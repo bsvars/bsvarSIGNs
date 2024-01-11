@@ -1,12 +1,23 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # bsvarSIGNs
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Developing an R package for Bayesian Structural VARs identified by sign
-and narrative restrictions
+Developing an R package for Bayesian Structural VARs identified by sign and narrative restrictions 
+
