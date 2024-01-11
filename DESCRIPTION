@@ -1,12 +1,17 @@
 Package: bsvarSIGNs
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Bayesian Estimation of Structural Vector Autoregressive Models Identified by Sign and Narrative Restrictions
+Version: 0.1.9000
 Date: 2024-01-11
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
-Imports: Rcpp (>= 1.0.12)
+Authors@R: c(person("Xiaolei", "Wang", , "adamwang15@gmail.com", role = c("aut", "cre")),person("Tomasz", "Woźniak", , "wozniak.tom@pm.me", role = c("aut"), comment = c(ORCID = "0000-0003-2212-2378")))
+Maintainer: Xiaolei Wang <adamwang15@gmail.com>
+Description: Implements efficient algorithms for the Bayesian estimation of Stuructural Vector Autoregressive models identified by sign and narrative restrictions following Rubio-Ramírez, Waggoner & Zha (2010) <doi:10.1111/j.1467-937X.2009.00578.x> and Antolín-Díaz & Rubio-Ramírez (2018) <doi:10.1257/aer.20161852>. 
+License: GPL (>= 3)
+Encoding: UTF-8
+Imports: 
+    bsvars,
+    R6,
+    Rcpp (>= 1.0.12),
+    RcppArmadillo
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
