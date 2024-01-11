@@ -2,3 +2,4 @@
 ^\.github$
 ^LICENSE\.md$
 ^bsvarSIGNs\.Rproj$
+^\.Rproj\.user$
