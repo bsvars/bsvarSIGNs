@@ -15,4 +15,7 @@ Imports:
     RcppArmadillo,
     RcppProgress
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
+Depends: 
+    R (>= 2.10)
+LazyData: true
