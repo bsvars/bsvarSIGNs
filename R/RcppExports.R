@@ -5,3 +5,7 @@ matnrnd_cpp <- function(M, U, V) {
     .Call(`_bsvarSIGNs_matnrnd_cpp`, M, U, V)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call(`_bsvarSIGNs_RcppExport_registerCCallable`)
+})
