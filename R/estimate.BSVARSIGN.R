@@ -65,11 +65,6 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
    
-  # normalise output
-  BB                  = qqq$last_draw$B
-  BB                  = diag(sign(diag(BB))) %*% BB
-  normalise_posterior(output, BB)
-    
   return(output)
 }
 
@@ -96,11 +91,6 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
   
   specification$last_draw$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification$last_draw, qqq$posterior)
-  
-  # normalise output
-  BB                  = qqq$last_draw$B
-  BB                  = diag(sign(diag(BB))) %*% BB
-  normalise_posterior(output, BB)
   
   return(output)
 }
