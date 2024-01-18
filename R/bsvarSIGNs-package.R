@@ -14,6 +14,7 @@
 #' @importFrom Rcpp sourceCpp
 #' @import bsvars
 #' @import RcppArmadillo
+#' @import RcppProgress
 #' @note This package is currently in active development. We give no 
 #' warranty that anything here works.
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} Tomasz Woźniak \email{wozniak.tom@pm.me}

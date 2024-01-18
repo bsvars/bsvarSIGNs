@@ -12,6 +12,7 @@ Imports:
     bsvars,
     R6,
     Rcpp (>= 1.0.12),
-    RcppArmadillo
-LinkingTo: Rcpp, RcppArmadillo
+    RcppArmadillo,
+    RcppProgress
+LinkingTo: Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 7.2.3
