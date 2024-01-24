@@ -55,3 +55,4 @@ rsconnect/
 .Rdata
 .DS_Store
 .quarto
+*.so

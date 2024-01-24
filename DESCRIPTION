@@ -14,7 +14,7 @@ Imports:
     Rcpp (>= 1.0.12),
     RcppArmadillo,
     RcppProgress
-LinkingTo: Rcpp, RcppArmadillo, RcppProgress
+LinkingTo: bsvars, Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 7.3.0
 Depends: 
     R (>= 2.10)
