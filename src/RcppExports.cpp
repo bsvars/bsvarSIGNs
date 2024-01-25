@@ -55,19 +55,6 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP YSEXP, SEXP XSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// matnrnd_cpp
-arma::mat matnrnd_cpp(const arma::mat& M, const arma::mat& U, const arma::mat& V);
-RcppExport SEXP _bsvarSIGNs_matnrnd_cpp(SEXP MSEXP, SEXP USEXP, SEXP VSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
-    rcpp_result_gen = Rcpp::wrap(matnrnd_cpp(M, U, V));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _bsvarSIGNs_RcppExport_validate(const char* sig) { 
@@ -87,7 +74,6 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 8},
-    {"_bsvarSIGNs_matnrnd_cpp", (DL_FUNC) &_bsvarSIGNs_matnrnd_cpp, 3},
     {"_bsvarSIGNs_RcppExport_registerCCallable", (DL_FUNC) &_bsvarSIGNs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
