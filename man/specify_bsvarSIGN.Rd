@@ -41,7 +41,8 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$new(
   data,
   p = 1L,
-  B,
+  sign_irf,
+  sign_hd,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -54,14 +55,19 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
 
 \item{\code{p}}{a positive integer providing model's autoregressive lag order.}
 
-\item{\code{B}}{a logical \code{NxN} matrix containing value \code{TRUE} for the elements of 
-the structural matrix \eqn{B} to be estimated and value \code{FALSE} for exclusion restrictions 
-to be set to zero.}
+\item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
+up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+-1: negative restriction, 0: no restriction, 1: positive restriction.}
+
+\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
+Each row of the matrix corresponds to a different restriction.
+Each column contains the following information:
+| type | variable | shock | start | end | sign |}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 
-\item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets 
-the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
+\item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
+the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
 otherwise to random walk.}
 }
 \if{html}{\out{</div>}}

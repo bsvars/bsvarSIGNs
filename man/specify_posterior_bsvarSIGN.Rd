@@ -4,18 +4,18 @@
 \alias{specify_posterior_bsvarSIGN}
 \title{R6 Class Representing PosteriorBSVARSIGN}
 \description{
-The class PosteriorBSVARSIGN contains posterior output and the specification including 
-the last MCMC draw for the homoskedastic bsvar model. 
+The class PosteriorBSVARSIGN contains posterior output and the specification including
+the last MCMC draw for the homoskedastic bsvar model.
 Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 might not be equal to the last draw provided in element \code{posterior}.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{last_draw}}{an object of class BSVARSIGN with the last draw of the current MCMC run as 
+\item{\code{last_draw}}{an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.}
 
-\item{\code{posterior}}{a list containing Bayesian estimation output collected in elements 
+\item{\code{posterior}}{a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
 }
 \if{html}{\out{</div>}}
@@ -43,10 +43,10 @@ Create a new posterior output PosteriorBSVARSIGN.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{specification_bsvarSIGN}}{an object of class BSVARSIGN with the last draw of the current 
+\item{\code{specification_bsvarSIGN}}{an object of class BSVARSIGN with the last draw of the current
 MCMC run as the starting value.}
 
-\item{\code{posterior_bsvarSIGN}}{a list containing Bayesian estimation output collected in elements 
+\item{\code{posterior_bsvarSIGN}}{a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
 }
 \if{html}{\out{</div>}}
@@ -59,7 +59,7 @@ A posterior output PosteriorBSVARSIGN.
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_posterior"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_posterior}{}}}
 \subsection{Method \code{get_posterior()}}{
-Returns a list containing Bayesian estimation output collected in elements 
+Returns a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_posterior()}\if{html}{\out{</div>}}
@@ -70,7 +70,7 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_last_draw"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_last_draw}{}}}
 \subsection{Method \code{get_last_draw()}}{
-Returns an object of class BSVARSIGN with the last draw of the current MCMC run as 
+Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_last_draw()}\if{html}{\out{</div>}}
@@ -81,7 +81,7 @@ the starting value to be passed to the continuation of the MCMC estimation using
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-is_normalised"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-is_normalised}{}}}
 \subsection{Method \code{is_normalised()}}{
-Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()} 
+Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
 and \code{FALSE} otherwise.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$is_normalised()}\if{html}{\out{</div>}}

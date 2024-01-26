@@ -2,13 +2,9 @@
 
 using namespace arma;
 
-// log determinant given Cholesky decomposition of some matrix
-double log_det_lower_cpp(const arma::mat& L) {
-  return 2 * sum(log(diagvec(L)));
-}
-
 // QR decomposition, where the diagonal elements of R are positive
 // [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
 arma::mat qr_sign_cpp(const arma::mat& A) {
   arma::mat Q, R;
   arma::qr_econ(Q, R, A);
@@ -22,4 +18,11 @@ arma::mat qr_sign_cpp(const arma::mat& A) {
   }
 
   return Q;
+}
+
+// Sample uniformly from the space of NxN orthogonal matrices
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+arma::mat rortho_cpp(const int& N) {
+  return qr_sign_cpp(arma::mat(N, N, fill::randn));
 }

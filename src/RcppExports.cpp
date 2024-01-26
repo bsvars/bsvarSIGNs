@@ -14,28 +14,22 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// bsvar_sign_cpp
-Rcpp::List bsvar_sign_cpp(const int& S, const arma::mat& Y, const arma::mat& X, const arma::field<arma::mat>& VB, const Rcpp::List& prior, const Rcpp::List& starting_values, const int thin, const bool show_progress);
-static SEXP _bsvarSIGNs_bsvar_sign_cpp_try(SEXP SSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP) {
+// match_sign_cpp
+bool match_sign_cpp(const arma::mat& A, const arma::mat sign);
+static SEXP _bsvarSIGNs_match_sign_cpp_try(SEXP ASEXP, SEXP signSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type VB(VBSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type starting_values(starting_valuesSEXP);
-    Rcpp::traits::input_parameter< const int >::type thin(thinSEXP);
-    Rcpp::traits::input_parameter< const bool >::type show_progress(show_progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(bsvar_sign_cpp(S, Y, X, VB, prior, starting_values, thin, show_progress));
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type sign(signSEXP);
+    rcpp_result_gen = Rcpp::wrap(match_sign_cpp(A, sign));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP) {
+RcppExport SEXP _bsvarSIGNs_match_sign_cpp(SEXP ASEXP, SEXP signSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvar_sign_cpp_try(SSEXP, YSEXP, XSEXP, VBSEXP, priorSEXP, starting_valuesSEXP, thinSEXP, show_progressSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_match_sign_cpp_try(ASEXP, signSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -55,25 +49,96 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP YSEXP, SEXP XSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// bsvar_sign_cpp
+Rcpp::List bsvar_sign_cpp(const int& S, const int& lags, const arma::mat& Y, const arma::mat& X, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_hd, const Rcpp::List& prior, const Rcpp::List& starting_values, const int thin, const bool show_progress);
+static SEXP _bsvarSIGNs_bsvar_sign_cpp_try(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_hdSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type VB(VBSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type sign_irf(sign_irfSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sign_hd(sign_hdSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type starting_values(starting_valuesSEXP);
+    Rcpp::traits::input_parameter< const int >::type thin(thinSEXP);
+    Rcpp::traits::input_parameter< const bool >::type show_progress(show_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(bsvar_sign_cpp(S, lags, Y, X, VB, sign_irf, sign_hd, prior, starting_values, thin, show_progress));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_hdSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvar_sign_cpp_try(SSEXP, lagsSEXP, YSEXP, XSEXP, VBSEXP, sign_irfSEXP, sign_hdSEXP, priorSEXP, starting_valuesSEXP, thinSEXP, show_progressSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// qr_sign_cpp
+arma::mat qr_sign_cpp(const arma::mat& A);
+RcppExport SEXP _bsvarSIGNs_qr_sign_cpp(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(qr_sign_cpp(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rortho_cpp
+arma::mat rortho_cpp(const int& N);
+RcppExport SEXP _bsvarSIGNs_rortho_cpp(SEXP NSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type N(NSEXP);
+    rcpp_result_gen = Rcpp::wrap(rortho_cpp(N));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _bsvarSIGNs_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const Rcpp::List&,const Rcpp::List&,const int,const bool)");
+        signatures.insert("bool(*match_sign_cpp)(const arma::mat&,const arma::mat)");
+        signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const Rcpp::List&,const Rcpp::List&,const int,const bool)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_cpp", (DL_FUNC)_bsvarSIGNs_match_sign_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC)_bsvarSIGNs_bsvar_sign_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_RcppExport_validate", (DL_FUNC)_bsvarSIGNs_RcppExport_validate);
     return R_NilValue;
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 8},
+    {"_bsvarSIGNs_match_sign_cpp", (DL_FUNC) &_bsvarSIGNs_match_sign_cpp, 2},
+    {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 11},
+    {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
+    {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
     {"_bsvarSIGNs_RcppExport_registerCCallable", (DL_FUNC) &_bsvarSIGNs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
