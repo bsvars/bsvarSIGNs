@@ -6,7 +6,9 @@ using namespace arma;
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 arma::mat qr_sign_cpp(const arma::mat& A) {
-  arma::mat Q, R;
+  int N = A.n_rows;
+  
+  arma::mat Q(N, N), R(N, N);
   arma::qr_econ(Q, R, A);
 
   // Check and modify the diagonal elements of R
