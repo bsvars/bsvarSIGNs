@@ -13,7 +13,7 @@ using namespace arma;
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 bool match_sign(const arma::mat& A, const arma::mat sign) {
-  return accu(((A % sign) > 0)) >= accu(abs(sign));
+  return accu(((A % sign) > 0)) == accu(abs(sign));
 }
 
 
