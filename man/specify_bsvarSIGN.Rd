@@ -43,6 +43,7 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
   p = 1L,
   sign_irf,
   sign_hd,
+  sign_B,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -56,13 +57,22 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
 \item{\code{p}}{a positive integer providing model's autoregressive lag order.}
 
 \item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
-up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
 \item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
 Each row of the matrix corresponds to a different restriction.
-Each column contains the following information:
-| type | variable | shock | start | end | sign |}
+Each column contains the following information: \cr
+| type | sign | var_i | shock_j | start | horizons | \cr
+type: 1 if type A restriction i.e. hd of shock_j on var_i is greater (less) than 0;
+2 if type B restriction i.e. hd of shock_j on var_i is the largest (smallest); \cr
+sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+var_i: \code{i}-th variable; \cr
+shock_j: \code{j}-th shock; \cr
+start: starting period of the restriction; \cr
+horizons: horizons of the restriction; \cr}
+
+\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 

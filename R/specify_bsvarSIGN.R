@@ -16,21 +16,24 @@ specify_identification_bsvarSIGN = R6::R6Class(
     VB       = list(),
     #' @field sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions.
     sign_irf = array(),
-    #' @field sign_hd a \code{Mx6} matrix of sign restrictions on the Historical decompositions.
+    #' @field sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
     sign_hd  = matrix(),
+    #' @field sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
+    sign_B   = matrix(),
     
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGNs.
     #' @param N a positive integer - the number of dependent variables in the model.
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
-    #' up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+    #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
     #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
     #' Each row of the matrix corresponds to a different restriction.
     #' Each column contains the following information:
     #' | type | variable | shock | start | end | sign |
+    #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @return Identifying restrictions IdentificationBSVARSIGNs.
-    initialize = function(N, sign_irf, sign_hd) {
+    initialize = function(N, sign_irf, sign_hd, sign_B) {
         B     = matrix(FALSE, N, N)
         B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -42,6 +45,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       # TODO: verify sign_irf and sign_hd
       self$sign_irf <- sign_irf
       self$sign_hd  <- sign_hd
+      self$sign_B   <- sign_B
     }, # END initialize
     
     #' @description
@@ -52,7 +56,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
       list(
         VB       = as.list(self$VB),
         sign_irf = as.array(self$sign_irf),
-        sign_hd  = as.matrix(self$sign_hd)
+        sign_hd  = as.matrix(self$sign_hd),
+        sign_B   = as.matrix(self$sign_B)
         )
     }, # END get_identification
     
@@ -60,14 +65,15 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' Set new starting values StartingValuesBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
-    #' up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+    #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
     #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
     #' Each row of the matrix corresponds to a different restriction.
     #' Each column contains the following information:
     #' | type | variable | shock | start | end | sign |
+    #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #'
-    set_identification = function(N, sign_irf, sign_hd) {
+    set_identification = function(N, sign_irf, sign_hd, sign_B) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -79,6 +85,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       # TODO: verify sign_irf and sign_hd
       self$sign_irf <- sign_irf
       self$sign_hd  <- sign_hd
+      self$sign_B   <- sign_B
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -118,12 +125,20 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param data a \code{(T+p)xN} matrix with time series data.
     #' @param p a positive integer providing model's autoregressive lag order.
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
-    #' up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+    #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
     #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
     #' Each row of the matrix corresponds to a different restriction.
-    #' Each column contains the following information:
-    #' | type | variable | shock | start | end | sign |
+    #' Each column contains the following information: \cr
+    #' | type | sign | var_i | shock_j | start | horizons | \cr
+    #' type: 1 if type A restriction i.e. hd of shock_j on var_i is greater (less) than 0;
+    #' 2 if type B restriction i.e. hd of shock_j on var_i is the largest (smallest); \cr
+    #' sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+    #' var_i: \code{i}-th variable; \cr
+    #' shock_j: \code{j}-th shock; \cr
+    #' start: starting period of the restriction; \cr
+    #' horizons: horizons of the restriction; \cr
+    #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
@@ -134,6 +149,7 @@ specify_bsvarSIGN = R6::R6Class(
     p = 1L,
     sign_irf,
     sign_hd,
+    sign_B,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
     ) {
@@ -148,16 +164,17 @@ specify_bsvarSIGN = R6::R6Class(
         d           = ncol(exogenous)
       }
       
+      if (missing(sign_irf)) {
+        sign_irf <- array(rep(0, N^2), dim = c(N, N, 1))
+      }
+      
       if (missing(sign_hd)) {
-        # sign_hd <- matrix(c(0, 0, 0, 0, 0, 0), nrow = 1)
-        sign_hd <- matrix()
-        
-        if (missing(sign_irf)) {
-          message("The identification is set to the default option of contemporaneous impulse response
-                  as a diagonal matrix with 1 and -1 alternating on the diagonal.")
-          sign_irf <- array(-diag((-1)^(1:N)), dim = c(N, N, 1))
-        }
-      } 
+        sign_hd <- matrix(rep(0, 6), ncol = 6, nrow = 1)
+      }
+      
+      if (missing(sign_B)) {
+        sign_B <- matrix(rep(0, N^2), ncol = N, nrow = N)
+      }
 
       # stopifnot("Incorrectly specified argument B." = (is.matrix(B) & is.logical(B)) | (length(B) == 1 & is.na(B)))
       
@@ -165,7 +182,7 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices   = bsvars::specify_data_matrices$new(data, p, exogenous)
-      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd)
+      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd, sign_B)
       self$prior           = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
       self$starting_values = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize

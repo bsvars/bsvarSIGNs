@@ -62,7 +62,8 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, data_matrices$Y, data_matrices$X, 
-                              identification$VB, identification$sign_irf, identification$sign_hd, 
+                              identification$VB, identification$sign_irf,
+                              identification$sign_hd, identification$sign_B, 
                               prior, starting_values, thin, show_progress)
   
   specification$starting_values$set_starting_values(qqq$last_draw)
@@ -92,7 +93,8 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
   
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, data_matrices$Y, data_matrices$X, 
-                              identification$VB, identification$sign_irf, identification$sign_hd,
+                              identification$VB, identification$sign_irf,
+                              identification$sign_hd, identification$sign_B,
                               prior, starting_values, thin, show_progress)
   
   specification$last_draw$starting_values$set_starting_values(qqq$last_draw)

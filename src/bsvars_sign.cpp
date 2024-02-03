@@ -21,6 +21,7 @@ Rcpp::List bsvar_sign_cpp(
     const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
     const arma::mat&  sign_hd,            // Mx6 matrix of signs for historical decomposition
+    const arma::mat&  sign_B,             // Mx6 matrix of signs for B
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
     const int         thin = 100,         // introduce thinning
@@ -74,9 +75,10 @@ Rcpp::List bsvar_sign_cpp(
     aux_hyper     = bsvars::sample_hyperparameters(aux_hyper, aux_B, aux_A, VB, prior);
     aux_A         = bsvars::sample_A_homosk1(aux_A, aux_B, aux_hyper, Y, X, prior);
     aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
-    Q             = sample_Q(aux_B, aux_A, lags, sign_irf, sign_hd);
     
     if (s % thin == 0) {
+      Q = sample_Q(lags, Y, X, aux_A, aux_B, sign_irf, sign_hd, sign_B);
+      
       posterior_Q.slice(ss)      = Q;
       posterior_B.slice(ss)      = aux_B;
       posterior_A.slice(ss)      = aux_A;

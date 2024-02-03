@@ -13,7 +13,9 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 
 \item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions.}
 
-\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the Historical decompositions.}
+\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.}
+
+\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
 \if{html}{\out{</div>}}
 }
@@ -32,7 +34,7 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 \subsection{Method \code{new()}}{
 Create new identifying restrictions IdentificationBSVARSIGNs.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd, sign_B)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -41,13 +43,15 @@ Create new identifying restrictions IdentificationBSVARSIGNs.
 \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 
 \item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
-up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
 \item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
 Each row of the matrix corresponds to a different restriction.
 Each column contains the following information:
 | type | variable | shock | start | end | sign |}
+
+\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
 \if{html}{\out{</div>}}
 }
@@ -71,7 +75,12 @@ Returns the elements of the identification pattern IdentificationBSVARSIGNs as a
 \subsection{Method \code{set_identification()}}{
 Set new starting values StartingValuesBSVARSIGN.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$set_identification(N, sign_irf, sign_hd)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$set_identification(
+  N,
+  sign_irf,
+  sign_hd,
+  sign_B
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -80,13 +89,15 @@ Set new starting values StartingValuesBSVARSIGN.
 \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 
 \item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
-up to \code{h} horizons. Each \code{NxN} matrix nnly accept values in {-1 ,0, 1},
+up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
 \item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
 Each row of the matrix corresponds to a different restriction.
 Each column contains the following information:
 | type | variable | shock | start | end | sign |}
+
+\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
 \if{html}{\out{</div>}}
 }
