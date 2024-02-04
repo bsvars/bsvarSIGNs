@@ -2,6 +2,7 @@
 
 using namespace arma;
 
+
 // QR decomposition, where the diagonal elements of R are positive
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
@@ -22,9 +23,21 @@ arma::mat qr_sign_cpp(const arma::mat& A) {
   return Q;
 }
 
+
 // Sample uniformly from the space of NxN orthogonal matrices
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 arma::mat rortho_cpp(const int& N) {
   return qr_sign_cpp(arma::mat(N, N, fill::randn));
+}
+
+
+// Function to generate random integers within a range
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+int randint_cpp(int min, int max) {
+  static std::random_device rd;
+  static std::mt19937 generator(rd());
+  std::uniform_int_distribution<int> distribution(min, max);
+  return distribution(generator);
 }

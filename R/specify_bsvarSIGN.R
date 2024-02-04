@@ -16,8 +16,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
     VB       = list(),
     #' @field sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions.
     sign_irf = array(),
-    #' @field sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-    sign_hd  = matrix(),
+    #' @field sign_narrative a \code{Kx6} matrix of narrative sign restrictions.
+    sign_narrative  = matrix(),
     #' @field sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     sign_B   = matrix(),
     
@@ -27,13 +27,24 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
     #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
-    #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-    #' Each row of the matrix corresponds to a different restriction.
-    #' Each column contains the following information:
-    #' | type | variable | shock | start | end | sign |
+    #' @param sign_narrative a \code{Kx6} matrix of narrative sign restrictions,
+    #' each row of the matrix corresponds to a different restriction,
+    #' each column contains the following information: \cr
+    #' | type | sign | var_i | shock_j | start | horizons | \cr
+    #' type: 0 if no restriction; \cr
+    #' 1 if restriction on structural shock; \cr
+    #' 2 if type A restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+    #' 3 if type B restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is the largest (smallest); \cr
+    #' sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+    #' var_i: \code{i}-th variable; \cr
+    #' shock_j: \code{j}-th shock; \cr
+    #' start: starting period of the restriction; \cr
+    #' horizons: horizons of the restriction; \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @return Identifying restrictions IdentificationBSVARSIGNs.
-    initialize = function(N, sign_irf, sign_hd, sign_B) {
+    initialize = function(N, sign_irf, sign_narrative, sign_B) {
         B     = matrix(FALSE, N, N)
         B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -42,9 +53,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
         self$VB[[n]]   <- matrix(diag(N)[B[n,],], ncol = N)
       }
       
-      # TODO: verify sign_irf and sign_hd
+      # TODO: verify sign_irf and sign_narrative
       self$sign_irf <- sign_irf
-      self$sign_hd  <- sign_hd
+      self$sign_narrative  <- sign_narrative
       self$sign_B   <- sign_B
     }, # END initialize
     
@@ -56,7 +67,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       list(
         VB       = as.list(self$VB),
         sign_irf = as.array(self$sign_irf),
-        sign_hd  = as.matrix(self$sign_hd),
+        sign_narrative  = as.matrix(self$sign_narrative),
         sign_B   = as.matrix(self$sign_B)
         )
     }, # END get_identification
@@ -67,13 +78,24 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
     #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
-    #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-    #' Each row of the matrix corresponds to a different restriction.
-    #' Each column contains the following information:
-    #' | type | variable | shock | start | end | sign |
+    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
+    #' each row of the matrix corresponds to a different restriction,
+    #' each column contains the following information: \cr
+    #' | type | sign | var_i | shock_j | start | horizons | \cr
+    #' type: 0 if no restriction; \cr
+    #' 1 if restriction on structural shock; \cr
+    #' 2 if type A restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+    #' 3 if type B restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is the largest (smallest); \cr
+    #' sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+    #' var_i: \code{i}-th variable; \cr
+    #' shock_j: \code{j}-th shock; \cr
+    #' start: starting period of the restriction; \cr
+    #' horizons: horizons of the restriction; \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #'
-    set_identification = function(N, sign_irf, sign_hd, sign_B) {
+    set_identification = function(N, sign_irf, sign_narrative, sign_B) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -82,9 +104,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
         self$VB[[n]]   <- matrix(diag(N)[B[n,],], ncol = N)
       }
       
-      # TODO: verify sign_irf and sign_hd
+      # TODO: verify sign_irf and sign_narrative
       self$sign_irf <- sign_irf
-      self$sign_hd  <- sign_hd
+      self$sign_narrative  <- sign_narrative
       self$sign_B   <- sign_B
     } # END set_identification
   ) # END public
@@ -127,12 +149,16 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
     #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
     #' -1: negative restriction, 0: no restriction, 1: positive restriction.
-    #' @param sign_hd a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-    #' Each row of the matrix corresponds to a different restriction.
-    #' Each column contains the following information: \cr
+    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
+    #' each row of the matrix corresponds to a different restriction,
+    #' each column contains the following information: \cr
     #' | type | sign | var_i | shock_j | start | horizons | \cr
-    #' type: 1 if type A restriction i.e. hd of shock_j on var_i is greater (less) than 0;
-    #' 2 if type B restriction i.e. hd of shock_j on var_i is the largest (smallest); \cr
+    #' type: 0 if no restriction; \cr
+    #' 1 if restriction on structural shock; \cr
+    #' 2 if type A restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+    #' 3 if type B restriction on historical decomposition
+    #' i.e. hd of shock_j on var_i is the largest (smallest); \cr
     #' sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
     #' var_i: \code{i}-th variable; \cr
     #' shock_j: \code{j}-th shock; \cr
@@ -148,7 +174,7 @@ specify_bsvarSIGN = R6::R6Class(
     data,
     p = 1L,
     sign_irf,
-    sign_hd,
+    sign_narrative,
     sign_B,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
@@ -168,8 +194,8 @@ specify_bsvarSIGN = R6::R6Class(
         sign_irf <- array(rep(0, N^2), dim = c(N, N, 1))
       }
       
-      if (missing(sign_hd)) {
-        sign_hd <- matrix(rep(0, 6), ncol = 6, nrow = 1)
+      if (missing(sign_narrative)) {
+        sign_narrative <- matrix(rep(0, 6), ncol = 6, nrow = 1)
       }
       
       if (missing(sign_B)) {
@@ -182,7 +208,7 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices   = bsvars::specify_data_matrices$new(data, p, exogenous)
-      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd, sign_B)
+      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_narrative, sign_B)
       self$prior           = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
       self$starting_values = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize

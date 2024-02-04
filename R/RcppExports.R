@@ -9,6 +9,10 @@ rortho_cpp <- function(N) {
     .Call(`_bsvarSIGNs_rortho_cpp`, N)
 }
 
+randint_cpp <- function(min, max) {
+    .Call(`_bsvarSIGNs_randint_cpp`, min, max)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call(`_bsvarSIGNs_RcppExport_registerCCallable`)

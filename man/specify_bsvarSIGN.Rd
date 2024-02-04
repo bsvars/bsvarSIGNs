@@ -42,7 +42,7 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
   data,
   p = 1L,
   sign_irf,
-  sign_hd,
+  sign_narrative,
   sign_B,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
@@ -60,12 +60,16 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
 up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
-\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-Each row of the matrix corresponds to a different restriction.
-Each column contains the following information: \cr
+\item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions,
+each row of the matrix corresponds to a different restriction,
+each column contains the following information: \cr
 | type | sign | var_i | shock_j | start | horizons | \cr
-type: 1 if type A restriction i.e. hd of shock_j on var_i is greater (less) than 0;
-2 if type B restriction i.e. hd of shock_j on var_i is the largest (smallest); \cr
+type: 0 if no restriction; \cr
+1 if restriction on structural shock; \cr
+2 if type A restriction on historical decomposition
+i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+3 if type B restriction on historical decomposition
+i.e. hd of shock_j on var_i is the largest (smallest); \cr
 sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
 var_i: \code{i}-th variable; \cr
 shock_j: \code{j}-th shock; \cr

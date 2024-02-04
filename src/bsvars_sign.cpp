@@ -20,7 +20,7 @@ Rcpp::List bsvar_sign_cpp(
     const arma::mat&  X,                  // KxT dependent variables
     const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
-    const arma::mat&  sign_hd,            // Mx6 matrix of signs for historical decomposition
+    const arma::mat&  sign_narrative,            // Mx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // Mx6 matrix of signs for B
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
@@ -50,6 +50,7 @@ Rcpp::List bsvar_sign_cpp(
   
   const int N       = Y.n_rows;
   const int K       = X.n_rows;
+  const int M       = pow(10, 4);
   
   mat   aux_B       = as<mat>(starting_values["B"]);
   mat   aux_A       = as<mat>(starting_values["A"]);
@@ -58,12 +59,15 @@ Rcpp::List bsvar_sign_cpp(
   
   const int   SS    = floor(S / thin);
   
-  cube  posterior_Q(N, N, SS);
   cube  posterior_B(N, N, SS);
   cube  posterior_A(N, K, SS);
   cube  posterior_hyper(2 * N + 1, 2, SS);
+  cube  posterior_Q(N, N, SS);
+  cube  Z(N, sign_narrative.col(5).max() + 1, M, fill::randn);
   
-  int  ss        = 0;
+  int    ss         = 0;
+  double aux_w      = 1;
+  vec    w          = ones(SS);
   
   for (int s=0; s<S; s++) {
     
@@ -77,28 +81,33 @@ Rcpp::List bsvar_sign_cpp(
     aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
     
     if (s % thin == 0) {
-      Q = sample_Q(lags, Y, X, aux_A, aux_B, sign_irf, sign_hd, sign_B);
+      Q                          = sample_Q(lags, Y, X, aux_A, aux_B, aux_hyper, prior, VB, 
+                                            sign_irf, sign_narrative, sign_B,
+                                            Z, aux_w);
       
-      posterior_Q.slice(ss)      = Q;
       posterior_B.slice(ss)      = aux_B;
       posterior_A.slice(ss)      = aux_A;
       posterior_hyper.slice(ss)  = aux_hyper;
+      posterior_Q.slice(ss)      = Q;
+      w(ss)                      = aux_w;
       ss++;
     }
   } // END s loop
   
   return List::create(
     _["last_draw"]  = List::create(
-      _["Q"]        = Q,
       _["B"]        = aux_B,
       _["A"]        = aux_A,
-      _["hyper"]    = aux_hyper
+      _["hyper"]    = aux_hyper,
+      _["Q"]        = Q,
+      _["w"]        = aux_w
     ),
     _["posterior"]  = List::create(
-      _["Q"]        = posterior_Q,
       _["B"]        = posterior_B,
       _["A"]        = posterior_A,
-      _["hyper"]    = posterior_hyper
+      _["hyper"]    = posterior_hyper,
+      _["Q"]        = posterior_Q,
+      _["w"]        = w
     )
   );
 } // END bsvar_sign_cpp

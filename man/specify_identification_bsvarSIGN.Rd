@@ -13,7 +13,7 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 
 \item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions.}
 
-\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.}
+\item{\code{sign_narrative}}{a \code{Kx6} matrix of narrative sign restrictions.}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
@@ -34,7 +34,7 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 \subsection{Method \code{new()}}{
 Create new identifying restrictions IdentificationBSVARSIGNs.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(N, sign_irf, sign_hd, sign_B)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(N, sign_irf, sign_narrative, sign_B)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -46,10 +46,21 @@ Create new identifying restrictions IdentificationBSVARSIGNs.
 up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
-\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-Each row of the matrix corresponds to a different restriction.
-Each column contains the following information:
-| type | variable | shock | start | end | sign |}
+\item{\code{sign_narrative}}{a \code{Kx6} matrix of narrative sign restrictions,
+each row of the matrix corresponds to a different restriction,
+each column contains the following information: \cr
+| type | sign | var_i | shock_j | start | horizons | \cr
+type: 0 if no restriction; \cr
+1 if restriction on structural shock; \cr
+2 if type A restriction on historical decomposition
+i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+3 if type B restriction on historical decomposition
+i.e. hd of shock_j on var_i is the largest (smallest); \cr
+sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+var_i: \code{i}-th variable; \cr
+shock_j: \code{j}-th shock; \cr
+start: starting period of the restriction; \cr
+horizons: horizons of the restriction; \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
@@ -78,7 +89,7 @@ Set new starting values StartingValuesBSVARSIGN.
 \if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$set_identification(
   N,
   sign_irf,
-  sign_hd,
+  sign_narrative,
   sign_B
 )}\if{html}{\out{</div>}}
 }
@@ -92,10 +103,21 @@ Set new starting values StartingValuesBSVARSIGN.
 up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
 -1: negative restriction, 0: no restriction, 1: positive restriction.}
 
-\item{\code{sign_hd}}{a \code{Mx6} matrix of sign restrictions on the historical decompositions.
-Each row of the matrix corresponds to a different restriction.
-Each column contains the following information:
-| type | variable | shock | start | end | sign |}
+\item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions,
+each row of the matrix corresponds to a different restriction,
+each column contains the following information: \cr
+| type | sign | var_i | shock_j | start | horizons | \cr
+type: 0 if no restriction; \cr
+1 if restriction on structural shock; \cr
+2 if type A restriction on historical decomposition
+i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+3 if type B restriction on historical decomposition
+i.e. hd of shock_j on var_i is the largest (smallest); \cr
+sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
+var_i: \code{i}-th variable; \cr
+shock_j: \code{j}-th shock; \cr
+start: starting period of the restriction; \cr
+horizons: horizons of the restriction; \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 }
