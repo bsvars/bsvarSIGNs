@@ -68,6 +68,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
   
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
+  output              = importance_sampling(output)
    
   return(output)
 }
@@ -80,7 +81,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
 #' @param specification an object of class PosteriorBSVARSIGN generated using the \code{estimate.BSVARSIGN()} function.
 #' This setup facilitates the continuation of the MCMC sampling starting from the last draw of the previous run.
 #' 
-
+#'
 #' @export
 estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
   
@@ -96,9 +97,11 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
                               identification$VB, identification$sign_irf,
                               identification$sign_narrative, identification$sign_B,
                               prior, starting_values, thin, show_progress)
+  qqq                 = importance_sampling(qqq)
   
   specification$last_draw$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification$last_draw, qqq$posterior)
+  output              = importance_sampling(output)
   
   return(output)
 }

@@ -2,6 +2,8 @@
 
 S3method(estimate,BSVARSIGN)
 S3method(estimate,PosteriorBSVARSIGN)
+export(importance_sampling)
+export(irf)
 export(specify_bsvarSIGN)
 export(specify_identification_bsvarSIGN)
 export(specify_posterior_bsvarSIGN)

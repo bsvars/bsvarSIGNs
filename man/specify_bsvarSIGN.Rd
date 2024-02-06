@@ -74,7 +74,7 @@ sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
 var_i: \code{i}-th variable; \cr
 shock_j: \code{j}-th shock; \cr
 start: starting period of the restriction; \cr
-horizons: horizons of the restriction; \cr}
+horizons: horizons of the restriction, input 0 if only one period \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 

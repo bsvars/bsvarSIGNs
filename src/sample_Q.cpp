@@ -186,7 +186,7 @@ arma::mat sample_Q(
   bool   has_narrative = sign_narrative(0, 0) != 0;
   
   mat    Q(N, N);
-  mat    U(N, T);
+  mat    U             = aux_B * (Y - aux_A * X);
   
   cube   irf           = bsvars::bsvars_ir1(aux_B, aux_A, h, lags);
   
@@ -197,8 +197,7 @@ arma::mat sample_Q(
       if (!has_narrative) {
         success = true;
       } else {
-        U = Q.t() * aux_B * (Y - aux_A * X); // structural shocks
-        success = match_sign_narrative(U, sign_narrative, irf);
+        success = match_sign_narrative(Q.t() * U, sign_narrative, irf);
       }
     }
     
@@ -218,7 +217,9 @@ arma::mat sample_Q(
                     Z, aux_w);
   }
   
-  aux_w = approximate_w(sign_narrative, irf, Z);
+  if (has_narrative) {
+    aux_w = approximate_w(sign_narrative, irf, Z);
+  }
   
   return Q;
 }

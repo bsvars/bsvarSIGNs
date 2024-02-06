@@ -9,8 +9,8 @@ rortho_cpp <- function(N) {
     .Call(`_bsvarSIGNs_rortho_cpp`, N)
 }
 
-randint_cpp <- function(min, max) {
-    .Call(`_bsvarSIGNs_randint_cpp`, min, max)
+irf_cpp <- function(posterior_Q, posterior_B, posterior_A, horizon, p) {
+    .Call(`_bsvarSIGNs_irf_cpp`, posterior_Q, posterior_B, posterior_A, horizon, p)
 }
 
 # Register entry points for exported C++ functions

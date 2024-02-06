@@ -23,17 +23,17 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-PosteriorBSVARSIGN-new}{\code{specify_posterior_bsvarSIGN$new()}}
-\item \href{#method-PosteriorBSVARSIGN-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
-\item \href{#method-PosteriorBSVARSIGN-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
-\item \href{#method-PosteriorBSVARSIGN-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
-\item \href{#method-PosteriorBSVARSIGN-set_normalised}{\code{specify_posterior_bsvarSIGN$set_normalised()}}
-\item \href{#method-PosteriorBSVARSIGN-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
+\item \href{#method-PosteriorBSVAR-new}{\code{specify_posterior_bsvarSIGN$new()}}
+\item \href{#method-PosteriorBSVAR-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
+\item \href{#method-PosteriorBSVAR-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
+\item \href{#method-PosteriorBSVAR-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
+\item \href{#method-PosteriorBSVAR-set_normalised}{\code{specify_posterior_bsvarSIGN$set_normalised()}}
+\item \href{#method-PosteriorBSVAR-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-new"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-new}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new posterior output PosteriorBSVARSIGN.
 \subsection{Usage}{
@@ -56,8 +56,8 @@ A posterior output PosteriorBSVARSIGN.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_posterior"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_posterior}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-get_posterior"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-get_posterior}{}}}
 \subsection{Method \code{get_posterior()}}{
 Returns a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
@@ -67,8 +67,8 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_last_draw"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_last_draw}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-get_last_draw"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-get_last_draw}{}}}
 \subsection{Method \code{get_last_draw()}}{
 Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
@@ -78,8 +78,8 @@ the starting value to be passed to the continuation of the MCMC estimation using
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-is_normalised"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-is_normalised}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-is_normalised"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-is_normalised}{}}}
 \subsection{Method \code{is_normalised()}}{
 Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
 and \code{FALSE} otherwise.
@@ -89,8 +89,8 @@ and \code{FALSE} otherwise.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-set_normalised"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-set_normalised}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-set_normalised"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-set_normalised}{}}}
 \subsection{Method \code{set_normalised()}}{
 Sets the private indicator \code{normalised} to TRUE.
 \subsection{Usage}{
@@ -106,8 +106,8 @@ Sets the private indicator \code{normalised} to TRUE.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-clone}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVAR-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

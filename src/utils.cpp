@@ -1,5 +1,7 @@
 #include <RcppArmadillo.h>
 
+#include <bsvars.h>
+
 using namespace arma;
 
 
@@ -32,12 +34,24 @@ arma::mat rortho_cpp(const int& N) {
 }
 
 
-// Function to generate random integers within a range
+// Compute impulse response functions with bsvars
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
-int randint_cpp(int min, int max) {
-  static std::random_device rd;
-  static std::mt19937 generator(rd());
-  std::uniform_int_distribution<int> distribution(min, max);
-  return distribution(generator);
+arma::field<arma::cube> irf_cpp(
+    const arma::cube&   posterior_Q,        // (N, N, S)
+    arma::cube&         posterior_B,        // (N, N, S)
+    arma::cube&         posterior_A,        // (N, K, S)
+    const int           horizon,
+    const int           p
+) {
+  
+  const int   S = posterior_Q.n_slices;
+  
+  cube        QB(size(posterior_Q));
+  
+  for(int s = 0; s < S; s++) {
+    QB.slice(s) = posterior_Q.slice(s).t() * posterior_B.slice(s);
+  }
+  
+  return bsvars::bsvars_ir(QB, posterior_A, horizon, p);
 }

@@ -99,8 +99,7 @@ Rcpp::List bsvar_sign_cpp(
       _["B"]        = aux_B,
       _["A"]        = aux_A,
       _["hyper"]    = aux_hyper,
-      _["Q"]        = Q,
-      _["w"]        = aux_w
+      _["Q"]        = Q
     ),
     _["posterior"]  = List::create(
       _["B"]        = posterior_B,

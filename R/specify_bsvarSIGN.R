@@ -41,7 +41,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' var_i: \code{i}-th variable; \cr
     #' shock_j: \code{j}-th shock; \cr
     #' start: starting period of the restriction; \cr
-    #' horizons: horizons of the restriction; \cr
+    #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @return Identifying restrictions IdentificationBSVARSIGNs.
     initialize = function(N, sign_irf, sign_narrative, sign_B) {
@@ -92,7 +92,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' var_i: \code{i}-th variable; \cr
     #' shock_j: \code{j}-th shock; \cr
     #' start: starting period of the restriction; \cr
-    #' horizons: horizons of the restriction; \cr
+    #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #'
     set_identification = function(N, sign_irf, sign_narrative, sign_B) {
@@ -163,7 +163,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' var_i: \code{i}-th variable; \cr
     #' shock_j: \code{j}-th shock; \cr
     #' start: starting period of the restriction; \cr
-    #' horizons: horizons of the restriction; \cr
+    #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
@@ -261,7 +261,9 @@ specify_bsvarSIGN = R6::R6Class(
 #'
 #' @export
 specify_posterior_bsvarSIGN = R6::R6Class(
-  "PosteriorBSVARSIGN",
+  "PosteriorBSVAR",
+  # "PosteriorBSVARSIGN",
+  # inherit = bsvars::specify_posterior_bsvar,
   
   private = list(
     normalised = FALSE
