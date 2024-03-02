@@ -17,6 +17,34 @@ knitr::opts_chunk$set(
 
 Developing an R package for Bayesian Structural VARs identified by sign and narrative restrictions 
 
+# Installation
+
+```{r}
+devtools::install_github("bsvars/bsvarSIGNs")
+```
+
+# Example
+
+A repliaction of Antolín-Díaz & Rubio-Ramírez (2018).
+
+```{r}
+library(bsvarSIGNs)
+
+data(oil)
+
+# try ?specify_bsvarSIGN
+sign_narrative <- matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+sign_irf       <- array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3), dim = c(3, 3, 1))
+
+specification  <- specify_bsvarSIGN$new(oil,
+                                        p = 12,
+                                        sign_irf = sign_irf,
+                                        sign_narrative = sign_narrative)
+
+posterior      <- estimate.BSVARSIGN(specification, S = 10000, thin = 10, max_tries = 20000000)
+irf            <- compute_irf(posterior, horizon = 24)
+```
+
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->

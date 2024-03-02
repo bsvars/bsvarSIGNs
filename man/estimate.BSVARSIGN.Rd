@@ -4,7 +4,7 @@
 \alias{estimate.BSVARSIGN}
 \title{Bayesian estimation of a homoskedastic Structural Vector Autoregression via Gibbs sampler}
 \usage{
-\method{estimate}{BSVARSIGN}(specification, S, thin = 10, show_progress = TRUE)
+\method{estimate}{BSVARSIGN}(specification, S, thin = 10, show_progress = TRUE, max_tries = 10000)
 }
 \arguments{
 \item{specification}{an object of class BSVAR generated using the \code{specify_bsvar$new()} function.}
@@ -14,6 +14,8 @@
 \item{thin}{a positive integer, specifying the frequency of MCMC output thinning}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
+
+\item{max_tries}{a integer value, the maximum number of tries for sampling orthogonal matrix Q}
 }
 \value{
 An object of class PosteriorBSVAR containing the Bayesian estimation output and containing two elements:

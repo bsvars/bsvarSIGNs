@@ -9,8 +9,6 @@
 #' @export
 importance_sampling <- function(posterior) {
   
-  print(posterior$last_draw$identification$sign_narrative)
-  
   if (posterior$last_draw$identification$sign_narrative[1, 1] == 0) {
     return(posterior)
   }
@@ -39,7 +37,7 @@ importance_sampling <- function(posterior) {
 #' @param horizon a positive integer number denoting the forecast horizon for the impulse responses computations.
 #'
 #' @export
-irf <- function(posterior, horizon = 24) {
+compute_irf <- function(posterior, horizon = 24) {
   
   irf_list <-
     irf_cpp(

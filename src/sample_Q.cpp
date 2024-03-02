@@ -39,7 +39,7 @@ bool match_sign_irf(
 }
 
 
-// compute historical decomposition from t to t+h
+// compute historical decomposition from t to t+h of the i-th variable
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat hd1(
@@ -136,22 +136,28 @@ bool match_sign_narrative(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double approximate_w(
+    const int&                    T,
     arma::mat                     sign_narrative,
-    const arma::cube&             irf,
-    const arma::cube&             Z
+    const arma::cube&             irf
 ) {
   
-  int    S         = Z.n_slices;
-  double n_success = 1.0e-15;
+  const int M         = 1e+04;  // number of draws to approximate normal distribution
   
+  double    n_success = 1.0e-15;
+  
+  cube      Z(irf.n_rows, sign_narrative.col(5).max() + 1, M, fill::randn);
+  // cube      Z(irf.n_rows, T, M, fill::randn);
+  
+  // change all starting period to the first period
+  // since we use the same M draws for all narrative restrictions
   sign_narrative.col(4) = ones(sign_narrative.n_rows, 1);
   
-  for (int s=0; s<S; s++) {
-    if (match_sign_narrative(Z.slice(s), sign_narrative, irf)) {
+  for (int m=0; m<M; m++) {
+    if (match_sign_narrative(Z.slice(m), sign_narrative, irf)) {
       n_success++;
     }
   }
-  return S / n_success;
+  return M / n_success;
 }
 
 
@@ -162,21 +168,21 @@ arma::mat sample_Q(
     const int&                    lags,
     const arma::mat&              Y,
     const arma::mat&              X,
+    double&                       aux_w,
     arma::mat&                    aux_A,
     arma::mat&                    aux_B,
     arma::mat&                    aux_hyper,
-    const Rcpp::List&             prior,              // a list of priors
-    const arma::field<arma::mat>& VB,     // N-list
+    const Rcpp::List&             prior,
+    const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
-    const arma::cube&             Z,
-    double&                       aux_w
+    const int&                    max_tries,
+    int&                          n_fails
 ) {
   
   const int N          = Y.n_rows;
   const int T          = Y.n_cols;
-  const int max_tries  = pow(10, 4);
   
   int    n_tries       = 0;
   int    h             = sign_narrative.col(5).max(); // maximum horizon
@@ -205,20 +211,21 @@ arma::mat sample_Q(
   }
   
   if (!success) {
-    // Rcout << "Warning: could not find a valid Q matrix after " << max_tries << " tries," << endl;
-    // Rcout << "         go to next sample of A, B and hyper." << endl;
+    n_fails++;
     
-    aux_hyper     = bsvars::sample_hyperparameters(aux_hyper, aux_B, aux_A, VB, prior);
+    // aux_hyper     = bsvars::sample_hyperparameters(aux_hyper, aux_B, aux_A, VB, prior);
     aux_A         = bsvars::sample_A_homosk1(aux_A, aux_B, aux_hyper, Y, X, prior);
     aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
     
-    return sample_Q(lags, Y, X, aux_A, aux_B, aux_hyper, prior, VB, 
+    return sample_Q(lags, Y, X,
+                    aux_w, aux_A, aux_B, aux_hyper, 
+                    prior, VB,
                     sign_irf, sign_narrative, sign_B,
-                    Z, aux_w);
+                    max_tries, n_fails);
   }
   
   if (has_narrative) {
-    aux_w = approximate_w(sign_narrative, irf, Z);
+    aux_w = approximate_w(T, sign_narrative, irf);
   }
   
   return Q;

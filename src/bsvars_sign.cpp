@@ -14,18 +14,19 @@ using namespace arma;
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 Rcpp::List bsvar_sign_cpp(
-    const int&  S,                        // number of draws from the posterior
-    const int&  lags,                     // number of lags
+    const int&        S,                  // number of draws from the posterior
+    const int&        lags,               // number of lags
     const arma::mat&  Y,                  // NxT dependent variables
     const arma::mat&  X,                  // KxT dependent variables
     const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
-    const arma::mat&  sign_narrative,            // Mx6 matrix of signs for historical decomposition
+    const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // Mx6 matrix of signs for B
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
     const int         thin = 100,         // introduce thinning
-    const bool        show_progress = true
+    const bool        show_progress = true,
+    const int&        max_tries = 10000   // maximum tries for Q draw
 ) {
   
   std::string oo = "";
@@ -50,7 +51,6 @@ Rcpp::List bsvar_sign_cpp(
   
   const int N       = Y.n_rows;
   const int K       = X.n_rows;
-  const int M       = pow(10, 4);
   
   mat   aux_B       = as<mat>(starting_values["B"]);
   mat   aux_A       = as<mat>(starting_values["A"]);
@@ -63,8 +63,8 @@ Rcpp::List bsvar_sign_cpp(
   cube  posterior_A(N, K, SS);
   cube  posterior_hyper(2 * N + 1, 2, SS);
   cube  posterior_Q(N, N, SS);
-  cube  Z(N, sign_narrative.col(5).max() + 1, M, fill::randn);
   
+  int    n_fails    = 0;
   int    ss         = 0;
   double aux_w      = 1;
   vec    w          = ones(SS);
@@ -81,9 +81,11 @@ Rcpp::List bsvar_sign_cpp(
     aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
     
     if (s % thin == 0) {
-      Q                          = sample_Q(lags, Y, X, aux_A, aux_B, aux_hyper, prior, VB, 
+      Q                          = sample_Q(lags, Y, X, 
+                                            aux_w, aux_A, aux_B, aux_hyper, 
+                                            prior, VB,
                                             sign_irf, sign_narrative, sign_B,
-                                            Z, aux_w);
+                                            max_tries, n_fails);
       
       posterior_B.slice(ss)      = aux_B;
       posterior_A.slice(ss)      = aux_A;
@@ -93,6 +95,8 @@ Rcpp::List bsvar_sign_cpp(
       ss++;
     }
   } // END s loop
+  
+  double fail = static_cast<double>(n_fails) / SS;
   
   return List::create(
     _["last_draw"]  = List::create(
@@ -106,7 +110,8 @@ Rcpp::List bsvar_sign_cpp(
       _["A"]        = posterior_A,
       _["hyper"]    = posterior_hyper,
       _["Q"]        = posterior_Q,
-      _["w"]        = w
+      _["w"]        = w,
+      _["fail"]     = fail
     )
   );
 } // END bsvar_sign_cpp
