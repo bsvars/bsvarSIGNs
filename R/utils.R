@@ -22,7 +22,7 @@ importance_sampling <- function(posterior) {
     posterior$posterior$hyper[, , indices]
   posterior$posterior$Q <- posterior$posterior$Q[, , indices]
   
-  posterior$posterior <- posterior$posterior[-5] # remove weights
+  posterior$posterior <- posterior$posterior[-4] # remove weights
   
   return(posterior)
 }
@@ -41,7 +41,6 @@ compute_irf <- function(posterior, horizon = 24) {
   
   irf_list <-
     irf_cpp(
-      posterior$posterior$Q,
       posterior$posterior$B,
       posterior$posterior$A,
       horizon,

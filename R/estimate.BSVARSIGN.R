@@ -71,10 +71,12 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
   output              = importance_sampling(output)
   
+  print(output$posterior)
+  
   fail                = output$posterior$fail
   if (fail > 0.05) {
-    cat(paste("Message: ", round(fail*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of",
-              max_tries, " tries. Consider increasing the parameter max_tries", sep = ""))
+    cat(paste("Message: ", round(fail*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
+              max_tries, " tries. Consider increasing the parameter max_tries\n", sep = ""))
   }
    
   return(output)
@@ -111,8 +113,8 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
   
   fail                = output$posterior$fail
   if (fail > 0.05) {
-    cat(paste("Message: ", round(fail*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of",
-              max_tries, " tries. Consider increasing the parameter max_tries", sep = ""))
+    cat(paste("Message: ", round(fail*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
+              max_tries, " tries. Consider increasing the parameter max_tries\n", sep = ""))
   }
   
   return(output)

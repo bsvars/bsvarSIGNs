@@ -311,17 +311,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // irf_cpp
-arma::field<arma::cube> irf_cpp(const arma::cube& posterior_Q, arma::cube& posterior_B, arma::cube& posterior_A, const int horizon, const int p);
-RcppExport SEXP _bsvarSIGNs_irf_cpp(SEXP posterior_QSEXP, SEXP posterior_BSEXP, SEXP posterior_ASEXP, SEXP horizonSEXP, SEXP pSEXP) {
+arma::field<arma::cube> irf_cpp(arma::cube& posterior_B, arma::cube& posterior_A, const int horizon, const int p);
+RcppExport SEXP _bsvarSIGNs_irf_cpp(SEXP posterior_BSEXP, SEXP posterior_ASEXP, SEXP horizonSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::cube& >::type posterior_Q(posterior_QSEXP);
     Rcpp::traits::input_parameter< arma::cube& >::type posterior_B(posterior_BSEXP);
     Rcpp::traits::input_parameter< arma::cube& >::type posterior_A(posterior_ASEXP);
     Rcpp::traits::input_parameter< const int >::type horizon(horizonSEXP);
     Rcpp::traits::input_parameter< const int >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(irf_cpp(posterior_Q, posterior_B, posterior_A, horizon, p));
+    rcpp_result_gen = Rcpp::wrap(irf_cpp(posterior_B, posterior_A, horizon, p));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -364,7 +363,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_sample_Q", (DL_FUNC) &_bsvarSIGNs_sample_Q, 14},
     {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
     {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
-    {"_bsvarSIGNs_irf_cpp", (DL_FUNC) &_bsvarSIGNs_irf_cpp, 5},
+    {"_bsvarSIGNs_irf_cpp", (DL_FUNC) &_bsvarSIGNs_irf_cpp, 4},
     {"_bsvarSIGNs_RcppExport_registerCCallable", (DL_FUNC) &_bsvarSIGNs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

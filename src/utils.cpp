@@ -38,20 +38,19 @@ arma::mat rortho_cpp(const int& N) {
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 arma::field<arma::cube> irf_cpp(
-    const arma::cube&   posterior_Q,        // (N, N, S)
     arma::cube&         posterior_B,        // (N, N, S)
     arma::cube&         posterior_A,        // (N, K, S)
     const int           horizon,
     const int           p
 ) {
   
-  const int   S = posterior_Q.n_slices;
+  // const int   S = posterior_Q.n_slices;
+  // 
+  // cube        QB(size(posterior_Q));
+  // 
+  // for(int s = 0; s < S; s++) {
+  //   QB.slice(s) = posterior_Q.slice(s).t() * posterior_B.slice(s);
+  // }
   
-  cube        QB(size(posterior_Q));
-  
-  for(int s = 0; s < S; s++) {
-    QB.slice(s) = posterior_Q.slice(s).t() * posterior_B.slice(s);
-  }
-  
-  return bsvars::bsvars_ir(QB, posterior_A, horizon, p);
+  return bsvars::bsvars_ir(posterior_B, posterior_A, horizon, p);
 }
