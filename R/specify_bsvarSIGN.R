@@ -20,6 +20,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_narrative  = matrix(),
     #' @field sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     sign_B   = matrix(),
+    #' @field max_tries a positive integer with the maximum number of iterations 
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
+    max_tries = 10000,
     
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGNs.
@@ -43,8 +46,10 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' start: starting period of the restriction; \cr
     #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
+    #' @param max_tries a positive integer with the maximum number of iterations
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGNs.
-    initialize = function(N, sign_irf, sign_narrative, sign_B) {
+    initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 10000) {
         B     = matrix(FALSE, N, N)
         B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -57,18 +62,19 @@ specify_identification_bsvarSIGN = R6::R6Class(
       self$sign_irf <- sign_irf
       self$sign_narrative  <- sign_narrative
       self$sign_B   <- sign_B
+      self$max_tries <- max_tries
     }, # END initialize
     
     #' @description
     #' Returns the elements of the identification pattern IdentificationBSVARSIGNs as a \code{list}.
-    #'
     #'
     get_identification = function() {
       list(
         VB       = as.list(self$VB),
         sign_irf = as.array(self$sign_irf),
         sign_narrative  = as.matrix(self$sign_narrative),
-        sign_B   = as.matrix(self$sign_B)
+        sign_B   = as.matrix(self$sign_B),
+        max_tries       = self$max_tries
         )
     }, # END get_identification
     
@@ -94,7 +100,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' start: starting period of the restriction; \cr
     #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
-    #'
+    #' @param max_tries a positive integer with the maximum number of iterations
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     set_identification = function(N, sign_irf, sign_narrative, sign_B) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -165,6 +172,8 @@ specify_bsvarSIGN = R6::R6Class(
     #' start: starting period of the restriction; \cr
     #' horizons: horizons of the restriction, input 0 if only one period \cr
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
+    #' @param max_tries a positive integer with the maximum number of iterations
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
@@ -176,6 +185,7 @@ specify_bsvarSIGN = R6::R6Class(
     sign_irf,
     sign_narrative,
     sign_B,
+    max_tries = 10000L,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
     ) {
@@ -208,7 +218,7 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices   = bsvars::specify_data_matrices$new(data, p, exogenous)
-      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_narrative, sign_B)
+      self$identification  = specify_identification_bsvarSIGN$new(N, sign_irf, sign_narrative, sign_B, max_tries)
       self$prior           = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
       self$starting_values = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
@@ -266,7 +276,7 @@ specify_posterior_bsvarSIGN = R6::R6Class(
   # inherit = bsvars::specify_posterior_bsvar,
   
   private = list(
-    normalised = FALSE
+    normalised = TRUE
   ), # END private
   
   public = list(
@@ -320,20 +330,7 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #'
     is_normalised      = function(){
       private$normalised
-    }, # END is_normalised
-    
-    #' @description
-    #' Sets the private indicator \code{normalised} to TRUE.
-    #' @param value (optional) a logical value to be passed to indicator \code{normalised}.
-    #'
-    #'
-    set_normalised     = function(value){
-      if (missing(value)) {
-        private$normalised <- TRUE
-      } else {
-        private$normalised <- value
-      }
-    } # END set_normalised
+    } # END is_normalised
     
   ) # END public
 ) # END specify_posterior_bsvarSIGN

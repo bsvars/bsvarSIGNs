@@ -25,7 +25,7 @@
 #' @param S a positive integer, the number of posterior draws to be generated
 #' @param thin a positive integer, specifying the frequency of MCMC output thinning
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
-#' @param max_tries a integer value, the maximum number of tries for sampling orthogonal matrix Q
+## @param max_tries a integer value, the maximum number of tries for sampling orthogonal matrix Q
 #' 
 #' @return An object of class PosteriorBSVAR containing the Bayesian estimation output and containing two elements:
 #' 
@@ -52,12 +52,13 @@
 #' 
 #' 
 #' @export
-estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE, max_tries = 10000) {
+estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
   
   # get the inputs to estimation
   prior               = specification$prior$get_prior()
   starting_values     = specification$starting_values$get_starting_values()
   identification      = specification$identification$get_identification()
+  max_tries           = identification$max_tries
   data_matrices       = specification$data_matrices$get_data_matrices()
   p                   = specification$p
 
@@ -71,12 +72,10 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
   output              = importance_sampling(output)
   
-  print(output$posterior)
-  
   fail                = output$posterior$fail
   if (fail > 0.05) {
     cat(paste("Message: ", round(fail*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
-              max_tries, " tries. Consider increasing the parameter max_tries\n", sep = ""))
+              max_tries, " tries. Consider increasing the parameter max_tries of the specify_bsvarSIGN.\n", sep = ""))
   }
    
   return(output)
@@ -92,12 +91,13 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
 #' 
 #'
 #' @export
-estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE, max_tries = 10000) {
+estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
   
   # get the inputs to estimation
   prior               = specification$last_draw$prior$get_prior()
   starting_values     = specification$last_draw$starting_values$get_starting_values()
   identification      = specification$last_draw$identification$get_identification()
+  max_tries           = identification$max_tries
   data_matrices       = specification$last_draw$data_matrices$get_data_matrices()
   p                   = specification$last_draw$p
   

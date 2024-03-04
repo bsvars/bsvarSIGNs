@@ -44,6 +44,7 @@ Create a new specification of the homoskedastic bsvar model BSVARSIGN.
   sign_irf,
   sign_narrative,
   sign_B,
+  max_tries = 10000L,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -77,6 +78,9 @@ start: starting period of the restriction; \cr
 horizons: horizons of the restriction, input 0 if only one period \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+
+\item{\code{max_tries}}{a positive integer with the maximum number of iterations
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 

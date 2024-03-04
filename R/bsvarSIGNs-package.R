@@ -12,6 +12,7 @@
 #' @useDynLib bsvarSIGNs, .registration = TRUE
 #' @importFrom R6 R6Class
 #' @importFrom Rcpp sourceCpp
+#' @importFrom bsvars estimate
 #' @import bsvars
 #' @import RcppArmadillo
 #' @import RcppProgress

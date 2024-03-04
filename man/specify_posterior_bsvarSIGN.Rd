@@ -27,7 +27,6 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \item \href{#method-PosteriorBSVAR-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
 \item \href{#method-PosteriorBSVAR-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
 \item \href{#method-PosteriorBSVAR-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
-\item \href{#method-PosteriorBSVAR-set_normalised}{\code{specify_posterior_bsvarSIGN$set_normalised()}}
 \item \href{#method-PosteriorBSVAR-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
 }
 }
@@ -87,23 +86,6 @@ and \code{FALSE} otherwise.
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$is_normalised()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-set_normalised"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-set_normalised}{}}}
-\subsection{Method \code{set_normalised()}}{
-Sets the private indicator \code{normalised} to TRUE.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$set_normalised(value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{value}}{(optional) a logical value to be passed to indicator \code{normalised}.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PosteriorBSVAR-clone"></a>}}

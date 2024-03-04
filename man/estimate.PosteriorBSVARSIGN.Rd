@@ -4,7 +4,7 @@
 \alias{estimate.PosteriorBSVARSIGN}
 \title{Bayesian estimation of a homoskedastic Structural Vector Autoregression via Gibbs sampler}
 \usage{
-\method{estimate}{PosteriorBSVARSIGN}(specification, S, thin = 10, show_progress = TRUE, max_tries = 10000)
+\method{estimate}{PosteriorBSVARSIGN}(specification, S, thin = 10, show_progress = TRUE)
 }
 \arguments{
 \item{specification}{an object of class PosteriorBSVARSIGN generated using the \code{estimate.BSVARSIGN()} function.
@@ -15,8 +15,6 @@ This setup facilitates the continuation of the MCMC sampling starting from the l
 \item{thin}{a positive integer, specifying the frequency of MCMC output thinning}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
-
-\item{max_tries}{a integer value, the maximum number of tries for sampling orthogonal matrix Q}
 }
 \value{
 An object of class PosteriorBSVAR containing the Bayesian estimation output and containing two elements:

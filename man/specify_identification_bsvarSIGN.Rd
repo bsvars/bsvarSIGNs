@@ -16,6 +16,9 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 \item{\code{sign_narrative}}{a \code{Kx6} matrix of narrative sign restrictions.}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+
+\item{\code{max_tries}}{a positive integer with the maximum number of iterations 
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -34,7 +37,13 @@ The class IdentificationBSVARSIGNs presents the identifying restrictions for the
 \subsection{Method \code{new()}}{
 Create new identifying restrictions IdentificationBSVARSIGNs.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(N, sign_irf, sign_narrative, sign_B)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(
+  N,
+  sign_irf,
+  sign_narrative,
+  sign_B,
+  max_tries = 10000
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -63,6 +72,9 @@ start: starting period of the restriction; \cr
 horizons: horizons of the restriction, input 0 if only one period \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+
+\item{\code{max_tries}}{a positive integer with the maximum number of iterations
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -120,6 +132,9 @@ start: starting period of the restriction; \cr
 horizons: horizons of the restriction, input 0 if only one period \cr}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+
+\item{\code{max_tries}}{a positive integer with the maximum number of iterations
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
 \if{html}{\out{</div>}}
 }

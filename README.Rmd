@@ -27,7 +27,7 @@ devtools::install_github("bsvars/bsvarSIGNs")
 
 A repliaction of Antolín-Díaz & Rubio-Ramírez (2018).
 
-```{r}
+```
 library(bsvarSIGNs)
 
 data(oil)
@@ -41,7 +41,7 @@ specification  <- specify_bsvarSIGN$new(oil,
                                         sign_irf = sign_irf,
                                         sign_narrative = sign_narrative)
 
-posterior      <- estimate.BSVARSIGN(specification, S = 10000, thin = 10, max_tries = 20000000)
+posterior      <- estimate(specification, S = 10000, thin = 10)
 irf            <- compute_irf(posterior, horizon = 24)
 ```
 
