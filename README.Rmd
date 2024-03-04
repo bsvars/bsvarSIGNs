@@ -19,7 +19,7 @@ Developing an R package for Bayesian Structural VARs identified by sign and narr
 
 # Installation
 
-```{r}
+```r
 devtools::install_github("bsvars/bsvarSIGNs")
 ```
 
@@ -27,7 +27,7 @@ devtools::install_github("bsvars/bsvarSIGNs")
 
 A repliaction of Antolín-Díaz & Rubio-Ramírez (2018).
 
-```
+```r
 library(bsvarSIGNs)
 
 data(oil)
