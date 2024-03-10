@@ -271,9 +271,7 @@ specify_bsvarSIGN = R6::R6Class(
 #'
 #' @export
 specify_posterior_bsvarSIGN = R6::R6Class(
-  "PosteriorBSVAR",
-  # "PosteriorBSVARSIGN",
-  # inherit = bsvars::specify_posterior_bsvar,
+  "PosteriorBSVARSIGN",
   
   private = list(
     normalised = TRUE
