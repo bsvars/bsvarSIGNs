@@ -5,6 +5,11 @@
 #' @description
 #' The class IdentificationBSVARSIGNs presents the identifying restrictions for the bsvar models.
 #'
+#' @examples 
+#' specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
+#' 
+#' sign_narrative <- matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+#' specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) # an identification pattern with narrative sign restrictions
 #'
 #' @export
 specify_identification_bsvarSIGN = R6::R6Class(
@@ -50,8 +55,23 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGNs.
     initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 10000) {
-        B     = matrix(FALSE, N, N)
-        B[lower.tri(B, diag = TRUE)] = TRUE
+        
+      if (missing(sign_irf)) {
+        sign_irf <- array(rep(0, N^2), dim = c(N, N, 1))
+      }
+      
+      if (missing(sign_narrative)) {
+        sign_narrative <- matrix(rep(0, 6), ncol = 6, nrow = 1)
+      }
+      
+      if (missing(sign_B)) {
+        sign_B <- matrix(rep(0, N^2), ncol = N, nrow = N)
+      }
+      
+      # stopifnot("Incorrectly specified argument B." = (is.matrix(B) & is.logical(B)) | (length(B) == 1 & is.na(B)))
+      
+      B     = matrix(FALSE, N, N)
+      B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$VB          <- vector("list", N)
       for (n in 1:N) {
