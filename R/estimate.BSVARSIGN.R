@@ -1,5 +1,6 @@
 
-#' @title Bayesian estimation of a homoskedastic Structural Vector Autoregression via Gibbs sampler
+#' @title Bayesian estimation of a homoskedastic Structural Vector Autoregression
+#' with traditional and narrative sign restrictions via Gibbs sampler
 #'
 #' @description Estimates the homoskedastic SVAR using the Gibbs sampler proposed by Waggoner & Zha (2003)
 #' for the structural matrix \eqn{B} and the equation-by-equation sampler by Chan, Koop, & Yu (2021)
@@ -7,6 +8,13 @@
 #' follow a Minnesota prior and generalised-normal prior distributions respectively with the matrix-specific
 #' overall shrinkage parameters estimated using a hierarchical prior distribution. 
 #' See section \bold{Details} for the model equations.
+#' 
+#' Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix 
+#' \eqn{Q} uniformly from the space of \code{NxN} orthogonal matrices and checks if the sign restrictions
+#' are satisfied. If a valid \eqn{Q} is found within \code{max_tries}, the sampler proceeds to the next 
+#' iteration. Otherwise, the sampler increments the number of failures then proceeds to next iteration
+#' without saving \eqn{A} and \eqn{B} draws. If a narrative sign restriction is given, the posterior
+#' draws are resampled with algorithm 1 in Antolín-Díaz & Rubio-Ramírez (2018).
 #' 
 #' @details 
 #' The homoskedastic SVAR model is given by the reduced form equation:
@@ -17,28 +25,30 @@
 #' The structural equation is given by
 #' \deqn{BE = U}
 #' where \eqn{U} is an \code{NxT} matrix of structural form error terms, and
-#' \eqn{B} is an \code{NxN} matrix of contemporaneous relationships.
+#' \eqn{B} is an \code{NxN} matrix of contemporaneous relationships. More specifically,
+#' \deqn{B = Q'P}
+#' where \eqn{Q} is an \code{NxN} rotation matrix and \eqn{P} is an \code{NxN} lower triangular matrix.
 #' 
 #' Finally, the structural shocks, \code{U}, are temporally and contemporaneously independent and jointly normally distributed with zero mean and unit variances.
 #' 
-#' @param specification an object of class BSVAR generated using the \code{specify_bsvar$new()} function.
+#' @param specification an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.
 #' @param S a positive integer, the number of posterior draws to be generated
 #' @param thin a positive integer, specifying the frequency of MCMC output thinning
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
-## @param max_tries a integer value, the maximum number of tries for sampling orthogonal matrix Q
 #' 
-#' @return An object of class PosteriorBSVAR containing the Bayesian estimation output and containing two elements:
+#' @return An object of class PosteriorBSVARSIGN containing the Bayesian estimation output and containing two elements:
 #' 
 #'  \code{posterior} a list with a collection of \code{S} draws from the posterior distribution generated via Gibbs sampler containing:
 #'  \describe{
 #'  \item{A}{an \code{NxKxS} array with the posterior draws for matrix \eqn{A}}
 #'  \item{B}{an \code{NxNxS} array with the posterior draws for matrix \eqn{B}}
 #'  \item{hyper}{a \code{5xS} matrix with the posterior draws for the hyper-parameters of the hierarchical prior distribution}
+#'  \item{fail}{a scalar probability of failure to reach a valid Q within \code{max_tries}}
 #' }
 #' 
-#' \code{last_draw} an object of class BSVAR with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}. 
+#' \code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}. 
 #'
-#' @author Tomasz Woźniak \email{wozniak.tom@pm.me}
+#' @author Tomasz Woźniak \email{wozniak.tom@pm.me}, Xiaolei Wang \email{adamwang15@gmail.com}
 #' 
 #' @references Sampling from the generalised-normal full conditional posterior distribution of matrix \eqn{B} is implemented using the Gibbs sampler by:
 #' 
@@ -48,8 +58,32 @@
 #' 
 #' Chan, J.C.C., Koop, G, and Yu, X. (2021) Large Order-Invariant Bayesian VARs with Stochastic Volatility.
 #' 
+#' Narrative sign restrictions are implemented using algorithm 1 in:
+#' 
+#' Antolín-Díaz, J., & Rubio-Ramírez, J. F. (2018). Narrative sign restrictions for SVARs.
+#' 
 #' @method estimate BSVARSIGN
 #' 
+#' @examples
+#' # simple workflow
+#' ############################################################
+#' 
+#' # upload data
+#' data(oil)
+#'
+#' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
+#' sign_narrative = matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+#' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
+#'                        dim = c(3, 3, 1))
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' specification  = specify_bsvarSIGN$new(oil,
+#'                                        p              = 12,
+#'                                        sign_irf       = sign_irf,
+#'                                        sign_narrative = sign_narrative
+#'                                        )
+#' poesterior     = estimate(specification, S = 10, thin = 2)
 #' 
 #' @export
 estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
@@ -119,3 +153,4 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
   
   return(output)
 }
+
