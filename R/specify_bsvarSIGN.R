@@ -1,9 +1,9 @@
 
 
-#' R6 Class Representing IdentificationBSVARSIGNs
+#' R6 Class Representing IdentificationBSVARSIGN
 #'
 #' @description
-#' The class IdentificationBSVARSIGNs presents the identifying restrictions for the bsvar models.
+#' The class IdentificationBSVARSIGN presents the identifying restrictions for the bsvar models with sign and narrative restrictions.
 #'
 #' @examples 
 #' specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
@@ -13,7 +13,7 @@
 #'
 #' @export
 specify_identification_bsvarSIGN = R6::R6Class(
-  "IdentificationBSVARSIGNs",
+  "IdentificationBSVARSIGN",
   
   public = list(
     
@@ -30,7 +30,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     max_tries = 10000,
     
     #' @description
-    #' Create new identifying restrictions IdentificationBSVARSIGNs.
+    #' Create new identifying restrictions IdentificationBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
     #' up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
@@ -53,7 +53,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @param sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
-    #' @return Identifying restrictions IdentificationBSVARSIGNs.
+    #' @return Identifying restrictions IdentificationBSVARSIGN.
     initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 10000) {
         
       if (missing(sign_irf)) {
@@ -67,8 +67,6 @@ specify_identification_bsvarSIGN = R6::R6Class(
       if (missing(sign_B)) {
         sign_B <- matrix(rep(0, N^2), ncol = N, nrow = N)
       }
-      
-      # stopifnot("Incorrectly specified argument B." = (is.matrix(B) & is.logical(B)) | (length(B) == 1 & is.na(B)))
       
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -86,7 +84,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     }, # END initialize
     
     #' @description
-    #' Returns the elements of the identification pattern IdentificationBSVARSIGNs as a \code{list}.
+    #' Returns the elements of the identification pattern IdentificationBSVARSIGN as a \code{list}.
     #'
     get_identification = function() {
       list(
@@ -141,12 +139,19 @@ specify_identification_bsvarSIGN = R6::R6Class(
 
 
 
-#' R6 Class representing the specification of the homoskedastic BSVARSIGN model
+#' R6 Class representing the specification of the BSVARSIGN model
 #'
 #' @description
-#' The class BSVARSIGN presents complete specification for the homoskedastic bsvar model.
+#' The class BSVARSIGN presents complete specification for the bsvar model with sign and narrative restrictions.
 #'
-#'
+#' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
+#' 
+#' @examples 
+#' data(oil)
+#' spec = specify_bsvarSIGN$new(
+#'    data = oil,
+#'    p = 4
+#' )
 #'
 #' @export
 specify_bsvarSIGN = R6::R6Class(
@@ -170,7 +175,7 @@ specify_bsvarSIGN = R6::R6Class(
     starting_values        = list(),
     
     #' @description
-    #' Create a new specification of the homoskedastic bsvar model BSVARSIGN.
+    #' Create a new specification of the bsvar model with sign and narrative restrictions BSVARSIGN.
     #' @param data a \code{(T+p)xN} matrix with time series data.
     #' @param p a positive integer providing model's autoregressive lag order.
     #' @param sign_irf a \code{NxNxh} array of sign restrictions on the impulse response functions
@@ -244,32 +249,60 @@ specify_bsvarSIGN = R6::R6Class(
     }, # END initialize
     
     #' @description
-    #' Returns the data matrices as the DataMatricesBSVARSIGN object.
+    #' Returns the data matrices as the DataMatricesBSVAR object.
     #'
+    #' @examples 
+    #' data(oil)
+    #' spec = specify_bsvarSIGN$new(
+    #'    data = oil,
+    #'    p = 4
+    #' )
+    #' spec$get_data_matrices()
     #'
     get_data_matrices = function() {
       self$data_matrices$clone()
     }, # END get_data_matrices
     
     #' @description
-    #' Returns the identifying restrictions as the IdentificationBSVARSIGNs object.
+    #' Returns the identifying restrictions as the IdentificationBSVARSIGN object.
     #'
+    #' @examples 
+    #' data(oil)
+    #' spec = specify_bsvarSIGN$new(
+    #'    data = oil,
+    #'    p = 4
+    #' )
+    #' spec$get_identification()
     #'
     get_identification = function() {
       self$identification$clone()
     }, # END get_identification
     
     #' @description
-    #' Returns the prior specification as the PriorBSVARSIGN object.
+    #' Returns the prior specification as the PriorBSVAR object.
     #'
+    #' @examples 
+    #' data(oil)
+    #' spec = specify_bsvarSIGN$new(
+    #'    data = oil,
+    #'    p = 4
+    #' )
+    #' spec$get_prior()
     #'
     get_prior = function() {
       self$prior$clone()
     }, # END get_prior
     
     #' @description
-    #' Returns the starting values as the StartingValuesBSVARSIGN object.
+    #' Returns the starting values as the StartingValuesBSVAR object.
     #'
+    #' @examples 
+    #' data(oil)
+    #' spec = specify_bsvarSIGN$new(
+    #'    data = oil,
+    #'    p = 4
+    #' )
+    #' spec$get_starting_values()
     #'
     get_starting_values = function() {
       self$starting_values$clone()
@@ -283,11 +316,19 @@ specify_bsvarSIGN = R6::R6Class(
 #'
 #' @description
 #' The class PosteriorBSVARSIGN contains posterior output and the specification including
-#' the last MCMC draw for the homoskedastic bsvar model.
+#' the last MCMC draw for the bsvar model with sign and narrative restrictions.
 #' Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 #' might not be equal to the last draw provided in element \code{posterior}.
 #'
-#'
+#' @seealso \code{\link{estimate}}, \code{\link{specify_bsvarSIGN}}
+#' 
+#' @examples 
+#' # This is a function that is used within estimate()
+#' data(oil)
+#' specification  = specify_bsvarSIGN$new(oil, p = 4)
+#' set.seed(123)
+#' estimate       = estimate(specification, 50)
+#' class(estimate)
 #'
 #' @export
 specify_posterior_bsvarSIGN = R6::R6Class(
@@ -327,6 +368,12 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' Returns a list containing Bayesian estimation output collected in elements
     #' an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
     #'
+    #' @examples 
+    #' data(oil)
+    #' specification  = specify_bsvarSIGN$new(oil)
+    #' set.seed(123)
+    #' estimate       = estimate(specification, 50)
+    #' estimate$get_posterior()
     #'
     get_posterior       = function(){
       self$posterior
@@ -336,6 +383,18 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
     #' the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
     #'
+    #' @examples
+    #' data(oil)
+    #' 
+    #' # specify the model and set seed
+    #' specification  = specify_bsvarSIGN$new(oil)
+    #' set.seed(123)
+    #' 
+    #' # run the burn-in
+    #' burn_in        = estimate(specification, 10)
+    #' 
+    #' # estimate the model
+    #' posterior      = estimate(burn_in, 10)
     #'
     get_last_draw      = function(){
       self$last_draw$clone()
@@ -345,6 +404,14 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
     #' and \code{FALSE} otherwise.
     #'
+    #' @examples
+    #' data(oil)
+    #' specification  = specify_bsvarSIGN$new(oil)
+    #' set.seed(123)
+    #' estimate       = estimate(specification, 20)
+    #' 
+    #' # check normalisation status afterwards
+    #' posterior$is_normalised()
     #'
     is_normalised      = function(){
       private$normalised
