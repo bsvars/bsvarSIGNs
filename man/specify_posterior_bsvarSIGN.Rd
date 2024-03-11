@@ -5,9 +5,62 @@
 \title{R6 Class Representing PosteriorBSVARSIGN}
 \description{
 The class PosteriorBSVARSIGN contains posterior output and the specification including
-the last MCMC draw for the homoskedastic bsvar model.
+the last MCMC draw for the bsvar model with sign and narrative restrictions.
 Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 might not be equal to the last draw provided in element \code{posterior}.
+}
+\examples{
+# This is a function that is used within estimate()
+data(oil)
+specification  = specify_bsvarSIGN$new(oil, p = 4)
+set.seed(123)
+posterior      = estimate(specification, 50)
+class(posterior)
+
+
+## ------------------------------------------------
+## Method `specify_posterior_bsvarSIGN$get_posterior`
+## ------------------------------------------------
+
+data(oil)
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+estimate       = estimate(specification, 50)
+estimate$get_posterior()
+
+
+## ------------------------------------------------
+## Method `specify_posterior_bsvarSIGN$get_last_draw`
+## ------------------------------------------------
+
+data(oil)
+
+# specify the model and set seed
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+
+# run the burn-in
+burn_in        = estimate(specification, 10)
+
+# estimate the model
+posterior      = estimate(burn_in, 10)
+
+
+## ------------------------------------------------
+## Method `specify_posterior_bsvarSIGN$is_normalised`
+## ------------------------------------------------
+
+data(oil)
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+estimate       = estimate(specification, 20)
+
+# check normalisation status afterwards
+posterior$is_normalised()
+
+}
+\seealso{
+\code{\link{estimate}}, \code{\link{specify_bsvarSIGN}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -23,16 +76,16 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-PosteriorBSVAR-new}{\code{specify_posterior_bsvarSIGN$new()}}
-\item \href{#method-PosteriorBSVAR-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
-\item \href{#method-PosteriorBSVAR-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
-\item \href{#method-PosteriorBSVAR-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
-\item \href{#method-PosteriorBSVAR-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
+\item \href{#method-PosteriorBSVARSIGN-new}{\code{specify_posterior_bsvarSIGN$new()}}
+\item \href{#method-PosteriorBSVARSIGN-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
+\item \href{#method-PosteriorBSVARSIGN-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
+\item \href{#method-PosteriorBSVARSIGN-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
+\item \href{#method-PosteriorBSVARSIGN-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-new"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-new}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new posterior output PosteriorBSVARSIGN.
 \subsection{Usage}{
@@ -55,8 +108,8 @@ A posterior output PosteriorBSVARSIGN.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-get_posterior"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-get_posterior}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_posterior"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_posterior}{}}}
 \subsection{Method \code{get_posterior()}}{
 Returns a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
@@ -64,10 +117,23 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_posterior()}\if{html}{\out{</div>}}
 }
 
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+estimate       = estimate(specification, 50)
+estimate$get_posterior()
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-get_last_draw"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-get_last_draw}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_last_draw"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_last_draw}{}}}
 \subsection{Method \code{get_last_draw()}}{
 Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
@@ -75,10 +141,29 @@ the starting value to be passed to the continuation of the MCMC estimation using
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_last_draw()}\if{html}{\out{</div>}}
 }
 
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+
+# specify the model and set seed
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+
+# run the burn-in
+burn_in        = estimate(specification, 10)
+
+# estimate the model
+posterior      = estimate(burn_in, 10)
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-is_normalised"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-is_normalised}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-is_normalised"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-is_normalised}{}}}
 \subsection{Method \code{is_normalised()}}{
 Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
 and \code{FALSE} otherwise.
@@ -86,10 +171,25 @@ and \code{FALSE} otherwise.
 \if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$is_normalised()}\if{html}{\out{</div>}}
 }
 
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+specification  = specify_bsvarSIGN$new(oil)
+set.seed(123)
+estimate       = estimate(specification, 20)
+
+# check normalisation status afterwards
+posterior$is_normalised()
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVAR-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVAR-clone}{}}}
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

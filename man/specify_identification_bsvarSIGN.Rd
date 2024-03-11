@@ -2,9 +2,17 @@
 % Please edit documentation in R/specify_bsvarSIGN.R
 \name{specify_identification_bsvarSIGN}
 \alias{specify_identification_bsvarSIGN}
-\title{R6 Class Representing IdentificationBSVARSIGNs}
+\title{R6 Class Representing IdentificationBSVARSIGN}
 \description{
-The class IdentificationBSVARSIGNs presents the identifying restrictions for the bsvar models.
+The class IdentificationBSVARSIGN presents the identifying restrictions for the bsvar models with sign and narrative restrictions.
+}
+\examples{
+specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
+
+# an identification pattern with narrative sign restrictions
+sign_narrative <- matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) 
+
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -25,17 +33,17 @@ for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-IdentificationBSVARSIGNs-new}{\code{specify_identification_bsvarSIGN$new()}}
-\item \href{#method-IdentificationBSVARSIGNs-get_identification}{\code{specify_identification_bsvarSIGN$get_identification()}}
-\item \href{#method-IdentificationBSVARSIGNs-set_identification}{\code{specify_identification_bsvarSIGN$set_identification()}}
-\item \href{#method-IdentificationBSVARSIGNs-clone}{\code{specify_identification_bsvarSIGN$clone()}}
+\item \href{#method-IdentificationBSVARSIGN-new}{\code{specify_identification_bsvarSIGN$new()}}
+\item \href{#method-IdentificationBSVARSIGN-get_identification}{\code{specify_identification_bsvarSIGN$get_identification()}}
+\item \href{#method-IdentificationBSVARSIGN-set_identification}{\code{specify_identification_bsvarSIGN$set_identification()}}
+\item \href{#method-IdentificationBSVARSIGN-clone}{\code{specify_identification_bsvarSIGN$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IdentificationBSVARSIGNs-new"></a>}}
-\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGNs-new}{}}}
+\if{html}{\out{<a id="method-IdentificationBSVARSIGN-new"></a>}}
+\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-new}{}}}
 \subsection{Method \code{new()}}{
-Create new identifying restrictions IdentificationBSVARSIGNs.
+Create new identifying restrictions IdentificationBSVARSIGN.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(
   N,
@@ -79,22 +87,22 @@ for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Identifying restrictions IdentificationBSVARSIGNs.
+Identifying restrictions IdentificationBSVARSIGN.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IdentificationBSVARSIGNs-get_identification"></a>}}
-\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGNs-get_identification}{}}}
+\if{html}{\out{<a id="method-IdentificationBSVARSIGN-get_identification"></a>}}
+\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-get_identification}{}}}
 \subsection{Method \code{get_identification()}}{
-Returns the elements of the identification pattern IdentificationBSVARSIGNs as a \code{list}.
+Returns the elements of the identification pattern IdentificationBSVARSIGN as a \code{list}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$get_identification()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IdentificationBSVARSIGNs-set_identification"></a>}}
-\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGNs-set_identification}{}}}
+\if{html}{\out{<a id="method-IdentificationBSVARSIGN-set_identification"></a>}}
+\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-set_identification}{}}}
 \subsection{Method \code{set_identification()}}{
 Set new starting values StartingValuesBSVARSIGN.
 \subsection{Usage}{
@@ -140,8 +148,8 @@ for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IdentificationBSVARSIGNs-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGNs-clone}{}}}
+\if{html}{\out{<a id="method-IdentificationBSVARSIGN-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

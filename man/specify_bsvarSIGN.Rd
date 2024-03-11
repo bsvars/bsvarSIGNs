@@ -2,9 +2,68 @@
 % Please edit documentation in R/specify_bsvarSIGN.R
 \name{specify_bsvarSIGN}
 \alias{specify_bsvarSIGN}
-\title{R6 Class representing the specification of the homoskedastic BSVARSIGN model}
+\title{R6 Class representing the specification of the BSVARSIGN model}
 \description{
-The class BSVARSIGN presents complete specification for the homoskedastic bsvar model.
+The class BSVARSIGN presents complete specification for the bsvar model with sign and narrative restrictions.
+}
+\examples{
+data(oil)
+specification = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$get_data_matrices`
+## ------------------------------------------------
+
+data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_data_matrices()
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$get_identification`
+## ------------------------------------------------
+
+data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_identification()
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$get_prior`
+## ------------------------------------------------
+
+data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_prior()
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$get_starting_values`
+## ------------------------------------------------
+
+data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_starting_values()
+
+}
+\seealso{
+\code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -36,7 +95,7 @@ The class BSVARSIGN presents complete specification for the homoskedastic bsvar 
 \if{html}{\out{<a id="method-BSVARSIGN-new"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new specification of the homoskedastic bsvar model BSVARSIGN.
+Create a new specification of the bsvar model with sign and narrative restrictions BSVARSIGN.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$new(
   data,
@@ -98,9 +157,23 @@ A new complete specification for the homoskedastic bsvar model BSVARSIGN.
 \if{html}{\out{<a id="method-BSVARSIGN-get_data_matrices"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_data_matrices}{}}}
 \subsection{Method \code{get_data_matrices()}}{
-Returns the data matrices as the DataMatricesBSVARSIGN object.
+Returns the data matrices as the DataMatricesBSVAR object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_data_matrices()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_data_matrices()
+
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -108,9 +181,23 @@ Returns the data matrices as the DataMatricesBSVARSIGN object.
 \if{html}{\out{<a id="method-BSVARSIGN-get_identification"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_identification}{}}}
 \subsection{Method \code{get_identification()}}{
-Returns the identifying restrictions as the IdentificationBSVARSIGNs object.
+Returns the identifying restrictions as the IdentificationBSVARSIGN object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_identification()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_identification()
+
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -118,9 +205,23 @@ Returns the identifying restrictions as the IdentificationBSVARSIGNs object.
 \if{html}{\out{<a id="method-BSVARSIGN-get_prior"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_prior}{}}}
 \subsection{Method \code{get_prior()}}{
-Returns the prior specification as the PriorBSVARSIGN object.
+Returns the prior specification as the PriorBSVAR object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_prior()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_prior()
+
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -128,9 +229,23 @@ Returns the prior specification as the PriorBSVARSIGN object.
 \if{html}{\out{<a id="method-BSVARSIGN-get_starting_values"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_starting_values}{}}}
 \subsection{Method \code{get_starting_values()}}{
-Returns the starting values as the StartingValuesBSVARSIGN object.
+Returns the starting values as the StartingValuesBSVAR object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_starting_values()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(oil)
+spec = specify_bsvarSIGN$new(
+   data = oil,
+   p = 4
+)
+spec$get_starting_values()
+
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

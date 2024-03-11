@@ -8,8 +8,9 @@
 #' @examples 
 #' specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
 #' 
+#' # an identification pattern with narrative sign restrictions
 #' sign_narrative <- matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
-#' specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) # an identification pattern with narrative sign restrictions
+#' specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) 
 #'
 #' @export
 specify_identification_bsvarSIGN = R6::R6Class(
@@ -148,7 +149,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #' 
 #' @examples 
 #' data(oil)
-#' spec = specify_bsvarSIGN$new(
+#' specification = specify_bsvarSIGN$new(
 #'    data = oil,
 #'    p = 4
 #' )
@@ -327,8 +328,8 @@ specify_bsvarSIGN = R6::R6Class(
 #' data(oil)
 #' specification  = specify_bsvarSIGN$new(oil, p = 4)
 #' set.seed(123)
-#' estimate       = estimate(specification, 50)
-#' class(estimate)
+#' posterior      = estimate(specification, 50)
+#' class(posterior)
 #'
 #' @export
 specify_posterior_bsvarSIGN = R6::R6Class(
