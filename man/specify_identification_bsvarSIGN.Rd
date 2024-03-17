@@ -10,7 +10,7 @@ The class IdentificationBSVARSIGN presents the identifying restrictions for the 
 specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
 
 # an identification pattern with narrative sign restrictions
-sign_narrative <- matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+sign_narrative <- matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
 specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) 
 
 }
@@ -19,9 +19,9 @@ specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative)
 \describe{
 \item{\code{VB}}{a list of \code{N} matrices determining the unrestricted elements of matrix \eqn{B}.}
 
-\item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions.}
+\item{\code{sign_irf}}{a \code{NxNxH} array of sign restrictions on the impulse response functions.}
 
-\item{\code{sign_narrative}}{a \code{Kx6} matrix of narrative sign restrictions.}
+\item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions.}
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
@@ -59,27 +59,33 @@ Create new identifying restrictions IdentificationBSVARSIGN.
 \describe{
 \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 
-\item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
-up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
--1: negative restriction, 0: no restriction, 1: positive restriction.}
+\item{\code{sign_irf}}{a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
+impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
+sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
+on the contemporaneous impulse response function.}
 
-\item{\code{sign_narrative}}{a \code{Kx6} matrix of narrative sign restrictions,
+\item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions,
 each row of the matrix corresponds to a different restriction,
-each column contains the following information: \cr
-| type | sign | var_i | shock_j | start | horizons | \cr
-type: 0 if no restriction; \cr
-1 if restriction on structural shock; \cr
+columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
+Column 1 (type):
+0 if no restriction;
+1 if restriction on structural shock;
 2 if type A restriction on historical decomposition
-i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
 3 if type B restriction on historical decomposition
-i.e. hd of shock_j on var_i is the largest (smallest); \cr
-sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
-var_i: \code{i}-th variable; \cr
-shock_j: \code{j}-th shock; \cr
-start: starting period of the restriction; \cr
-horizons: horizons of the restriction, input 0 if only one period \cr}
+i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
+Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
+Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
+Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
+Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
+if start=t and horizons=h the restriction in on periods t to t+h,
+e.g. when h=0 the restriction in only placed on period t.}
 
-\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+\item{\code{sign_B}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+contemporaneous relations \code{B} between reduced-form errors \code{E} and
+structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
+of \code{B} is the contemporaneous impulse response function.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
@@ -119,27 +125,33 @@ Set new starting values StartingValuesBSVARSIGN.
 \describe{
 \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 
-\item{\code{sign_irf}}{a \code{NxNxh} array of sign restrictions on the impulse response functions
-up to \code{h} horizons. Each \code{NxN} matrix only accept values in {-1 ,0, 1},
--1: negative restriction, 0: no restriction, 1: positive restriction.}
+\item{\code{sign_irf}}{a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
+impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
+sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
+on the contemporaneous impulse response function.}
 
 \item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions,
 each row of the matrix corresponds to a different restriction,
-each column contains the following information: \cr
-| type | sign | var_i | shock_j | start | horizons | \cr
-type: 0 if no restriction; \cr
-1 if restriction on structural shock; \cr
+columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
+Column 1 (type):
+0 if no restriction;
+1 if restriction on structural shock;
 2 if type A restriction on historical decomposition
-i.e. hd of shock_j on var_i is greater (less) than 0; \cr
+i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
 3 if type B restriction on historical decomposition
-i.e. hd of shock_j on var_i is the largest (smallest); \cr
-sign: depending on type, 1 if greater/largest, otherwise less/smallest; \cr
-var_i: \code{i}-th variable; \cr
-shock_j: \code{j}-th shock; \cr
-start: starting period of the restriction; \cr
-horizons: horizons of the restriction, input 0 if only one period \cr}
+i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
+Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
+Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
+Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
+Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
+if start=t and horizons=h the restriction in on periods t to t+h,
+e.g. when h=0 the restriction in only placed on period t.}
 
-\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+\item{\code{sign_B}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+contemporaneous relations \code{B} between reduced-form errors \code{E} and
+structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
+of \code{B} is the contemporaneous impulse response function.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}

@@ -11,16 +11,19 @@
 #' 
 #' Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix 
 #' \eqn{Q} uniformly from the space of \code{NxN} orthogonal matrices and checks if the sign restrictions
-#' are satisfied. If a valid \eqn{Q} is found within \code{max_tries}, the sampler proceeds to the next 
-#' iteration. Otherwise, the sampler increments the number of failures then proceeds to next iteration
-#' without saving \eqn{A} and \eqn{B} draws. If a narrative sign restriction is given, the posterior
-#' draws are resampled with algorithm 1 in Antolín-Díaz & Rubio-Ramírez (2018).
+#' are satisfied. If a valid \eqn{Q} is found within \code{max_tries} (defined in \code{specify_bsvarSIGN}),
+#' the sampler proceeds to the next iteration.
+#' Otherwise, the sampler increments the number of failures then proceeds to next iteration
+#' without saving the current \eqn{A} and \eqn{B} sample.
+#' If a narrative sign restriction is given, the posterior
+#' samples are resampled with \code{algorithm 1} in Antolín-Díaz & Rubio-Ramírez (2018).
 #' 
 #' @details 
 #' The homoskedastic SVAR model is given by the reduced form equation:
 #' \deqn{Y = AX + E}
 #' where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables, 
-#' \eqn{E} is an \code{NxT} matrix of reduced form error terms, and \eqn{A} is an \code{NxK} matrix of autoregressive slope coefficients and parameters on deterministic terms in \eqn{X}.
+#' \eqn{E} is an \code{NxT} matrix of reduced form error terms, and \eqn{A} is an \code{NxK} matrix of
+#' autoregressive slope coefficients and parameters on deterministic terms in \eqn{X}.
 #' 
 #' The structural equation is given by
 #' \deqn{BE = U}
@@ -72,7 +75,7 @@
 #' data(oil)
 #'
 #' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
-#' sign_narrative = matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+#' sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
 #' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
 #'                        dim = c(3, 3, 1))
 #' 
@@ -83,10 +86,11 @@
 #'                                        sign_irf       = sign_irf,
 #'                                        sign_narrative = sign_narrative
 #'                                        )
-#' poesterior     = estimate(specification, S = 10, thin = 2)
+#' burn_in        = estimate(specification, S = 10)
+#' posterior      = estimate(burn_in, S = 10, thin = 2)
 #' 
 #' @export
-estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
+estimate.BSVARSIGN <- function(specification, S, thin = S, show_progress = TRUE) {
   
   # get the inputs to estimation
   prior               = specification$prior$get_prior()
@@ -123,7 +127,28 @@ estimate.BSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE
 #' @param specification an object of class PosteriorBSVARSIGN generated using the \code{estimate.BSVARSIGN()} function.
 #' This setup facilitates the continuation of the MCMC sampling starting from the last draw of the previous run.
 #' 
+#' @examples
+#' # simple workflow
+#' ############################################################
+#' 
+#' # upload data
+#' data(oil)
 #'
+#' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
+#' sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
+#' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
+#'                        dim = c(3, 3, 1))
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' specification  = specify_bsvarSIGN$new(oil,
+#'                                        p              = 12,
+#'                                        sign_irf       = sign_irf,
+#'                                        sign_narrative = sign_narrative
+#'                                        )
+#' burn_in        = estimate(specification, S = 10)
+#' posterior      = estimate(burn_in, S = 10, thin = 2)
+#' 
 #' @export
 estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
   
