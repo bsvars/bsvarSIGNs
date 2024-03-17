@@ -199,7 +199,7 @@ arma::mat sample_Q(
   while (n_tries < max_tries && !success) {
     Q = rortho_cpp(N);
     
-    if (match_sign_irf(Q, sign_irf, irf) && match_sign(aux_B, sign_B)) {
+    if (match_sign_irf(Q, sign_irf, irf) && match_sign(Q.t() * aux_B, sign_B)) {
       if (!has_narrative) {
         success = true;
       } else {

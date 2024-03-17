@@ -81,6 +81,7 @@ Rcpp::List bsvar_sign_cpp(
     aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
     
     if (s % thin == 0) {
+      // aux_w, aux_A, aux_B are updated by referencing
       Q                          = sample_Q(lags, Y, X, 
                                             aux_w, aux_A, aux_B, aux_hyper, 
                                             prior, VB,
