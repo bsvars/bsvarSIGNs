@@ -4,7 +4,7 @@
 \alias{specify_bsvarSIGN}
 \title{R6 Class representing the specification of the BSVARSIGN model}
 \description{
-The class BSVARSIGN presents complete specification for the bsvar model with sign and narrative restrictions.
+The class BSVARSIGN presents complete specification for the Bayesian Structural VAR model with sign and narrative restrictions.
 }
 \examples{
 data(oil)

@@ -5,7 +5,7 @@
 \title{R6 Class Representing PosteriorBSVARSIGN}
 \description{
 The class PosteriorBSVARSIGN contains posterior output and the specification including
-the last MCMC draw for the bsvar model with sign and narrative restrictions.
+the last MCMC draw for the Bayesian Structural VAR model with sign and narrative restrictions.
 Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 might not be equal to the last draw provided in element \code{posterior}.
 }
@@ -68,7 +68,7 @@ posterior$is_normalised()
 \item{\code{last_draw}}{an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.}
 
-\item{\code{posterior}}{a list containing Bayesian estimation output collected in elements
+\item{\code{posterior}}{a list containing Bayesian estimation output including:
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
 }
 \if{html}{\out{</div>}}

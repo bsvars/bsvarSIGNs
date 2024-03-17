@@ -233,7 +233,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #' R6 Class representing the specification of the BSVARSIGN model
 #'
 #' @description
-#' The class BSVARSIGN presents complete specification for the bsvar model with sign and narrative restrictions.
+#' The class BSVARSIGN presents complete specification for the Bayesian Structural VAR model with sign and narrative restrictions.
 #'
 #' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
 #' 
@@ -422,7 +422,7 @@ specify_bsvarSIGN = R6::R6Class(
 #'
 #' @description
 #' The class PosteriorBSVARSIGN contains posterior output and the specification including
-#' the last MCMC draw for the bsvar model with sign and narrative restrictions.
+#' the last MCMC draw for the Bayesian Structural VAR model with sign and narrative restrictions.
 #' Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 #' might not be equal to the last draw provided in element \code{posterior}.
 #'
@@ -450,7 +450,7 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
     last_draw = list(),
     
-    #' @field posterior a list containing Bayesian estimation output collected in elements
+    #' @field posterior a list containing Bayesian estimation output including:
     #' an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
     posterior = list(),
     
