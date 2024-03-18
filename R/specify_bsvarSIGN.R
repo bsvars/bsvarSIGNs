@@ -28,10 +28,10 @@ verify_narrative = function(N, A) {
     stop("Narrative sign restriction matrix column 4 (shock_j) has entries that are not in 1:N.")
   }
   if (!(all(A[,5] == floor(A[,5])))) {
-    stop("Narrative sign restriction matrix column 5 (shock_j) has entries that are not in 1:T.")
+    stop("Narrative sign restriction matrix column 5 (start_t) has entries that are not in 1:T.")
   }
   if (!(all(A[,6] == floor(A[,6])))) {
-    stop("Narrative sign restriction matrix column 5 (shock_j) has entries that are not in 1:(T-start).")
+    stop("Narrative sign restriction matrix column 6 (horizons_h) has entries that are not in 1:(T-start).")
   }
 }
 
