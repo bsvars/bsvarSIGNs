@@ -54,7 +54,7 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
 #' R6 Class Representing IdentificationBSVARSIGN
 #'
 #' @description
-#' The class IdentificationBSVARSIGN presents the identifying restrictions for the bsvar models with sign and narrative restrictions.
+#' The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 #'
 #' @examples 
 #' specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
@@ -266,7 +266,7 @@ specify_bsvarSIGN = R6::R6Class(
     starting_values        = list(),
     
     #' @description
-    #' Create a new specification of the bsvar model with sign and narrative restrictions BSVARSIGN.
+    #' Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
     #' @param data a \code{(T+p)xN} matrix with time series data.
     #' @param p a positive integer providing model's autoregressive lag order.
     #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
@@ -300,7 +300,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
     #' otherwise to random walk.
-    #' @return A new complete specification for the homoskedastic bsvar model BSVARSIGN.
+    #' @return A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
     initialize = function(
     data,
     p = 1L,

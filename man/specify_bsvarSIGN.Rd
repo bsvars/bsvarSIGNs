@@ -95,7 +95,7 @@ spec$get_starting_values()
 \if{html}{\out{<a id="method-BSVARSIGN-new"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new specification of the bsvar model with sign and narrative restrictions BSVARSIGN.
+Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$new(
   data,
@@ -156,7 +156,7 @@ otherwise to random walk.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new complete specification for the homoskedastic bsvar model BSVARSIGN.
+A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
 }
 }
 \if{html}{\out{<hr>}}

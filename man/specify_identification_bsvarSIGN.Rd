@@ -4,7 +4,7 @@
 \alias{specify_identification_bsvarSIGN}
 \title{R6 Class Representing IdentificationBSVARSIGN}
 \description{
-The class IdentificationBSVARSIGN presents the identifying restrictions for the bsvar models with sign and narrative restrictions.
+The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 }
 \examples{
 specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
