@@ -21,7 +21,7 @@ Replication package, \url{https://www.aeaweb.org/articles?id=10.1257/aer.2016185
 data(oil)
 }
 \description{
-A system used to identify the oil shocks.
+A sample data to identify oil demand and supply shocks.
 }
 \references{
 Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.

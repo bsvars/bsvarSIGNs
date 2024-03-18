@@ -1,6 +1,6 @@
 #' @title A 3-variable oil price data, from 1971 to 2016
 #'
-#' @description A system used to identify the oil shocks.
+#' @description A sample data to identify oil demand and supply shocks.
 #'
 #' @usage data(oil)
 #'

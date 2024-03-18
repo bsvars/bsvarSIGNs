@@ -1,12 +1,5 @@
 
-#' Importance sampling
-#'
-#' @description
-#' Given posterior draws with importance weights, sample with replacement
-#'
-#' @param posterior posterior estimation outcome
-#'
-#' @export
+# Given posterior draws with importance weights, sample with replacement
 importance_sampling <- function(posterior) {
   
   w <- posterior$posterior$w

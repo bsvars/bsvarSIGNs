@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate.BSVARSIGN.R
 \name{estimate.PosteriorBSVARSIGN}
 \alias{estimate.PosteriorBSVARSIGN}
-\title{Bayesian estimation of a homoskedastic Structural Vector Autoregression
+\title{Bayesian estimation of a Structural Vector Autoregression
 with traditional and narrative sign restrictions via Gibbs sampler}
 \usage{
 \method{estimate}{PosteriorBSVARSIGN}(specification, S, thin = 10, show_progress = TRUE)
@@ -25,30 +25,36 @@ An object of class PosteriorBSVARSIGN containing the Bayesian estimation output 
  \item{A}{an \code{NxKxS} array with the posterior draws for matrix \eqn{A}}
  \item{B}{an \code{NxNxS} array with the posterior draws for matrix \eqn{B}}
  \item{hyper}{a \code{5xS} matrix with the posterior draws for the hyper-parameters of the hierarchical prior distribution}
- \item{fail}{a scalar probability of failure to reach a valid Q within \code{max_tries}}
+ \item{skipped}{an integer of the total skipped iterations,
+ the Gibbs sampler performs a total of S+skipped iterations,
+ when the sampler does not find a valid rotation matrix \code{Q} within \code{max_tries},
+ the current iteration is skipped (i.e. the current draw of \code{A,B} is not saved).
+ A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the total number of draws returned.
+ }
 }
 
 \code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
 }
 \description{
-Estimates the homoskedastic SVAR using the Gibbs sampler proposed by Waggoner & Zha (2003)
-for the structural matrix \eqn{B} and the equation-by-equation sampler by Chan, Koop, & Yu (2021)
-for the autoregressive slope parameters \eqn{A}. Additionally, the parameter matrices \eqn{A} and \eqn{B}
+Estimates Bayesian Structural Vector Autoregression model
+using the Gibbs sampler proposed by Waggoner & Zha (2003) with traditional sign restrictions 
+following Rubio-Ramírez, Waggoner & Zha (2010) and narrative sign restrictions 
+following Antolín-Díaz & Rubio-Ramírez (2018). Additionally, the parameter matrices \eqn{A} and \eqn{B}
 follow a Minnesota prior and generalised-normal prior distributions respectively with the matrix-specific
 overall shrinkage parameters estimated using a hierarchical prior distribution. 
-See section \bold{Details} for the model equations.
 
 Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix 
 \eqn{Q} uniformly from the space of \code{NxN} orthogonal matrices and checks if the sign restrictions
 are satisfied. If a valid \eqn{Q} is found within \code{max_tries} (defined in \code{specify_bsvarSIGN}),
-the sampler proceeds to the next iteration.
-Otherwise, the sampler increments the number of failures then proceeds to next iteration
-without saving the current \eqn{A} and \eqn{B} sample.
+the sampler saves the current \eqn{A} and \eqn{B} draw and proceeds to the next iteration.
+Otherwise, the sampler then proceeds to next iteration without saving the current \eqn{A} and \eqn{B} draw.
 If a narrative sign restriction is given, the posterior
-samples are resampled with \code{algorithm 1} in Antolín-Díaz & Rubio-Ramírez (2018).
+draws are resampled with \code{algorithm 1} in Antolín-Díaz & Rubio-Ramírez (2018).
+
+See section \bold{Details} for the model equations.
 }
 \details{
-The homoskedastic SVAR model is given by the reduced form equation:
+The Structural VAR model is given by the reduced form equation:
 \deqn{Y = AX + E}
 where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables, 
 \eqn{E} is an \code{NxT} matrix of reduced form error terms, and \eqn{A} is an \code{NxK} matrix of

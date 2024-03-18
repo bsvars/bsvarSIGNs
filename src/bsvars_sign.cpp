@@ -64,7 +64,7 @@ Rcpp::List bsvar_sign_cpp(
   cube  posterior_hyper(2 * N + 1, 2, SS);
   // cube  posterior_Q(N, N, SS);
   
-  int    n_fails    = 0;
+  int    skipped    = 0;
   int    ss         = 0;
   double aux_w      = 1;
   vec    w          = ones(SS);
@@ -86,7 +86,7 @@ Rcpp::List bsvar_sign_cpp(
                                             aux_w, aux_A, aux_B, aux_hyper, 
                                             prior, VB,
                                             sign_irf, sign_narrative, sign_B,
-                                            max_tries, n_fails);
+                                            max_tries, skipped);
       
       posterior_B.slice(ss)      = Q.t() * aux_B;
       posterior_A.slice(ss)      = aux_A;
@@ -95,8 +95,6 @@ Rcpp::List bsvar_sign_cpp(
       ss++;
     }
   } // END s loop
-  
-  double fail = static_cast<double>(n_fails) / SS;
   
   return List::create(
     _["last_draw"]  = List::create(
@@ -109,7 +107,7 @@ Rcpp::List bsvar_sign_cpp(
       _["A"]        = posterior_A,
       _["hyper"]    = posterior_hyper,
       _["w"]        = w,
-      _["fail"]     = fail
+      _["skipped"]  = skipped
     )
   );
 } // END bsvar_sign_cpp
