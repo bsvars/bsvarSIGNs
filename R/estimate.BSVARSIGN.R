@@ -117,7 +117,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = S, show_progress = TRUE)
   p_skipped           = skipped/(skipped+S/thin)
   if (p_skipped > 0.05) {
     cat(paste("Message: ", round(p_skipped*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
-              max_tries, " tries. Consider increasing the parameter max_tries of the specify_bsvarSIGN.\n", sep = ""))
+              max_tries, " tries. Consider increasing the parameter max_tries of specify_bsvarSIGN.\n", sep = ""))
   }
    
   return(output)
@@ -178,7 +178,7 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progre
   p_skipped           = skipped/(skipped+S/thin)
   if (p_skipped > 0.05) {
     cat(paste("Message: ", round(p_skipped*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
-              max_tries, " tries. Consider increasing the parameter max_tries of the specify_bsvarSIGN.\n", sep = ""))
+              max_tries, " tries. Consider increasing the parameter max_tries of specify_bsvarSIGN.\n", sep = ""))
   }
   
   return(output)
