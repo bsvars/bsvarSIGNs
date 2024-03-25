@@ -1,27 +1,75 @@
 
 test_that(
-  "minimum example of estimate.BSVARSIGN works", 
+  "minimum example of estimate.BSVAR and estimate.PosteriorBSVARSIGN works", 
   {
+    # run 1
+    set.seed(123)
     data(oil)
-    spec = specify_bsvarSIGN$new(oil)
-    burn = estimate(spec, S = 10)
+    spec1 = specify_bsvarSIGN$new(oil)
+    burn1 = estimate(spec1, S = 3, thin = 1, show_progress = FALSE)
+    post1 = estimate(burn1, S = 3, thin = 1, show_progress = FALSE)
+    
+    # run 2
+    set.seed(123)
+    data(oil)
+    spec2 = specify_bsvarSIGN$new(oil)
+    burn2 = estimate(spec2, S = 3, thin = 1, show_progress = FALSE)
+    post2 = estimate(burn2, S = 3, thin = 1, show_progress = FALSE)
+    
+    # run 3 (pipe workflow)
+    set.seed(123)
+    data(oil)
+    post3 = oil |> 
+      specify_bsvarSIGN$new() |> 
+      estimate(S = 3, thin = 1, show_progress = FALSE) |> 
+      estimate(S = 3, thin = 1, show_progress = FALSE)
+    
+    
+    # tests
     expect_identical(
-      class(burn)[1],
+      class(burn1)[1],
+      class(burn2)[1],
+    )
+    
+    expect_identical(
+      class(burn1)[1],
       "PosteriorBSVARSIGN"
+    )
+    
+    expect_identical(
+      class(post1)[1],
+      class(post2)[1],
+    )
+    
+    expect_identical(
+      class(post2)[1],
+      class(post3)[1],
+    )
+    
+    expect_identical(
+      class(post1)[1],
+      "PosteriorBSVARSIGN"
+    )
+    
+    expect_identical(
+      post1$posterior$B[,,1],
+      post2$posterior$B[,,1],
+    )
+    
+    expect_identical(
+      post2$posterior$B[,,1],
+      post3$posterior$B[,,1],
+    )
+    
+    expect_identical(
+      post1$last_draw$B[,,1],
+      post2$last_draw$B[,,1],
+    )
+    
+    expect_identical(
+      post2$last_draw$B[,,1],
+      post3$last_draw$B[,,1],
     )
   }
 )
 
-test_that(
-  "minimum example of estimate.PosteriorBSVARSIGN works", 
-  {
-    data(oil)
-    spec = specify_bsvarSIGN$new(oil)
-    burn = estimate(spec, S = 10)
-    post = estimate(burn, S = 10)
-    expect_identical(
-      class(post)[1],
-      "PosteriorBSVARSIGN"
-    )
-  }
-)
