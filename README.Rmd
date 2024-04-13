@@ -31,7 +31,7 @@ A repliaction of Antolín-Díaz & Rubio-Ramírez (2018).
 data(oil)
 
 # try ?specify_bsvarSIGN
-sign_narrative = matrix(c(2, 0, 3, 2, 236, 0), ncol = 6)
+sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
 sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3), dim = c(3, 3, 1))
 
 specification  = specify_bsvarSIGN$new(oil,
@@ -39,8 +39,7 @@ specification  = specify_bsvarSIGN$new(oil,
                                         sign_irf = sign_irf,
                                         sign_narrative = sign_narrative)
 
-burn_in        = estimate(specification, S = 100)
-posterior      = estimate(burn_in, S = 100, thin = 1)
+posterior      = estimate(specification, S = 100)
 irf            = compute_impulse_responses(posterior, horizon = 24)
 plot(irf)
 ```
