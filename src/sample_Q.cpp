@@ -178,7 +178,7 @@ arma::mat sample_Q(
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const int&                    max_tries,
-    int&                          n_fails
+    bool&                         success
 ) {
   
   const int N          = Y.n_rows;
@@ -188,7 +188,6 @@ arma::mat sample_Q(
   int    h             = sign_narrative.col(5).max(); // maximum horizon
   if (h < sign_irf.n_slices - 1) {h = sign_irf.n_slices - 1;}
   
-  bool   success       = false;
   bool   has_narrative = sign_narrative(0, 0) != 0;
   
   mat    Q(N, N);
@@ -210,20 +209,10 @@ arma::mat sample_Q(
     n_tries++;
   }
   
+  aux_w = 1;
   if (!success) {
-    n_fails++;
-    
-    aux_A         = bsvars::sample_A_homosk1(aux_A, aux_B, aux_hyper, Y, X, prior);
-    aux_B         = bsvars::sample_B_homosk1(aux_B, aux_A, aux_hyper, Y, X, prior, VB);
-    
-    return sample_Q(lags, Y, X,
-                    aux_w, aux_A, aux_B, aux_hyper, 
-                    prior, VB,
-                    sign_irf, sign_narrative, sign_B,
-                    max_tries, n_fails);
-  }
-  
-  if (has_narrative) {
+    aux_w = 0;
+  } else if (has_narrative) {
     aux_w = approximate_w(T, sign_narrative, irf);
   }
   

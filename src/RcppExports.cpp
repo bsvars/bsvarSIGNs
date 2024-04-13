@@ -60,6 +60,70 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// bsvar_sign_gibbs_cpp
+Rcpp::List bsvar_sign_gibbs_cpp(const int& S, const int& lags, const arma::mat& Y, const arma::mat& X, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const Rcpp::List& prior, const Rcpp::List& starting_values, const int thin, const bool show_progress, const int& max_tries);
+static SEXP _bsvarSIGNs_bsvar_sign_gibbs_cpp_try(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP, SEXP max_triesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type VB(VBSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type sign_irf(sign_irfSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sign_narrative(sign_narrativeSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sign_B(sign_BSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type starting_values(starting_valuesSEXP);
+    Rcpp::traits::input_parameter< const int >::type thin(thinSEXP);
+    Rcpp::traits::input_parameter< const bool >::type show_progress(show_progressSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_tries(max_triesSEXP);
+    rcpp_result_gen = Rcpp::wrap(bsvar_sign_gibbs_cpp(S, lags, Y, X, VB, sign_irf, sign_narrative, sign_B, prior, starting_values, thin, show_progress, max_tries));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_bsvar_sign_gibbs_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP thinSEXP, SEXP show_progressSEXP, SEXP max_triesSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvar_sign_gibbs_cpp_try(SSEXP, lagsSEXP, YSEXP, XSEXP, VBSEXP, sign_irfSEXP, sign_narrativeSEXP, sign_BSEXP, priorSEXP, starting_valuesSEXP, thinSEXP, show_progressSEXP, max_triesSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// niw_cpp
+void niw_cpp(arma::cube& A, arma::cube& SIGMA, const arma::mat& Y, const arma::mat& X, const int& S, const arma::mat& prior_A, const arma::mat& prior_V, const arma::mat& prior_S, const int& prior_nu);
+RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP ASEXP, SEXP SIGMASEXP, SEXP YSEXP, SEXP XSEXP, SEXP SSEXP, SEXP prior_ASEXP, SEXP prior_VSEXP, SEXP prior_SSEXP, SEXP prior_nuSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type SIGMA(SIGMASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_A(prior_ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_V(prior_VSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_S(prior_SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type prior_nu(prior_nuSEXP);
+    niw_cpp(A, SIGMA, Y, X, S, prior_A, prior_V, prior_S, prior_nu);
+    return R_NilValue;
+END_RCPP
+}
 // match_sign
 bool match_sign(const arma::mat& A, const arma::mat& sign);
 static SEXP _bsvarSIGNs_match_sign_try(SEXP ASEXP, SEXP signSEXP) {
@@ -242,8 +306,8 @@ RcppExport SEXP _bsvarSIGNs_approximate_w(SEXP TSEXP, SEXP sign_narrativeSEXP, S
     return rcpp_result_gen;
 }
 // sample_Q
-arma::mat sample_Q(const int& lags, const arma::mat& Y, const arma::mat& X, double& aux_w, arma::mat& aux_A, arma::mat& aux_B, arma::mat& aux_hyper, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const int& max_tries, int& n_fails);
-static SEXP _bsvarSIGNs_sample_Q_try(SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP aux_wSEXP, SEXP aux_ASEXP, SEXP aux_BSEXP, SEXP aux_hyperSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP max_triesSEXP, SEXP n_failsSEXP) {
+arma::mat sample_Q(const int& lags, const arma::mat& Y, const arma::mat& X, double& aux_w, arma::mat& aux_A, arma::mat& aux_B, arma::mat& aux_hyper, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const int& max_tries, bool& success);
+static SEXP _bsvarSIGNs_sample_Q_try(SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP aux_wSEXP, SEXP aux_ASEXP, SEXP aux_BSEXP, SEXP aux_hyperSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP max_triesSEXP, SEXP successSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const int& >::type lags(lagsSEXP);
@@ -259,16 +323,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_narrative(sign_narrativeSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_B(sign_BSEXP);
     Rcpp::traits::input_parameter< const int& >::type max_tries(max_triesSEXP);
-    Rcpp::traits::input_parameter< int& >::type n_fails(n_failsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sample_Q(lags, Y, X, aux_w, aux_A, aux_B, aux_hyper, prior, VB, sign_irf, sign_narrative, sign_B, max_tries, n_fails));
+    Rcpp::traits::input_parameter< bool& >::type success(successSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_Q(lags, Y, X, aux_w, aux_A, aux_B, aux_hyper, prior, VB, sign_irf, sign_narrative, sign_B, max_tries, success));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP aux_wSEXP, SEXP aux_ASEXP, SEXP aux_BSEXP, SEXP aux_hyperSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP max_triesSEXP, SEXP n_failsSEXP) {
+RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP aux_wSEXP, SEXP aux_ASEXP, SEXP aux_BSEXP, SEXP aux_hyperSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP max_triesSEXP, SEXP successSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_sample_Q_try(lagsSEXP, YSEXP, XSEXP, aux_wSEXP, aux_ASEXP, aux_BSEXP, aux_hyperSEXP, priorSEXP, VBSEXP, sign_irfSEXP, sign_narrativeSEXP, sign_BSEXP, max_triesSEXP, n_failsSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_sample_Q_try(lagsSEXP, YSEXP, XSEXP, aux_wSEXP, aux_ASEXP, aux_BSEXP, aux_hyperSEXP, priorSEXP, VBSEXP, sign_irfSEXP, sign_narrativeSEXP, sign_BSEXP, max_triesSEXP, successSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -287,6 +351,19 @@ RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP
     }
     UNPROTECT(1);
     return rcpp_result_gen;
+}
+// matnrnd_cpp
+arma::mat matnrnd_cpp(const arma::mat& M, const arma::mat& U, const arma::mat& V);
+RcppExport SEXP _bsvarSIGNs_matnrnd_cpp(SEXP MSEXP, SEXP USEXP, SEXP VSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
+    rcpp_result_gen = Rcpp::wrap(matnrnd_cpp(M, U, V));
+    return rcpp_result_gen;
+END_RCPP
 }
 // qr_sign_cpp
 arma::mat qr_sign_cpp(const arma::mat& A);
@@ -330,12 +407,13 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const Rcpp::List&,const Rcpp::List&,const int,const bool,const int&)");
+        signatures.insert("Rcpp::List(*bsvar_sign_gibbs_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const Rcpp::List&,const Rcpp::List&,const int,const bool,const int&)");
         signatures.insert("bool(*match_sign)(const arma::mat&,const arma::mat&)");
         signatures.insert("bool(*match_sign_irf)(const arma::mat&,const arma::cube&,const arma::cube&)");
         signatures.insert("arma::mat(*hd1)(const int&,const int&,const int&,const arma::mat&,const arma::cube&)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*approximate_w)(const int&,arma::mat,const arma::cube&)");
-        signatures.insert("arma::mat(*sample_Q)(const int&,const arma::mat&,const arma::mat&,double&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const int&,int&)");
+        signatures.insert("arma::mat(*sample_Q)(const int&,const arma::mat&,const arma::mat&,double&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const int&,bool&)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -343,6 +421,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() { 
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC)_bsvarSIGNs_bsvar_sign_cpp_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_gibbs_cpp", (DL_FUNC)_bsvarSIGNs_bsvar_sign_gibbs_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign", (DL_FUNC)_bsvarSIGNs_match_sign_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_irf", (DL_FUNC)_bsvarSIGNs_match_sign_irf_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_hd1", (DL_FUNC)_bsvarSIGNs_hd1_try);
@@ -355,12 +434,15 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 13},
+    {"_bsvarSIGNs_bsvar_sign_gibbs_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_gibbs_cpp, 13},
+    {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 9},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},
     {"_bsvarSIGNs_match_sign_irf", (DL_FUNC) &_bsvarSIGNs_match_sign_irf, 3},
     {"_bsvarSIGNs_hd1", (DL_FUNC) &_bsvarSIGNs_hd1, 5},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
     {"_bsvarSIGNs_approximate_w", (DL_FUNC) &_bsvarSIGNs_approximate_w, 3},
     {"_bsvarSIGNs_sample_Q", (DL_FUNC) &_bsvarSIGNs_sample_Q, 14},
+    {"_bsvarSIGNs_matnrnd_cpp", (DL_FUNC) &_bsvarSIGNs_matnrnd_cpp, 3},
     {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
     {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
     {"_bsvarSIGNs_irf_cpp", (DL_FUNC) &_bsvarSIGNs_irf_cpp, 4},

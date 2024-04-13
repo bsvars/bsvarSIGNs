@@ -24,7 +24,7 @@ arma::mat sample_Q(
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const int&                    max_tries,
-    int&                          n_fails
+    bool&                         success
 );
 
 #endif  // _SAMPLE_Q_H_

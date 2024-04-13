@@ -39,6 +39,5 @@
 #'                                        sign_irf       = sign_irf,
 #'                                        sign_narrative = sign_narrative
 #'                                        )
-#' burn_in        = estimate(specification, S = 10)
-#' posterior      = estimate(burn_in, S = 20, thin = 1)
+#' posterior      = estimate(specification, S = 10)
 NULL

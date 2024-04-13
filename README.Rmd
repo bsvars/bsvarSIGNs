@@ -41,7 +41,8 @@ specification  = specify_bsvarSIGN$new(oil,
 
 burn_in        = estimate(specification, S = 100)
 posterior      = estimate(burn_in, S = 100, thin = 1)
-irf            = compute_irf(posterior, horizon = 24)
+irf            = compute_impulse_responses(posterior, horizon = 24)
+plot(irf)
 ```
 
 <!-- badges: start -->

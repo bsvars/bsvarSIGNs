@@ -3,6 +3,11 @@
 
 #include <RcppArmadillo.h>
 
+
+arma::mat matnrnd_cpp(const arma::mat& M,
+                      const arma::mat& U,
+                      const arma::mat& V);
+
 arma::mat qr_sign_cpp(const arma::mat& A);
 
 arma::mat rortho_cpp(const int& N);

@@ -32,8 +32,7 @@ specification  = specify_bsvarSIGN$new(oil,
                                        sign_irf       = sign_irf,
                                        sign_narrative = sign_narrative
                                        )
-burn_in        = estimate(specification, S = 10)
-posterior      = estimate(burn_in, S = 20, thin = 1)
+posterior      = estimate(specification, S = 10)
 }
 \references{
 Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.

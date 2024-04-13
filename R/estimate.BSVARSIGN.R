@@ -89,14 +89,14 @@
 #'                                        sign_irf       = sign_irf,
 #'                                        sign_narrative = sign_narrative
 #'                                        )
-#' burn_in        = estimate(specification, S = 10)
-#' posterior      = estimate(burn_in, S = 10, thin = 2)
+#' posterior      = estimate(specification, S = 10)
 #' 
 #' @export
-estimate.BSVARSIGN <- function(specification, S, thin = S, show_progress = TRUE) {
+estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE) {
   
   # get the inputs to estimation
-  prior               = specification$prior$get_prior()
+  # prior               = specification$last_draw$prior$get_prior()
+  prior               = specification$prior
   starting_values     = specification$starting_values$get_starting_values()
   identification      = specification$identification$get_identification()
   max_tries           = identification$max_tries
@@ -150,14 +150,14 @@ estimate.BSVARSIGN <- function(specification, S, thin = S, show_progress = TRUE)
 #'                                        sign_irf       = sign_irf,
 #'                                        sign_narrative = sign_narrative
 #'                                        )
-#' burn_in        = estimate(specification, S = 10)
-#' posterior      = estimate(burn_in, S = 10, thin = 2)
+#' posterior      = estimate(specification, S = 10)
 #' 
 #' @export
-estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 10, show_progress = TRUE) {
+estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE) {
   
   # get the inputs to estimation
-  prior               = specification$last_draw$prior$get_prior()
+  # prior               = specification$last_draw$prior$get_prior()
+  prior               = specification$prior
   starting_values     = specification$last_draw$starting_values$get_starting_values()
   identification      = specification$last_draw$identification$get_identification()
   max_tries           = identification$max_tries

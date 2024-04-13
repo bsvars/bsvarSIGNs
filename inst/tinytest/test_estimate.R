@@ -5,11 +5,7 @@
 set.seed(123)
 data(oil)
 spec1 = specify_bsvarSIGN$new(oil)
-burn1 = estimate(spec1,
-                 S = 3,
-                 thin = 1,
-                 show_progress = FALSE)
-post1 = estimate(burn1,
+post1 = estimate(spec1,
                  S = 3,
                  thin = 1,
                  show_progress = FALSE)
@@ -18,11 +14,7 @@ post1 = estimate(burn1,
 set.seed(123)
 data(oil)
 spec2 = specify_bsvarSIGN$new(oil)
-burn2 = estimate(spec2,
-                 S = 3,
-                 thin = 1,
-                 show_progress = FALSE)
-post2 = estimate(burn2,
+post2 = estimate(spec2,
                  S = 3,
                  thin = 1,
                  show_progress = FALSE)
@@ -34,19 +26,10 @@ post3 = oil |>
   specify_bsvarSIGN$new() |>
   estimate(S = 3,
            thin = 1,
-           show_progress = FALSE) |>
-  estimate(S = 3,
-           thin = 1,
            show_progress = FALSE)
 
 
 # tests
-expect_identical(class(burn1)[1],
-                 class(burn2)[1],)
-
-expect_identical(class(burn1)[1],
-                 "PosteriorBSVARSIGN")
-
 expect_identical(class(post1)[1],
                  class(post2)[1],)
 

@@ -350,7 +350,8 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           sign_irf,
                                                                           sign_narrative, sign_B,
                                                                           max_tries)
-      self$prior                   = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
+      # self$prior                   = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
+      self$prior                   = niw_prior(data, p, !stationary) # temporary hack
       self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     
@@ -525,3 +526,33 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     
   ) # END public
 ) # END specify_posterior_bsvarSIGN
+
+
+niw_prior <- function(Y,
+                      p,
+                      non_stationary,
+                      lambda_1 = 1 / .Machine$double.eps,
+                      lambda_2 = 0.2,
+                      lambda_3 = 1) {
+  T <- nrow(Y)
+  N <- ncol(Y)
+  K <- 1 + N * p
+  
+  ar_s2 <- vector(length = N)
+  for (n in 1:N) {
+    resid <- stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
+    ar_s2[n] <- t(resid) %*% resid / (T - p - 1)
+  }
+  
+  A <- matrix(0, N, K)
+  A[1:N, 1:N] <- diag(non_stationary)
+  
+  V <- matrix(0, K, K)
+  V[K, K] <- lambda_1
+  V[1:(K-1), 1:(K-1)] <- diag(lambda_2^2 * rep((1:p)^-(2 * lambda_3), each = N) * rep(ar_s2^-1, p))
+  
+  S <- diag(ar_s2)
+  nu <- N + 2
+  
+  list(A = A, V = V, S = S, nu = nu)
+}

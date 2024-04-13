@@ -5,7 +5,7 @@
 \title{Bayesian estimation of a Structural Vector Autoregression
 with traditional and narrative sign restrictions via Gibbs sampler}
 \usage{
-\method{estimate}{BSVARSIGN}(specification, S, thin = S, show_progress = TRUE)
+\method{estimate}{BSVARSIGN}(specification, S, thin = 1, show_progress = TRUE)
 }
 \arguments{
 \item{specification}{an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.}
@@ -84,8 +84,7 @@ specification  = specify_bsvarSIGN$new(oil,
                                        sign_irf       = sign_irf,
                                        sign_narrative = sign_narrative
                                        )
-burn_in        = estimate(specification, S = 10)
-posterior      = estimate(burn_in, S = 10, thin = 2)
+posterior      = estimate(specification, S = 10)
 
 }
 \references{

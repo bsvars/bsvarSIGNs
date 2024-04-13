@@ -2,7 +2,6 @@
 
 S3method(estimate,BSVARSIGN)
 S3method(estimate,PosteriorBSVARSIGN)
-export(compute_irf)
 export(specify_bsvarSIGN)
 export(specify_identification_bsvarSIGN)
 export(specify_posterior_bsvarSIGN)

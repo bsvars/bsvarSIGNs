@@ -5,6 +5,18 @@
 using namespace arma;
 
 
+// sample from matrix normal, U = var between rows, V = var between columns
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+arma::mat matnrnd_cpp(const arma::mat& M,
+                      const arma::mat& U,
+                      const arma::mat& V) {
+  
+  mat X = mat(size(M), fill::randn);
+  return M + chol(U).t() * X * chol(V);
+}
+
+
 // QR decomposition, where the diagonal elements of R are positive
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
