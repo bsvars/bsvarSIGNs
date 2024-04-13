@@ -67,13 +67,7 @@ Rcpp::List bsvar_sign_cpp(
   double aux_w      = 1;
   vec    w          = ones(S);
   
-  mat prior_A  = as<mat>(prior["A"]);
-  mat prior_V  = as<mat>(prior["V"]);
-  mat prior_S  = as<mat>(prior["S"]);
-  int prior_nu = as<int>(prior["nu"]);
-  
-  niw_cpp(posterior_A, posterior_SIGMA, Y.t(), X.t(), S, 
-          prior_A.t(), prior_V, prior_S, prior_nu);
+  niw_cpp(posterior_A, posterior_SIGMA, Y, X, S, prior);
   
   for (int s=0; s<S; s++) {
     

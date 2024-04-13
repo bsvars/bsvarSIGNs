@@ -9,15 +9,12 @@ using namespace Rcpp;
 using namespace arma;
 
 void niw_cpp(
-        arma::cube&      A,
-        arma::cube&      SIGMA,
-        const arma::mat& Y,       // (T, N)
-        const arma::mat& X,       // (T, K)
-        const int&       S,
-        const arma::mat& prior_A,
-        const arma::mat& prior_V,
-        const arma::mat& prior_S,
-        const int&       prior_nu
+                arma::cube&      A,
+                arma::cube&      SIGMA,
+                const arma::mat& Y,
+                const arma::mat& X,
+                const int&       S,
+                const Rcpp::List prior
 );
 
 #endif  // _SAMPLE_NIW_H_
