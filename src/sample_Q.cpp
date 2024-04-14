@@ -180,7 +180,7 @@ arma::mat sample_Q(
     const int&                    max_tries,
     bool&                         success
 ) {
-  
+
   const int N          = Y.n_rows;
   const int T          = Y.n_cols;
   
@@ -193,7 +193,7 @@ arma::mat sample_Q(
   mat    Q(N, N);
   mat    U             = aux_B * (Y - aux_A * X);
   
-  cube   irf           = bsvars::bsvars_ir1(aux_B, aux_A, h, lags);
+  cube   irf           = bsvars::bsvars_ir1(aux_B, aux_A, h, lags);  // contaminates rng
   
   while (n_tries < max_tries && !success) {
     Q = rortho_cpp(N);

@@ -10,11 +10,12 @@ using namespace arma;
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 void niw_cpp(
-    arma::cube&      A,
-    arma::cube&      SIGMA,
+    arma::mat&       post_A,
+    arma::mat&       post_V,
+    arma::mat&       post_S,
+    int&             post_nu,
     const arma::mat& Y,
     const arma::mat& X,
-    const int&       S,
     const Rcpp::List prior
 ) {
 
@@ -28,20 +29,12 @@ void niw_cpp(
   // analytic solutions
   mat prior_V_inv = inv_sympd(prior_V);
   mat post_V_inv  = prior_V_inv + X * X.t();
-  mat post_V      = inv_sympd(post_V_inv);
-  mat post_A      = (prior_A * prior_V_inv + Y * X.t()) * post_V;
+  post_V      = inv_sympd(post_V_inv);
+  post_A      = (prior_A * prior_V_inv + Y * X.t()) * post_V;
   
   // marginal posterior of Sigma
-  mat post_S  = prior_S + Y * Y.t() + prior_A * prior_V_inv * prior_A.t() - post_A * post_V_inv * post_A.t();
+  post_S  = prior_S + Y * Y.t() + prior_A * prior_V_inv * prior_A.t() - post_A * post_V_inv * post_A.t();
   post_S      = symmatu(post_S);
-  int post_nu = prior_nu + T;
-  
-  mat sigma, a;
-  for(int s = 0; s < S; s++) {
-    sigma          = iwishrnd(post_S, post_nu);
-    a              = matnrnd_cpp(post_A, sigma, post_V);
-    SIGMA.slice(s) = sigma;
-    A.slice(s)     = a;
-  }
+  post_nu = prior_nu + T;
 }
 

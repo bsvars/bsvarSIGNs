@@ -67,7 +67,17 @@ Rcpp::List bsvar_sign_cpp(
   double aux_w      = 1;
   vec    w          = ones(S);
   
-  niw_cpp(posterior_A, posterior_SIGMA, Y, X, S, prior);
+  mat post_A, post_V, post_S;
+  int post_nu;
+  niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
+  
+  mat sigma, a;
+  for(int s = 0; s < S; s++) {
+    sigma          = iwishrnd(post_S, post_nu);
+    a              = matnrnd_cpp(post_A, sigma, post_V);
+    posterior_SIGMA.slice(s) = sigma;
+    posterior_A.slice(s)     = a;
+  }
   
   for (int s=0; s<S; s++) {
     
@@ -75,6 +85,11 @@ Rcpp::List bsvar_sign_cpp(
     if (any(prog_rep_points == s)) p.increment();
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
+    
+    // sigma          = iwishrnd(post_S, post_nu);
+    // a              = matnrnd_cpp(post_A, sigma, post_V);
+    // posterior_SIGMA.slice(s) = sigma;
+    // posterior_A.slice(s)     = a;
     
     aux_B        = inv(trimatl(chol(posterior_SIGMA.slice(s)).t())); // lower triangular identification
     

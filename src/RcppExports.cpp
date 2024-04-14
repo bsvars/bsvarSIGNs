@@ -107,17 +107,18 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_gibbs_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP
     return rcpp_result_gen;
 }
 // niw_cpp
-void niw_cpp(arma::cube& A, arma::cube& SIGMA, const arma::mat& Y, const arma::mat& X, const int& S, const Rcpp::List prior);
-RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP ASEXP, SEXP SIGMASEXP, SEXP YSEXP, SEXP XSEXP, SEXP SSEXP, SEXP priorSEXP) {
+void niw_cpp(arma::mat& post_A, arma::mat& post_V, arma::mat& post_S, int& post_nu, const arma::mat& Y, const arma::mat& X, const Rcpp::List prior);
+RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP post_ASEXP, SEXP post_VSEXP, SEXP post_SSEXP, SEXP post_nuSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< arma::cube& >::type SIGMA(SIGMASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type post_A(post_ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type post_V(post_VSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type post_S(post_SSEXP);
+    Rcpp::traits::input_parameter< int& >::type post_nu(post_nuSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type prior(priorSEXP);
-    niw_cpp(A, SIGMA, Y, X, S, prior);
+    niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
     return R_NilValue;
 END_RCPP
 }
@@ -432,7 +433,7 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 13},
     {"_bsvarSIGNs_bsvar_sign_gibbs_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_gibbs_cpp, 13},
-    {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 6},
+    {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 7},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},
     {"_bsvarSIGNs_match_sign_irf", (DL_FUNC) &_bsvarSIGNs_match_sign_irf, 3},
     {"_bsvarSIGNs_hd1", (DL_FUNC) &_bsvarSIGNs_hd1, 5},

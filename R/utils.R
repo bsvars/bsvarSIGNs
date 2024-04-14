@@ -16,5 +16,8 @@ importance_sampling <- function(posterior) {
   posterior$posterior$hyper <- posterior$posterior$hyper[, , indices]
   posterior$posterior$Q     <- posterior$posterior$Q[, , indices]
   
+  posterior$posterior$ess   <- sum(w)^2/sum(w^2)
+  cat("The effective sample size is:", round(posterior$posterior$ess, 0), "\n")
+  
   return(posterior)
 }
