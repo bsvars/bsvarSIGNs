@@ -17,7 +17,7 @@ arma::mat sample_Q(
     double&                       aux_w,
     arma::mat&                    aux_A,
     arma::mat&                    aux_B,
-    arma::mat&                    aux_hyper,
+    arma::mat&                    chol_SIGMA,
     const Rcpp::List&             prior,
     const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,

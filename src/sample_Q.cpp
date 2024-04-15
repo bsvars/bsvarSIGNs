@@ -4,6 +4,7 @@
 #include <bsvars.h>
 
 #include "utils.h"
+#include "bsvarTOOLs.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -171,7 +172,7 @@ arma::mat sample_Q(
     double&                       aux_w,
     arma::mat&                    aux_A,
     arma::mat&                    aux_B,
-    arma::mat&                    aux_hyper,
+    arma::mat&                    chol_SIGMA,
     const Rcpp::List&             prior,
     const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,
@@ -193,7 +194,7 @@ arma::mat sample_Q(
   mat    Q(N, N);
   mat    U             = aux_B * (Y - aux_A * X);
   
-  cube   irf           = bsvars::bsvars_ir1(aux_B, aux_A, h, lags);  // contaminates rng
+  cube   irf           = ir1_cpp(aux_A.t(), chol_SIGMA, h+1, lags);  // contaminates rng
   
   while (n_tries < max_tries && !success) {
     Q = rortho_cpp(N);
