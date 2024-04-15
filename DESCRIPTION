@@ -18,5 +18,5 @@ Depends:
     bsvars
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
 Suggests: tinytest
