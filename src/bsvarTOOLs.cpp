@@ -39,17 +39,19 @@ arma::cube ir11_cpp (
 // [[Rcpp::export]]
 arma::cube ir1_cpp(
     const arma::mat& A, 
-    const arma::mat& B, 
-    const int& periods,
-    const int& k
+    const arma::mat& chol_SIGMA, 
+    int              horizon,
+    const int&       p
 ) {
-  int N = B.n_cols;
   
-  cube irf = zeros(N, N, periods);
-  irf.slice(0) = B;
+  horizon++;
+  int N = chol_SIGMA.n_cols;
   
-  for(int t = 2; t <= periods; t++) {
-    for(int j = 1; j <= std::min(k, t - 1); j++) {
+  cube irf = zeros(N, N, horizon);
+  irf.slice(0) = chol_SIGMA;
+  
+  for(int t = 2; t <= horizon; t++) {
+    for(int j = 1; j <= std::min(p, t - 1); j++) {
       mat A_j = A.rows(1 + (j - 1) * N, j * N).t();
       irf.slice(t - 1) += A_j * irf.slice(t - j - 1);
     }

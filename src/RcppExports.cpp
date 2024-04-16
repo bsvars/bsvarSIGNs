@@ -53,23 +53,23 @@ RcppExport SEXP _bsvarSIGNs_ir11_cpp(SEXP irf_0SEXP, SEXP aux_ASEXP, SEXP horizo
     return rcpp_result_gen;
 }
 // ir1_cpp
-arma::cube ir1_cpp(const arma::mat& A, const arma::mat& B, const int& periods, const int& k);
-static SEXP _bsvarSIGNs_ir1_cpp_try(SEXP ASEXP, SEXP BSEXP, SEXP periodsSEXP, SEXP kSEXP) {
+arma::cube ir1_cpp(const arma::mat& A, const arma::mat& chol_SIGMA, int horizon, const int& p);
+static SEXP _bsvarSIGNs_ir1_cpp_try(SEXP ASEXP, SEXP chol_SIGMASEXP, SEXP horizonSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP);
-    Rcpp::traits::input_parameter< const int& >::type periods(periodsSEXP);
-    Rcpp::traits::input_parameter< const int& >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(ir1_cpp(A, B, periods, k));
+    Rcpp::traits::input_parameter< const arma::mat& >::type chol_SIGMA(chol_SIGMASEXP);
+    Rcpp::traits::input_parameter< int >::type horizon(horizonSEXP);
+    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(ir1_cpp(A, chol_SIGMA, horizon, p));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_ir1_cpp(SEXP ASEXP, SEXP BSEXP, SEXP periodsSEXP, SEXP kSEXP) {
+RcppExport SEXP _bsvarSIGNs_ir1_cpp(SEXP ASEXP, SEXP chol_SIGMASEXP, SEXP horizonSEXP, SEXP pSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_ir1_cpp_try(ASEXP, BSEXP, periodsSEXP, kSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_ir1_cpp_try(ASEXP, chol_SIGMASEXP, horizonSEXP, pSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -492,7 +492,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("arma::cube(*ir11_cpp)(arma::mat&,arma::mat&,const int,const int,const bool)");
-        signatures.insert("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,const int&,const int&)");
+        signatures.insert("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,int,const int&)");
         signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const Rcpp::List&,const Rcpp::List&,const int,const bool,const int&)");
         signatures.insert("Rcpp::List(*bsvar_sign_gibbs_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const Rcpp::List&,const Rcpp::List&,const int,const bool,const int&)");
         signatures.insert("bool(*match_sign)(const arma::mat&,const arma::mat&)");

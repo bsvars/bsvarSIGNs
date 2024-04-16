@@ -46,17 +46,17 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::cube >(rcpp_result_gen);
     }
 
-    inline arma::cube ir1_cpp(const arma::mat& A, const arma::mat& B, const int& periods, const int& k) {
+    inline arma::cube ir1_cpp(const arma::mat& A, const arma::mat& chol_SIGMA, int horizon, const int& p) {
         typedef SEXP(*Ptr_ir1_cpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_ir1_cpp p_ir1_cpp = NULL;
         if (p_ir1_cpp == NULL) {
-            validateSignature("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,const int&,const int&)");
+            validateSignature("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,int,const int&)");
             p_ir1_cpp = (Ptr_ir1_cpp)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_ir1_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_ir1_cpp(Shield<SEXP>(Rcpp::wrap(A)), Shield<SEXP>(Rcpp::wrap(B)), Shield<SEXP>(Rcpp::wrap(periods)), Shield<SEXP>(Rcpp::wrap(k)));
+            rcpp_result_gen = p_ir1_cpp(Shield<SEXP>(Rcpp::wrap(A)), Shield<SEXP>(Rcpp::wrap(chol_SIGMA)), Shield<SEXP>(Rcpp::wrap(horizon)), Shield<SEXP>(Rcpp::wrap(p)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

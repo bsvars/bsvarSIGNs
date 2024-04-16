@@ -194,7 +194,7 @@ arma::mat sample_Q(
   mat    Q(N, N);
   mat    U             = aux_B * (Y - aux_A * X);
   
-  cube   irf           = ir1_cpp(aux_A.t(), chol_SIGMA, h+1, lags);  // contaminates rng
+  cube   irf           = ir1_cpp(aux_A.t(), chol_SIGMA, h, lags);  // contaminates rng
   
   while (n_tries < max_tries && !success) {
     Q = rortho_cpp(N);

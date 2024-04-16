@@ -70,10 +70,10 @@ Rcpp::List bsvar_sign_cpp(
   int post_nu;
   niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
   
-  for (int s=0; s<S; s++) {
-    
-    // Increment progress bar
-    if (any(prog_rep_points == s)) p.increment();
+  bool success;
+  int  s = 0;
+  while (s < S) {
+
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
     
@@ -81,19 +81,23 @@ Rcpp::List bsvar_sign_cpp(
     chol_SIGMA = chol(aux_SIGMA, "lower");
     aux_A      = rmnorm_cpp(post_A, aux_SIGMA, post_V);
     aux_B      = inv(trimatl(chol_SIGMA)); // lower triangular identification
-
-    posterior_A.slice(s) = aux_A;
     
-    bool success = false;
-    Q            = sample_Q(lags, Y, X, 
-                            aux_w, aux_A, aux_B, chol_SIGMA, 
-                            prior, VB,
-                            sign_irf, sign_narrative, sign_B,
-                            max_tries, success);
-
-    posterior_B.slice(s) = Q.t() * aux_B;
-    w(s)                 = aux_w;
+    success = false;
+    Q       = sample_Q(lags, Y, X, 
+                       aux_w, aux_A, aux_B, chol_SIGMA, 
+                       prior, VB,
+                       sign_irf, sign_narrative, sign_B,
+                       max_tries, success);
     
+    if (success) {
+      // Increment progress bar
+      if (any(prog_rep_points == s)) p.increment();
+      
+      posterior_A.slice(s) = aux_A;
+      posterior_B.slice(s) = Q.t() * aux_B;
+      w(s)                 = aux_w;
+      s++;
+    }
   } // END s loop
   
   return List::create(
