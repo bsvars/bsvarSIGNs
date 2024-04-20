@@ -161,18 +161,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // niw_cpp
-void niw_cpp(arma::mat& post_A, arma::mat& post_V, arma::mat& post_S, int& post_nu, const arma::mat& Y, const arma::mat& X, const Rcpp::List prior);
-RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP post_ASEXP, SEXP post_VSEXP, SEXP post_SSEXP, SEXP post_nuSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
+void niw_cpp(arma::mat& post_B, arma::mat& post_V, arma::mat& post_S, int& post_nu, const arma::mat& Y, const arma::mat& X, const Rcpp::List prior);
+RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP post_BSEXP, SEXP post_VSEXP, SEXP post_SSEXP, SEXP post_nuSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat& >::type post_A(post_ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type post_B(post_BSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type post_V(post_VSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type post_S(post_SSEXP);
     Rcpp::traits::input_parameter< int& >::type post_nu(post_nuSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type prior(priorSEXP);
-    niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
+    niw_cpp(post_B, post_V, post_S, post_nu, Y, X, prior);
     return R_NilValue;
 END_RCPP
 }
