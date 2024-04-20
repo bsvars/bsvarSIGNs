@@ -79,7 +79,7 @@ Rcpp::List bsvar_sign_cpp(
     
     aux_SIGMA  = iwishrnd(post_S, post_nu);
     chol_SIGMA = chol(aux_SIGMA, "lower");
-    aux_A      = rmnorm_cpp(post_A, aux_SIGMA, post_V);
+    aux_A      = rmatnorm_cpp(post_A, aux_SIGMA, post_V);
     aux_B      = inv(trimatl(chol_SIGMA)); // lower triangular identification
     
     success = false;

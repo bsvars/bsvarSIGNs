@@ -181,16 +181,16 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_gibbs_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rmnorm_cpp
-arma::mat rmnorm_cpp(const arma::mat& M, const arma::mat& U, const arma::mat& V);
-RcppExport SEXP _bsvarSIGNs_rmnorm_cpp(SEXP MSEXP, SEXP USEXP, SEXP VSEXP) {
+// rmatnorm_cpp
+arma::mat rmatnorm_cpp(const arma::mat& M, const arma::mat& U, const arma::mat& V);
+RcppExport SEXP _bsvarSIGNs_rmatnorm_cpp(SEXP MSEXP, SEXP USEXP, SEXP VSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type M(MSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
-    rcpp_result_gen = Rcpp::wrap(rmnorm_cpp(M, U, V));
+    rcpp_result_gen = Rcpp::wrap(rmatnorm_cpp(M, U, V));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -526,7 +526,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_ir1_cpp", (DL_FUNC) &_bsvarSIGNs_ir1_cpp, 4},
     {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 13},
     {"_bsvarSIGNs_bsvar_sign_gibbs_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_gibbs_cpp, 13},
-    {"_bsvarSIGNs_rmnorm_cpp", (DL_FUNC) &_bsvarSIGNs_rmnorm_cpp, 3},
+    {"_bsvarSIGNs_rmatnorm_cpp", (DL_FUNC) &_bsvarSIGNs_rmatnorm_cpp, 3},
     {"_bsvarSIGNs_riwish_cpp", (DL_FUNC) &_bsvarSIGNs_riwish_cpp, 2},
     {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 7},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},

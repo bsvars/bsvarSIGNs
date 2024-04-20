@@ -9,9 +9,9 @@ using namespace Rcpp;
 using namespace arma;
 
 
-arma::mat rmnorm_cpp(const arma::mat& M,
-                      const arma::mat& U,
-                      const arma::mat& V);
+arma::mat rmatnorm_cpp(const arma::mat& M,
+                       const arma::mat& U,
+                       const arma::mat& V);
 
 arma::mat riwish_cpp (
     const arma::mat&  S, 
