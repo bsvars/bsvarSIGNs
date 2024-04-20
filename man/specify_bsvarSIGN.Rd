@@ -103,7 +103,7 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   sign_irf,
   sign_narrative,
   sign_B,
-  max_tries = 1,
+  max_tries = 10000L,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
