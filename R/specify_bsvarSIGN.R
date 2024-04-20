@@ -79,7 +79,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_B   = matrix(),
     #' @field max_tries a positive integer with the maximum number of iterations 
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
-    max_tries = 10000,
+    max_tries = 1,
     
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGN.
@@ -112,7 +112,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
-    initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 10000) {
+    initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 1) {
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
@@ -307,7 +307,7 @@ specify_bsvarSIGN = R6::R6Class(
     sign_irf,
     sign_narrative,
     sign_B,
-    max_tries = 10000L,
+    max_tries = 1,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
     ) {

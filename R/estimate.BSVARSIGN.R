@@ -113,13 +113,6 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
   output              = importance_sampling(output)
   
-  skipped             = output$posterior$skipped
-  p_skipped           = skipped/(skipped+S/thin)
-  if (p_skipped > 0.05) {
-    cat(paste("Message: ", round(p_skipped*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
-              max_tries, " tries. Consider increasing the parameter max_tries of specify_bsvarSIGN.\n", sep = ""))
-  }
-   
   return(output)
 }
 
@@ -173,13 +166,6 @@ estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 1, show_progres
   specification$last_draw$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification$last_draw, qqq$posterior)
   output              = importance_sampling(output)
-  
-  skipped             = output$posterior$skipped
-  p_skipped           = skipped/(skipped+S/thin)
-  if (p_skipped > 0.05) {
-    cat(paste("Message: ", round(p_skipped*100, 2), "% of the samples failed to find a valid Q matrix with a maximum of ",
-              max_tries, " tries. Consider increasing the parameter max_tries of specify_bsvarSIGN.\n", sep = ""))
-  }
   
   return(output)
 }

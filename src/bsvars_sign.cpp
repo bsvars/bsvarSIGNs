@@ -56,9 +56,8 @@ Rcpp::List bsvar_sign_cpp(
   mat   aux_B       = as<mat>(starting_values["B"]);
   mat   aux_A       = as<mat>(starting_values["A"]);
   mat   aux_hyper   = as<mat>(starting_values["hyper"]);
-  mat   Q(N, N);
+  mat   aux_SIGMA(N, N), chol_SIGMA(N, N), Q(N, N);
   
-  cube  posterior_SIGMA(N, N, S);
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
   cube  posterior_hyper(2 * N + 1, 2, S);
@@ -71,38 +70,34 @@ Rcpp::List bsvar_sign_cpp(
   int post_nu;
   niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
   
-  mat sigma, a;
-  for(int s = 0; s < S; s++) {
-    sigma          = iwishrnd(post_S, post_nu);
-    a              = matnrnd_cpp(post_A, sigma, post_V);
-    posterior_SIGMA.slice(s) = sigma;
-    posterior_A.slice(s)     = a;
-  }
-  
-  for (int s=0; s<S; s++) {
-    
-    // Increment progress bar
-    if (any(prog_rep_points == s)) p.increment();
+  bool success;
+  int  s = 0;
+  while (s < S) {
+
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
     
-    // sigma          = iwishrnd(post_S, post_nu);
-    // a              = matnrnd_cpp(post_A, sigma, post_V);
-    // posterior_SIGMA.slice(s) = sigma;
-    // posterior_A.slice(s)     = a;
+    aux_SIGMA  = iwishrnd(post_S, post_nu);
+    chol_SIGMA = chol(aux_SIGMA, "lower");
+    aux_A      = rmatnorm_cpp(post_A, aux_SIGMA, post_V);
+    aux_B      = inv(trimatl(chol_SIGMA)); // lower triangular identification
     
-    aux_B        = inv(trimatl(chol(posterior_SIGMA.slice(s)).t())); // lower triangular identification
+    success = false;
+    Q       = sample_Q(lags, Y, X, 
+                       aux_w, aux_A, aux_B, chol_SIGMA, 
+                       prior, VB,
+                       sign_irf, sign_narrative, sign_B,
+                       max_tries, success);
     
-    bool success = false;
-    Q            = sample_Q(lags, Y, X, 
-                            aux_w, aux_A, aux_B, aux_hyper, 
-                            prior, VB,
-                            sign_irf, sign_narrative, sign_B,
-                            max_tries, success);
-    
-    posterior_B.slice(s) = Q.t() * aux_B;
-    w(s)                 = aux_w;
-    
+    if (success) {
+      // Increment progress bar
+      if (any(prog_rep_points == s)) p.increment();
+      
+      posterior_A.slice(s) = aux_A;
+      posterior_B.slice(s) = Q.t() * aux_B;
+      w(s)                 = aux_w;
+      s++;
+    }
   } // END s loop
   
   return List::create(
