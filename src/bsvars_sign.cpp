@@ -56,7 +56,6 @@ Rcpp::List bsvar_sign_cpp(
   mat   aux_B       = as<mat>(starting_values["B"]);
   mat   aux_A       = as<mat>(starting_values["A"]);
   mat   aux_hyper   = as<mat>(starting_values["hyper"]);
-  mat   aux_SIGMA(N, N), chol_SIGMA(N, N), Q(N, N);
   
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
@@ -70,6 +69,8 @@ Rcpp::List bsvar_sign_cpp(
   int post_nu;
   niw_cpp(post_A, post_V, post_S, post_nu, Y, X, prior);
   
+  mat B, Sigma, chol_Sigma, h_inv, Q;
+  
   bool success;
   int  s = 0;
   while (s < S) {
@@ -77,14 +78,14 @@ Rcpp::List bsvar_sign_cpp(
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
     
-    aux_SIGMA  = iwishrnd(post_S, post_nu);
-    chol_SIGMA = chol(aux_SIGMA, "lower");
-    aux_A      = rmatnorm_cpp(post_A, aux_SIGMA, post_V);
-    aux_B      = inv(trimatl(chol_SIGMA)); // lower triangular identification
+    Sigma      = iwishrnd(post_S, post_nu);
+    chol_Sigma = chol(Sigma, "lower");
+    B          = rmatnorm_cpp(post_A, Sigma, post_V);
+    h_inv      = inv(trimatl(chol_Sigma)); // lower triangular identification
     
     success = false;
     Q       = sample_Q(lags, Y, X, 
-                       aux_w, aux_A, aux_B, chol_SIGMA, 
+                       aux_w, B, h_inv, chol_Sigma, 
                        prior, VB,
                        sign_irf, sign_narrative, sign_B,
                        max_tries, success);
@@ -93,8 +94,8 @@ Rcpp::List bsvar_sign_cpp(
       // Increment progress bar
       if (any(prog_rep_points == s)) p.increment();
       
-      posterior_A.slice(s) = aux_A;
-      posterior_B.slice(s) = Q.t() * aux_B;
+      posterior_A.slice(s) = B;
+      posterior_B.slice(s) = Q.t() * h_inv;
       w(s)                 = aux_w;
       s++;
     }
