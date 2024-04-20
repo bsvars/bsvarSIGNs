@@ -133,7 +133,7 @@ bool match_sign_narrative(
 }
 
 
-// approximate importance weight
+// approximate importance weight for narrative restrictions
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double approximate_w(
@@ -162,6 +162,39 @@ double approximate_w(
 }
 
 
+// approximate importance weight for narrative restrictions
+// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::export]]
+void rzeroQ(
+    const arma::field<arma::mat>& Z,
+    const arma::cube              irf
+) {
+  
+  Z.print();
+  
+}
+
+/***R
+# construction Z_j matrices
+get_Z = function(zero_irf) {
+  N = dim(zero_irf)[2]
+  
+  Z = list()
+  for (j in 1:N) {
+    Z_j          = diag(zero_irf[, j])  
+    nonzero_rows = rowSums(Z_j) > 0
+    Z[[j]]       = as.matrix(Z_j[nonzero_rows, ])
+  }
+  
+  Z
+}
+
+zero_irf = matrix(c(0,0,0,0), 2,2)
+Z = get_Z(zero_irf)
+rzeroQ(Z, array(dim = c(2,2,2)))
+*/
+
+
 // Sample rotation matrix Q and updates importance weight by reference
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
@@ -178,7 +211,7 @@ arma::mat sample_Q(
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
-    const arma::cube&             zero_irf,
+    const arma::field<arma::mat>& Z,
     const int&                    max_tries,
     bool&                         success
 ) {
@@ -214,8 +247,11 @@ arma::mat sample_Q(
   aux_w = 1;
   if (!success) {
     aux_w = 0;
-  } else if (has_narrative) {
-    aux_w = approximate_w(T, sign_narrative, irf);
+  } else {
+    if (has_narrative) {
+      aux_w = approximate_w(T, sign_narrative, irf);  
+    }
+    
   }
   
   return Q;

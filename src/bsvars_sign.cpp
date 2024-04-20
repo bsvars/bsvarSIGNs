@@ -23,7 +23,7 @@ Rcpp::List bsvar_sign_cpp(
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
     const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // Mx6 matrix of signs for B
-    const arma::cube& zero_irf,           // NxNxh cube of zero restrictions for impulse response function
+    const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
     const int         thin = 100,         // introduce thinning
@@ -92,7 +92,7 @@ Rcpp::List bsvar_sign_cpp(
     Q       = sample_Q(lags, Y, X, 
                        aux_w, B, h_invp, chol_Sigma, 
                        prior, VB,
-                       sign_irf, sign_narrative, sign_B, zero_irf,
+                       sign_irf, sign_narrative, sign_B, Z,
                        max_tries, success);
     
     if (success) {

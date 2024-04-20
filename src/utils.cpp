@@ -54,3 +54,12 @@ arma::field<arma::cube> irf_cpp(
   
   return bsvars::bsvars_ir(posterior_B, posterior_A, horizon, p);
 }
+
+
+
+
+
+
+
+
+
