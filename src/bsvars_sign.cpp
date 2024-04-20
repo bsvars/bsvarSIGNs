@@ -23,6 +23,7 @@ Rcpp::List bsvar_sign_cpp(
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
     const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // Mx6 matrix of signs for B
+    const arma::cube& zero_irf,           // NxNxh cube of zero restrictions for impulse response function
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
     const int         thin = 100,         // introduce thinning
@@ -64,15 +65,16 @@ Rcpp::List bsvar_sign_cpp(
   cube  posterior_B(N, N, S);
   cube  posterior_hyper(2 * N + 1, 2, S);
   
-  int    skipped    = 0;
-  double aux_w      = 1;
-  vec    w          = ones(S);
+  double aux_w = 1;
+  vec    w     = ones(S);
   
-  mat post_B, post_V, post_S;
-  int post_nu;
-  niw_cpp(post_B, post_V, post_S, post_nu, Y, X, prior);
+  List post    = niw_cpp(Y, X, prior);
+  mat  post_B  = as<mat>(post["B"]);
+  mat  post_V  = as<mat>(post["V"]);
+  mat  post_S  = as<mat>(post["S"]);
+  int  post_nu = as<int>(post["nu"]);
   
-  mat B, Sigma, chol_Sigma, h_inv, Q;
+  mat B, Sigma, chol_Sigma, h_invp, Q;
   
   bool success;
   int  s = 0;
@@ -84,13 +86,13 @@ Rcpp::List bsvar_sign_cpp(
     Sigma      = iwishrnd(post_S, post_nu);
     chol_Sigma = chol(Sigma, "lower");
     B          = rmatnorm_cpp(post_B, post_V, Sigma);
-    h_inv      = inv(trimatl(chol_Sigma)); // lower triangular identification
+    h_invp     = inv(trimatl(chol_Sigma));    // lower triangular, h(Sigma) is upper triangular
     
     success = false;
     Q       = sample_Q(lags, Y, X, 
-                       aux_w, B, h_inv, chol_Sigma, 
+                       aux_w, B, h_invp, chol_Sigma, 
                        prior, VB,
-                       sign_irf, sign_narrative, sign_B,
+                       sign_irf, sign_narrative, sign_B, zero_irf,
                        max_tries, success);
     
     if (success) {
@@ -98,7 +100,7 @@ Rcpp::List bsvar_sign_cpp(
       if (any(prog_rep_points == s)) p.increment();
       
       posterior_A.slice(s) = B.t();
-      posterior_B.slice(s) = Q.t() * h_inv;
+      posterior_B.slice(s) = Q.t() * h_invp;
       w(s)                 = aux_w;
       s++;
     }
@@ -109,8 +111,7 @@ Rcpp::List bsvar_sign_cpp(
       _["B"]        = posterior_B,
       _["A"]        = posterior_A,
       _["hyper"]    = posterior_hyper,
-      _["w"]        = w,
-      _["skipped"]  = skipped
+      _["w"]        = w
     )
   );
 } // END bsvar_sign_cpp

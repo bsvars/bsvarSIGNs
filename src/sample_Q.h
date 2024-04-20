@@ -23,6 +23,7 @@ arma::mat sample_Q(
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
+    const arma::cube&             zero_irf,
     const int&                    max_tries,
     bool&                         success
 );

@@ -104,9 +104,10 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
   p                   = specification$p
 
   # estimation
-  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, data_matrices$Y, data_matrices$X, 
-                              identification$VB, identification$sign_irf,
-                              identification$sign_narrative, identification$sign_B, 
+  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, 
+                              data_matrices$Y, data_matrices$X, identification$VB, 
+                              identification$sign_irf, identification$sign_narrative, 
+                              identification$sign_B, identification$zero_irf,
                               prior, starting_values, thin, show_progress, max_tries)
   
   specification$starting_values$set_starting_values(qqq$last_draw)
@@ -116,57 +117,4 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
   return(output)
 }
 
-
-#' @inherit estimate.BSVARSIGN
-#' 
-#' @method estimate PosteriorBSVARSIGN
-#' 
-#' @param specification an object of class PosteriorBSVARSIGN generated using the \code{estimate.BSVARSIGN()} function.
-#' This setup facilitates the continuation of the MCMC sampling starting from the last draw of the previous run.
-#' 
-#' @examples
-#' # simple workflow
-#' ############################################################
-#' 
-#' # upload data
-#' data(oil)
-#'
-#' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
-#' sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-#' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
-#'                        dim = c(3, 3, 1))
-#' 
-#' # specify the model and set seed
-#' set.seed(123)
-#' specification  = specify_bsvarSIGN$new(oil,
-#'                                        p              = 12,
-#'                                        sign_irf       = sign_irf,
-#'                                        sign_narrative = sign_narrative
-#'                                        )
-#' posterior      = estimate(specification, S = 10)
-#' 
-#' @export
-estimate.PosteriorBSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE) {
-  
-  # get the inputs to estimation
-  # prior               = specification$last_draw$prior$get_prior()
-  prior               = specification$prior
-  starting_values     = specification$last_draw$starting_values$get_starting_values()
-  identification      = specification$last_draw$identification$get_identification()
-  max_tries           = identification$max_tries
-  data_matrices       = specification$last_draw$data_matrices$get_data_matrices()
-  p                   = specification$last_draw$p
-  
-  # estimation
-  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, data_matrices$Y, data_matrices$X, 
-                              identification$VB, identification$sign_irf,
-                              identification$sign_narrative, identification$sign_B,
-                              prior, starting_values, thin, show_progress, max_tries)
-  
-  specification$last_draw$starting_values$set_starting_values(qqq$last_draw)
-  output              = specify_posterior_bsvarSIGN$new(specification$last_draw, qqq$posterior)
-  output              = importance_sampling(output)
-  
-  return(output)
-}
 

@@ -9,8 +9,8 @@ riwish_cpp <- function(S, nu) {
     .Call(`_bsvarSIGNs_riwish_cpp`, S, nu)
 }
 
-niw_cpp <- function(post_B, post_V, post_S, post_nu, Y, X, prior) {
-    invisible(.Call(`_bsvarSIGNs_niw_cpp`, post_B, post_V, post_S, post_nu, Y, X, prior))
+niw_cpp <- function(Y, X, prior) {
+    .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior)
 }
 
 qr_sign_cpp <- function(A) {

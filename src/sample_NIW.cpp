@@ -46,11 +46,7 @@ arma::mat riwish_cpp (
 
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
-void niw_cpp(
-    arma::mat&       post_B,
-    arma::mat&       post_V,
-    arma::mat&       post_S,
-    int&             post_nu,
+Rcpp::List niw_cpp(
     const arma::mat& Y,
     const arma::mat& X,
     const Rcpp::List prior
@@ -66,12 +62,19 @@ void niw_cpp(
   // analytic solutions
   mat prior_V_inv = inv_sympd(prior_V);
   mat post_V_inv  = prior_V_inv + X.t() * X;
-  post_V          = inv_sympd(post_V_inv);
-  post_B          = post_V * (X.t() * Y + prior_V_inv * prior_B);
+  mat post_V      = inv_sympd(post_V_inv);
+  mat post_B      = post_V * (X.t() * Y + prior_V_inv * prior_B);
   
   // marginal posterior of Sigma
-  post_S  = prior_S + Y.t() * Y + prior_B.t() * prior_V_inv * prior_B - post_B.t() * post_V_inv * post_B;
-  post_S  = symmatu(post_S);
-  post_nu = prior_nu + T;
+  mat post_S  = prior_S + Y.t() * Y + prior_B.t() * prior_V_inv * prior_B - post_B.t() * post_V_inv * post_B;
+  post_S      = symmatu(post_S);
+  int post_nu = prior_nu + T;
+  
+  return List::create(
+    Named("B")  = post_B,
+    Named("V")  = post_V,
+    Named("S")  = post_S,
+    Named("nu") = post_nu
+  );
 }
 

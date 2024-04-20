@@ -18,11 +18,7 @@ arma::mat riwish_cpp (
     const double&     nu
 );
 
-void niw_cpp(
-    arma::mat&       post_B,
-    arma::mat&       post_V,
-    arma::mat&       post_S,
-    int&             post_nu,
+Rcpp::List niw_cpp(
     const arma::mat& Y,
     const arma::mat& X,
     const Rcpp::List prior
