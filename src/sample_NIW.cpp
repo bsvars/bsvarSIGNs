@@ -56,24 +56,22 @@ void niw_cpp(
     const Rcpp::List prior
 ) {
 
-  const int T  = Y.n_cols;
+  const int T  = Y.n_rows;
   
   mat prior_B  = as<mat>(prior["B"]);
   mat prior_V  = as<mat>(prior["V"]);
   mat prior_S  = as<mat>(prior["S"]);
   int prior_nu = as<int>(prior["nu"]);
   
-  prior_B = prior_B.t();
-  
   // analytic solutions
   mat prior_V_inv = inv_sympd(prior_V);
-  mat post_V_inv  = prior_V_inv + X * X.t();
-  post_V      = inv_sympd(post_V_inv);
-  post_B      = (prior_B * prior_V_inv + Y * X.t()) * post_V;
+  mat post_V_inv  = prior_V_inv + X.t() * X;
+  post_V          = inv_sympd(post_V_inv);
+  post_B          = post_V * (X.t() * Y + prior_V_inv * prior_B);
   
   // marginal posterior of Sigma
-  post_S  = prior_S + Y * Y.t() + prior_B * prior_V_inv * prior_B.t() - post_B * post_V_inv * post_B.t();
-  post_S      = symmatu(post_S);
+  post_S  = prior_S + Y.t() * Y + prior_B.t() * prior_V_inv * prior_B - post_B.t() * post_V_inv * post_B;
+  post_S  = symmatu(post_S);
   post_nu = prior_nu + T;
 }
 

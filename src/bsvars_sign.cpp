@@ -68,9 +68,9 @@ Rcpp::List bsvar_sign_cpp(
   double aux_w      = 1;
   vec    w          = ones(S);
   
-  mat post_A, post_V, post_S;
+  mat post_B, post_V, post_S;
   int post_nu;
-  niw_cpp(post_A, post_V, post_S, post_nu, Yt, Xt, prior);
+  niw_cpp(post_B, post_V, post_S, post_nu, Y, X, prior);
   
   mat B, Sigma, chol_Sigma, h_inv, Q;
   
@@ -83,11 +83,11 @@ Rcpp::List bsvar_sign_cpp(
     
     Sigma      = iwishrnd(post_S, post_nu);
     chol_Sigma = chol(Sigma, "lower");
-    B          = rmatnorm_cpp(post_A, Sigma, post_V);
+    B          = rmatnorm_cpp(post_B, post_V, Sigma);
     h_inv      = inv(trimatl(chol_Sigma)); // lower triangular identification
     
     success = false;
-    Q       = sample_Q(lags, Yt, Xt, 
+    Q       = sample_Q(lags, Y, X, 
                        aux_w, B, h_inv, chol_Sigma, 
                        prior, VB,
                        sign_irf, sign_narrative, sign_B,
@@ -97,7 +97,7 @@ Rcpp::List bsvar_sign_cpp(
       // Increment progress bar
       if (any(prog_rep_points == s)) p.increment();
       
-      posterior_A.slice(s) = B;
+      posterior_A.slice(s) = B.t();
       posterior_B.slice(s) = Q.t() * h_inv;
       w(s)                 = aux_w;
       s++;
@@ -105,11 +105,6 @@ Rcpp::List bsvar_sign_cpp(
   } // END s loop
   
   return List::create(
-    _["last_draw"]  = List::create(
-      _["B"]        = aux_B,
-      _["A"]        = aux_A,
-      _["hyper"]    = aux_hyper
-    ),
     _["posterior"]  = List::create(
       _["B"]        = posterior_B,
       _["A"]        = posterior_A,

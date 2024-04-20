@@ -182,8 +182,8 @@ arma::mat sample_Q(
     bool&                         success
 ) {
 
-  const int N          = Y.n_rows;
-  const int T          = Y.n_cols;
+  const int N          = Y.n_cols;
+  const int T          = Y.n_rows;
   
   int    n_tries       = 0;
   int    h             = sign_narrative.col(5).max(); // maximum horizon
@@ -192,9 +192,9 @@ arma::mat sample_Q(
   bool   has_narrative = sign_narrative(0, 0) != 0;
   
   mat    Q(N, N);
-  mat    U             = aux_B * (Y - aux_A * X);
+  mat    U             = aux_B * (Y.t() - aux_A.t() * X.t());
   
-  cube   irf           = ir1_cpp(aux_A.t(), chol_SIGMA, h, lags);  // contaminates rng
+  cube   irf           = ir1_cpp(aux_A, chol_SIGMA, h, lags);
   
   while (n_tries < max_tries && !success) {
     Q = rortho_cpp(N);
