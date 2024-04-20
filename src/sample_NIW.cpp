@@ -58,10 +58,12 @@ void niw_cpp(
 
   const int T  = Y.n_cols;
   
-  mat prior_A  = as<mat>(prior["A"]);
+  mat prior_A  = as<mat>(prior["B"]);
   mat prior_V  = as<mat>(prior["V"]);
   mat prior_S  = as<mat>(prior["S"]);
   int prior_nu = as<int>(prior["nu"]);
+  
+  prior_A = prior_A.t();
   
   // analytic solutions
   mat prior_V_inv = inv_sympd(prior_V);

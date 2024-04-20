@@ -346,6 +346,9 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices           = bsvars::specify_data_matrices$new(data, p, exogenous)
+      self$data_matrices$Y         = t(self$data_matrices$Y)
+      self$data_matrices$X         = t(self$data_matrices$X)
+      
       self$identification          = specify_identification_bsvarSIGN$new(N,
                                                                           sign_irf,
                                                                           sign_narrative, sign_B,
@@ -544,8 +547,8 @@ niw_prior <- function(Y,
     ar_s2[n] <- t(resid) %*% resid / (T - p - 1)
   }
   
-  A <- matrix(0, N, K)
-  A[1:N, 1:N] <- diag(non_stationary)
+  B <- matrix(0, K, N)
+  B[1:N, 1:N] <- diag(non_stationary)
   
   V <- matrix(0, K, K)
   V[K, K] <- lambda_1
@@ -554,5 +557,5 @@ niw_prior <- function(Y,
   S <- diag(ar_s2)
   nu <- N + 2
   
-  list(A = A, V = V, S = S, nu = nu)
+  list(B = B, V = V, S = S, nu = nu)
 }
