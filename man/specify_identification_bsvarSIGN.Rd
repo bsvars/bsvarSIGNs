@@ -50,7 +50,7 @@ Create new identifying restrictions IdentificationBSVARSIGN.
   sign_irf,
   sign_narrative,
   sign_B,
-  max_tries = 10000
+  max_tries = 1
 )}\if{html}{\out{</div>}}
 }
 

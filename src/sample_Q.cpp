@@ -167,8 +167,8 @@ double approximate_w(
 // [[Rcpp::export]]
 arma::mat sample_Q(    
     const int&                    lags,
-    const arma::mat&              Y,
-    const arma::mat&              X,
+    arma::mat                     Y,
+    arma::mat                     X,
     double&                       aux_w,
     arma::mat&                    aux_A,
     arma::mat&                    aux_B,
@@ -181,6 +181,9 @@ arma::mat sample_Q(
     const int&                    max_tries,
     bool&                         success
 ) {
+  Y = Y.t();
+  X = X.t();
+  aux_A = aux_A.t();
 
   const int N          = Y.n_rows;
   const int T          = Y.n_cols;
