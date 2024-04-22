@@ -67,9 +67,14 @@ arma::colvec g_fh(
   mat    M_j, K_j;
   colvec w_j;
   for (int j=0; j<ZF.n_elem; j++) {
-    M_j = join_horiz(Q.cols(0, j), ZF(j).t()).t();
+    if (j == 0) {
+      M_j = ZF(j);
+    } else {
+      M_j = join_horiz(Q.cols(0, j-1), ZF(j).t()).t();  
+    }
+    
     K_j = null(M_j);
-    w_j = K_j.t() * Q.col(j+1);
+    w_j = K_j.t() * Q.col(j);
     out = join_vert(out, w_j);
   }
   
