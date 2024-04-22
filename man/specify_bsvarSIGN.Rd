@@ -145,10 +145,8 @@ contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}
 
-\item{\code{zero_irf}}{a \code{NxNxH} array with entries in (0, 1), zero restrictions on the
-impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-zero restrictions on the \code{h-1} horizon, e.g. \code{zero_irf[,,0]} contains restrictions
-on the contemporaneous impulse response function.}
+\item{\code{zero_irf}}{a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
+contemporaneous impulse response functions.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
