@@ -1,13 +1,31 @@
 
 # construction Z_j matrices
 get_Z = function(zero_irf) {
+  if (sum(zero_irf) == 0) {
+    return(NULL)
+  }
+  
+  if (!(all(zero_irf %in% c(0, 1)))) {
+    stop("Zero restriction matrix has entries that are not in {0, 1}.")
+  }
+  
   N = dim(zero_irf)[2]
   
   Z = list()
   for (j in 1:N) {
     Z_j          = diag(zero_irf[, j])  
     nonzero_rows = rowSums(Z_j) > 0
-    Z[[j]]       = as.matrix(Z_j[nonzero_rows, ])
+    Z_j          = as.matrix(Z_j[nonzero_rows, ])
+    
+    if (dim(Z_j)[2] == 1) {
+      Z_j = as.matrix(t(Z_j))
+    }
+    
+    if (dim(Z_j)[1] > N-j) {
+      stop("Too many zero restrictions for shock ", j)
+    }
+    
+    Z[[j]]       = Z_j
   }
   
   Z

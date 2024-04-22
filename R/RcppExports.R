@@ -13,18 +13,6 @@ niw_cpp <- function(Y, X, prior) {
     .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior)
 }
 
-qr_sign_cpp <- function(A) {
-    .Call(`_bsvarSIGNs_qr_sign_cpp`, A)
-}
-
-rortho_cpp <- function(N) {
-    .Call(`_bsvarSIGNs_rortho_cpp`, N)
-}
-
-irf_cpp <- function(posterior_B, posterior_A, horizon, p) {
-    .Call(`_bsvarSIGNs_irf_cpp`, posterior_B, posterior_A, horizon, p)
-}
-
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call(`_bsvarSIGNs_RcppExport_registerCCallable`)

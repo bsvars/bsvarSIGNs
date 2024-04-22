@@ -1,6 +1,8 @@
-#include <RcppArmadillo.h>
 
-#include <bsvars.h>
+#include <functional>
+#include <iostream>
+
+#include <RcppArmadillo.h>
 
 using namespace arma;
 
@@ -34,26 +36,48 @@ arma::mat rortho_cpp(const int& N) {
 }
 
 
-// Compute impulse response functions with bsvars
-// [[Rcpp:interface(cpp)]]
+// If matches signs
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
-arma::field<arma::cube> irf_cpp(
-    arma::cube&         posterior_B,        // (N, N, S)
-    arma::cube&         posterior_A,        // (N, K, S)
-    const int           horizon,
-    const int           p
+bool match_sign(
+    const arma::mat& A, 
+    const arma::mat& sign
 ) {
-  
-  // const int   S = posterior_Q.n_slices;
-  // 
-  // cube        QB(size(posterior_Q));
-  // 
-  // for(int s = 0; s < S; s++) {
-  //   QB.slice(s) = posterior_Q.slice(s).t() * posterior_B.slice(s);
-  // }
-  
-  return bsvars::bsvars_ir(posterior_B, posterior_A, horizon, p);
+  return accu(((A % sign) > 0)) == accu(sign != 0);
 }
+
+
+// Numerical derivative of f: R^n -> R^m, at x (Rcpp::export is not possible)
+// [[Rcpp:interface(cpp)]]
+arma::mat Df(
+    const  std::function<arma::colvec(const arma::colvec&)>& f,
+    const  arma::colvec& x,
+    double               h = 1e-10
+)
+{
+  colvec f_x = f(x);
+  
+  int n  = x.n_elem;
+  int m  = f_x.n_elem;
+  
+  mat result(m, n);
+  
+  for (int i = 0; i < n; i++)
+  {
+    vec x_plus_h  = x;
+    x_plus_h(i)  += h;
+    
+    vec f_plus_h = f(x_plus_h);
+    
+    for (int j = 0; j < m; j++)
+    {
+      result(j, i) = (f_plus_h(j) - f_x(j)) / h;
+    }
+  }
+  
+  return result;
+}
+
 
 
 

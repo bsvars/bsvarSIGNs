@@ -3,15 +3,13 @@
 
 #include <RcppArmadillo.h>
 
-#include <bsvars.h>
-
 #include "utils.h"
 
 using namespace Rcpp;
 using namespace arma;
 
 arma::mat sample_Q(    
-    const int&                    lags,
+    const int&                    p,
     const arma::mat&              Y,
     const arma::mat&              X,
     double&                       aux_w,

@@ -8,11 +8,15 @@ arma::mat qr_sign_cpp(const arma::mat& A);
 
 arma::mat rortho_cpp(const int& N);
 
-arma::field<arma::cube> irf_cpp(
-    arma::cube&         posterior_B,        // (N, N, S)
-    arma::cube&         posterior_A,        // (N, K, S)
-    const int           horizon,
-    const int           p
+bool match_sign(
+    const arma::mat& A, 
+    const arma::mat& sign
+);
+
+arma::mat Df(
+    const  std::function<arma::colvec(const arma::colvec&)>& f,
+    const  arma::colvec& x,
+    double               h = 1e-10
 );
 
 #endif  // _UTILS_H_
