@@ -84,6 +84,118 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
 }
 
 
+# Minnesota prior of Normal-Inverse-Wishart form
+niw_prior <- function(Y,
+                      p,
+                      non_stationary,
+                      lambda_1 = 1 / .Machine$double.eps,
+                      lambda_2 = 0.2,
+                      lambda_3 = 1) {
+  T <- nrow(Y)
+  N <- ncol(Y)
+  K <- 1 + N * p
+  
+  ar_s2 <- vector(length = N)
+  for (n in 1:N) {
+    resid <- stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
+    ar_s2[n] <- t(resid) %*% resid / (T - p - 1)
+  }
+  
+  B <- matrix(0, K, N)
+  B[1:N, 1:N] <- diag(non_stationary)
+  
+  V <- matrix(0, K, K)
+  V[K, K] <- lambda_1
+  V[1:(K-1), 1:(K-1)] <- diag(lambda_2^2 * rep((1:p)^-(2 * lambda_3), each = N) * rep(ar_s2^-1, p))
+  
+  S <- diag(ar_s2)
+  nu <- N + 2
+  
+  list(B = B, V = V, S = S, nu = nu)
+}
+
+
+#' R6 Class Representing PriorBSVAR
+#'
+#' @description
+#' The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
+#' 
+#' @examples 
+#' prior = specify_prior_bsvarSIGN$new(N = 3, p = 1)  # a prior for 3-variable example with one lag
+#' prior$B                                        # show autoregressive prior mean
+#' 
+#' @export
+specify_prior_bsvarSIGN = R6::R6Class(
+  "PriorBSVARSIGN",
+  
+  public = list(
+    
+    #' @field B an \code{KxN} matrix, the mean of the normal prior distribution for the parameter matrix \eqn{B}. 
+    B          = matrix(),
+    
+    #' @field V a \code{KxK} covariance matrix of the normal prior distribution for each of 
+    #' the column of the parameter matrix \eqn{B}. This covariance matrix is equation invariant.
+    V          = matrix(),
+    
+    #' @field S an \code{NxN} scale matrix of the inverse-Wishart prior distribution 
+    #' for the covariance matrix \eqn{\Sigma}. This scale matrix is equation invariant.
+    S          = matrix(),
+    
+    #' @field nu a positive real number greater of equal than \code{N}, a degree of freedom parameter
+    #' of the inverse-Wishart prior distribution for the covariance matrix \eqn{\Sigma}.
+    nu         = NA,
+    
+    #' @description
+    #' Create a new prior specification PriorBSVAR.
+    #' @param data the \code{TxN} data matrix.
+    #' @param N a positive integer - the number of dependent variables in the model.
+    #' @param p a positive integer - the autoregressive lag order of the SVAR model.
+    #' @param d a positive integer - the number of \code{exogenous} variables in the model.
+    #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets 
+    #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
+    #' otherwise to random walk.
+    #' @return A new prior specification PriorBSVARSIGN.
+    #' @examples 
+    #' # a prior for 3-variable example with one lag and stationary data
+    #' prior = specify_prior_bsvarSIGN$new(N = 3, p = 1, stationary = rep(TRUE, 3))
+    #' prior$B # show autoregressive prior mean
+    #' 
+    initialize = function(data, N, p, d = 0, stationary = rep(FALSE, N)){
+      stopifnot("Argument N must be a positive integer number." = N > 0 & N %% 1 == 0)
+      stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
+      stopifnot("Argument d must be a non-negative integer number." = d >= 0 & d %% 1 == 0)
+      stopifnot("Argument stationary must be a logical vector of length N." = length(stationary) == N & is.logical(stationary))
+      
+      prior   = niw_prior(data, p, !stationary)
+      
+      self$B  = prior$B
+      self$V  = prior$V
+      self$S  = prior$S
+      self$nu = prior$nu
+      
+    }, # END initialize
+    
+    #' @description
+    #' Returns the elements of the prior specification PriorBSVAR as a \code{list}.
+    #' 
+    #' @examples 
+    #' # a prior for 3-variable example with four lags
+    #' prior = specify_prior_bsvar$new(N = 3, p = 4)
+    #' prior$get_prior() # show the prior as list
+    #' 
+    get_prior = function(){
+      list(
+        B  = self$B,
+        V  = self$V,
+        S  = self$S,
+        nu = self$nu
+      )
+    } # END get_prior
+    
+  ) # END public
+) # END specify_prior_bsvarSIGN
+
+
 #' R6 Class Representing IdentificationBSVARSIGN
 #'
 #' @description
@@ -406,8 +518,7 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           sign_B,
                                                                           zero_irf,
                                                                           max_tries)
-      # self$prior                   = bsvars::specify_prior_bsvar$new(N, p, d, stationary)
-      self$prior                   = niw_prior(data, p, !stationary) # temporary hack
+      self$prior                   = specify_prior_bsvarSIGN$new(data, N, p, stationary)
       self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     
@@ -583,32 +694,3 @@ specify_posterior_bsvarSIGN = R6::R6Class(
   ) # END public
 ) # END specify_posterior_bsvarSIGN
 
-
-niw_prior <- function(Y,
-                      p,
-                      non_stationary,
-                      lambda_1 = 1 / .Machine$double.eps,
-                      lambda_2 = 0.2,
-                      lambda_3 = 1) {
-  T <- nrow(Y)
-  N <- ncol(Y)
-  K <- 1 + N * p
-  
-  ar_s2 <- vector(length = N)
-  for (n in 1:N) {
-    resid <- stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
-    ar_s2[n] <- t(resid) %*% resid / (T - p - 1)
-  }
-  
-  B <- matrix(0, K, N)
-  B[1:N, 1:N] <- diag(non_stationary)
-  
-  V <- matrix(0, K, K)
-  V[K, K] <- lambda_1
-  V[1:(K-1), 1:(K-1)] <- diag(lambda_2^2 * rep((1:p)^-(2 * lambda_3), each = N) * rep(ar_s2^-1, p))
-  
-  S <- diag(ar_s2)
-  nu <- N + 2
-  
-  list(B = B, V = V, S = S, nu = nu)
-}
