@@ -30,23 +30,6 @@ estimate$get_posterior()
 
 
 ## ------------------------------------------------
-## Method `specify_posterior_bsvarSIGN$get_last_draw`
-## ------------------------------------------------
-
-data(oil)
-
-# specify the model and set seed
-specification  = specify_bsvarSIGN$new(oil)
-set.seed(123)
-
-# run the burn-in
-burn_in        = estimate(specification, 10)
-
-# estimate the model
-posterior      = estimate(burn_in, 10)
-
-
-## ------------------------------------------------
 ## Method `specify_posterior_bsvarSIGN$is_normalised`
 ## ------------------------------------------------
 
@@ -78,7 +61,6 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 \itemize{
 \item \href{#method-PosteriorBSVARSIGN-new}{\code{specify_posterior_bsvarSIGN$new()}}
 \item \href{#method-PosteriorBSVARSIGN-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
-\item \href{#method-PosteriorBSVARSIGN-get_last_draw}{\code{specify_posterior_bsvarSIGN$get_last_draw()}}
 \item \href{#method-PosteriorBSVARSIGN-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
 \item \href{#method-PosteriorBSVARSIGN-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
 }
@@ -124,36 +106,6 @@ specification  = specify_bsvarSIGN$new(oil)
 set.seed(123)
 estimate       = estimate(specification, 50)
 estimate$get_posterior()
-
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_last_draw"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_last_draw}{}}}
-\subsection{Method \code{get_last_draw()}}{
-Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
-the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_last_draw()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data(oil)
-
-# specify the model and set seed
-specification  = specify_bsvarSIGN$new(oil)
-set.seed(123)
-
-# run the burn-in
-burn_in        = estimate(specification, 10)
-
-# estimate the model
-posterior      = estimate(burn_in, 10)
 
 }
 \if{html}{\out{</div>}}

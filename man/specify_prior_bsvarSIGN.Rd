@@ -7,7 +7,9 @@
 The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 }
 \examples{
-prior = specify_prior_bsvarSIGN$new(N = 3, p = 1)  # a prior for 3-variable example with one lag
+# a prior for 3-variable example with one lag 
+data(oil)
+prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1)
 prior$B                                        # show autoregressive prior mean
 
 
@@ -16,7 +18,8 @@ prior$B                                        # show autoregressive prior mean
 ## ------------------------------------------------
 
 # a prior for 3-variable example with one lag and stationary data
-prior = specify_prior_bsvarSIGN$new(N = 3, p = 1, stationary = rep(TRUE, 3))
+data(oil)
+prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
 prior$B # show autoregressive prior mean
 
 
@@ -85,7 +88,8 @@ A new prior specification PriorBSVARSIGN.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{# a prior for 3-variable example with one lag and stationary data
-prior = specify_prior_bsvarSIGN$new(N = 3, p = 1, stationary = rep(TRUE, 3))
+data(oil)
+prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
 prior$B # show autoregressive prior mean
 
 }

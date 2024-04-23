@@ -120,8 +120,10 @@ niw_prior <- function(Y,
 #' @description
 #' The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 #' 
-#' @examples 
-#' prior = specify_prior_bsvarSIGN$new(N = 3, p = 1)  # a prior for 3-variable example with one lag
+#' @examples
+#' # a prior for 3-variable example with one lag 
+#' data(oil)
+#' prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1)
 #' prior$B                                        # show autoregressive prior mean
 #' 
 #' @export
@@ -157,7 +159,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @return A new prior specification PriorBSVARSIGN.
     #' @examples 
     #' # a prior for 3-variable example with one lag and stationary data
-    #' prior = specify_prior_bsvarSIGN$new(N = 3, p = 1, stationary = rep(TRUE, 3))
+    #' data(oil)
+    #' prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
     #' prior$B # show autoregressive prior mean
     #' 
     initialize = function(data, N, p, d = 0, stationary = rep(FALSE, N)){
@@ -281,7 +284,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
           sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
-      
+      if (missing(zero_irf)) {
+        zero_irf = matrix(rep(0, N^2), ncol = N, nrow = N)
+      }
       verify_all(N, sign_irf, sign_narrative, sign_B)
       
       B     = matrix(FALSE, N, N)
@@ -652,27 +657,6 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     get_posterior       = function(){
       self$posterior
     }, # END get_posterior
-    
-    #' @description
-    #' Returns an object of class BSVARSIGN with the last draw of the current MCMC run as
-    #' the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
-    #'
-    #' @examples
-    #' data(oil)
-    #' 
-    #' # specify the model and set seed
-    #' specification  = specify_bsvarSIGN$new(oil)
-    #' set.seed(123)
-    #' 
-    #' # run the burn-in
-    #' burn_in        = estimate(specification, 10)
-    #' 
-    #' # estimate the model
-    #' posterior      = estimate(burn_in, 10)
-    #'
-    get_last_draw      = function(){
-      self$last_draw$clone()
-    }, # END get_last_draw
     
     #' @description
     #' Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
