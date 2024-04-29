@@ -19,8 +19,8 @@ arma::mat qr_sign_cpp(const arma::mat& A) {
   // Check and modify the diagonal elements of R
   for(arma::uword i = 0; i < R.n_cols; ++i) {
     if(R(i, i) < 0) {
-      // R.col(i) *= -1;  // Change sign of the column
-      Q.row(i) *= -1;  // Change sign of the corresponding row in Q
+      // R.row(i) *= -1;  // Change sign of the column
+      Q.col(i) *= -1;  // Change sign of the corresponding row in Q
     }
   }
 
