@@ -25,4 +25,13 @@ arma::cube ir1_cpp(
     const int&       p
 );
 
+
+arma::field<arma::cube> bsvarSIGNs_ir (
+    arma::cube&   posterior_B,        // (K, N, S)
+    arma::cube&   posterior_Theta0,   // (N, N, S)
+    const int     horizon,
+    const int     p
+);
+
+
 #endif  // _BSVARTOOLS_H_

@@ -59,3 +59,29 @@ arma::cube ir1_cpp(
   
   return irf;
 } // END ir1_cpp
+
+
+
+// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::export]]
+arma::field<arma::cube> bsvarSIGNs_ir (
+    arma::cube&   posterior_B,        // (K, N, S)
+    arma::cube&   posterior_Theta0,   // (N, N, S)
+    const int     horizon,
+    const int     p
+) {
+  
+  const int       N = posterior_B.n_cols;
+  const int       S = posterior_B.n_slices;
+  
+  cube            aux_irfs(N, N, horizon + 1);
+  field<cube>     irfs(S);
+  
+  for (int s=0; s<S; s++) {
+    aux_irfs            = ir1_cpp( posterior_B.slice(s), posterior_Theta0.slice(s), horizon, p );
+    irfs(s)             = aux_irfs;
+  } // END s loop
+  
+  return irfs;
+} // END bsvarSIGNs_ir
+
