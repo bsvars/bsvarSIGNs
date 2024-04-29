@@ -48,7 +48,7 @@ bool match_sign_narrative(
       }
     } else {
       // narrative sign restrictions on historical decomposition
-      hd   = abs(hd1(var_i, t, h, U, irf));
+      hd   = abs(hd1_cpp(var_i, t, h, U, irf));
       hd_j = hd.row(shock_j);
       hd.shed_row(shock_j);
       

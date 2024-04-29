@@ -9,7 +9,7 @@ using namespace Rcpp;
 using namespace arma;
 
 
-arma::mat hd1(
+arma::mat hd1_cpp(
     const int&        var_i,  // i-th variable
     const int&        t,      // start at period t
     const int&        h,      // number of horizons
@@ -19,8 +19,8 @@ arma::mat hd1(
   
   
 arma::cube ir1_cpp(
-    const arma::mat& A, 
-    const arma::mat& chol_SIGMA, 
+    const arma::mat& B,           // KxN
+    const arma::mat& Theta0,      // NxN
     int              horizon,
     const int&       p
 );
