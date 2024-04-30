@@ -63,7 +63,7 @@ arma::mat sample_Q(
   mat    Q(N, N);
   mat    U             = aux_B * (Y.t() - aux_A.t() * X.t());
   
-  cube   irf           = ir1_cpp(aux_A, chol_SIGMA, h, p);
+  cube   irf           = ir1_cpp(aux_A, chol_SIGMA, h, p);  // reduced-form irf
   
   while (n_tries < max_tries && !success) {
     if (has_zero) {

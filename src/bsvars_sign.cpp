@@ -64,6 +64,7 @@ Rcpp::List bsvar_sign_cpp(
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
   cube  posterior_Sigma(N, N, S);
+  cube  posterior_Theta0(N, N, S);
   cube  posterior_hyper(2 * N + 1, 2, S);
   
   double aux_w = 1;
@@ -100,21 +101,23 @@ Rcpp::List bsvar_sign_cpp(
       // Increment progress bar
       if (any(prog_rep_points == s)) p.increment();
       
-      posterior_A.slice(s)     = B.t();
-      posterior_B.slice(s)     = Q.t() * h_invp;
-      posterior_Sigma.slice(s) = Sigma;
-      w(s)                     = aux_w;
+      posterior_A.slice(s)      = B.t();
+      posterior_B.slice(s)      = Q.t() * h_invp;
+      posterior_Sigma.slice(s)  = Sigma;
+      posterior_Theta0.slice(s) = chol_Sigma * Q;
+      w(s)                      = aux_w;
       s++;
     }
   } // END s loop
   
   return List::create(
     _["posterior"]  = List::create(
+      _["w"]        = w,
       _["A"]        = posterior_A,
       _["B"]        = posterior_B,
       _["Sigma"]    = posterior_Sigma,
-      _["hyper"]    = posterior_hyper,
-      _["w"]        = w
+      _["Theta0"]   = posterior_Theta0,
+      _["hyper"]    = posterior_hyper
     )
   );
 } // END bsvar_sign_cpp
