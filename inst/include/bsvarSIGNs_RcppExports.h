@@ -256,17 +256,17 @@ namespace bsvarSIGNs {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline double weight_zero(const int& p, const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q) {
-        typedef SEXP(*Ptr_weight_zero)(SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline double weight_zero(const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q) {
+        typedef SEXP(*Ptr_weight_zero)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_weight_zero p_weight_zero = NULL;
         if (p_weight_zero == NULL) {
-            validateSignature("double(*weight_zero)(const int&,const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
+            validateSignature("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
             p_weight_zero = (Ptr_weight_zero)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_zero");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_weight_zero(Shield<SEXP>(Rcpp::wrap(p)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(B)), Shield<SEXP>(Rcpp::wrap(h_inv)), Shield<SEXP>(Rcpp::wrap(Q)));
+            rcpp_result_gen = p_weight_zero(Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(B)), Shield<SEXP>(Rcpp::wrap(h_inv)), Shield<SEXP>(Rcpp::wrap(Q)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

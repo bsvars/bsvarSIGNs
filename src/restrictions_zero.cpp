@@ -123,18 +123,18 @@ double log_volume_element(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double weight_zero(
-    const int&                    p,
     const arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,
     const arma::mat&              Q
 ) {
-  int N     = Q.n_rows;
+  int K     = B.n_rows;
+  int N     = Q.n_cols;
   
   mat A0    = h_inv * Q;
   mat Aplus = B * h_inv * Q;
   
-  double log_ve_f   = -(2*N+p+1) * log_det(A0).real();
+  double log_ve_f   = -(2*N+K+1) * log_det(A0).real();
   double log_ve_gfz = log_volume_element(Z, A0, Aplus);
   
   return exp(log_ve_f - log_ve_gfz);

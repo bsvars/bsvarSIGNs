@@ -11,7 +11,6 @@ using namespace arma;
 
 
 double weight_zero(
-    const int&                    p,
     const arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,

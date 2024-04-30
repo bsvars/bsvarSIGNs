@@ -91,7 +91,7 @@ arma::mat sample_Q(
       aux_w *= weight_narrative(T, sign_narrative, irf);  
     }
     if (has_zero) {
-      aux_w *= weight_zero(p, Z, aux_A, aux_B, Q);
+      aux_w *= weight_zero(Z, aux_A, aux_B, Q);
     }
   }
   
