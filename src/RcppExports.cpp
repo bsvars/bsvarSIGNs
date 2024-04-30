@@ -15,24 +15,24 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // hd1_cpp
-arma::mat hd1_cpp(const int& var_i, const int& t, const int& h, const arma::mat& U, const arma::cube& irf);
-static SEXP _bsvarSIGNs_hd1_cpp_try(SEXP var_iSEXP, SEXP tSEXP, SEXP hSEXP, SEXP USEXP, SEXP irfSEXP) {
+arma::mat hd1_cpp(const int& var_i, const int& t, const int& h, const arma::mat& Epsilon, const arma::cube& irf);
+static SEXP _bsvarSIGNs_hd1_cpp_try(SEXP var_iSEXP, SEXP tSEXP, SEXP hSEXP, SEXP EpsilonSEXP, SEXP irfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const int& >::type var_i(var_iSEXP);
     Rcpp::traits::input_parameter< const int& >::type t(tSEXP);
     Rcpp::traits::input_parameter< const int& >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Epsilon(EpsilonSEXP);
     Rcpp::traits::input_parameter< const arma::cube& >::type irf(irfSEXP);
-    rcpp_result_gen = Rcpp::wrap(hd1_cpp(var_i, t, h, U, irf));
+    rcpp_result_gen = Rcpp::wrap(hd1_cpp(var_i, t, h, Epsilon, irf));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_hd1_cpp(SEXP var_iSEXP, SEXP tSEXP, SEXP hSEXP, SEXP USEXP, SEXP irfSEXP) {
+RcppExport SEXP _bsvarSIGNs_hd1_cpp(SEXP var_iSEXP, SEXP tSEXP, SEXP hSEXP, SEXP EpsilonSEXP, SEXP irfSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_hd1_cpp_try(var_iSEXP, tSEXP, hSEXP, USEXP, irfSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_hd1_cpp_try(var_iSEXP, tSEXP, hSEXP, EpsilonSEXP, irfSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {

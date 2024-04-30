@@ -10,10 +10,10 @@ using namespace arma;
 
 
 arma::mat hd1_cpp(
-    const int&        var_i,  // i-th variable
-    const int&        t,      // start at period t
-    const int&        h,      // number of horizons
-    const arma::mat&  U,      // structural shocks 
+    const int&        var_i,
+    const int&        t,
+    const int&        h,
+    const arma::mat&  Epsilon,
     const arma::cube& irf
 );
   

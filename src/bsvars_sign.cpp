@@ -111,7 +111,7 @@ Rcpp::List bsvar_sign_cpp(
       posterior_B.slice(s)      = Q.t() * h_invp;
       posterior_Sigma.slice(s)  = Sigma;
       posterior_Theta0.slice(s) = chol_Sigma * Q;
-      posterior_shocks.slice(s) = Epsilon.t();
+      posterior_shocks.slice(s) = Epsilon;
       
       s++;
     }

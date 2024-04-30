@@ -17,13 +17,11 @@ bool match_sign_narrative(
     const arma::cube& irf
 ) {
   
-  mat U = Epsilon.t();
-  
   bool is_greater;
   
   int type, var_i, shock_j, t, h;
   
-  mat one, u, hd, hd_j;
+  mat one, epsilon, hd, hd_j;
   
   for (int k=0; k<sign_narrative.n_rows; k++) {
     
@@ -43,14 +41,14 @@ bool match_sign_narrative(
     
     if (type == 1) {
       // narrative sign restrictions on structural shocks
-      u = U.submat(shock_j, t - 1, shock_j, t + h - 1);
+      epsilon = Epsilon.submat(shock_j, t - 1, shock_j, t + h - 1);
       
-      if (!match_sign(u, one)) {
+      if (!match_sign(epsilon, one)) {
         return false;
       }
     } else {
       // narrative sign restrictions on historical decomposition
-      hd   = abs(hd1_cpp(var_i, t, h, U, irf));
+      hd   = abs(hd1_cpp(var_i, t, h, Epsilon, irf));
       hd_j = hd.row(shock_j);
       hd.shed_row(shock_j);
       

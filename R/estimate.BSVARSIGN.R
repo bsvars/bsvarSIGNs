@@ -105,7 +105,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, 
-                              data_matrices$Y, data_matrices$X, identification$VB, 
+                              t(data_matrices$Y), t(data_matrices$X), identification$VB, 
                               identification$sign_irf, identification$sign_narrative, 
                               identification$sign_B, identification$zero_irf,
                               prior, starting_values, thin, show_progress, max_tries)

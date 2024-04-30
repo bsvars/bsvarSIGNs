@@ -8,16 +8,16 @@ using namespace arma;
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat hd1_cpp(
-    const int&        var_i,  // i-th variable
-    const int&        t,      // start at period t
-    const int&        h,      // number of horizons
-    const arma::mat&  U,      // structural shocks 
+    const int&        var_i,   // i-th variable
+    const int&        t,       // start at period t
+    const int&        h,       // number of horizons
+    const arma::mat&  Epsilon, // structural shocks, NxT
     const arma::cube& irf
 ) {
   
   int ii = var_i - 1;
   int tt = t - 1;
-  int N  = U.n_rows;
+  int N  = Epsilon.n_rows;
   
   mat hd(N, h + 1);
   
@@ -27,7 +27,7 @@ arma::mat hd1_cpp(
     for(int hh = 0; hh <= h; hh++) {
       // for each lag ll
       for(int ll = 0; ll <= hh; ll++) {
-        hd(jj, hh) += irf(ii, jj, ll) * U(jj, tt + hh - ll);
+        hd(jj, hh) += irf(ii, jj, ll) * Epsilon(jj, tt + hh - ll);
       }
     }
   }

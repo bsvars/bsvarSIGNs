@@ -25,7 +25,7 @@ namespace bsvarSIGNs {
         }
     }
 
-    inline arma::mat hd1_cpp(const int& var_i, const int& t, const int& h, const arma::mat& U, const arma::cube& irf) {
+    inline arma::mat hd1_cpp(const int& var_i, const int& t, const int& h, const arma::mat& Epsilon, const arma::cube& irf) {
         typedef SEXP(*Ptr_hd1_cpp)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_hd1_cpp p_hd1_cpp = NULL;
         if (p_hd1_cpp == NULL) {
@@ -35,7 +35,7 @@ namespace bsvarSIGNs {
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_hd1_cpp(Shield<SEXP>(Rcpp::wrap(var_i)), Shield<SEXP>(Rcpp::wrap(t)), Shield<SEXP>(Rcpp::wrap(h)), Shield<SEXP>(Rcpp::wrap(U)), Shield<SEXP>(Rcpp::wrap(irf)));
+            rcpp_result_gen = p_hd1_cpp(Shield<SEXP>(Rcpp::wrap(var_i)), Shield<SEXP>(Rcpp::wrap(t)), Shield<SEXP>(Rcpp::wrap(h)), Shield<SEXP>(Rcpp::wrap(Epsilon)), Shield<SEXP>(Rcpp::wrap(irf)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

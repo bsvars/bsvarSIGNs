@@ -21,7 +21,7 @@ bool match_sign_irf(
   
   int h = sign_irf.n_slices;
   for (int t=0; t<h; t++) {
-    if ( !match_sign(irf.slice(t)*Q, sign_irf.slice(t)) ) {
+    if ( !match_sign(irf.slice(t) * Q, sign_irf.slice(t)) ) {
       return false;
     }
   }
@@ -59,7 +59,7 @@ Rcpp::List sample_Q(
   bool   has_zero      = Z.n_elem > 0;
   
   mat    Q(N, N);
-  mat    U             = (Y - X * B) * h_invp.t();
+  mat    lt_Epsilon    = h_invp * (Y - X * B).t();  // lower triangular identified shocks
   
   cube   irf           = ir1_cpp(B, chol_Sigma, h, p);  // reduced-form irf
   
@@ -72,7 +72,7 @@ Rcpp::List sample_Q(
       Q = rortho_cpp(N);
     }
     
-    Epsilon = U * Q;
+    Epsilon = Q.t() * lt_Epsilon;
     
     if (match_sign_irf(Q, sign_irf, irf) && match_sign(Q.t() * h_invp, sign_B)) {
       if (!has_narrative) {
