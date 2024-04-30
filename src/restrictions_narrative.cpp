@@ -12,10 +12,12 @@ using namespace arma;
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 bool match_sign_narrative(
-    const arma::mat&  U,
+    const arma::mat&  Epsilon,
     const arma::mat&  sign_narrative,
     const arma::cube& irf
 ) {
+  
+  mat U = Epsilon.t();
   
   bool is_greater;
   

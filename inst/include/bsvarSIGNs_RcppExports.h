@@ -109,7 +109,7 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline bool match_sign_narrative(const arma::mat& U, const arma::mat& sign_narrative, const arma::cube& irf) {
+    inline bool match_sign_narrative(const arma::mat& Epsilon, const arma::mat& sign_narrative, const arma::cube& irf) {
         typedef SEXP(*Ptr_match_sign_narrative)(SEXP,SEXP,SEXP);
         static Ptr_match_sign_narrative p_match_sign_narrative = NULL;
         if (p_match_sign_narrative == NULL) {
@@ -119,7 +119,7 @@ namespace bsvarSIGNs {
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_match_sign_narrative(Shield<SEXP>(Rcpp::wrap(U)), Shield<SEXP>(Rcpp::wrap(sign_narrative)), Shield<SEXP>(Rcpp::wrap(irf)));
+            rcpp_result_gen = p_match_sign_narrative(Shield<SEXP>(Rcpp::wrap(Epsilon)), Shield<SEXP>(Rcpp::wrap(sign_narrative)), Shield<SEXP>(Rcpp::wrap(irf)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -319,17 +319,17 @@ namespace bsvarSIGNs {
         return Rcpp::as<bool >(rcpp_result_gen);
     }
 
-    inline arma::mat sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, double& aux_w, arma::mat& aux_A, arma::mat& aux_B, arma::mat& chol_SIGMA, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries, bool& success) {
-        typedef SEXP(*Ptr_sample_Q)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::List sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries) {
+        typedef SEXP(*Ptr_sample_Q)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_sample_Q p_sample_Q = NULL;
         if (p_sample_Q == NULL) {
-            validateSignature("arma::mat(*sample_Q)(const int&,const arma::mat&,const arma::mat&,double&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&,bool&)");
+            validateSignature("Rcpp::List(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
             p_sample_Q = (Ptr_sample_Q)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_sample_Q");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_sample_Q(Shield<SEXP>(Rcpp::wrap(p)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(aux_w)), Shield<SEXP>(Rcpp::wrap(aux_A)), Shield<SEXP>(Rcpp::wrap(aux_B)), Shield<SEXP>(Rcpp::wrap(chol_SIGMA)), Shield<SEXP>(Rcpp::wrap(prior)), Shield<SEXP>(Rcpp::wrap(VB)), Shield<SEXP>(Rcpp::wrap(sign_irf)), Shield<SEXP>(Rcpp::wrap(sign_narrative)), Shield<SEXP>(Rcpp::wrap(sign_B)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(max_tries)), Shield<SEXP>(Rcpp::wrap(success)));
+            rcpp_result_gen = p_sample_Q(Shield<SEXP>(Rcpp::wrap(p)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(B)), Shield<SEXP>(Rcpp::wrap(h_invp)), Shield<SEXP>(Rcpp::wrap(chol_Sigma)), Shield<SEXP>(Rcpp::wrap(prior)), Shield<SEXP>(Rcpp::wrap(VB)), Shield<SEXP>(Rcpp::wrap(sign_irf)), Shield<SEXP>(Rcpp::wrap(sign_narrative)), Shield<SEXP>(Rcpp::wrap(sign_B)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(max_tries)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -337,7 +337,7 @@ namespace bsvarSIGNs {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::mat >(rcpp_result_gen);
+        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
     inline arma::mat qr_sign_cpp(const arma::mat& A) {

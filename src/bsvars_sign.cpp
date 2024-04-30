@@ -54,6 +54,7 @@ Rcpp::List bsvar_sign_cpp(
   mat Yt = Y.t();
   mat Xt = X.t();
   
+  const int T       = Y.n_rows;
   const int N       = Y.n_cols;
   const int K       = X.n_cols;
   
@@ -61,24 +62,26 @@ Rcpp::List bsvar_sign_cpp(
   mat   aux_A       = as<mat>(starting_values["A"]);
   mat   aux_hyper   = as<mat>(starting_values["hyper"]);
   
+  vec   posterior_w(S);
+  
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
   cube  posterior_Sigma(N, N, S);
   cube  posterior_Theta0(N, N, S);
   cube  posterior_hyper(2 * N + 1, 2, S);
+  cube  posterior_shocks(N, T, S);
   
-  double aux_w = 1;
-  vec    w     = ones(S);
+  double w = 1;
   
-  List post    = niw_cpp(Y, X, prior);
-  mat  post_B  = as<mat>(post["B"]);
-  mat  post_V  = as<mat>(post["V"]);
-  mat  post_S  = as<mat>(post["S"]);
-  int  post_nu = as<int>(post["nu"]);
   
-  mat B, Sigma, chol_Sigma, h_invp, Q;
+  List result  = niw_cpp(Y, X, prior);
+  mat  post_B  = as<mat>(result["B"]);
+  mat  post_V  = as<mat>(result["V"]);
+  mat  post_S  = as<mat>(result["S"]);
+  int  post_nu = as<int>(result["nu"]);
   
-  bool success;
+  mat B, Sigma, chol_Sigma, h_invp, Q, Epsilon;
+  
   int  s = 0;
   while (s < S) {
 
@@ -90,34 +93,39 @@ Rcpp::List bsvar_sign_cpp(
     B          = rmatnorm_cpp(post_B, post_V, Sigma);
     h_invp     = inv(trimatl(chol_Sigma));    // lower triangular, h(Sigma) is upper triangular
     
-    success = false;
-    Q       = sample_Q(lags, Y, X, 
-                       aux_w, B, h_invp, chol_Sigma, 
-                       prior, VB,
-                       sign_irf, sign_narrative, sign_B, Z,
-                       max_tries, success);
+    result     = sample_Q(lags, Y, X, 
+                          B, h_invp, chol_Sigma, 
+                          prior, VB,
+                          sign_irf, sign_narrative, sign_B, Z,
+                          max_tries);
+    Q          = as<mat>(result["Q"]);
+    w          = as<double>(result["w"]);
+    Epsilon    = as<mat>(result["Epsilon"]);
     
-    if (success) {
+    if (w > 0) {
       // Increment progress bar
       if (any(prog_rep_points == s)) p.increment();
       
+      posterior_w(s)            = w;
       posterior_A.slice(s)      = B.t();
       posterior_B.slice(s)      = Q.t() * h_invp;
       posterior_Sigma.slice(s)  = Sigma;
       posterior_Theta0.slice(s) = chol_Sigma * Q;
-      w(s)                      = aux_w;
+      posterior_shocks.slice(s) = Epsilon.t();
+      
       s++;
     }
   } // END s loop
   
   return List::create(
     _["posterior"]  = List::create(
-      _["w"]        = w,
+      _["w"]        = posterior_w,
+      _["hyper"]    = posterior_hyper,
       _["A"]        = posterior_A,
       _["B"]        = posterior_B,
       _["Sigma"]    = posterior_Sigma,
       _["Theta0"]   = posterior_Theta0,
-      _["hyper"]    = posterior_hyper
+      _["shocks"]   = posterior_shocks
     )
   );
 } // END bsvar_sign_cpp

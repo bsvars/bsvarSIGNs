@@ -8,22 +8,20 @@
 using namespace Rcpp;
 using namespace arma;
 
-arma::mat sample_Q(    
+Rcpp::List sample_Q(    
     const int&                    p,
     const arma::mat&              Y,
     const arma::mat&              X,
-    double&                       aux_w,
-    arma::mat&                    aux_A,
-    arma::mat&                    aux_B,
-    arma::mat&                    chol_SIGMA,
+    arma::mat&                    B,
+    arma::mat&                    h_invp,
+    arma::mat&                    chol_Sigma,
     const Rcpp::List&             prior,
     const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const arma::field<arma::mat>& Z,
-    const int&                    max_tries,
-    bool&                         success
+    const int&                    max_tries
 );
 
 #endif  // _SAMPLE_Q_H_

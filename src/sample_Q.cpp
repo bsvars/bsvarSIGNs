@@ -32,24 +32,22 @@ bool match_sign_irf(
 // Sample rotation matrix Q and updates importance weight by reference
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
-arma::mat sample_Q(    
+Rcpp::List sample_Q(    
     const int&                    p,
     const arma::mat&              Y,
     const arma::mat&              X,
-    double&                       aux_w,
-    arma::mat&                    aux_A,
-    arma::mat&                    aux_B,
-    arma::mat&                    chol_SIGMA,
+    arma::mat&                    B,
+    arma::mat&                    h_invp,
+    arma::mat&                    chol_Sigma,
     const Rcpp::List&             prior,
     const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const arma::field<arma::mat>& Z,
-    const int&                    max_tries,
-    bool&                         success
+    const int&                    max_tries
 ) {
-
+  
   const int N          = Y.n_cols;
   const int T          = Y.n_rows;
   
@@ -61,10 +59,12 @@ arma::mat sample_Q(
   bool   has_zero      = Z.n_elem > 0;
   
   mat    Q(N, N);
-  mat    U             = aux_B * (Y.t() - aux_A.t() * X.t());
+  mat    U             = (Y - X * B) * h_invp.t();
   
-  cube   irf           = ir1_cpp(aux_A, chol_SIGMA, h, p);  // reduced-form irf
+  cube   irf           = ir1_cpp(B, chol_Sigma, h, p);  // reduced-form irf
   
+  bool   success       = false;
+  mat    Epsilon;
   while (n_tries < max_tries && !success) {
     if (has_zero) {
       Q = rzeroQ(Z, irf.slice(0));
@@ -72,28 +72,34 @@ arma::mat sample_Q(
       Q = rortho_cpp(N);
     }
     
-    if (match_sign_irf(Q, sign_irf, irf) && match_sign(Q.t() * aux_B, sign_B)) {
+    Epsilon = U * Q;
+    
+    if (match_sign_irf(Q, sign_irf, irf) && match_sign(Q.t() * h_invp, sign_B)) {
       if (!has_narrative) {
         success = true;
       } else {
-        success = match_sign_narrative(Q.t() * U, sign_narrative, irf);
+        success = match_sign_narrative(Epsilon, sign_narrative, irf);
       }
     }
     
     n_tries++;
   }
   
-  aux_w = 1;
+  double w = 1;
   if (!success) {
-    aux_w = 0;
+    w = 0;
   } else {
     if (has_narrative) {
-      aux_w *= weight_narrative(T, sign_narrative, irf);  
+      w *= weight_narrative(T, sign_narrative, irf);  
     }
     if (has_zero) {
-      aux_w *= weight_zero(Z, aux_A, aux_B, Q);
+      w *= weight_zero(Z, B, h_invp, Q);
     }
   }
   
-  return Q;
+  return List::create(
+    Named("Q")       = Q,
+    Named("w")       = w,
+    Named("Epsilon") = Epsilon
+  );
 }

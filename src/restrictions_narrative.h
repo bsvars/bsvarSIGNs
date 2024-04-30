@@ -11,7 +11,7 @@ using namespace arma;
 
 
 bool match_sign_narrative(
-    const arma::mat&  U,
+    const arma::mat&  Epsilon,
     const arma::mat&  sign_narrative,
     const arma::cube& irf
 );
