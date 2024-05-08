@@ -514,6 +514,8 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices           = bsvars::specify_data_matrices$new(data, p, exogenous)
+      self$data_matrices$Y         = t(self$data_matrices$Y)
+      self$data_matrices$X         = t(self$data_matrices$X)
       self$identification          = specify_identification_bsvarSIGN$new(N,
                                                                           sign_irf,
                                                                           sign_narrative,
