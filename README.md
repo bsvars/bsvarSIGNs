@@ -3,7 +3,7 @@
 
 # bsvarSIGNs
 
-Developing an R package for Bayesian Structural VARs identified by sign
+Developing an R package for Bayesian Structural VARs identified by zero, sign,
 and narrative restrictions
 
 # Installation
