@@ -85,31 +85,30 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
 
 
 # Minnesota prior of Normal-Inverse-Wishart form
-niw_prior <- function(Y,
-                      p,
-                      non_stationary,
-                      lambda_1 = 1 / .Machine$double.eps,
-                      lambda_2 = 0.2,
-                      lambda_3 = 1) {
-  T <- nrow(Y)
-  N <- ncol(Y)
-  K <- 1 + N * p
+niw_prior = function(Y,
+                     p,
+                     non_stationary,
+                     lambda_1 = 1 / .Machine$double.eps,
+                     lambda_2 = 0.2) {
+  T = nrow(Y)
+  N = ncol(Y)
+  K = 1 + N * p
   
-  ar_s2 <- vector(length = N)
+  ar_s2 = vector(length = N)
   for (n in 1:N) {
-    resid <- stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
-    ar_s2[n] <- t(resid) %*% resid / (T - p - 1)
+    resid    = stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
+    ar_s2[n] = t(resid) %*% resid / (T - p - 1)
   }
   
-  B <- matrix(0, K, N)
-  B[1:N, 1:N] <- diag(non_stationary)
+  B           = matrix(0, K, N)
+  B[1:N, 1:N] = diag(non_stationary)
   
-  V <- matrix(0, K, K)
-  V[K, K] <- lambda_1
-  V[1:(K-1), 1:(K-1)] <- diag(lambda_2^2 * rep((1:p)^-(2 * lambda_3), each = N) * rep(ar_s2^-1, p))
+  V                       = matrix(0, K, K)
+  V[K, K]                 = lambda_1
+  V[1:(K - 1), 1:(K - 1)] = diag(lambda_2^2 * kronecker((1:p)^2, ar_s2^-1))
   
-  S <- diag(ar_s2)
-  nu <- N + 2
+  S  = diag(ar_s2)
+  nu = N + 2
   
   list(B = B, V = V, S = S, nu = nu)
 }
