@@ -133,7 +133,7 @@ i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
 3 if type B restriction on historical decomposition
 i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
 Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
 Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
 Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
 Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
