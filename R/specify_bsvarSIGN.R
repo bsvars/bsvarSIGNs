@@ -54,7 +54,7 @@ verify_narrative = function(N, A) {
   if (!(all(A[,2] %in% c(-1, 1)))) {
     stop("Narrative sign restriction matrix column 2 (sign) has entries that are not in {-1, 1}.")
   }
-  if (!(all(A[,3] %in% 1:N))) {
+  if (!(all(A[,3] %in% c(1:N, NA)))) {
     stop("Narrative sign restriction matrix column 3 (var_i) has entries that are not in 1:N.")
   }
   if (!(all(A[,4] %in% 1:N))) {
@@ -249,7 +249,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' 3 if type B restriction on historical decomposition
     #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
     #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
     #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
     #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
@@ -336,7 +336,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' 3 if type B restriction on historical decomposition
     #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
     #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
     #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
     #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
@@ -446,7 +446,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' 3 if type B restriction on historical decomposition
     #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
     #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N, index of the restricted variable. \cr
+    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
     #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
     #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
