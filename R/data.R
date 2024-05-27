@@ -1,3 +1,4 @@
+
 #' @title A 3-variable oil price data, from 1971 to 2016
 #'
 #' @description A sample data to identify oil demand and supply shocks.
@@ -19,7 +20,6 @@
 #' @source
 #' Replication package, \url{https://www.aeaweb.org/articles?id=10.1257/aer.20161852}
 "oil"
-
 
 
 #' @title A 5-variable US business cycle data, from 1955 Q1 to 2004 Q4
@@ -47,3 +47,28 @@
 #' @source
 #' Replication package, \url{https://www.econometricsociety.org/publications/econometrica/2018/03/01/inference-based-structural-vector-autoregressions-identified}
 "optimism"
+
+
+#' @title A 6-variable US monetary policy data, from 1965 Jan to 2007 Aug
+#'
+#' @description A sample data to identify monetary policy shock.
+#'
+#' @usage data(monetary)
+#'
+#' @format A matrix and a \code{ts} object with time series of over two hundred observations on 5 variables:
+#' \describe{
+#'   \item{gdpc1}{monthly real gross domestic product}
+#'   \item{gdpdef}{monthly gross domestic product: implicit price deflator}
+#'   \item{cprindex}{monthly consumer price index}
+#'   \item{totresns}{monthly reserves of depository institutions}
+#'   \item{bognonbr}{monthly non-borrowed reserves of depository institutions}
+#'   \item{fedfunds}{monthly federal funds effective rate}
+#' }
+#'
+#' @references
+#' Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.
+#'
+#' @source
+#' Replication package, \url{https://www.aeaweb.org/articles?id=10.1257/aer.20161852}
+"monetary"
+
