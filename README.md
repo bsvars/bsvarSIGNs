@@ -24,14 +24,14 @@ sign_irf       = matrix(0, 6, 6)
 sign_irf[, 1]  = c(0, -1, -1, 0, -1, 1)
 sign_irf       = array(sign_irf, dim = c(6, 6, 5))
 
-sign_narrative = rbind(c(1, 1, NA, 1, 166, 0),
-                       c(3, 1, 6,  1, 166, 0))
+# in October 1979 the shock
+sign_narrative = rbind(c(1, 1, NA, 1, 166, 0),   # is positive
+                       c(3, 1, 6,  1, 166, 0))   # greatest historical decomposition
 
 specification  = specify_bsvarSIGN$new(monetary       * 100,
                                        p              = 12,
                                        sign_irf       = sign_irf,
-                                       sign_narrative = sign_narrative
-                                       )
+                                       sign_narrative = sign_narrative)
 
 posterior      = estimate(specification, S = 100)
 irf            = compute_impulse_responses(posterior, horizon = 60)
@@ -43,16 +43,18 @@ A repliaction of Arias, Rubio-Ramírez and Waggoner (2018).
 ``` r
 data(optimism)
 
+# optimism shock
+# no contemporaneous effect on productivity
 zero_irf          = matrix(0, nrow = 5, ncol = 5)
 zero_irf[1, 1]    = 1
+# positive contemporaneous effect on stock prices
 sign_irf          = array(0, dim = c(5, 5, 1))
 sign_irf[2, 1, 1] = 1
 
 specification  = specify_bsvarSIGN$new(optimism * 100,
                                        p        = 4,
                                        sign_irf = sign_irf,
-                                       zero_irf = zero_irf
-                                       )
+                                       zero_irf = zero_irf)
 
 posterior      = estimate(specification, S = 100)
 irf            = compute_impulse_responses(posterior, horizon = 40)
