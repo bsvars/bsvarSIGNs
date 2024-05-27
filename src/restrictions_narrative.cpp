@@ -27,7 +27,7 @@ bool match_sign_narrative(
     
     // sign_narrative: | type | sign | var_i | shock_j | start | horizons |
     type        = sign_narrative(k, 0);
-    is_greater  = sign_narrative(k, 1) == 0;
+    is_greater  = sign_narrative(k, 1) == 1;
     var_i       = sign_narrative(k, 2);
     shock_j     = sign_narrative(k, 3) - 1;
     t           = sign_narrative(k, 4);
