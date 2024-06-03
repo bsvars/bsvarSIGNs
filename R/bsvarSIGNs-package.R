@@ -12,7 +12,7 @@
 #' @useDynLib bsvarSIGNs, .registration = TRUE
 #' @importFrom R6 R6Class
 #' @importFrom Rcpp sourceCpp
-#' @importFrom bsvars estimate
+#' @importFrom bsvars estimate forecast compute_impulse_responses compute_fitted_values compute_historical_decompositions compute_structural_shocks compute_variance_decompositions
 #' @import bsvars
 #' @import RcppArmadillo
 #' @import RcppProgress
