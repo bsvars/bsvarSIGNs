@@ -88,26 +88,20 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
 niw_prior = function(Y,
                      p,
                      non_stationary,
-                     lambda_1 = 1 / .Machine$double.eps,
-                     lambda_2 = 0.2) {
+                     lambda = 0.2) {
   T = nrow(Y)
   N = ncol(Y)
   K = 1 + N * p
   
-  ar_s2 = vector(length = N)
-  for (n in 1:N) {
-    resid    = stats::ar(Y[, n], order.max = p)$resid |> stats::na.omit()
-    ar_s2[n] = t(resid) %*% resid / (T - p - 1)
-  }
-  
   B           = matrix(0, K, N)
   B[1:N, 1:N] = diag(non_stationary)
   
+  sigma2                  = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
   V                       = matrix(0, K, K)
-  V[K, K]                 = lambda_1
-  V[1:(K - 1), 1:(K - 1)] = diag(lambda_2^2 * kronecker((1:p)^2, ar_s2^-1))
+  V[K, K]                 = 1e+6
+  V[1:(K - 1), 1:(K - 1)] = diag(lambda^2 * kronecker((1:p)^-2, sigma2^-1))
   
-  S  = diag(ar_s2)
+  S  = diag(sigma2)
   nu = N + 2
   
   list(B = B, V = V, S = S, nu = nu)
@@ -169,7 +163,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
       stopifnot("Argument stationary must be a logical vector of length N." = length(stationary) == N & is.logical(stationary))
       
       prior   = niw_prior(data, p, !stationary)
-      
       self$B  = prior$B
       self$V  = prior$V
       self$S  = prior$S
