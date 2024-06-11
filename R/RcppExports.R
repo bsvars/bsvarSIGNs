@@ -41,8 +41,8 @@ log_posterior_hyper <- function(p, hyper, Y, X, prior) {
     .Call(`_bsvarSIGNs_log_posterior_hyper`, p, hyper, Y, X, prior)
 }
 
-sample_hyper <- function(S, p, Y, X, prior) {
-    .Call(`_bsvarSIGNs_sample_hyper`, S, p, Y, X, prior)
+sample_hyper <- function(S, p, c, Y, X, prior) {
+    .Call(`_bsvarSIGNs_sample_hyper`, S, p, c, Y, X, prior)
 }
 
 # Register entry points for exported C++ functions

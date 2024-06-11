@@ -25,6 +25,7 @@ Rcpp::List extend_dummy(
 arma::mat sample_hyper(
   const int&        S,
   const int&        p,
+  const double&     c,
   const arma::mat&  Y,
   const arma::mat&  X,
   const Rcpp::List& prior

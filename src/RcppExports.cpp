@@ -710,17 +710,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // sample_hyper
-arma::mat sample_hyper(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const Rcpp::List& prior);
-RcppExport SEXP _bsvarSIGNs_sample_hyper(SEXP SSEXP, SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
+arma::mat sample_hyper(const int& S, const int& p, const double& c, const arma::mat& Y, const arma::mat& X, const Rcpp::List& prior);
+RcppExport SEXP _bsvarSIGNs_sample_hyper(SEXP SSEXP, SEXP pSEXP, SEXP cSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
     Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double& >::type c(cSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
-    rcpp_result_gen = Rcpp::wrap(sample_hyper(S, p, Y, X, prior));
+    rcpp_result_gen = Rcpp::wrap(sample_hyper(S, p, c, Y, X, prior));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -904,7 +905,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_log_prior_hyper", (DL_FUNC) &_bsvarSIGNs_log_prior_hyper, 2},
     {"_bsvarSIGNs_log_ml_dummy", (DL_FUNC) &_bsvarSIGNs_log_ml_dummy, 5},
     {"_bsvarSIGNs_log_posterior_hyper", (DL_FUNC) &_bsvarSIGNs_log_posterior_hyper, 5},
-    {"_bsvarSIGNs_sample_hyper", (DL_FUNC) &_bsvarSIGNs_sample_hyper, 5},
+    {"_bsvarSIGNs_sample_hyper", (DL_FUNC) &_bsvarSIGNs_sample_hyper, 6},
     {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
     {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},

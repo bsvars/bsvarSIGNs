@@ -20,8 +20,16 @@ Rcpp::List update_prior(
   vec    phi    = hyper.rows(3, n_hyper - 1);
   
   mat prior_B   = as<mat>(prior["B"]);
-  mat prior_V   = lambda * lambda * as<mat>(prior["V"]);
-  mat prior_S   = diagmat(phi);
+  
+  int K            = prior_B.n_rows;
+  vec v(K);
+  v(K - 1)         = 1e+6;
+  v.rows(0, K - 2) = lambda * lambda * kron(pow(linspace(1, p, p), -2), 1 / phi);
+  mat prior_V      = lambda * lambda * as<mat>(prior["V"]);
+  // mat prior_V      = diagmat(v);
+  
+  mat prior_S   = as<mat>(prior["S"]);
+  // mat prior_S   = diagmat(phi);
   int prior_nu  = as<int>(prior["nu"]);
   
   return List::create(
@@ -196,6 +204,9 @@ double log_ml_dummy(
   double log_ml_dummy    = log_ml(p, prior_B, prior_V, prior_S, prior_nu, 
                                   chol_V, cholinv_S, inv_V, Ystar, Xstar);
   
+  return log_ml(p, prior_B, prior_V, prior_S, prior_nu, 
+                chol_V, cholinv_S, inv_V, Y, X);
+  
   return log_ml_extended - log_ml_dummy;
 }
 
@@ -224,6 +235,7 @@ double log_posterior_hyper(
 arma::mat sample_hyper(
     const int&        S,
     const int&        p,
+    const double&     c,
     const arma::mat&  Y,
     const arma::mat&  X,
     const Rcpp::List& prior
@@ -236,8 +248,7 @@ arma::mat sample_hyper(
   
   double logp    = log_posterior_hyper(p, hyper, Y, X, prior);
   
-  double c       = 1;
-  mat    W       = as<mat>(prior["W"]);
+  mat    W       = c * as<mat>(prior["W"]);
   
   mat posterior_hyper(n_hyper, S);
   
@@ -247,12 +258,6 @@ arma::mat sample_hyper(
     vec    hyperp = mvnrnd(hyper, c * W);
     double logpp  = log_posterior_hyper(p, hyperp, Y, X, prior);
     double r      = exp(logpp - logp);
-    
-    if (r < 0.2) {
-      c /= 10;
-    } else if (r > 0.5) {
-      c *= 2;
-    }
     
     if (randu() < r) {
       hyper = hyperp;
