@@ -21,8 +21,8 @@ extend_dummy <- function(p, hyper, Y, X) {
     .Call(`_bsvarSIGNs_extend_dummy`, p, hyper, Y, X)
 }
 
-log_dgamma <- function(x, alpha, beta) {
-    .Call(`_bsvarSIGNs_log_dgamma`, x, alpha, beta)
+log_dgamma <- function(x, k, theta) {
+    .Call(`_bsvarSIGNs_log_dgamma`, x, k, theta)
 }
 
 log_dinvgamma <- function(x, alpha, beta) {
@@ -31,6 +31,14 @@ log_dinvgamma <- function(x, alpha, beta) {
 
 log_prior_hyper <- function(hyper, prior) {
     .Call(`_bsvarSIGNs_log_prior_hyper`, hyper, prior)
+}
+
+log_mvgamma <- function(n, x) {
+    .Call(`_bsvarSIGNs_log_mvgamma`, n, x)
+}
+
+log_ml <- function(p, b, Omega, Psi, d, inv_Omega, Y, X) {
+    .Call(`_bsvarSIGNs_log_ml`, p, b, Omega, Psi, d, inv_Omega, Y, X)
 }
 
 log_ml_dummy <- function(p, hyper, Y, X, prior) {

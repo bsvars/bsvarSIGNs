@@ -17,19 +17,19 @@ Rcpp::List update_prior(
   int n_hyper   = hyper.n_elem;
   
   double lambda = hyper(2);
-  vec    phi    = hyper.rows(3, n_hyper - 1);
+  // vec    psi    = hyper.rows(3, n_hyper - 1);
   
   mat prior_B   = as<mat>(prior["B"]);
   
   int K            = prior_B.n_rows;
-  vec v(K);
-  v(K - 1)         = 1e+6;
-  v.rows(0, K - 2) = lambda * lambda * kron(pow(linspace(1, p, p), -2), 1 / phi);
+  // vec v(K);
+  // v(K - 1)         = 1e+6;
+  // v.rows(0, K - 2) = lambda * lambda * kron(pow(linspace(1, p, p), -2), 1 / psi);
   mat prior_V      = lambda * lambda * as<mat>(prior["V"]);
   // mat prior_V      = diagmat(v);
   
   mat prior_S   = as<mat>(prior["S"]);
-  // mat prior_S   = diagmat(phi);
+  // mat prior_S   = diagmat(psi);
   int prior_nu  = as<int>(prior["nu"]);
   
   return List::create(
@@ -75,29 +75,29 @@ Rcpp::List extend_dummy(
 }
 
 
-// log density of gamma distribution (up to a constant)
+// log density of gamma distribution
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_dgamma(
     const double& x,
-    const double& alpha,  // shape
-    const double& beta    // rate
+    const double& k,
+    const double& theta
 ) {
   
-  return (alpha - 1) * log(x) - beta * x;
+  return (k - 1) * log(x) - x / theta - k * log(theta) - lgamma(k);
 }
 
 
-// log density of inverse gamma distribution (up to a constant)
+// log density of inverse gamma distribution
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_dinvgamma(
     const double& x,
-    const double& alpha,  // shape
-    const double& beta    // scale
+    const double& alpha,
+    const double& beta
 ) {
   
-  return -(alpha + 1) * log(x) - beta / x;
+  return alpha * log(beta) - (alpha + 1) * log(x) - beta / x - lgamma(alpha);
 }
 
 
@@ -126,39 +126,53 @@ double log_prior_hyper(
 }
 
 
-// log marginal likelihood (up to a constant)
-// notation as in Domenico, Lenza & Primiceri (2014)
-double log_ml(
-    const int& p,
-    const mat& b,
-    const mat& Omega,
-    const mat& Phi,
-    const int& d,
-    const mat& D_Omega,
-    const mat& D_Phi,
-    const mat& inv_Omega,
-    const mat& Y,
-    const mat& X
+// log multivariate gamma function
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+double log_mvgamma(
+    const int&    n,
+    const double& x
 ) {
   
-  int T = Y.n_rows + p;
+  if (n == 1) {
+    return lgamma(x);
+  }
+  
+  double c = (n - 1) / 2;
+  return c * log(M_PI) + lgamma(x - c) + log_mvgamma(n - 1, x);
+}
+
+
+// log marginal likelihood
+// notation as in Giannone, Lenza & Primiceri (2014)
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+double log_ml(
+    const int&       p,
+    const arma::mat& b,
+    const arma::mat& Omega,
+    const arma::mat& Psi,
+    const int&       d,
+    const arma::mat& inv_Omega,
+    const arma::mat& Y,
+    const arma::mat& X
+) {
+  
+  int T = Y.n_rows;
   int N = Y.n_cols;
-  int K = X.n_cols;
   
   mat Bhat = solve(X.t() * X + inv_Omega, X.t() * Y + inv_Omega * b);
   mat ehat = Y - X * Bhat;
   
   double log_ml = 0;
   
-  // cancels out in p(Yplus) / p(Ystar)
-  // log_ml -= (T - p) / 2 * log_det_sympd(Phi);
-  
-  log_ml -= N / 2 * log_det(D_Omega.t() * X.t() * X * D_Omega + eye(K, K)).real();
-  // log_ml -= N / 2 * log_det(X.t() * X + inv_Omega).real();
-  
+  log_ml += - N * T / 2 * log(M_PI);
+  log_ml += log_mvgamma(N, (T + d) / 2) - log_mvgamma(N, d / 2);
+  log_ml += - N / 2 * log_det_sympd(Omega);
+  log_ml += d / 2 * log_det_sympd(Psi);
+  log_ml += - N / 2 * log_det_sympd(X.t() * X + inv_Omega);
   mat A   = ehat.t() * ehat + (Bhat - b).t() * inv_Omega * (Bhat - b);
-  log_ml -= (T - p + d) / 2 * log_det(D_Phi.t() * A * D_Phi + eye(N, N)).real();
-  // log_ml -= (T - p + d) / 2 * log_det(Phi + A).real();
+  log_ml += - (T + d) / 2 * log_det_sympd(Psi + A);
   
   return log_ml;
 }
@@ -178,8 +192,6 @@ double log_ml_dummy(
   int N         = Y.n_cols;
   int n_hyper   = hyper.n_elem;
   
-  vec    phi    = hyper.rows(3, n_hyper - 1);  
-  
   List extended = extend_dummy(p, hyper, Y, X);
   mat  Yplus    = as<mat>(extended["Y"]);
   mat  Xplus    = as<mat>(extended["X"]);
@@ -190,22 +202,13 @@ double log_ml_dummy(
   mat prior_S   = as<mat>(prior["S"]);
   int prior_nu  = as<int>(prior["nu"]);
   
-  // mat chol_V    = chol(prior_V, "lower");
-  // mat inv_V     = inv_sympd(prior_V);
-  mat chol_V    = diagmat(sqrt(prior_V.diag()));
   mat inv_V     = diagmat(1 / prior_V.diag());
-  mat cholinv_S = diagmat(sqrt(1 / phi));
   
   mat Ystar     = Yplus.rows(0, N);
   mat Xstar     = Xplus.rows(0, N);
   
-  double log_ml_extended = log_ml(p, prior_B, prior_V, prior_S, prior_nu, 
-                                  chol_V, cholinv_S, inv_V, Yplus, Xplus);
-  double log_ml_dummy    = log_ml(p, prior_B, prior_V, prior_S, prior_nu, 
-                                  chol_V, cholinv_S, inv_V, Ystar, Xstar);
-  
-  return log_ml(p, prior_B, prior_V, prior_S, prior_nu, 
-                chol_V, cholinv_S, inv_V, Y, X);
+  double log_ml_extended = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Yplus, Xplus);
+  double log_ml_dummy    = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Ystar, Xstar);
   
   return log_ml_extended - log_ml_dummy;
 }

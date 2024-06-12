@@ -642,15 +642,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // log_dgamma
-double log_dgamma(const double& x, const double& alpha, const double& beta);
-RcppExport SEXP _bsvarSIGNs_log_dgamma(SEXP xSEXP, SEXP alphaSEXP, SEXP betaSEXP) {
+double log_dgamma(const double& x, const double& k, const double& theta);
+RcppExport SEXP _bsvarSIGNs_log_dgamma(SEXP xSEXP, SEXP kSEXP, SEXP thetaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const double& >::type beta(betaSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_dgamma(x, alpha, beta));
+    Rcpp::traits::input_parameter< const double& >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const double& >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_dgamma(x, k, theta));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -676,6 +676,36 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
     rcpp_result_gen = Rcpp::wrap(log_prior_hyper(hyper, prior));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_mvgamma
+double log_mvgamma(const int& n, const double& x);
+RcppExport SEXP _bsvarSIGNs_log_mvgamma(SEXP nSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_mvgamma(n, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_ml
+double log_ml(const int& p, const arma::mat& b, const arma::mat& Omega, const arma::mat& Psi, const int& d, const arma::mat& inv_Omega, const arma::mat& Y, const arma::mat& X);
+RcppExport SEXP _bsvarSIGNs_log_ml(SEXP pSEXP, SEXP bSEXP, SEXP OmegaSEXP, SEXP PsiSEXP, SEXP dSEXP, SEXP inv_OmegaSEXP, SEXP YSEXP, SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Omega(OmegaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Psi(PsiSEXP);
+    Rcpp::traits::input_parameter< const int& >::type d(dSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type inv_Omega(inv_OmegaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_ml(p, b, Omega, Psi, d, inv_Omega, Y, X));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -903,6 +933,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_log_dgamma", (DL_FUNC) &_bsvarSIGNs_log_dgamma, 3},
     {"_bsvarSIGNs_log_dinvgamma", (DL_FUNC) &_bsvarSIGNs_log_dinvgamma, 3},
     {"_bsvarSIGNs_log_prior_hyper", (DL_FUNC) &_bsvarSIGNs_log_prior_hyper, 2},
+    {"_bsvarSIGNs_log_mvgamma", (DL_FUNC) &_bsvarSIGNs_log_mvgamma, 2},
+    {"_bsvarSIGNs_log_ml", (DL_FUNC) &_bsvarSIGNs_log_ml, 8},
     {"_bsvarSIGNs_log_ml_dummy", (DL_FUNC) &_bsvarSIGNs_log_ml_dummy, 5},
     {"_bsvarSIGNs_log_posterior_hyper", (DL_FUNC) &_bsvarSIGNs_log_posterior_hyper, 5},
     {"_bsvarSIGNs_sample_hyper", (DL_FUNC) &_bsvarSIGNs_sample_hyper, 6},
