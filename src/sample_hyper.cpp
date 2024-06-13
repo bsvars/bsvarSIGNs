@@ -255,6 +255,7 @@ arma::mat sample_hyper(
   
   mat posterior_hyper(n_hyper, S);
   
+  int success = 0;
   for (int s = 0; s < S; s++) {
     
     // sample from proposal distribution
@@ -265,10 +266,13 @@ arma::mat sample_hyper(
     if (randu() < r) {
       hyper = hyperp;
       logp  = logpp;
+      success++;
     }
     
     posterior_hyper.col(s) = hyper;
   }
+  
+  cout << "Acceptance rate: " << (double) success / S << endl;
   
   return posterior_hyper;
 }
