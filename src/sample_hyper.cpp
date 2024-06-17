@@ -5,32 +5,74 @@ using namespace Rcpp;
 using namespace arma;
 
 
+// get prior from hyper-parameters
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+Rcpp::List mn_prior(
+  const int&       p,
+  const double&    lambda,
+  const arma::vec& psi
+) {
+  
+  int N = psi.n_elem;
+  int K = 1 + N * p;
+  
+  mat B(K, N, fill::eye);
+  
+  vec v(K);
+  v.rows(0, K - 2) = kron(pow(linspace(1, p, p), -2), 1 / psi);
+  mat V            = lambda * lambda * diagmat(v);
+  V(K - 1, K - 1)  = 1e+6;
+  
+  mat S  = diagmat(psi);
+  int nu = N + 2;
+  
+  return List::create(
+    _["B"]   = B,
+    _["V"]   = V,
+    _["S"]   = S,
+    _["nu"]  = nu
+  );
+}
+
+
 // update prior with hyper-parameters
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 Rcpp::List update_prior(
     const int&        p,
     const arma::vec&  hyper,
+    const arma::vec&  model,
     const Rcpp::List& prior
 ) {
   
-  int n_hyper   = hyper.n_elem;
-  
-  double lambda = hyper(2);
-  // vec    psi    = hyper.rows(3, n_hyper - 1);
-  
   mat prior_B   = as<mat>(prior["B"]);
-  
-  int K            = prior_B.n_rows;
-  // vec v(K);
-  // v(K - 1)         = 1e+6;
-  // v.rows(0, K - 2) = lambda * lambda * kron(pow(linspace(1, p, p), -2), 1 / psi);
-  mat prior_V      = lambda * lambda * as<mat>(prior["V"]);
-  // mat prior_V      = diagmat(v);
-  
-  mat prior_S   = as<mat>(prior["S"]);
-  // mat prior_S   = diagmat(psi);
   int prior_nu  = as<int>(prior["nu"]);
+  
+  mat prior_V, prior_S;
+  if (model(3)) {
+    int K       = prior_B.n_rows;
+    int n_hyper = hyper.n_elem;
+    
+    vec psi     = hyper.rows(3, n_hyper - 1);
+    prior_S     = diagmat(psi);
+    
+    vec v(K);
+    v(K - 1)         = 1e+6;
+    v.rows(0, K - 2) = kron(pow(linspace(1, p, p), -2), 1 / psi);
+    prior_V          = diagmat(v);
+  } else {
+    prior_V = as<mat>(prior["V"]);
+    prior_S = as<mat>(prior["S"]);
+  }
+  
+  double lambda;
+  if (model(2)) {
+    lambda = hyper(2);
+  } else {
+    lambda = 0.2;
+  }
+  prior_V *= lambda * lambda;
   
   return List::create(
     _["B"]  = prior_B,
@@ -47,30 +89,45 @@ Rcpp::List update_prior(
 Rcpp::List extend_dummy(
     const int&       p,
     const arma::vec& hyper,
+    const arma::vec& model,
     const arma::mat& Y,
     const arma::mat& X
 ) {
   
   int N        = Y.n_cols;
-  
-  double mu    = hyper(0);
-  double delta = hyper(1);
+  int K        = X.n_cols;
   
   mat ybar0    = mean(X.submat(0, 0, p - 1, N - 1), 0);
-  mat yplus    = diagmat(ybar0 / mu);
-  mat ypplus   = ybar0 / delta;
   
-  mat Ystar    = join_vert(ypplus, yplus);
+  double mu, delta;
+  mat Ystar(0, N), Xstar(0, K);
+  
+  if (model(0)) {
+    mu         = hyper(0);
+    mat yp     = diagmat(ybar0 / mu);
+    mat xp     = join_horiz(repmat(yp, 1, p), zeros(N, 1));
+    
+    Ystar      = join_vert(Ystar, yp);
+    Xstar      = join_vert(Xstar, xp);
+  }
+  
+  if (model(1)) {
+    delta      = hyper(1);
+    mat ypp    = ybar0 / delta;
+    mat xpp    = join_horiz(repmat(ypp, 1, p), mat(1, 1, fill::value(1 / delta)));
+    
+    Ystar      = join_vert(Ystar, ypp);
+    Xstar      = join_vert(Xstar, xpp);
+  }
+  
   mat Yplus    = join_vert(Ystar, Y);
-  
-  mat Xstar    = zeros(N + 1, 1);
-  Xstar(0, 0)  = 1 / delta;
-  Xstar        = join_horiz(repmat(Ystar, 1, p), Xstar);
   mat Xplus    = join_vert(Xstar, X);
   
   return List::create(
-    _["Y"] = Yplus,
-    _["X"] = Xplus
+    _["Yplus"] = Yplus,
+    _["Xplus"] = Xplus,
+    _["Ystar"] = Ystar,
+    _["Xstar"] = Xstar
   );
 }
 
@@ -101,11 +158,12 @@ double log_dinvgamma(
 }
 
 
-// log prior density of hyper-parameters (up to a constant)
+// log prior density of hyper-parameters
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_prior_hyper(
     const arma::vec&  hyper,
+    const arma::vec&  model,
     const Rcpp::List& prior
 ) {
   
@@ -113,11 +171,20 @@ double log_prior_hyper(
   
   mat    prior_hyper = prior["hyper"];
   
-  for (int i = 0; i < hyper.n_elem; i++) {
-    // first 3 hyper-parameters ~ gamma
-    if (i < 3) {
-      log_prior += log_dgamma(hyper(i), prior_hyper(i, 0), prior_hyper(i, 1));
-    } else {
+  if (model(0)) {
+    log_prior += log_dgamma(hyper(0), prior_hyper(0, 0), prior_hyper(0, 1));
+  }
+  
+  if (model(1)) {
+    log_prior += log_dgamma(hyper(1), prior_hyper(1, 0), prior_hyper(1, 1));
+  }
+  
+  if (model(2)) {
+    log_prior += log_dgamma(hyper(2), prior_hyper(2, 0), prior_hyper(2, 1));
+  }
+  
+  if (model(3)) {
+    for (int i = 3; i < hyper.n_elem; i++) {
       log_prior += log_dinvgamma(hyper(i), prior_hyper(i, 0), prior_hyper(i, 1));
     }
   }
@@ -178,12 +245,13 @@ double log_ml(
 }
 
 
-// log marginal likelihood with dummy observations (up to a constant)
+// log marginal likelihood with dummy observations
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_ml_dummy(
     const int&        p,
     const arma::vec&  hyper,
+    const arma::vec&  model,
     const arma::mat&  Y,
     const arma::mat&  X,
     Rcpp::List        prior
@@ -192,20 +260,19 @@ double log_ml_dummy(
   int N         = Y.n_cols;
   int n_hyper   = hyper.n_elem;
   
-  List extended = extend_dummy(p, hyper, Y, X);
-  mat  Yplus    = as<mat>(extended["Y"]);
-  mat  Xplus    = as<mat>(extended["X"]);
+  List extended = extend_dummy(p, model, hyper, Y, X);
+  mat  Yplus    = as<mat>(extended["Yplus"]);
+  mat  Xplus    = as<mat>(extended["Xplus"]);
+  mat  Ystar    = as<mat>(extended["Ystar"]);
+  mat  Xstar    = as<mat>(extended["Xstar"]);
   
-  prior         = update_prior(p, hyper, prior);
+  prior         = update_prior(p, hyper, model, prior);
   mat prior_B   = as<mat>(prior["B"]);
   mat prior_V   = as<mat>(prior["V"]);
   mat prior_S   = as<mat>(prior["S"]);
   int prior_nu  = as<int>(prior["nu"]);
   
   mat inv_V     = diagmat(1 / prior_V.diag());
-  
-  mat Ystar     = Yplus.rows(0, N);
-  mat Xstar     = Xplus.rows(0, N);
   
   double log_ml_extended = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Yplus, Xplus);
   double log_ml_dummy    = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Ystar, Xstar);
@@ -214,66 +281,22 @@ double log_ml_dummy(
 }
 
 
-// log posterior of hyper-parameters
+// log posterior of hyper-parameters (up to a constant)
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_posterior_hyper(
     const int&        p,
     const arma::vec&  hyper,
+    const arma::vec&  model,
     const arma::mat&  Y,
     const arma::mat&  X,
     const Rcpp::List& prior
 ) {
   
-  double log_prior = log_prior_hyper(hyper, prior);
-  double log_ml    = log_ml_dummy(p, hyper, Y, X, prior);
+  double log_prior = log_prior_hyper(hyper, model, prior);
+  double log_ml    = log_ml_dummy(p, hyper, model, Y, X, prior);
   
   return log_prior + log_ml;
 }
 
-
-// sample hyper-parameters with Metropolis-Hastings
-// [[Rcpp:interface(cpp)]]
-// [[Rcpp::export]]
-arma::mat sample_hyper(
-    const int&        S,
-    const int&        p,
-    const double&     c,
-    const arma::mat&  Y,
-    const arma::mat&  X,
-    const Rcpp::List& prior
-) {
-  
-  int    N       = Y.n_cols;
-  int    n_hyper = N + 3;
-  
-  vec    hyper   = as<vec>(prior["map"]);
-  
-  double logp    = log_posterior_hyper(p, hyper, Y, X, prior);
-  
-  mat    W       = c * as<mat>(prior["W"]);
-  
-  mat posterior_hyper(n_hyper, S);
-  
-  int success = 0;
-  for (int s = 0; s < S; s++) {
-    
-    // sample from proposal distribution
-    vec    hyperp = mvnrnd(hyper, c * W);
-    double logpp  = log_posterior_hyper(p, hyperp, Y, X, prior);
-    double r      = exp(logpp - logp);
-    
-    if (randu() < r) {
-      hyper = hyperp;
-      logp  = logpp;
-      success++;
-    }
-    
-    posterior_hyper.col(s) = hyper;
-  }
-  
-  cout << "Acceptance rate: " << (double) success / S << endl;
-  
-  return posterior_hyper;
-}
 

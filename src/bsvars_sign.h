@@ -21,11 +21,11 @@ Rcpp::List bsvar_sign_cpp(
         const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
         const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
         const arma::mat&  sign_B,             // Mx6 matrix of signs for B
-        const Rcpp::List& Z,                  // a list of zero restrictions
+        const arma::field<arma::mat>& Z,      // a list of zero restrictions
         const Rcpp::List& prior,              // a list of priors
         const Rcpp::List& starting_values,    // a list of starting values
-        const int         thin = 100,         // introduce thinning
         const bool        show_progress = true,
+        const int         thin = 100,         // introduce thinning
         const int&        max_tries = 10000   // maximum tries for Q draw
 );
 

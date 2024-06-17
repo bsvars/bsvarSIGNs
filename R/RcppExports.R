@@ -13,12 +13,16 @@ niw_cpp <- function(Y, X, prior) {
     .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior)
 }
 
-update_prior <- function(p, hyper, prior) {
-    .Call(`_bsvarSIGNs_update_prior`, p, hyper, prior)
+mn_prior <- function(p, lambda, psi) {
+    .Call(`_bsvarSIGNs_mn_prior`, p, lambda, psi)
 }
 
-extend_dummy <- function(p, hyper, Y, X) {
-    .Call(`_bsvarSIGNs_extend_dummy`, p, hyper, Y, X)
+update_prior <- function(p, hyper, model, prior) {
+    .Call(`_bsvarSIGNs_update_prior`, p, hyper, model, prior)
+}
+
+extend_dummy <- function(p, hyper, model, Y, X) {
+    .Call(`_bsvarSIGNs_extend_dummy`, p, hyper, model, Y, X)
 }
 
 log_dgamma <- function(x, k, theta) {
@@ -29,8 +33,8 @@ log_dinvgamma <- function(x, alpha, beta) {
     .Call(`_bsvarSIGNs_log_dinvgamma`, x, alpha, beta)
 }
 
-log_prior_hyper <- function(hyper, prior) {
-    .Call(`_bsvarSIGNs_log_prior_hyper`, hyper, prior)
+log_prior_hyper <- function(hyper, model, prior) {
+    .Call(`_bsvarSIGNs_log_prior_hyper`, hyper, model, prior)
 }
 
 log_mvgamma <- function(n, x) {
@@ -41,16 +45,12 @@ log_ml <- function(p, b, Omega, Psi, d, inv_Omega, Y, X) {
     .Call(`_bsvarSIGNs_log_ml`, p, b, Omega, Psi, d, inv_Omega, Y, X)
 }
 
-log_ml_dummy <- function(p, hyper, Y, X, prior) {
-    .Call(`_bsvarSIGNs_log_ml_dummy`, p, hyper, Y, X, prior)
+log_ml_dummy <- function(p, hyper, model, Y, X, prior) {
+    .Call(`_bsvarSIGNs_log_ml_dummy`, p, hyper, model, Y, X, prior)
 }
 
-log_posterior_hyper <- function(p, hyper, Y, X, prior) {
-    .Call(`_bsvarSIGNs_log_posterior_hyper`, p, hyper, Y, X, prior)
-}
-
-sample_hyper <- function(S, p, c, Y, X, prior) {
-    .Call(`_bsvarSIGNs_sample_hyper`, S, p, c, Y, X, prior)
+log_posterior_hyper <- function(p, hyper, model, Y, X, prior) {
+    .Call(`_bsvarSIGNs_log_posterior_hyper`, p, hyper, model, Y, X, prior)
 }
 
 # Register entry points for exported C++ functions

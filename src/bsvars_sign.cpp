@@ -5,6 +5,7 @@
 
 #include <bsvars.h>
 
+#include "sample_hyper.h"
 #include "sample_Q.h"
 #include "sample_NIW.h"
 
@@ -26,8 +27,8 @@ Rcpp::List bsvar_sign_cpp(
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
-    const int         thin = 100,         // introduce thinning
     const bool        show_progress = true,
+    const int         thin = 100,         // introduce thinning
     const int&        max_tries = 10000   // maximum tries for Q draw
 ) {
   
@@ -51,9 +52,6 @@ Rcpp::List bsvar_sign_cpp(
   }
   Progress p(50, show_progress);
   
-  mat Yt = Y.t();
-  mat Xt = X.t();
-  
   const int T       = Y.n_rows;
   const int N       = Y.n_cols;
   const int K       = X.n_cols;
@@ -64,29 +62,36 @@ Rcpp::List bsvar_sign_cpp(
   
   vec   posterior_w(S);
   
+  vec   model           = as<vec>(prior["model"]);
+  mat   sample_hyper    = as<mat>(prior["hyper"]);
+  
+  mat   posterior_hyper(N + 3, S);
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
   cube  posterior_Sigma(N, N, S);
   cube  posterior_Theta0(N, N, S);
-  cube  posterior_hyper(2 * N + 1, 2, S);
   cube  posterior_shocks(N, T, S);
   
-  double w = 1;
+  int    s = 0, S_hyper = sample_hyper.n_cols - 1, post_nu;
+  double w = 1, lambda;
+  vec    hyper, psi;
+  mat    B, Sigma, chol_Sigma, h_invp, Q, Epsilon, post_B, post_V, post_S;
+  List   result;
   
-  
-  List result  = niw_cpp(Y, X, prior);
-  mat  post_B  = as<mat>(result["B"]);
-  mat  post_V  = as<mat>(result["V"]);
-  mat  post_S  = as<mat>(result["S"]);
-  int  post_nu = as<int>(result["nu"]);
-  
-  mat B, Sigma, chol_Sigma, h_invp, Q, Epsilon;
-  
-  int  s = 0;
   while (s < S) {
 
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
+    
+    hyper      = sample_hyper.col(randi(distr_param(0, S_hyper)));
+    lambda     = hyper(2);
+    psi        = hyper.rows(3, N + 2);
+    
+    result     = niw_cpp(Y, X, mn_prior(lags, lambda, psi));
+    post_B     = as<mat>(result["B"]);
+    post_V     = as<mat>(result["V"]);
+    post_S     = as<mat>(result["S"]);
+    post_nu    = as<int>(result["nu"]);
     
     Sigma      = iwishrnd(post_S, post_nu);
     chol_Sigma = chol(Sigma, "lower");
@@ -112,6 +117,7 @@ Rcpp::List bsvar_sign_cpp(
       posterior_Sigma.slice(s)  = Sigma;
       posterior_Theta0.slice(s) = chol_Sigma * Q;
       posterior_shocks.slice(s) = Epsilon;
+      posterior_hyper.col(s)    = hyper;
       
       s++;
     }
