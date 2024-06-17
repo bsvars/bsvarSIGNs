@@ -13,7 +13,7 @@ importance_sampling <- function(posterior) {
   
   posterior$posterior$A      = posterior$posterior$A[, , indices]
   posterior$posterior$B      = posterior$posterior$B[, , indices]
-  posterior$posterior$hyper  = posterior$posterior$hyper[, , indices]
+  posterior$posterior$hyper  = posterior$posterior$hyper[, indices]
   posterior$posterior$Q      = posterior$posterior$Q[, , indices]
   posterior$posterior$Sigma  = posterior$posterior$Sigma[, , indices]
   posterior$posterior$Theta0 = posterior$posterior$Theta0[, , indices]

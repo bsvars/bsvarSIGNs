@@ -124,21 +124,12 @@ specify_prior_bsvarSIGN = R6::R6Class(
   "PriorBSVARSIGN",
   
   public = list(
+    #' @field hyper a \code{(N+3)xS} matrix of posterior draws of hyperparameters.
+    hyper      = matrix(),
     
-    #' @field B an \code{KxN} matrix, the mean of the normal prior distribution for the parameter matrix \eqn{B}. 
-    B          = matrix(),
-    
-    #' @field V a \code{KxK} covariance matrix of the normal prior distribution for each of 
-    #' the column of the parameter matrix \eqn{B}. This covariance matrix is equation invariant.
-    V          = matrix(),
-    
-    #' @field S an \code{NxN} scale matrix of the inverse-Wishart prior distribution 
-    #' for the covariance matrix \eqn{\Sigma}. This scale matrix is equation invariant.
-    S          = matrix(),
-    
-    #' @field nu a positive real number greater of equal than \code{N}, a degree of freedom parameter
-    #' of the inverse-Wishart prior distribution for the covariance matrix \eqn{\Sigma}.
-    nu         = NA,
+    #' @field model a \code{4x1} vector of Boolean values indicating prior specifications,
+    #' model[1] = dummy soc, model[2] = dummy sur, model[3] = mn lambda, model[4] = mn psi.
+    model      = c(),
     
     #' @description
     #' Create a new prior specification PriorBSVAR.
@@ -162,11 +153,17 @@ specify_prior_bsvarSIGN = R6::R6Class(
       stopifnot("Argument d must be a non-negative integer number." = d >= 0 & d %% 1 == 0)
       stopifnot("Argument stationary must be a logical vector of length N." = length(stationary) == N & is.logical(stationary))
       
-      prior   = niw_prior(data, p, !stationary)
-      self$B  = prior$B
-      self$V  = prior$V
-      self$S  = prior$S
-      self$nu = prior$nu
+      Y      = data
+      T      = nrow(Y)
+      lambda = 0.2
+      psi    = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
+      
+      hyper              = matrix(NA, N + 3, 1)
+      hyper[3, ]         = lambda
+      hyper[4:(N + 3), ] = psi
+      
+      self$model         = c(FALSE, FALSE, FALSE, FALSE)
+      self$hyper         = hyper
       
     }, # END initialize
     
@@ -180,10 +177,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     get_prior = function(){
       list(
-        B  = self$B,
-        V  = self$V,
-        S  = self$S,
-        nu = self$nu
+        model = self$model,
+        hyper = self$hyper
       )
     } # END get_prior
     

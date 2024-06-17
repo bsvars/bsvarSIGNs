@@ -108,7 +108,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
                               data_matrices$Y, data_matrices$X, identification$VB, 
                               identification$sign_irf, identification$sign_narrative, 
                               identification$sign_B, identification$zero_irf,
-                              prior, starting_values, thin, show_progress, max_tries)
+                              prior, starting_values, show_progress, thin, max_tries)
   
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
