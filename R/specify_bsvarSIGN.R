@@ -156,7 +156,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
       Y      = data
       T      = nrow(Y)
       lambda = 0.2
-      psi    = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
+      psi    = sapply(1:N, \(i) summary(stats::lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
       
       hyper              = matrix(NA, N + 3, 1)
       hyper[3, ]         = lambda
