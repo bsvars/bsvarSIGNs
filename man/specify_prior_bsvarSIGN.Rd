@@ -35,16 +35,10 @@ prior$get_prior() # show the prior as list
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{B}}{an \code{KxN} matrix, the mean of the normal prior distribution for the parameter matrix \eqn{B}.}
+\item{\code{hyper}}{a \code{(N+3)xS} matrix of posterior draws of hyperparameters.}
 
-\item{\code{V}}{a \code{KxK} covariance matrix of the normal prior distribution for each of 
-the column of the parameter matrix \eqn{B}. This covariance matrix is equation invariant.}
-
-\item{\code{S}}{an \code{NxN} scale matrix of the inverse-Wishart prior distribution 
-for the covariance matrix \eqn{\Sigma}. This scale matrix is equation invariant.}
-
-\item{\code{nu}}{a positive real number greater of equal than \code{N}, a degree of freedom parameter
-of the inverse-Wishart prior distribution for the covariance matrix \eqn{\Sigma}.}
+\item{\code{model}}{a \code{4x1} vector of Boolean values indicating prior specifications,
+model[1] = dummy soc, model[2] = dummy sur, model[3] = mn lambda, model[4] = mn psi.}
 }
 \if{html}{\out{</div>}}
 }
