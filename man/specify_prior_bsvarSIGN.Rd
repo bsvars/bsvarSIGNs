@@ -9,7 +9,7 @@ The class PriorBSVARSIGN presents a prior specification for the homoskedastic bs
 \examples{
 # a prior for 3-variable example with one lag 
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1)
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$B                                        # show autoregressive prior mean
 
 
@@ -19,7 +19,7 @@ prior$B                                        # show autoregressive prior mean
 
 # a prior for 3-variable example with one lag and stationary data
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
 prior$B # show autoregressive prior mean
 
 
@@ -35,10 +35,42 @@ prior$get_prior() # show the prior as list
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{hyper}}{a \code{(N+3)xS} matrix of posterior draws of hyperparameters.}
+\item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters $\mu$, $\delta$,
+$\lambda$, $\psi$.}
 
-\item{\code{model}}{a \code{4x1} vector of Boolean values indicating prior specifications,
-model[1] = dummy soc, model[2] = dummy sur, model[3] = mn lambda, model[4] = mn psi.}
+\item{\code{B}}{a \code{KxN} normal prior mean matrix for the autoregressive 
+parameters.}
+
+\item{\code{V}}{a \code{KxK} matrix determining  the normal prior column-specific 
+covariance for the autoregressive parameters.}
+
+\item{\code{S}}{an \code{NxN} matrix determining the inverted-Wishart prior scale 
+of error terms covariance matrix.}
+
+\item{\code{nu}}{a positive scalar greater than \code{N+1} - the shape of the 
+inverted-Wishart prior for error terms covariance matrix.}
+
+\item{\code{Yplus}}{an \code{(N+1)xN} matrix with the sum-of-coefficients and 
+dummy-initial-observation prior LHS matrix.}
+
+\item{\code{Xplus}}{an \code{(N+1)xK} matrix with the sum-of-coefficients and 
+dummy-initial-observation prior LHS matrix.}
+
+\item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for $\mu$.}
+
+\item{\code{mu.shape}}{a positive scalar - the shape of the gamma prior for $\mu$.}
+
+\item{\code{delta.scale}}{a positive scalar - the shape of the gamma prior for $\delta$.}
+
+\item{\code{delta.shape}}{a positive scalar - the shape of the gamma prior for $\delta$.}
+
+\item{\code{lambda.scale}}{a positive scalar - the shape of the gamma prior for $\lambda$.}
+
+\item{\code{lambda.shape}}{a positive scalar - the shape of the gamma prior for $\lambda$.}
+
+\item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for $\psi$.}
+
+\item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for $\psi$.}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,15 +88,18 @@ model[1] = dummy soc, model[2] = dummy sur, model[3] = mn lambda, model[4] = mn 
 \subsection{Method \code{new()}}{
 Create a new prior specification PriorBSVAR.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$new(data, N, p, d = 0, stationary = rep(FALSE, N))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$new(
+  data,
+  p,
+  d = 0,
+  stationary = rep(FALSE, ncol(data))
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{data}}{the \code{TxN} data matrix.}
-
-\item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 
 \item{\code{p}}{a positive integer - the autoregressive lag order of the SVAR model.}
 
@@ -73,6 +108,8 @@ Create a new prior specification PriorBSVAR.
 \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets 
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
 otherwise to random walk.}
+
+\item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 }
 \if{html}{\out{</div>}}
 }
@@ -83,7 +120,7 @@ A new prior specification PriorBSVARSIGN.
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{# a prior for 3-variable example with one lag and stationary data
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
 prior$B # show autoregressive prior mean
 
 }

@@ -85,28 +85,43 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
 
 
 # Minnesota prior of Normal-Inverse-Wishart form
-niw_prior = function(Y,
-                     p,
-                     non_stationary,
-                     lambda = 0.2) {
-  T = nrow(Y)
-  N = ncol(Y)
-  K = 1 + N * p
-  
-  B           = matrix(0, K, N)
-  B[1:N, 1:N] = diag(non_stationary)
-  
-  sigma2                  = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
-  V                       = matrix(0, K, K)
-  V[K, K]                 = 1e+6
-  V[1:(K - 1), 1:(K - 1)] = diag(lambda^2 * kronecker((1:p)^-2, sigma2^-1))
-  
-  S  = diag(sigma2)
-  nu = N + 2
-  
-  list(B = B, V = V, S = S, nu = nu)
+# niw_prior = function(Y,
+#                      p,
+#                      non_stationary,
+#                      lambda = 0.2) {
+#   T = nrow(Y)
+#   N = ncol(Y)
+#   K = 1 + N * p
+#   
+#   B           = matrix(0, K, N)
+#   B[1:N, 1:N] = diag(non_stationary)
+#   
+#   sigma2                  = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
+#   V                       = matrix(0, K, K)
+#   V[K, K]                 = 1e+6
+#   V[1:(K - 1), 1:(K - 1)] = diag(lambda^2 * kronecker((1:p)^-2, sigma2^-1))
+#   
+#   S  = diag(sigma2)
+#   nu = N + 2
+#   
+#   list(B = B, V = V, S = S, nu = nu)
+# }
+
+gamma_scale = function(mode, variance) {
+  (2 * mode * variance) / (mode^2 + sqrt(mode^4 + 4 * variance * mode^2))
 }
 
+gamma_shape = function(mode, variance) {
+  (mode^2 + sqrt(mode^4 + 4 * (mode^2) * variance) + 2 * variance) / (2 * variance)
+}
+
+igamma_scale = function(mode, variance) {
+  (0.5 * mode * (sqrt(variance * (variance + 24 * mode^2)) - 5 * variance)) / (mode^2 - variance)
+}
+
+igamma_shape = function(mode, variance) {
+  0.5 * (sqrt(variance * (variance + 24 * mode^2)) - 2 * mode^2 - 3 * variance ) / (mode^2 - variance)
+}
 
 #' R6 Class Representing PriorBSVAR
 #'
@@ -116,7 +131,7 @@ niw_prior = function(Y,
 #' @examples
 #' # a prior for 3-variable example with one lag 
 #' data(oil)
-#' prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1)
+#' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 #' prior$B                                        # show autoregressive prior mean
 #' 
 #' @export
@@ -124,12 +139,57 @@ specify_prior_bsvarSIGN = R6::R6Class(
   "PriorBSVARSIGN",
   
   public = list(
-    #' @field hyper a \code{(N+3)xS} matrix of posterior draws of hyperparameters.
+    #' @field hyper a \code{(N+3)xS} matrix of hyper-parameters $\mu$, $\delta$,
+    #' $\lambda$, $\psi$.
     hyper      = matrix(),
     
-    #' @field model a \code{4x1} vector of Boolean values indicating prior specifications,
-    #' model[1] = dummy soc, model[2] = dummy sur, model[3] = mn lambda, model[4] = mn psi.
-    model      = c(),
+    #' @field B a \code{KxN} normal prior mean matrix for the autoregressive 
+    #' parameters.
+    B          = matrix(),
+    
+    #' @field V a \code{KxK} matrix determining  the normal prior column-specific 
+    #' covariance for the autoregressive parameters.
+    V          = matrix(),
+    
+    #' @field S an \code{NxN} matrix determining the inverted-Wishart prior scale 
+    #' of error terms covariance matrix.
+    S          = matrix(),
+    
+    #' @field nu a positive scalar greater than \code{N+1} - the shape of the 
+    #' inverted-Wishart prior for error terms covariance matrix.
+    nu          = NA,
+    
+    #' @field Yplus an \code{(N+1)xN} matrix with the sum-of-coefficients and 
+    #' dummy-initial-observation prior LHS matrix.
+    Yplus       = matrix(),
+    
+    #' @field Xplus an \code{(N+1)xK} matrix with the sum-of-coefficients and 
+    #' dummy-initial-observation prior LHS matrix.
+    Xplus       = matrix(),
+    
+    #' @field mu.scale a positive scalar - the shape of the gamma prior for $\mu$.
+    mu.scale    = NA,
+    
+    #' @field mu.shape a positive scalar - the shape of the gamma prior for $\mu$.
+    mu.shape    = NA,
+    
+    #' @field delta.scale a positive scalar - the shape of the gamma prior for $\delta$.
+    delta.scale = NA,
+
+    #' @field delta.shape a positive scalar - the shape of the gamma prior for $\delta$.
+    delta.shape = NA,
+    
+    #' @field lambda.scale a positive scalar - the shape of the gamma prior for $\lambda$.
+    lambda.scale = NA,
+    
+    #' @field lambda.shape a positive scalar - the shape of the gamma prior for $\lambda$.
+    lambda.shape = NA,
+    
+    #' @field psi.scale a positive scalar - the shape of the inverted gamma prior for $\psi$.
+    psi.scale   = NA,
+    
+    #' @field psi.shape a positive scalar - the shape of the inverted gamma prior for $\psi$.
+    psi.shape   = NA,
     
     #' @description
     #' Create a new prior specification PriorBSVAR.
@@ -144,27 +204,66 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @examples 
     #' # a prior for 3-variable example with one lag and stationary data
     #' data(oil)
-    #' prior = specify_prior_bsvarSIGN$new(oil, N = 3, p = 1, stationary = rep(TRUE, 3))
+    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
     #' prior$B # show autoregressive prior mean
     #' 
-    initialize = function(data, N, p, d = 0, stationary = rep(FALSE, N)){
-      stopifnot("Argument N must be a positive integer number." = N > 0 & N %% 1 == 0)
+    initialize = function(data, p, d = 0, stationary = rep(FALSE, ncol(data))){
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
       stopifnot("Argument d must be a non-negative integer number." = d >= 0 & d %% 1 == 0)
-      stopifnot("Argument stationary must be a logical vector of length N." = length(stationary) == N & is.logical(stationary))
+      Y       = data
+      N       = ncol(Y)
+      stopifnot("Argument stationary must be a logical vector of length equal to the number of columns in data." = length(stationary) == N & is.logical(stationary))
       
-      Y      = data
-      T      = nrow(Y)
-      lambda = 0.2
-      psi    = sapply(1:N, \(i) summary(stats::lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
+      T       = nrow(Y)
+      K       = N * p + 1 + d
+      
+      B       = matrix(0, K, N)
+      B[1:N,] = diag(!stationary)
+      
+      V       = diag(c(kronecker((1:p)^-2, rep(1, N)), rep(100, 1 + d)))
+      
+      s2.ols  = rep(NA, N)
+      for (n in 1:N) {
+        y     = as.matrix(Y[(p + 5 + 1):T, n])
+        x     = matrix(1, T - p - 5, 1)
+        for (i in 1:(p + 5)) {
+          x   = cbind(x, Y[(p + 5 + 1):T - i, n])
+        }
+        s2.ols[n]   = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / (T - p - 5)
+      }
       
       hyper              = matrix(NA, N + 3, 1)
-      hyper[3, ]         = lambda
-      hyper[4:(N + 3), ] = psi
+      hyper[1:3]         = c(1, 1, 0.2)
+      hyper[4:(N + 3),]  = s2.ols
       
-      self$model         = c(FALSE, FALSE, FALSE, FALSE)
+      scale   = gamma_scale(1, 1)
+      shape   = gamma_shape(1, 1)
+      
+      ybar    = colMeans(Y[1:p,])
+      Yplus   = rbind(diag(ybar), ybar)
+      Xplus   = Yplus
+      if (p > 1) {
+        for (i in 2:p) {
+          Xplus = cbind(Xplus, Yplus)
+        }
+      }
+      Xplus   = cbind(Xplus, c(rep(0, N), 1), matrix(0, N + 1, d))
+      
       self$hyper         = hyper
-      
+      self$B             = B
+      self$V             = V
+      self$S             = diag(N)
+      self$nu            = N + 2
+      self$Yplus         = Yplus
+      self$Xplus         = Xplus
+      self$mu.scale      = scale
+      self$mu.shape      = shape
+      self$delta.scale   = scale
+      self$delta.shape   = shape
+      self$lambda.scale  = gamma_scale(0.2, 0.4)
+      self$lambda.shape  = gamma_shape(0.2, 0.4)
+      self$psi.scale     = igamma_scale(0.02^2, 0.02^2)
+      self$psi.shape     = igamma_shape(0.02^2, 0.02^2)
     }, # END initialize
     
     #' @description
@@ -177,8 +276,21 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     get_prior = function(){
       list(
-        model = self$model,
-        hyper = self$hyper
+        hyper        = self$hyper,
+        B            = self$B,
+        V            = self$V,
+        S            = self$S,
+        nu           = self$nu,
+        Yplus        = self$Yplus,
+        Xplus        = self$Xplus,
+        mu.scale     = self$mu.scale,
+        mu.shape     = self$mu.shape,
+        delta.scale  = self$delta.scale,
+        delta.shape  = self$delta.shape,
+        lambda.scale = self$lambda.scale,
+        lambda.shape = self$lambda.shape,
+        psi.scale    = self$psi.scale,
+        psi.shape    = self$psi.shape
       )
     } # END get_prior
     
@@ -509,7 +621,7 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           sign_B,
                                                                           zero_irf,
                                                                           max_tries)
-      self$prior                   = specify_prior_bsvarSIGN$new(data, N, p, stationary)
+      self$prior                   = specify_prior_bsvarSIGN$new(data, p, d, stationary)
       self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     
