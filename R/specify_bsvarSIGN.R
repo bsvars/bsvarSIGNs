@@ -239,7 +239,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
       scale   = gamma_scale(1, 1)
       shape   = gamma_shape(1, 1)
       
-      ybar    = colMeans(Y[1:p,])
+      ybar    = colMeans(matrix(Y[1:p,], ncol = N))
       Yplus   = rbind(diag(ybar), ybar)
       Xplus   = Yplus
       if (p > 1) {
