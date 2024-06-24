@@ -52,19 +52,11 @@ Rcpp::List bsvar_sign_cpp(
   }
   Progress p(50, show_progress);
   
-  const int T       = Y.n_rows;
-  const int N       = Y.n_cols;
-  const int K       = X.n_cols;
-  
-  mat   aux_B       = as<mat>(starting_values["B"]);
-  mat   aux_A       = as<mat>(starting_values["A"]);
-  mat   aux_hyper   = as<mat>(starting_values["hyper"]);
+  const int T = Y.n_rows;
+  const int N = Y.n_cols;
+  const int K = X.n_cols;
   
   vec   posterior_w(S);
-  
-  vec   model           = as<vec>(prior["model"]);
-  mat   sample_hyper    = as<mat>(prior["hyper"]);
-  
   mat   posterior_hyper(N + 3, S);
   cube  posterior_A(N, K, S);
   cube  posterior_B(N, N, S);
@@ -72,7 +64,9 @@ Rcpp::List bsvar_sign_cpp(
   cube  posterior_Theta0(N, N, S);
   cube  posterior_shocks(N, T, S);
   
-  int    s = 0, S_hyper = sample_hyper.n_cols - 1, post_nu;
+  mat   hypers = as<mat>(prior["hyper"]);
+  
+  int    s = 0, S_hyper = hypers.n_cols - 1, post_nu;
   double w = 1, lambda;
   vec    hyper, psi;
   mat    B, Sigma, chol_Sigma, h_invp, Q, Epsilon, post_B, post_V, post_S;
@@ -83,7 +77,7 @@ Rcpp::List bsvar_sign_cpp(
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
     
-    hyper      = sample_hyper.col(randi(distr_param(0, S_hyper)));
+    hyper      = hypers.col(randi(distr_param(0, S_hyper)));
     lambda     = hyper(2);
     psi        = hyper.rows(3, N + 2);
     
