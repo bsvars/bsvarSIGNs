@@ -75,7 +75,8 @@ logml = function(prior, p, Y, X) {
     Bhat      = solve(t(X) %*% X + inv_Omega, t(X) %*% Y + inv_Omega %*% b)
     ehat      = Y - X %*% Bhat
     
-    llike     = N * T / 2 * log(1 / pi) + log_mvgamma(N, (T + d) / 2) - log_mvgamma(N, d / 2)
+    llike     = - N * T / 2 * log(pi) 
+    llike     = llike + log_mvgamma(N, (T + d) / 2) - log_mvgamma(N, d / 2)
     llike     = llike - N / 2 * log_det(Omega)
     llike     = llike + d / 2 * log_det(Psi)
     llike     = llike - N / 2 * log_det(t(X) %*% X + inv_Omega)
@@ -85,13 +86,15 @@ logml = function(prior, p, Y, X) {
   })
   
   if (!is.finite(llike)) {
-    llike = -1e10
+    llike = -1e+10
   }
   
   return(llike)
 }
 
 set.seed(123)
+
+dhyper = log_posterior_hyper
 
 library(R.matlab)
 data = readMat('../data/DataSW.mat')
@@ -116,7 +119,7 @@ model[4] = TRUE
 result = optim(init, 
                \(x) -dhyper(p, x, model, Y, X), 
                method  = 'L-BFGS-B',
-               control = list(trace = 1),
+               control = list(trace = 1, maxit = 1e5),
                lower   = rep(0, length(init)),
                upper   = init * 100,
                hessian = TRUE
@@ -130,12 +133,15 @@ c = 1
 W = result$hessian
 e = eigen(W)
 W = e$vectors %*% diag(1 / abs(e$values)) %*% t(e$vectors)
+W = MASS::ginv(result$hessian)
+W = (W + t(W)) / 2
 
 S          = 10000
-start      = 1000
+start      = S / 4
 hyper      = matrix(0, S, length(init))
 hyper[1, ] = h
 
+start_time = Sys.time()
 for (s in 2:S) {
   newh = mvtnorm::rmvnorm(1, h, c^2 * W)
   newd = dhyper(p, exp(newh), model, Y, X)
@@ -148,7 +154,7 @@ for (s in 2:S) {
   
   if (s > start) {
     W = var(hyper[1:s, ])
-    c = c + (s - start) ^ -0.6 * (a - 0.234)
+    c = c + s ^ -0.6 * (a - 0.234)
   }
   
   if (s %% 100 == 0) {
@@ -157,10 +163,8 @@ for (s in 2:S) {
   
   hyper[s, ] = h
 }
+end_time = Sys.time()
+end_time - start_time
 
-burn = floor(S / 2)
-plot.ts(exp(hyper[burn:S, ]))
-# hist(exp(hyper[burn:S, 3]), breaks = 100)
-
-
-
+hyper = exp(hyper)
+plot.ts(hyper)

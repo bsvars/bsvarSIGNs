@@ -36,53 +36,6 @@ Rcpp::List mn_prior(
 }
 
 
-// update prior with hyper-parameters
-// [[Rcpp:interface(cpp)]]
-// [[Rcpp::export]]
-Rcpp::List update_prior(
-    const int&        p,
-    const arma::vec&  hyper,
-    const arma::vec&  model,
-    const Rcpp::List& prior
-) {
-  
-  mat prior_B   = as<mat>(prior["B"]);
-  int prior_nu  = as<int>(prior["nu"]);
-  
-  mat prior_V, prior_S;
-  if (model(3)) {
-    int K       = prior_B.n_rows;
-    int n_hyper = hyper.n_elem;
-    
-    vec psi     = hyper.rows(3, n_hyper - 1);
-    prior_S     = diagmat(psi);
-    
-    vec v(K);
-    v(K - 1)         = 1e+6;
-    v.rows(0, K - 2) = kron(pow(linspace(1, p, p), -2), 1 / psi);
-    prior_V          = diagmat(v);
-  } else {
-    prior_V = as<mat>(prior["V"]);
-    prior_S = as<mat>(prior["S"]);
-  }
-  
-  double lambda;
-  if (model(2)) {
-    lambda = hyper(2);
-  } else {
-    lambda = 0.2;
-  }
-  prior_V *= lambda * lambda;
-  
-  return List::create(
-    _["B"]  = prior_B,
-    _["V"]  = prior_V,
-    _["S"]  = prior_S,
-    _["nu"] = prior_nu
-  );
-}
-
-
 // extend data with dummy observations
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
@@ -210,8 +163,7 @@ double log_mvgamma(
 }
 
 
-// log marginal likelihood
-// notation as in Giannone, Lenza & Primiceri (2014)
+// log marginal likelihood, notation as in Giannone, Lenza & Primiceri (2014)
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
 double log_ml(
@@ -220,7 +172,6 @@ double log_ml(
     const arma::mat& Omega,
     const arma::mat& Psi,
     const int&       d,
-    const arma::mat& inv_Omega,
     const arma::mat& Y,
     const arma::mat& X
 ) {
@@ -228,18 +179,28 @@ double log_ml(
   int T = Y.n_rows;
   int N = Y.n_cols;
   
-  mat Bhat = solve(X.t() * X + inv_Omega, X.t() * Y + inv_Omega * b);
-  mat ehat = Y - X * Bhat;
+  double log_ml    = 0;
+  mat    inv_Omega = diagmat(1 / Omega.diag());
   
-  double log_ml = 0;
-  
-  log_ml += - N * T / 2 * log(M_PI);
-  log_ml += log_mvgamma(N, (T + d) / 2) - log_mvgamma(N, d / 2);
-  log_ml += - N / 2 * log_det_sympd(Omega);
-  log_ml += d / 2 * log_det_sympd(Psi);
-  log_ml += - N / 2 * log_det_sympd(X.t() * X + inv_Omega);
-  mat A   = ehat.t() * ehat + (Bhat - b).t() * inv_Omega * (Bhat - b);
-  log_ml += - (T + d) / 2 * log_det_sympd(Psi + A);
+  try {
+    mat Bhat = inv_sympd(X.t() * X + inv_Omega) * (X.t() * Y + inv_Omega * b);
+    mat ehat = Y - X * Bhat;
+    
+    log_ml += - N * T / 2.0 * log(M_PI);
+    log_ml += log_mvgamma(N, (T + d) / 2.0) - log_mvgamma(N, d / 2.0);
+    log_ml += - N / 2.0 * log_det_sympd(Omega);
+    log_ml += d / 2.0 * log_det_sympd(Psi);
+    log_ml += - N / 2.0 * log_det_sympd(X.t() * X + inv_Omega);
+    mat A   = Psi + ehat.t() * ehat + (Bhat - b).t() * inv_Omega * (Bhat - b);
+    log_ml += - (T + d) / 2.0 * log_det_sympd(A);
+    
+    if (!std::isfinite(log_ml)) {
+      log_ml = -1e+10;
+    }
+    
+  } catch(...) {
+    log_ml = -1e+10;
+  }
   
   return log_ml;
 }
@@ -253,31 +214,29 @@ double log_ml_dummy(
     const arma::vec&  hyper,
     const arma::vec&  model,
     const arma::mat&  Y,
-    const arma::mat&  X,
-    Rcpp::List        prior
+    const arma::mat&  X
 ) {
   
   int N         = Y.n_cols;
-  int n_hyper   = hyper.n_elem;
   
-  List extended = extend_dummy(p, model, hyper, Y, X);
+  List extended = extend_dummy(p, hyper, model, Y, X);
   mat  Yplus    = as<mat>(extended["Yplus"]);
   mat  Xplus    = as<mat>(extended["Xplus"]);
   mat  Ystar    = as<mat>(extended["Ystar"]);
   mat  Xstar    = as<mat>(extended["Xstar"]);
   
-  prior         = update_prior(p, hyper, model, prior);
-  mat prior_B   = as<mat>(prior["B"]);
-  mat prior_V   = as<mat>(prior["V"]);
-  mat prior_S   = as<mat>(prior["S"]);
-  int prior_nu  = as<int>(prior["nu"]);
+  double lambda   = hyper(2);
+  vec    psi      = hyper.rows(3, N + 2);
+  List   prior    = mn_prior(p, lambda, psi);
+  mat    prior_B  = as<mat>(prior["B"]);
+  mat    prior_V  = as<mat>(prior["V"]);
+  mat    prior_S  = as<mat>(prior["S"]);
+  int    prior_nu = as<int>(prior["nu"]);
   
-  mat inv_V     = diagmat(1 / prior_V.diag());
+  double log_ml_plus = log_ml(p, prior_B, prior_V, prior_S, prior_nu, Yplus, Xplus);
+  double log_ml_star = log_ml(p, prior_B, prior_V, prior_S, prior_nu, Ystar, Xstar);
   
-  double log_ml_extended = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Yplus, Xplus);
-  double log_ml_dummy    = log_ml(p, prior_B, prior_V, prior_S, prior_nu, inv_V, Ystar, Xstar);
-  
-  return log_ml_extended - log_ml_dummy;
+  return log_ml_plus - log_ml_star;
 }
 
 
@@ -289,12 +248,12 @@ double log_posterior_hyper(
     const arma::vec&  hyper,
     const arma::vec&  model,
     const arma::mat&  Y,
-    const arma::mat&  X,
-    const Rcpp::List& prior
+    const arma::mat&  X
 ) {
   
-  double log_prior = log_prior_hyper(hyper, model, prior);
-  double log_ml    = log_ml_dummy(p, hyper, model, Y, X, prior);
+  // double log_prior = log_prior_hyper(hyper, model, prior);
+  double log_prior = 0;
+  double log_ml    = log_ml_dummy(p, hyper, model, Y, X);
   
   return log_prior + log_ml;
 }

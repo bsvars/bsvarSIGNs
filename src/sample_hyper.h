@@ -14,28 +14,11 @@ Rcpp::List mn_prior(
 );
 
 
-Rcpp::List update_prior(
-    const int&        p,
-    const arma::vec&  hyper,
-    const Rcpp::List& prior
-);
-
-
 Rcpp::List extend_dummy(
     const int&       p,
     const arma::vec& hyper,
     const arma::mat& Y,
     const arma::mat& X
-);
-
-
-arma::mat sample_hyper(
-    const int&        S,
-    const int&        p,
-    const double&     c,
-    const arma::mat&  Y,
-    const arma::mat&  X,
-    const Rcpp::List& prior
 );
 
 
