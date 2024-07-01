@@ -143,11 +143,16 @@ hyper[1, ] = h
 
 start_time = Sys.time()
 for (s in 2:S) {
+  
+  if (s %% 100 == 0) {
+    cat(s, "\r")
+  }
+  
   newh = mvtnorm::rmvnorm(1, h, c^2 * W)
   newd = dhyper(p, exp(newh), model, Y, X)
-  a    = min(1, exp(newd - d + sum(h) - sum(newh)))
+  newa = min(1, exp(newd - d + sum(h) - sum(newh)))
   
-  if (runif(1) < a) {
+  if (runif(1) < newa) {
     h = newh
     d = newd
   }
@@ -157,10 +162,7 @@ for (s in 2:S) {
     c = c + s ^ -0.6 * (a - 0.234)
   }
   
-  if (s %% 100 == 0) {
-    cat(s, "\r")
-  }
-  
+  a          = newa
   hyper[s, ] = h
 }
 end_time = Sys.time()
