@@ -46,19 +46,17 @@ arma::mat riwish_cpp (
 
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
-Rcpp::List niw_cpp(
+arma::field<arma::mat> niw_cpp(
     const arma::mat& Y,
     const arma::mat& X,
-    const Rcpp::List prior
+    const arma::mat& prior_B,
+    const arma::mat& prior_V,
+    const arma::mat& prior_S,
+    const int&       prior_nu
 ) {
 
   const int T  = Y.n_rows;
-  
-  mat prior_B  = as<mat>(prior["B"]);
-  mat prior_V  = as<mat>(prior["V"]);
-  mat prior_S  = as<mat>(prior["S"]);
-  int prior_nu = as<int>(prior["nu"]);
-  
+
   // analytic solutions
   mat prior_V_inv = inv_sympd(prior_V);
   mat post_V_inv  = prior_V_inv + X.t() * X;
@@ -70,11 +68,12 @@ Rcpp::List niw_cpp(
   post_S      = symmatu(post_S);
   int post_nu = prior_nu + T;
   
-  return List::create(
-    Named("B")  = post_B,
-    Named("V")  = post_V,
-    Named("S")  = post_S,
-    Named("nu") = post_nu
-  );
+  field<mat> post(4);
+  post(0) = post_B;
+  post(1) = post_V;
+  post(2) = post_S;
+  post(3) = mat(1, 1, fill::ones) * post_nu;
+  
+  return post;
 }
 
