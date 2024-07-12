@@ -131,7 +131,7 @@ igamma_shape = function(mode, variance) {
 #' @examples
 #' # a prior for 3-variable example with one lag 
 #' data(oil)
-#' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+#' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
 #' prior$B                                        # show autoregressive prior mean
 #' 
 #' @export
@@ -150,6 +150,12 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' covariance for the autoregressive parameters.
     V          = matrix(),
     
+    #' @field Vp a \code{px1} vector of lag shrinkage level.
+    Vp         = matrix(),
+    
+    #' @field Vd a \code{(d+1)x1} vector of (large) variances for constants.
+    Vd         = matrix(),
+    
     #' @field S an \code{NxN} matrix determining the inverted-Wishart prior scale 
     #' of error terms covariance matrix.
     S          = matrix(),
@@ -158,13 +164,26 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' inverted-Wishart prior for error terms covariance matrix.
     nu          = NA,
     
-    #' @field Yplus an \code{(N+1)xN} matrix with the sum-of-coefficients and 
-    #' dummy-initial-observation prior LHS matrix.
-    Yplus       = matrix(),
+    #' @field data an \code{TxN} matrix of observations.
+    data        = matrix(),
     
-    #' @field Xplus an \code{(N+1)xK} matrix with the sum-of-coefficients and 
-    #' dummy-initial-observation prior LHS matrix.
-    Xplus       = matrix(),
+    #' @field Y an \code{TxN} matrix of dependent variables.
+    Y           = matrix(),
+    
+    #' @field X an \code{TxK} matrix of independent variables.
+    X           = matrix(),
+    
+    #' @field Ysoc an \code{NxN} matrix with the sum-of-coefficients dummy observations.
+    Ysoc        = matrix(),
+    
+    #' @field Xsoc an \code{NxK} matrix with the sum-of-coefficients dummy observations.
+    Xsoc        = matrix(),
+    
+    #' @field Ysur an \code{NxN} matrix with the single-unit-root dummy observations.
+    Ysur        = matrix(),
+    
+    #' @field Xsur an \code{NxK} matrix with the single-unit-root dummy observations.
+    Xsur        = matrix(),
     
     #' @field mu.scale a positive scalar - the shape of the gamma prior for \eqn{\mu}.
     mu.scale    = NA,
@@ -192,10 +211,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
     
     #' @description
     #' Create a new prior specification PriorBSVAR.
-    #' @param data the \code{TxN} data matrix.
-    #' @param N a positive integer - the number of dependent variables in the model.
+    #' @param data the \code{TxN} data matrix of observations.
     #' @param p a positive integer - the autoregressive lag order of the SVAR model.
-    #' @param d a positive integer - the number of \code{exogenous} variables in the model.
+    #' @param exogenous a \code{Txd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets 
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
     #' otherwise to random walk.
@@ -206,20 +224,30 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
     #' prior$B # show autoregressive prior mean
     #' 
-    initialize = function(data, p, d = 0, stationary = rep(FALSE, ncol(data))){
+    initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE, ncol(data))) {
+      
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
-      stopifnot("Argument d must be a non-negative integer number." = d >= 0 & d %% 1 == 0)
-      Y       = data
+      
+      data    = bsvars::specify_data_matrices$new(data, p, exogenous)
+      Y       = t(data$Y)
+      X       = t(data$X)
       N       = ncol(Y)
+      
       stopifnot("Argument stationary must be a logical vector of length equal to the number of columns in data." = length(stationary) == N & is.logical(stationary))
       
+      d       = 0
+      if (!is.null(exogenous)) {
+        d     = ncol(exogenous)
+      }
       T       = nrow(Y)
       K       = N * p + 1 + d
       
       B       = matrix(0, K, N)
       B[1:N,] = diag(!stationary)
       
-      V       = diag(c(kronecker((1:p)^-2, rep(1, N)), rep(100, 1 + d)))
+      Vp      = (1:p)^-2
+      Vd      = rep(100, 1 + d)
+      V       = diag(c(kronecker(Vp, rep(1, N)), Vd))
       
       s2.ols  = rep(NA, N)
       for (n in 1:N) {
@@ -228,7 +256,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
         for (i in 1:(p + 5)) {
           x   = cbind(x, Y[(p + 5 + 1):T - i, n])
         }
-        s2.ols[n]   = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / (T - p - 5)
+        s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / 
+          (T - p - 5)
       }
       
       hyper              = matrix(NA, N + 3, 1)
@@ -239,22 +268,35 @@ specify_prior_bsvarSIGN = R6::R6Class(
       shape   = gamma_shape(1, 1)
       
       ybar    = colMeans(matrix(Y[1:p,], ncol = N))
-      Yplus   = rbind(diag(ybar), ybar)
-      Xplus   = Yplus
-      if (p > 1) {
-        for (i in 2:p) {
-          Xplus = cbind(Xplus, Yplus)
-        }
-      }
-      Xplus   = cbind(Xplus, c(rep(0, N), 1), matrix(0, N + 1, d))
+      Ysoc    = diag(ybar)
+      Ysur    = t(ybar)
+      Xsoc    = cbind(kronecker(t(rep(1, p)), Ysoc), matrix(0, N, d + 1))
+      Xsur    = cbind(kronecker(t(rep(1, p)), Ysur), 1, matrix(0, 1, d))
+      
+      # Ystar   = rbind(diag(ybar), ybar)
+      # Xstar   = Ystar
+      # if (p > 1) {
+      #   for (i in 2:p) {
+      #     Xstar = cbind(Xstar, Ystar)
+      #   }
+      # }
+      # Xstar   = cbind(Xstar, c(rep(0, N), 1), matrix(0, N + 1, d))
+      
+      
+      self$Y             = Y
+      self$X             = X
+      self$Vp            = Vp
+      self$Vd            = Vd
       
       self$hyper         = hyper
       self$B             = B
       self$V             = V
       self$S             = diag(N)
       self$nu            = N + 2
-      self$Yplus         = Yplus
-      self$Xplus         = Xplus
+      self$Ysoc          = Ysoc
+      self$Xsoc          = Xsoc
+      self$Ysur          = Ysur
+      self$Xsur          = Xsur
       self$mu.scale      = scale
       self$mu.shape      = shape
       self$delta.scale   = scale
@@ -278,10 +320,14 @@ specify_prior_bsvarSIGN = R6::R6Class(
         hyper        = self$hyper,
         B            = self$B,
         V            = self$V,
+        Vp           = self$Vp,
+        Vd           = self$Vd,
         S            = self$S,
         nu           = self$nu,
-        Yplus        = self$Yplus,
-        Xplus        = self$Xplus,
+        Ysoc         = self$Ysoc,
+        Xsoc         = self$Xsoc,
+        Ysur         = self$Ysur,
+        Xsur         = self$Xsur,
         mu.scale     = self$mu.scale,
         mu.shape     = self$mu.shape,
         delta.scale  = self$delta.scale,
@@ -291,7 +337,70 @@ specify_prior_bsvarSIGN = R6::R6Class(
         psi.scale    = self$psi.scale,
         psi.shape    = self$psi.shape
       )
-    } # END get_prior
+    }, # END get_prior
+    
+    #' @description
+    #' Estimates hyper-parameters with adaptive Metropolis algorithm.
+    #' 
+    #' @param mu whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.
+    #' @param delta whether to estimate the hyper-parameter in the single-unit-root dummy prior.
+    #' @param lambda whether to estimate the hyper-parameter of shrinkage in the Minnesota prior.
+    #' @param psi whether to estimate the hyper-parameter of variances in the Minnesota prior.
+    #' @param S number of draws.
+    #' @param start starting point of the adaptive Metropolis algorithm.
+    #' @param burn number of burn-in draws.
+    #' 
+    #' @examples 
+    #' # a prior for 3-variable example with four lags
+    #' data(oil)
+    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+    #' prior$estimate_hyper(S = 5)
+    #' 
+    estimate_hyper = function(mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE,
+                              S = 10000, start = 1000, burn = 5000){
+      
+      model = c(mu, delta, lambda, psi)
+      
+      if (all(!model)) {
+        stop("At least one of the hyper-parameters must be estimated.")
+      }
+      
+      hyper  = matrix(self$hyper[, ncol(self$hyper)])
+      init   = narrow_hyper(model, hyper)
+      prior  = self$get_prior()
+      
+      if (!mu) {
+        prior$Ysoc = matrix(0, 0, ncol(self$Ysoc))
+        prior$Xsoc = matrix(0, 0, ncol(self$Xsoc))
+      }
+      if (!delta) {
+        prior$Ysur = matrix(0, 0, ncol(self$Ysur))
+        prior$Xsur = matrix(0, 0, ncol(self$Xsur))
+      }
+      
+      result = stats::optim(
+        init,
+        \(x) -log_posterior_hyper(extend_hyper(hyper, model, matrix(x)), 
+                                  model, self$Y, self$X, prior),
+        method  = 'L-BFGS-B',
+        lower   = rep(0, length(init)),
+        upper   = init * 100,
+        hessian = TRUE
+        )
+
+      mode   = extend_hyper(hyper, model, matrix(result$par))
+      W      = result$hessian
+
+      if (length(init) == 1){
+        W = 1 / W
+      } else {
+        e = eigen(W)
+        W = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
+      }
+      
+      self$hyper = sample_hyper(S, start, mode, model, self$Y, self$X, W, prior)
+      self$hyper = self$hyper[, -(1:burn)]
+    } # END estimate_hyper
     
   ) # END public
 ) # END specify_prior_bsvarSIGN
@@ -620,7 +729,7 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           sign_B,
                                                                           zero_irf,
                                                                           max_tries)
-      self$prior                   = specify_prior_bsvarSIGN$new(data, p, d, stationary)
+      self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous, stationary)
       self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     

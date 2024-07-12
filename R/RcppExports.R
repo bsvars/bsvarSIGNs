@@ -9,8 +9,8 @@ riwish_cpp <- function(S, nu) {
     .Call(`_bsvarSIGNs_riwish_cpp`, S, nu)
 }
 
-niw_cpp <- function(Y, X, prior) {
-    .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior)
+niw_cpp <- function(Y, X, prior_B, prior_V, prior_S, prior_nu) {
+    .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior_B, prior_V, prior_S, prior_nu)
 }
 
 mn_prior <- function(p, lambda, psi) {
@@ -37,16 +37,16 @@ log_mvgamma <- function(n, x) {
     .Call(`_bsvarSIGNs_log_mvgamma`, n, x)
 }
 
-log_ml <- function(p, b, Omega, Psi, d, Y, X) {
-    .Call(`_bsvarSIGNs_log_ml`, p, b, Omega, Psi, d, Y, X)
+log_ml <- function(b, Omega, Psi, d, Y, X) {
+    .Call(`_bsvarSIGNs_log_ml`, b, Omega, Psi, d, Y, X)
 }
 
-log_ml_dummy <- function(p, hyper, model, Y, X) {
-    .Call(`_bsvarSIGNs_log_ml_dummy`, p, hyper, model, Y, X)
+log_ml_dummy <- function(hyper, model, Y, X, prior) {
+    .Call(`_bsvarSIGNs_log_ml_dummy`, hyper, model, Y, X, prior)
 }
 
-log_posterior_hyper <- function(p, hyper, model, Y, X) {
-    .Call(`_bsvarSIGNs_log_posterior_hyper`, p, hyper, model, Y, X)
+log_posterior_hyper <- function(hyper, model, Y, X, prior) {
+    .Call(`_bsvarSIGNs_log_posterior_hyper`, hyper, model, Y, X, prior)
 }
 
 extend_hyper <- function(init, model, hypers) {
@@ -57,8 +57,8 @@ narrow_hyper <- function(model, hypers) {
     .Call(`_bsvarSIGNs_narrow_hyper`, model, hypers)
 }
 
-sample_hyper <- function(S, start, p, init, model, Y, X, W) {
-    .Call(`_bsvarSIGNs_sample_hyper`, S, start, p, init, model, Y, X, W)
+sample_hyper <- function(S, start, init, model, Y, X, W, prior) {
+    .Call(`_bsvarSIGNs_sample_hyper`, S, start, init, model, Y, X, W, prior)
 }
 
 # Register entry points for exported C++ functions

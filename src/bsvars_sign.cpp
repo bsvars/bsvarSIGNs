@@ -72,28 +72,54 @@ Rcpp::List bsvar_sign_cpp(
   mat    B, Sigma, chol_Sigma, h_invp, Q, Epsilon, post_B, post_V, post_S;
   List   result;
   
+  mat        prior_B  = as<mat>(prior["B"]), prior_V, prior_S;
+  int        prior_nu = as<int>(prior["nu"]);
+  field<mat> post;
+  
   while (s < S) {
 
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
     
+    // update Minnesota prior
     hyper      = hypers.col(randi(distr_param(0, S_hyper)));
     lambda     = hyper(2);
     psi        = hyper.rows(3, N + 2);
     
-    result     = niw_cpp(Y, X, mn_prior(lags, lambda, psi));
-    post_B     = as<mat>(result["B"]);
-    post_V     = as<mat>(result["V"]);
-    post_S     = as<mat>(result["S"]);
-    post_nu    = as<int>(result["nu"]);
+    prior_V    = diagmat(join_vert(
+      lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
+      as<vec>(prior["Vd"])  
+    ));
+    prior_S    = diagmat(psi);
     
+    // update dummy observation prior
+    mat    Ystar(0, N), Xstar(0, K);
+    double mu       = hyper(0);
+    Ystar           = join_vert(Ystar, as<mat>(prior["Ysoc"]) / mu);
+    Xstar           = join_vert(Xstar, as<mat>(prior["Xsoc"]) / mu);
+    
+    double delta    = hyper(1);
+    Ystar           = join_vert(Ystar, as<mat>(prior["Ysur"]) / delta);
+    Xstar           = join_vert(Xstar, as<mat>(prior["Xsur"]) / delta);
+    
+    mat    Yplus    = join_vert(Ystar, Y);
+    mat    Xplus    = join_vert(Xstar, X);
+  
+    // posterior parameters
+    post       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    post_B     = post(0);
+    post_V     = post(1);
+    post_S     = post(2);
+    post_nu    = as_scalar(post(3));
+    
+    // sample reduced-form parameters (B, Sigma, Q)
     Sigma      = iwishrnd(post_S, post_nu);
     chol_Sigma = chol(Sigma, "lower");
     B          = rmatnorm_cpp(post_B, post_V, Sigma);
-    h_invp     = inv(trimatl(chol_Sigma));    // lower triangular, h(Sigma) is upper triangular
+    h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
     
     result     = sample_Q(lags, Y, X, 
-                          B, h_invp, chol_Sigma, 
+                          B, h_invp, chol_Sigma,
                           prior, VB,
                           sign_irf, sign_narrative, sign_B, Z,
                           max_tries);

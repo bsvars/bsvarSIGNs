@@ -9,7 +9,7 @@ The class PriorBSVARSIGN presents a prior specification for the homoskedastic bs
 \examples{
 # a prior for 3-variable example with one lag 
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
 prior$B                                        # show autoregressive prior mean
 
 
@@ -31,6 +31,16 @@ prior$B # show autoregressive prior mean
 prior = specify_prior_bsvar$new(N = 3, p = 4)
 prior$get_prior() # show the prior as list
 
+
+## ------------------------------------------------
+## Method `specify_prior_bsvarSIGN$estimate_hyper`
+## ------------------------------------------------
+
+# a prior for 3-variable example with four lags
+data(oil)
+prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior$estimate_hyper(S = 5)
+
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -43,17 +53,29 @@ parameters.}
 \item{\code{V}}{a \code{KxK} matrix determining  the normal prior column-specific 
 covariance for the autoregressive parameters.}
 
+\item{\code{Vp}}{a \code{px1} vector of lag shrinkage level.}
+
+\item{\code{Vd}}{a \code{(d+1)x1} vector of (large) variances for constants.}
+
 \item{\code{S}}{an \code{NxN} matrix determining the inverted-Wishart prior scale 
 of error terms covariance matrix.}
 
 \item{\code{nu}}{a positive scalar greater than \code{N+1} - the shape of the 
 inverted-Wishart prior for error terms covariance matrix.}
 
-\item{\code{Yplus}}{an \code{(N+1)xN} matrix with the sum-of-coefficients and 
-dummy-initial-observation prior LHS matrix.}
+\item{\code{data}}{an \code{TxN} matrix of observations.}
 
-\item{\code{Xplus}}{an \code{(N+1)xK} matrix with the sum-of-coefficients and 
-dummy-initial-observation prior LHS matrix.}
+\item{\code{Y}}{an \code{TxN} matrix of dependent variables.}
+
+\item{\code{X}}{an \code{TxK} matrix of independent variables.}
+
+\item{\code{Ysoc}}{an \code{NxN} matrix with the sum-of-coefficients dummy observations.}
+
+\item{\code{Xsoc}}{an \code{NxK} matrix with the sum-of-coefficients dummy observations.}
+
+\item{\code{Ysur}}{an \code{NxN} matrix with the single-unit-root dummy observations.}
+
+\item{\code{Xsur}}{an \code{NxK} matrix with the single-unit-root dummy observations.}
 
 \item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
@@ -78,6 +100,7 @@ dummy-initial-observation prior LHS matrix.}
 \itemize{
 \item \href{#method-PriorBSVARSIGN-new}{\code{specify_prior_bsvarSIGN$new()}}
 \item \href{#method-PriorBSVARSIGN-get_prior}{\code{specify_prior_bsvarSIGN$get_prior()}}
+\item \href{#method-PriorBSVARSIGN-estimate_hyper}{\code{specify_prior_bsvarSIGN$estimate_hyper()}}
 \item \href{#method-PriorBSVARSIGN-clone}{\code{specify_prior_bsvarSIGN$clone()}}
 }
 }
@@ -90,7 +113,7 @@ Create a new prior specification PriorBSVAR.
 \if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$new(
   data,
   p,
-  d = 0,
+  exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
 }
@@ -98,17 +121,15 @@ Create a new prior specification PriorBSVAR.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{the \code{TxN} data matrix.}
+\item{\code{data}}{the \code{TxN} data matrix of observations.}
 
 \item{\code{p}}{a positive integer - the autoregressive lag order of the SVAR model.}
 
-\item{\code{d}}{a positive integer - the number of \code{exogenous} variables in the model.}
+\item{\code{exogenous}}{a \code{Txd} matrix of exogenous variables.}
 
 \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets 
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
 otherwise to random walk.}
-
-\item{\code{N}}{a positive integer - the number of dependent variables in the model.}
 }
 \if{html}{\out{</div>}}
 }
@@ -142,6 +163,55 @@ Returns the elements of the prior specification PriorBSVAR as a \code{list}.
 \preformatted{# a prior for 3-variable example with four lags
 prior = specify_prior_bsvar$new(N = 3, p = 4)
 prior$get_prior() # show the prior as list
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PriorBSVARSIGN-estimate_hyper"></a>}}
+\if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-estimate_hyper}{}}}
+\subsection{Method \code{estimate_hyper()}}{
+Estimates hyper-parameters with adaptive Metropolis algorithm.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$estimate_hyper(
+  mu = FALSE,
+  delta = FALSE,
+  lambda = TRUE,
+  psi = FALSE,
+  S = 10000,
+  start = S/10,
+  burn = 5000
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
+
+\item{\code{delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
+
+\item{\code{lambda}}{whether to estimate the hyper-parameter of shrinkage in the Minnesota prior.}
+
+\item{\code{psi}}{whether to estimate the hyper-parameter of variances in the Minnesota prior.}
+
+\item{\code{S}}{number of draws.}
+
+\item{\code{start}}{starting point of the adaptive Metropolis algorithm.}
+
+\item{\code{burn}}{number of burn-in draws.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# a prior for 3-variable example with four lags
+data(oil)
+prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior$estimate_hyper(S = 5)
 
 }
 \if{html}{\out{</div>}}
