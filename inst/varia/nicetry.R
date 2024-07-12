@@ -111,13 +111,12 @@ T = nrow(Y)
 N = ncol(Y)
 
 init   = c(1, 1, 0.2)
-model  = c(TRUE, TRUE, TRUE, FALSE)
+init   = c(init, rep(0.02^2, N))
+model  = c(FALSE, FALSE, TRUE, TRUE)
+# model[4] = TRUE
 
-init     = c(init, rep(0.02^2, N))
-model[4] = TRUE
-
-result = optim(init, 
-               \(x) -dhyper(p, x, model, Y, X), 
+result = optim(narrow_hyper(model, matrix(init)),
+               \(x) -dhyper(p, extend_hyper(init, model, matrix(x)), model, Y, X),
                method  = 'L-BFGS-B',
                control = list(trace = 1, maxit = 1e5),
                lower   = rep(0, length(init)),
@@ -126,47 +125,33 @@ result = optim(init,
                )
 
 h = result$par
-d = dhyper(p, h, model, Y, X)
+d = dhyper(p, extend_hyper(init, model, matrix(h)), model, Y, X)
 h = log(h)
+
 
 c = 1
 W = result$hessian
-e = eigen(W)
-W = e$vectors %*% diag(1 / abs(e$values)) %*% t(e$vectors)
-W = MASS::ginv(result$hessian)
-W = (W + t(W)) / 2
+if (length(h) == 1){
+  W = 1 / W
+} else {
+  e = eigen(W)
+  W = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
+}
+
 
 S          = 10000
-start      = S / 4
-hyper      = matrix(0, S, length(init))
-hyper[1, ] = h
-
+start      = S / 10
 start_time = Sys.time()
-for (s in 2:S) {
-  
-  if (s %% 100 == 0) {
-    cat(s, "\r")
-  }
-  
-  newh = mvtnorm::rmvnorm(1, h, c^2 * W)
-  newd = dhyper(p, exp(newh), model, Y, X)
-  newa = min(1, exp(newd - d + sum(h) - sum(newh)))
-  
-  if (runif(1) < newa) {
-    h = newh
-    d = newd
-  }
-  
-  if (s > start) {
-    W = var(hyper[1:s, ])
-    c = c + s ^ -0.6 * (a - 0.234)
-  }
-  
-  a          = newa
-  hyper[s, ] = h
-}
-end_time = Sys.time()
-end_time - start_time
 
-hyper = exp(hyper)
+
+hyper = sample_hyper(S, start, p, 
+                     extend_hyper(init, model, matrix(result$par)), 
+                     model, Y, X, W)
+
+
+hyper = t(hyper)
 plot.ts(hyper)
+
+
+Sys.time() - start_time
+

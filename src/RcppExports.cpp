@@ -740,6 +740,49 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// extend_hyper
+arma::mat extend_hyper(const arma::vec& init, const arma::vec& model, const arma::mat& hypers);
+RcppExport SEXP _bsvarSIGNs_extend_hyper(SEXP initSEXP, SEXP modelSEXP, SEXP hypersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type init(initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type hypers(hypersSEXP);
+    rcpp_result_gen = Rcpp::wrap(extend_hyper(init, model, hypers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// narrow_hyper
+arma::mat narrow_hyper(const arma::vec& model, arma::mat hypers);
+RcppExport SEXP _bsvarSIGNs_narrow_hyper(SEXP modelSEXP, SEXP hypersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type hypers(hypersSEXP);
+    rcpp_result_gen = Rcpp::wrap(narrow_hyper(model, hypers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sample_hyper
+arma::mat sample_hyper(const int& S, const int& start, const int& p, const arma::vec& init, const arma::vec& model, const arma::mat& Y, const arma::mat& X, const arma::mat& W);
+RcppExport SEXP _bsvarSIGNs_sample_hyper(SEXP SSEXP, SEXP startSEXP, SEXP pSEXP, SEXP initSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type init(initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type W(WSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_hyper(S, start, p, init, model, Y, X, W));
+    return rcpp_result_gen;
+END_RCPP
+}
 // qr_sign_cpp
 arma::mat qr_sign_cpp(const arma::mat& A);
 static SEXP _bsvarSIGNs_qr_sign_cpp_try(SEXP ASEXP) {
@@ -922,6 +965,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_log_ml", (DL_FUNC) &_bsvarSIGNs_log_ml, 7},
     {"_bsvarSIGNs_log_ml_dummy", (DL_FUNC) &_bsvarSIGNs_log_ml_dummy, 5},
     {"_bsvarSIGNs_log_posterior_hyper", (DL_FUNC) &_bsvarSIGNs_log_posterior_hyper, 5},
+    {"_bsvarSIGNs_extend_hyper", (DL_FUNC) &_bsvarSIGNs_extend_hyper, 3},
+    {"_bsvarSIGNs_narrow_hyper", (DL_FUNC) &_bsvarSIGNs_narrow_hyper, 2},
+    {"_bsvarSIGNs_sample_hyper", (DL_FUNC) &_bsvarSIGNs_sample_hyper, 8},
     {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
     {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},

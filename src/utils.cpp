@@ -50,9 +50,9 @@ bool match_sign(
 // Numerical derivative of f: R^n -> R^m, at x (Rcpp::export is not possible)
 // [[Rcpp:interface(cpp)]]
 arma::mat Df(
-    const  std::function<arma::colvec(const arma::colvec&)>& f,
-    const  arma::colvec& x,
-    double               h = 1e-10
+    const std::function<arma::vec(const arma::vec&)>& f,
+    const arma::vec& x,
+    const double     h = 1e-10
 )
 {
   colvec f_x = f(x);
@@ -79,7 +79,48 @@ arma::mat Df(
 }
 
 
-
+// adaptive Metropolis algorithm for strictly positive parameters
+// [[Rcpp:interfaces(cpp)]]
+arma::mat metropolis(
+    const int& T,
+    const int& t0,
+    arma::vec  x,
+    arma::mat  Sigma,
+    const std::function<double(const arma::vec&)>& log_target
+) {
+  
+  int    n = x.n_elem;
+  
+  double s = 1.0;
+  double d = log_target(x);
+  
+  double new_d, a;
+  vec    new_x;
+  
+  mat X(n, T);
+  x        = log(x);
+  X.col(0) = x;
+  
+  for (int t = 1; t < T; t++) {
+    new_x = mvnrnd(x, s*s * Sigma);
+    new_d = log_target(exp(new_x));
+    a     = std::min(1.0, exp(new_d - d + sum(x - new_x)));
+    
+    if (randu() < a) {
+      x = new_x;
+      d = new_d;
+    }
+    X.col(t) = x;
+    
+    if (t >= t0) {
+      Sigma  = cov(X.cols(0, t).t());
+      s     += pow(t, -0.6) * (a - 0.234);
+    }
+  }
+  
+  X = exp(X);
+  return X;
+}
 
 
 

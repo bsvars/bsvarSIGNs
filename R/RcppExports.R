@@ -49,6 +49,18 @@ log_posterior_hyper <- function(p, hyper, model, Y, X) {
     .Call(`_bsvarSIGNs_log_posterior_hyper`, p, hyper, model, Y, X)
 }
 
+extend_hyper <- function(init, model, hypers) {
+    .Call(`_bsvarSIGNs_extend_hyper`, init, model, hypers)
+}
+
+narrow_hyper <- function(model, hypers) {
+    .Call(`_bsvarSIGNs_narrow_hyper`, model, hypers)
+}
+
+sample_hyper <- function(S, start, p, init, model, Y, X, W) {
+    .Call(`_bsvarSIGNs_sample_hyper`, S, start, p, init, model, Y, X, W)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call(`_bsvarSIGNs_RcppExport_registerCCallable`)

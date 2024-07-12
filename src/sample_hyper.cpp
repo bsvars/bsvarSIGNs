@@ -1,6 +1,8 @@
 
 #include <RcppArmadillo.h>
 
+#include "utils.h"
+
 using namespace Rcpp;
 using namespace arma;
 
@@ -257,5 +259,106 @@ double log_posterior_hyper(
   
   return log_prior + log_ml;
 }
+
+
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+arma::mat extend_hyper(
+    const arma::vec& init,
+    const arma::vec& model,
+    const arma::mat& hypers
+) {
+  
+  int i = 0;
+  
+  mat extended = repmat(init, 1, hypers.n_cols);
+  
+  if (model(0)) {
+    extended.row(0) = hypers.row(i);
+    i++;  
+  }
+  
+  if (model(1)) {
+    extended.row(1) = hypers.row(i);
+    i++;
+  }
+  
+  if (model(2)) {
+    extended.row(2) = hypers.row(i);
+    i++;
+  }
+  
+  if (model(3)) {
+    extended.rows(3, extended.n_rows - 1) = hypers.rows(i, hypers.n_rows - 1);
+  }
+  
+  return extended;
+}
+
+
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+arma::mat narrow_hyper(
+    const arma::vec& model,
+    arma::mat        hypers
+) {
+  
+  uvec indices;
+  
+  if (!model(0)) {
+    indices = join_vert(indices, uvec({0}));
+  }
+  
+  if (!model(1)) {
+    indices = join_vert(indices, uvec({1}));
+  }
+  
+  if (!model(2)) {
+    indices = join_vert(indices, uvec({2}));
+  }
+  
+  if (!model(3)) {
+    indices = join_vert(indices, regspace<uvec>(3, hypers.n_rows - 1));
+  }
+  
+  hypers.shed_rows(indices);
+  
+  return hypers;
+}
+
+
+// sample hyper-parameters
+// [[Rcpp:interface(cpp)]]
+// [[Rcpp::export]]
+arma::mat sample_hyper(
+    const int&        S,
+    const int&        start,
+    const int&        p,
+    const arma::vec&  init,
+    const arma::vec&  model,
+    const arma::mat&  Y,
+    const arma::mat&  X,
+    const arma::mat&  W
+) {
+  
+  mat hypers = metropolis(
+    S, start, narrow_hyper(model, init), W,
+    [p, init, model, Y, X](const vec& x) {
+      vec extended = extend_hyper(init, model, x);
+      return log_posterior_hyper(p, extended, model, Y, X);
+    }
+  );
+  
+  hypers = extend_hyper(init, model, hypers);
+  
+  return hypers;
+}
+
+
+
+
+
+
+
 
 
