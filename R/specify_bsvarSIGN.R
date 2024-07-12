@@ -1,5 +1,5 @@
 
-# construction Z_j matrices
+# construct Z_j matrices
 get_Z = function(zero_irf) {
   if (sum(zero_irf) == 0) {
     return(NULL)
@@ -139,8 +139,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
   "PriorBSVARSIGN",
   
   public = list(
-    #' @field hyper a \code{(N+3)xS} matrix of hyper-parameters $\mu$, $\delta$,
-    #' $\lambda$, $\psi$.
+    #' @field hyper a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.
     hyper      = matrix(),
     
     #' @field B a \code{KxN} normal prior mean matrix for the autoregressive 
@@ -167,28 +166,28 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' dummy-initial-observation prior LHS matrix.
     Xplus       = matrix(),
     
-    #' @field mu.scale a positive scalar - the shape of the gamma prior for $\mu$.
+    #' @field mu.scale a positive scalar - the shape of the gamma prior for \eqn{\mu}.
     mu.scale    = NA,
     
-    #' @field mu.shape a positive scalar - the shape of the gamma prior for $\mu$.
+    #' @field mu.shape a positive scalar - the shape of the gamma prior for \eqn{\mu}.
     mu.shape    = NA,
     
-    #' @field delta.scale a positive scalar - the shape of the gamma prior for $\delta$.
+    #' @field delta.scale a positive scalar - the shape of the gamma prior for \eqn{\delta}.
     delta.scale = NA,
 
-    #' @field delta.shape a positive scalar - the shape of the gamma prior for $\delta$.
+    #' @field delta.shape a positive scalar - the shape of the gamma prior for \eqn{\delta}.
     delta.shape = NA,
     
-    #' @field lambda.scale a positive scalar - the shape of the gamma prior for $\lambda$.
+    #' @field lambda.scale a positive scalar - the shape of the gamma prior for \eqn{\lambda}.
     lambda.scale = NA,
     
-    #' @field lambda.shape a positive scalar - the shape of the gamma prior for $\lambda$.
+    #' @field lambda.shape a positive scalar - the shape of the gamma prior for \eqn{\lambda}.
     lambda.shape = NA,
     
-    #' @field psi.scale a positive scalar - the shape of the inverted gamma prior for $\psi$.
+    #' @field psi.scale a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.
     psi.scale   = NA,
     
-    #' @field psi.shape a positive scalar - the shape of the inverted gamma prior for $\psi$.
+    #' @field psi.shape a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.
     psi.shape   = NA,
     
     #' @description

@@ -35,8 +35,7 @@ prior$get_prior() # show the prior as list
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters $\mu$, $\delta$,
-$\lambda$, $\psi$.}
+\item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.}
 
 \item{\code{B}}{a \code{KxN} normal prior mean matrix for the autoregressive 
 parameters.}
@@ -56,21 +55,21 @@ dummy-initial-observation prior LHS matrix.}
 \item{\code{Xplus}}{an \code{(N+1)xK} matrix with the sum-of-coefficients and 
 dummy-initial-observation prior LHS matrix.}
 
-\item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for $\mu$.}
+\item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
-\item{\code{mu.shape}}{a positive scalar - the shape of the gamma prior for $\mu$.}
+\item{\code{mu.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
-\item{\code{delta.scale}}{a positive scalar - the shape of the gamma prior for $\delta$.}
+\item{\code{delta.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
 
-\item{\code{delta.shape}}{a positive scalar - the shape of the gamma prior for $\delta$.}
+\item{\code{delta.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
 
-\item{\code{lambda.scale}}{a positive scalar - the shape of the gamma prior for $\lambda$.}
+\item{\code{lambda.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
 
-\item{\code{lambda.shape}}{a positive scalar - the shape of the gamma prior for $\lambda$.}
+\item{\code{lambda.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
 
-\item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for $\psi$.}
+\item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
 
-\item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for $\psi$.}
+\item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
 }
 \if{html}{\out{</div>}}
 }
