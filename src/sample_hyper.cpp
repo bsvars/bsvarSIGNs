@@ -115,7 +115,7 @@ double log_ml(
     
     log_ml += - N * T / 2.0 * log(M_PI);
     log_ml += log_mvgamma(N, (T + d) / 2.0);
-    // log_ml += -log_mvgamma(N, d / 2.0);
+    log_ml += -log_mvgamma(N, d / 2.0);
     log_ml += - N / 2.0 * log_det_sympd(Omega);
     log_ml += d / 2.0 * log_det_sympd(Psi);
     log_ml += - N / 2.0 * log_det_sympd(X.t() * X + inv_Omega);
@@ -141,31 +141,27 @@ double log_ml_dummy(
     const Rcpp::List& prior
 ) {
   
-  int N           = Y.n_cols;
-  int K           = X.n_cols;
+  int    N           = Y.n_cols;
+  double mu          = hyper(0);
+  double delta       = hyper(1);
+  double lambda      = hyper(2);
+  vec    psi         = hyper.rows(3, N + 2);
   
-  double lambda   = hyper(2);
-  vec    psi      = hyper.rows(3, N + 2);
+  // update Minnesota prior
+  mat    prior_B     = as<mat>(prior["B"]);
+  mat    prior_V     = diagmat(join_vert(
+                               lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
+                               as<vec>(prior["Vd"])));
+  mat    prior_S     = diagmat(psi);
+  int    prior_nu    = as<int>(prior["nu"]);
   
-  mat    prior_B  = as<mat>(prior["B"]);
-  mat    prior_V  = diagmat(join_vert(
-                            lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
-                            as<vec>(prior["Vd"])
-                            ));
-  mat    prior_S  = diagmat(psi);
-  int    prior_nu = as<int>(prior["nu"]);
-  
-  mat    Ystar(0, N), Xstar(0, K);
-  double mu       = hyper(0);
-  Ystar           = join_vert(Ystar, as<mat>(prior["Ysoc"]) / mu);
-  Xstar           = join_vert(Xstar, as<mat>(prior["Xsoc"]) / mu);
-
-  double delta    = hyper(1);
-  Ystar           = join_vert(Ystar, as<mat>(prior["Ysur"]) / delta);
-  Xstar           = join_vert(Xstar, as<mat>(prior["Xsur"]) / delta);
-
-  mat    Yplus    = join_vert(Ystar, Y);
-  mat    Xplus    = join_vert(Xstar, X);
+  // update dummy observation prior
+  mat    Ystar       = join_vert(as<mat>(prior["Ysoc"]) / mu, 
+                                 as<mat>(prior["Ysur"]) / delta);
+  mat    Xstar       = join_vert(as<mat>(prior["Xsoc"]) / mu, 
+                                 as<mat>(prior["Xsur"]) / delta);
+  mat    Yplus       = join_vert(Ystar, Y);
+  mat    Xplus       = join_vert(Xstar, X);
   
   double log_ml_plus = log_ml(prior_B, prior_V, prior_S, prior_nu, Yplus, Xplus);
   double log_ml_star = log_ml(prior_B, prior_V, prior_S, prior_nu, Ystar, Xstar);

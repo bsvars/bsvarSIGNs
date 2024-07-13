@@ -572,7 +572,7 @@ RcppExport SEXP _bsvarSIGNs_match_sign_irf(SEXP QSEXP, SEXP sign_irfSEXP, SEXP i
     return rcpp_result_gen;
 }
 // sample_Q
-Rcpp::List sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries);
+arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries);
 static SEXP _bsvarSIGNs_sample_Q_try(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BSEXP, SEXP h_invpSEXP, SEXP chol_SigmaSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP max_triesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -879,7 +879,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
         signatures.insert("bool(*match_sign_irf)(const arma::mat&,const arma::cube&,const arma::cube&)");
-        signatures.insert("Rcpp::List(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
+        signatures.insert("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
         signatures.insert("arma::mat(*qr_sign_cpp)(const arma::mat&)");
         signatures.insert("arma::mat(*rortho_cpp)(const int&)");
         signatures.insert("bool(*match_sign)(const arma::mat&,const arma::mat&)");

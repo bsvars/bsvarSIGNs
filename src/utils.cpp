@@ -95,7 +95,7 @@ arma::mat metropolis(
   double d = log_target(x);
   
   double new_d, a;
-  vec    new_x, mu, delta;
+  vec    new_x, xbar, diff;
   
   mat X(n, T);
   x        = log(x);
@@ -114,13 +114,13 @@ arma::mat metropolis(
     
     
     if (t == t0) {
-      mu     = mean(X.cols(0, t), 1);
+      xbar   = mean(X.cols(0, t), 1);
       Sigma  = cov(X.cols(0, t).t());
     } else if (t > t0) {
-      delta  = x - mu;
-      s      = s + pow(t, -0.6) * (a - 0.234);
-      mu    += delta / t;
-      Sigma += delta * delta.t() / t;
+      diff   = x - xbar;
+      s     += pow(t, -0.6) * (a - 0.234);
+      xbar  += diff / (t + 1);
+      Sigma  = Sigma * t / (t + 1) + diff * diff.t() * t / (t + 1) / (t + 1);
     }
   }
   

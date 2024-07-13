@@ -355,8 +355,10 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
     #' prior$estimate_hyper(S = 5)
     #' 
-    estimate_hyper = function(mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE,
-                              S = 10000, start = 1000, burn = 5000){
+    estimate_hyper = function(
+      S = 10000, burn = 5000, start_adaptive = 1000,
+      mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE
+      ) {
       
       model = c(mu, delta, lambda, psi)
       
@@ -368,15 +370,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
       init   = narrow_hyper(model, hyper)
       prior  = self$get_prior()
       
-      if (!mu) {
-        prior$Ysoc = matrix(0, 0, ncol(self$Ysoc))
-        prior$Xsoc = matrix(0, 0, ncol(self$Xsoc))
-      }
-      if (!delta) {
-        prior$Ysur = matrix(0, 0, ncol(self$Ysur))
-        prior$Xsur = matrix(0, 0, ncol(self$Xsur))
-      }
-      
       result = stats::optim(
         init,
         \(x) -log_posterior_hyper(extend_hyper(hyper, model, matrix(x)), 
@@ -387,17 +380,17 @@ specify_prior_bsvarSIGN = R6::R6Class(
         hessian = TRUE
         )
 
-      mode   = extend_hyper(hyper, model, matrix(result$par))
-      W      = result$hessian
+      mode       = extend_hyper(hyper, model, matrix(result$par))
+      variance   = result$hessian
 
       if (length(init) == 1){
-        W = 1 / W
+        variance = 1 / variance
       } else {
-        e = eigen(W)
-        W = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
+        e        = eigen(variance)
+        variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
       }
       
-      self$hyper = sample_hyper(S, start, mode, model, self$Y, self$X, W, prior)
+      self$hyper = sample_hyper(S, start_adaptive, mode, model, self$Y, self$X, variance, prior)
       self$hyper = self$hyper[, -(1:burn)]
     } # END estimate_hyper
     

@@ -10,7 +10,7 @@ spec = specify_bsvarSIGN$new(data, p = 4)
 
 start_time = Sys.time()
 
-spec$prior$estimate_hyper(TRUE, TRUE, TRUE, TRUE)
+spec$prior$estimate_hyper(mu = FALSE, delta = FALSE, lambda = TRUE, psi = TRUE)
 # post = estimate(spec, S = 1000)
 # irf  = compute_impulse_responses(post, horizon = 40)
 # plot(irf, probability = 0.68)

@@ -8,7 +8,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-Rcpp::List sample_Q(    
+arma::field<arma::mat> sample_Q(    
     const int&                    p,
     const arma::mat&              Y,
     const arma::mat&              X,
