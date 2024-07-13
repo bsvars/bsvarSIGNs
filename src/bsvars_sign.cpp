@@ -94,44 +94,47 @@ Rcpp::List bsvar_sign_cpp(
   #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (s = 0; s < S; s++) {
     
-    hyper      = hypers.col(randi(distr_param(0, S_hyper)));
-    mu         = hyper(0);
-    delta      = hyper(1);
-    lambda     = hyper(2);
-    psi        = hyper.rows(3, N + 2);
-    
-    // update Minnesota prior
-    prior_V    = diagmat(join_vert(lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
-                                   as<vec>(prior["Vd"])));
-    prior_S    = diagmat(psi);
-    
-    // update dummy observation prior
-    Ystar      = join_vert(Ysoc / mu, Ysur / delta);
-    Xstar      = join_vert(Xsoc / mu, Xsur / delta);
-    Yplus      = join_vert(Ystar, Y);
-    Xplus      = join_vert(Xstar, X);
-    
-    // posterior parameters
-    result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
-    post_B     = result(0);
-    post_V     = result(1);
-    post_S     = result(2);
-    // post_nu    = as_scalar(post(3));
-    
-    // sample reduced-form parameters
-    Sigma      = iwishrnd(post_S, post_nu);
-    chol_Sigma = chol(Sigma, "lower");
-    B          = rmatnorm_cpp(post_B, post_V, Sigma);
-    h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
-    
-    result     = sample_Q(lags, Y, X, 
-                          B, h_invp, chol_Sigma,
-                          prior, VB,
-                          sign_irf, sign_narrative, sign_B, Z,
-                          max_tries);
-    Q          = result(0);
-    shocks     = result(1);
-    w          = as_scalar(result(2));
+    w = 0;
+    while (w == 0) {
+      hyper      = hypers.col(randi(distr_param(0, S_hyper)));
+      mu         = hyper(0);
+      delta      = hyper(1);
+      lambda     = hyper(2);
+      psi        = hyper.rows(3, N + 2);
+      
+      // update Minnesota prior
+      prior_V    = diagmat(join_vert(lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
+                                     as<vec>(prior["Vd"])));
+      prior_S    = diagmat(psi);
+      
+      // update dummy observation prior
+      Ystar      = join_vert(Ysoc / mu, Ysur / delta);
+      Xstar      = join_vert(Xsoc / mu, Xsur / delta);
+      Yplus      = join_vert(Ystar, Y);
+      Xplus      = join_vert(Xstar, X);
+      
+      // posterior parameters
+      result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+      post_B     = result(0);
+      post_V     = result(1);
+      post_S     = result(2);
+      // post_nu    = as_scalar(post(3));
+      
+      // sample reduced-form parameters
+      Sigma      = iwishrnd(post_S, post_nu);
+      chol_Sigma = chol(Sigma, "lower");
+      B          = rmatnorm_cpp(post_B, post_V, Sigma);
+      h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
+      
+      result     = sample_Q(lags, Y, X, 
+                            B, h_invp, chol_Sigma,
+                            prior, VB,
+                            sign_irf, sign_narrative, sign_B, Z,
+                            max_tries);
+      Q          = result(0);
+      shocks     = result(1);
+      w          = as_scalar(result(2));
+    }
     
     posterior_w(s)            = w;
     posterior_hyper.col(s)    = hyper;
@@ -144,7 +147,7 @@ Rcpp::List bsvar_sign_cpp(
     if (omp_get_thread_num() == 0) {
       // Check for user interrupts
       if (s % 10 == 0) checkUserInterrupt();
-      
+
       // Increment progress bar
       if (any(prog_rep_points == s)) p.increment();
     }

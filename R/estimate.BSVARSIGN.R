@@ -92,7 +92,7 @@
 #' posterior      = estimate(specification, S = 10)
 #' 
 #' @export
-estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE) {
+estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) {
   
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
@@ -109,6 +109,7 @@ estimate.BSVARSIGN <- function(specification, S, thin = 1, show_progress = TRUE)
                               identification$sign_irf, identification$sign_narrative, 
                               identification$sign_B, identification$zero_irf,
                               prior, starting_values, show_progress, thin, max_tries)
+
   
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
