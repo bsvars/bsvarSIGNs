@@ -1,4 +1,5 @@
 
+#include <omp.h>
 #include <RcppArmadillo.h>
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
@@ -86,7 +87,10 @@ Rcpp::List bsvar_sign_cpp(
   
   field<mat> result;
   
+  #pragma omp parallel for
   for (s = 0; s < S; s++) {
+    
+    cout << "Thread number " << omp_get_thread_num() << endl;
 
     // Check for user interrupts
     if (s % 200 == 0) checkUserInterrupt();
