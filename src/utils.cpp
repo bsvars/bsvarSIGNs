@@ -91,11 +91,11 @@ arma::mat metropolis(
   
   int    n = x.n_elem;
   
-  double s = 1.0;
+  double s = 2.38 / sqrt(n);
   double d = log_target(x);
   
   double new_d, a;
-  vec    new_x;
+  vec    new_x, mu, delta;
   
   mat X(n, T);
   x        = log(x);
@@ -112,9 +112,15 @@ arma::mat metropolis(
     }
     X.col(t) = x;
     
-    if (t >= t0) {
+    
+    if (t == t0) {
+      mu     = mean(X.cols(0, t), 1);
       Sigma  = cov(X.cols(0, t).t());
-      s     += pow(t, -0.6) * (a - 0.234);
+    } else if (t > t0) {
+      delta  = x - mu;
+      s      = s + pow(t, -0.6) * (a - 0.234);
+      mu    += delta / t;
+      Sigma += delta * delta.t() / t;
     }
   }
   

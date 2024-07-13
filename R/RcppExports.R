@@ -13,14 +13,6 @@ niw_cpp <- function(Y, X, prior_B, prior_V, prior_S, prior_nu) {
     .Call(`_bsvarSIGNs_niw_cpp`, Y, X, prior_B, prior_V, prior_S, prior_nu)
 }
 
-mn_prior <- function(p, lambda, psi) {
-    .Call(`_bsvarSIGNs_mn_prior`, p, lambda, psi)
-}
-
-extend_dummy <- function(p, hyper, model, Y, X) {
-    .Call(`_bsvarSIGNs_extend_dummy`, p, hyper, model, Y, X)
-}
-
 log_dgamma <- function(x, k, theta) {
     .Call(`_bsvarSIGNs_log_dgamma`, x, k, theta)
 }

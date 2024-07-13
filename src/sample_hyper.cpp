@@ -7,86 +7,6 @@ using namespace Rcpp;
 using namespace arma;
 
 
-// get prior from hyper-parameters
-// [[Rcpp:interface(cpp)]]
-// [[Rcpp::export]]
-Rcpp::List mn_prior(
-  const int&       p,
-  const double&    lambda,
-  const arma::vec& psi
-) {
-  
-  int N = psi.n_elem;
-  int K = 1 + N * p;
-  
-  mat B(K, N, fill::eye);
-  
-  vec v(K);
-  v.rows(0, K - 2) = kron(pow(linspace(1, p, p), -2), 1 / psi);
-  mat V            = lambda * lambda * diagmat(v);
-  V(K - 1, K - 1)  = 1e+6;
-  
-  mat S  = diagmat(psi);
-  int nu = N + 2;
-  
-  return List::create(
-    _["B"]   = B,
-    _["V"]   = V,
-    _["S"]   = S,
-    _["nu"]  = nu
-  );
-}
-
-
-// extend data with dummy observations
-// [[Rcpp:interface(cpp)]]
-// [[Rcpp::export]]
-Rcpp::List extend_dummy(
-    const int&       p,
-    const arma::vec& hyper,
-    const arma::vec& model,
-    const arma::mat& Y,
-    const arma::mat& X
-) {
-  
-  int N        = Y.n_cols;
-  int K        = X.n_cols;
-  
-  mat ybar0    = mean(X.submat(0, 0, p - 1, N - 1), 0);
-  
-  double mu, delta;
-  mat Ystar(0, N), Xstar(0, K);
-  
-  if (model(0)) {
-    mu         = hyper(0);
-    mat yp     = diagmat(ybar0 / mu);
-    mat xp     = join_horiz(repmat(yp, 1, p), zeros(N, 1));
-    
-    Ystar      = join_vert(Ystar, yp);
-    Xstar      = join_vert(Xstar, xp);
-  }
-  
-  if (model(1)) {
-    delta      = hyper(1);
-    mat ypp    = ybar0 / delta;
-    mat xpp    = join_horiz(repmat(ypp, 1, p), mat(1, 1, fill::value(1 / delta)));
-    
-    Ystar      = join_vert(Ystar, ypp);
-    Xstar      = join_vert(Xstar, xpp);
-  }
-  
-  mat Yplus    = join_vert(Ystar, Y);
-  mat Xplus    = join_vert(Xstar, X);
-  
-  return List::create(
-    _["Yplus"] = Yplus,
-    _["Xplus"] = Xplus,
-    _["Ystar"] = Ystar,
-    _["Xstar"] = Xstar
-  );
-}
-
-
 // log density of gamma distribution
 // [[Rcpp:interface(cpp)]]
 // [[Rcpp::export]]
@@ -194,7 +114,8 @@ double log_ml(
     mat ehat = Y - X * Bhat;
     
     log_ml += - N * T / 2.0 * log(M_PI);
-    log_ml += log_mvgamma(N, (T + d) / 2.0) - log_mvgamma(N, d / 2.0);
+    log_ml += log_mvgamma(N, (T + d) / 2.0);
+    // log_ml += -log_mvgamma(N, d / 2.0);
     log_ml += - N / 2.0 * log_det_sympd(Omega);
     log_ml += d / 2.0 * log_det_sympd(Psi);
     log_ml += - N / 2.0 * log_det_sympd(X.t() * X + inv_Omega);
@@ -371,12 +292,4 @@ arma::mat sample_hyper(
   
   return hypers;
 }
-
-
-
-
-
-
-
-
 

@@ -617,34 +617,6 @@ RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BS
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// mn_prior
-Rcpp::List mn_prior(const int& p, const double& lambda, const arma::vec& psi);
-RcppExport SEXP _bsvarSIGNs_mn_prior(SEXP pSEXP, SEXP lambdaSEXP, SEXP psiSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const double& >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type psi(psiSEXP);
-    rcpp_result_gen = Rcpp::wrap(mn_prior(p, lambda, psi));
-    return rcpp_result_gen;
-END_RCPP
-}
-// extend_dummy
-Rcpp::List extend_dummy(const int& p, const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X);
-RcppExport SEXP _bsvarSIGNs_extend_dummy(SEXP pSEXP, SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(extend_dummy(p, hyper, model, Y, X));
-    return rcpp_result_gen;
-END_RCPP
-}
 // log_dgamma
 double log_dgamma(const double& x, const double& k, const double& theta);
 RcppExport SEXP _bsvarSIGNs_log_dgamma(SEXP xSEXP, SEXP kSEXP, SEXP thetaSEXP) {
@@ -958,8 +930,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 6},
     {"_bsvarSIGNs_match_sign_irf", (DL_FUNC) &_bsvarSIGNs_match_sign_irf, 3},
     {"_bsvarSIGNs_sample_Q", (DL_FUNC) &_bsvarSIGNs_sample_Q, 13},
-    {"_bsvarSIGNs_mn_prior", (DL_FUNC) &_bsvarSIGNs_mn_prior, 3},
-    {"_bsvarSIGNs_extend_dummy", (DL_FUNC) &_bsvarSIGNs_extend_dummy, 5},
     {"_bsvarSIGNs_log_dgamma", (DL_FUNC) &_bsvarSIGNs_log_dgamma, 3},
     {"_bsvarSIGNs_log_dinvgamma", (DL_FUNC) &_bsvarSIGNs_log_dinvgamma, 3},
     {"_bsvarSIGNs_log_prior_hyper", (DL_FUNC) &_bsvarSIGNs_log_prior_hyper, 3},

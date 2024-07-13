@@ -86,10 +86,8 @@ Rcpp::List bsvar_sign_cpp(
     lambda     = hyper(2);
     psi        = hyper.rows(3, N + 2);
     
-    prior_V    = diagmat(join_vert(
-      lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
-      as<vec>(prior["Vd"])  
-    ));
+    prior_V    = diagmat(join_vert(lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
+                                   as<vec>(prior["Vd"])));
     prior_S    = diagmat(psi);
     
     // update dummy observation prior

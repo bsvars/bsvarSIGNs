@@ -282,7 +282,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
       # }
       # Xstar   = cbind(Xstar, c(rep(0, N), 1), matrix(0, N + 1, d))
       
-      
       self$Y             = Y
       self$X             = X
       self$Vp            = Vp
