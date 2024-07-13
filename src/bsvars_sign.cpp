@@ -1,10 +1,9 @@
 
-#include <omp.h>
 #include <RcppArmadillo.h>
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
-
 #include <bsvars.h>
+#include <omp.h>
 
 #include "sample_hyper.h"
 #include "sample_Q.h"
@@ -87,13 +86,11 @@ Rcpp::List bsvar_sign_cpp(
   
   field<mat> result;
   
-  #pragma omp parallel for
+  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (s = 0; s < S; s++) {
     
-    cout << "Thread number " << omp_get_thread_num() << endl;
-
     // Check for user interrupts
-    if (s % 200 == 0) checkUserInterrupt();
+    // if (s % 200 == 0) checkUserInterrupt();
     
     hyper      = hypers.col(randi(distr_param(0, S_hyper)));
     mu         = hyper(0);
@@ -111,7 +108,7 @@ Rcpp::List bsvar_sign_cpp(
     Xstar      = join_vert(Xsoc / mu, Xsur / delta);
     Yplus      = join_vert(Ystar, Y);
     Xplus      = join_vert(Xstar, X);
-  
+    
     // posterior parameters
     result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
     post_B     = result(0);
@@ -135,7 +132,7 @@ Rcpp::List bsvar_sign_cpp(
     w          = as_scalar(result(2));
     
     // Increment progress bar
-    if (any(prog_rep_points == s)) p.increment();
+    // if (any(prog_rep_points == s)) p.increment();
     
     posterior_w(s)            = w;
     posterior_hyper.col(s)    = hyper;
@@ -144,7 +141,6 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Sigma.slice(s)  = Sigma;
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
-      
   } // END s loop
   
   return List::create(
@@ -159,6 +155,4 @@ Rcpp::List bsvar_sign_cpp(
     )
   );
 } // END bsvar_sign_cpp
-
-
 

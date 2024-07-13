@@ -177,19 +177,23 @@ prior$get_prior() # show the prior as list
 Estimates hyper-parameters with adaptive Metropolis algorithm.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$estimate_hyper(
+  S = 10000,
+  burn = 5000,
+  start_adaptive = 1000,
   mu = FALSE,
   delta = FALSE,
   lambda = TRUE,
-  psi = FALSE,
-  S = 10000,
-  start = S/10,
-  burn = 5000
+  psi = FALSE
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{S}}{number of draws.}
+
+\item{\code{burn}}{number of burn-in draws.}
+
 \item{\code{mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
 
 \item{\code{delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
@@ -198,11 +202,7 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 
 \item{\code{psi}}{whether to estimate the hyper-parameter of variances in the Minnesota prior.}
 
-\item{\code{S}}{number of draws.}
-
 \item{\code{start}}{starting point of the adaptive Metropolis algorithm.}
-
-\item{\code{burn}}{number of burn-in draws.}
 }
 \if{html}{\out{</div>}}
 }
