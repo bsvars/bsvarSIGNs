@@ -178,8 +178,7 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$estimate_hyper(
   S = 10000,
-  burn = 5000,
-  start_adaptive = 1000,
+  burn_in = S/2,
   mu = FALSE,
   delta = FALSE,
   lambda = TRUE,
@@ -190,19 +189,21 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{S}}{number of draws.}
+\item{\code{S}}{number of MCMC draws.}
 
-\item{\code{burn}}{number of burn-in draws.}
+\item{\code{burn_in}}{number of burn-in draws.}
 
-\item{\code{mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
+\item{\code{mu}}{whether to estimate the hyper-parameter in the 
+sum-of-coefficients dummy prior.}
 
-\item{\code{delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
+\item{\code{delta}}{whether to estimate the hyper-parameter in the 
+single-unit-root dummy prior.}
 
-\item{\code{lambda}}{whether to estimate the hyper-parameter of shrinkage in the Minnesota prior.}
+\item{\code{lambda}}{whether to estimate the hyper-parameter of the 
+shrinkage in the Minnesota prior.}
 
-\item{\code{psi}}{whether to estimate the hyper-parameter of variances in the Minnesota prior.}
-
-\item{\code{start}}{starting point of the adaptive Metropolis algorithm.}
+\item{\code{psi}}{whether to estimate the hyper-parameter of the 
+variances in the Minnesota prior.}
 }
 \if{html}{\out{</div>}}
 }

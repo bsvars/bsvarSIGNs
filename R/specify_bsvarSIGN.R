@@ -341,13 +341,16 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @description
     #' Estimates hyper-parameters with adaptive Metropolis algorithm.
     #' 
-    #' @param mu whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.
-    #' @param delta whether to estimate the hyper-parameter in the single-unit-root dummy prior.
-    #' @param lambda whether to estimate the hyper-parameter of shrinkage in the Minnesota prior.
-    #' @param psi whether to estimate the hyper-parameter of variances in the Minnesota prior.
-    #' @param S number of draws.
-    #' @param start starting point of the adaptive Metropolis algorithm.
-    #' @param burn number of burn-in draws.
+    #' @param mu whether to estimate the hyper-parameter in the 
+    #' sum-of-coefficients dummy prior.
+    #' @param delta whether to estimate the hyper-parameter in the 
+    #' single-unit-root dummy prior.
+    #' @param lambda whether to estimate the hyper-parameter of the 
+    #' shrinkage in the Minnesota prior.
+    #' @param psi whether to estimate the hyper-parameter of the 
+    #' variances in the Minnesota prior.
+    #' @param S number of MCMC draws.
+    #' @param burn_in number of burn-in draws.
     #' 
     #' @examples 
     #' # a prior for 3-variable example with four lags
@@ -356,7 +359,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior$estimate_hyper(S = 5)
     #' 
     estimate_hyper = function(
-      S = 10000, burn = 5000, start_adaptive = 1000,
+      S = 10000, burn_in = S / 2,
       mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE
       ) {
       
@@ -390,8 +393,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
         variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
       }
       
-      self$hyper = sample_hyper(S, start_adaptive, mode, model, self$Y, self$X, variance, prior)
-      self$hyper = self$hyper[, -(1:burn)]
+      self$hyper = sample_hyper(S, burn_in, mode, model, self$Y, self$X, variance, prior)
+      self$hyper = self$hyper[, -(1:burn_in)]
     } # END estimate_hyper
     
   ) # END public

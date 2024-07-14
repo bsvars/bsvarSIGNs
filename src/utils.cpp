@@ -1,8 +1,9 @@
 
 #include <functional>
 #include <iostream>
-
 #include <RcppArmadillo.h>
+#include "Rcpp/Rmath.h"
+#include "progress.hpp"
 
 using namespace arma;
 
@@ -91,20 +92,23 @@ arma::mat metropolis(
   
   int    n = x.n_elem;
   
+         x = log(x);
   double s = 2.38 / sqrt(n);
-  double d = log_target(x);
+  double d = log_target(x) + sum(x);
   
   double new_d, a;
   vec    new_x, xbar, diff;
   
   mat X(n, T);
-  x        = log(x);
   X.col(0) = x;
+  
+  vec      progress = round(linspace(0, T, 50));
+  Progress p(50, true);
   
   for (int t = 1; t < T; t++) {
     new_x = mvnrnd(x, s*s * Sigma);
-    new_d = log_target(exp(new_x));
-    a     = std::min(1.0, exp(new_d - d + sum(x - new_x)));
+    new_d = log_target(exp(new_x)) + sum(new_x);
+    a     = std::min(1.0, exp(new_d - d));
     
     if (randu() < a) {
       x = new_x;
@@ -113,14 +117,18 @@ arma::mat metropolis(
     X.col(t) = x;
     
     
-    if (t == t0) {
+    if (t == 1) {
       xbar   = mean(X.cols(0, t), 1);
       Sigma  = cov(X.cols(0, t).t());
-    } else if (t > t0) {
+    } else if (t <= t0) {
       diff   = x - xbar;
       s     += pow(t, -0.6) * (a - 0.234);
       xbar  += diff / (t + 1);
       Sigma  = Sigma * t / (t + 1) + diff * diff.t() * t / (t + 1) / (t + 1);
+    }
+    
+    if (any(progress == t)) {
+      p.increment();
     }
   }
   

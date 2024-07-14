@@ -46,12 +46,13 @@ Rcpp::List bsvar_sign_cpp(
   vec prog_rep_points = arma::round(arma::linspace(0, S / num_threads, 50));
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
-    Rcout << "bsvars: Bayesian Structural Vector Autoregressions|" << endl;
+    Rcout << " bsvarSIGNs: Bayesian Structural VAR with zero,   |" << endl;
+    Rcout << "              sign and narrative restriction      |" << endl;
     Rcout << "**************************************************|" << endl;
-    Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
-    Rcout << "**************************************************|" << endl;
-    Rcout << " Progress of the MCMC simulation for " << S << " draws" << endl;
-    Rcout << "    Every " << oo << "draw is saved via MCMC thinning" << endl;
+    // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
+    // Rcout << "**************************************************|" << endl;
+    Rcout << " Progress of simulation for " << S << " independent draws" << endl;
+    // Rcout << "    Every " << oo << "draw is saved via MCMC thinning" << endl;
     Rcout << " Press Esc to interrupt the computations" << endl;
     Rcout << "**************************************************|" << endl;
   }
@@ -71,7 +72,6 @@ Rcpp::List bsvar_sign_cpp(
   
   mat        hypers = as<mat>(prior["hyper"]);
   
-  int        s        = 0;
   int        S_hyper  = hypers.n_cols - 1;
   int        prior_nu = as<int>(prior["nu"]);
   int        post_nu  = prior_nu + T;
@@ -92,7 +92,7 @@ Rcpp::List bsvar_sign_cpp(
   field<mat> result;
   
   #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
-  for (s = 0; s < S; s++) {
+  for (int s = 0; s < S; s++) {
     
     w = 0;
     while (w == 0) {
