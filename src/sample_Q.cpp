@@ -32,7 +32,7 @@ bool match_sign_irf(
 // Sample rotation matrix Q and updates importance weight by reference
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
-Rcpp::List sample_Q(    
+arma::field<arma::mat> sample_Q(    
     const int&                    p,
     const arma::mat&              Y,
     const arma::mat&              X,
@@ -59,12 +59,12 @@ Rcpp::List sample_Q(
   bool   has_zero      = Z.n_elem > 0;
   
   mat    Q(N, N);
-  mat    lt_Epsilon    = h_invp * (Y - X * B).t();  // lower triangular identified shocks
+  mat    lt_shocks     = h_invp * (Y - X * B).t();  // lower triangular identified shocks
   
   cube   irf           = ir1_cpp(B, chol_Sigma, h, p);  // reduced-form irf
   
   bool   success       = false;
-  mat    Epsilon;
+  mat    shocks;
   while (n_tries < max_tries && !success) {
     if (has_zero) {
       Q = rzeroQ(Z, irf.slice(0));
@@ -72,13 +72,13 @@ Rcpp::List sample_Q(
       Q = rortho_cpp(N);
     }
     
-    Epsilon = Q.t() * lt_Epsilon;
+    shocks = Q.t() * lt_shocks;
     
     if (match_sign_irf(Q, sign_irf, irf) && match_sign(Q.t() * h_invp, sign_B)) {
       if (!has_narrative) {
         success = true;
       } else {
-        success = match_sign_narrative(Epsilon, sign_narrative, irf);
+        success = match_sign_narrative(shocks, sign_narrative, irf);
       }
     }
     
@@ -97,9 +97,11 @@ Rcpp::List sample_Q(
     }
   }
   
-  return List::create(
-    Named("Q")       = Q,
-    Named("w")       = w,
-    Named("Epsilon") = Epsilon
-  );
+  field<mat> result(3);
+  result(0) = Q;
+  result(1) = shocks;
+  result(2) = w;
+  
+  return result;
 }
+

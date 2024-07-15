@@ -1,5 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 # bsvarSIGNs
 
@@ -60,8 +64,3 @@ posterior         = estimate(specification, S = 100)
 irf               = compute_impulse_responses(posterior, horizon = 40)
 plot(irf, probability = 0.68)
 ```
-
-<!-- badges: start -->
-
-[![R-CMD-check](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->

@@ -520,15 +520,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // niw_cpp
-Rcpp::List niw_cpp(const arma::mat& Y, const arma::mat& X, const Rcpp::List prior);
-RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
+arma::field<arma::mat> niw_cpp(const arma::mat& Y, const arma::mat& X, const arma::mat& prior_B, const arma::mat& prior_V, const arma::mat& prior_S, const int& prior_nu);
+RcppExport SEXP _bsvarSIGNs_niw_cpp(SEXP YSEXP, SEXP XSEXP, SEXP prior_BSEXP, SEXP prior_VSEXP, SEXP prior_SSEXP, SEXP prior_nuSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List >::type prior(priorSEXP);
-    rcpp_result_gen = Rcpp::wrap(niw_cpp(Y, X, prior));
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_B(prior_BSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_V(prior_VSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type prior_S(prior_SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type prior_nu(prior_nuSEXP);
+    rcpp_result_gen = Rcpp::wrap(niw_cpp(Y, X, prior_B, prior_V, prior_S, prior_nu));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -569,7 +572,7 @@ RcppExport SEXP _bsvarSIGNs_match_sign_irf(SEXP QSEXP, SEXP sign_irfSEXP, SEXP i
     return rcpp_result_gen;
 }
 // sample_Q
-Rcpp::List sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries);
+arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries);
 static SEXP _bsvarSIGNs_sample_Q_try(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BSEXP, SEXP h_invpSEXP, SEXP chol_SigmaSEXP, SEXP priorSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP max_triesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -613,48 +616,6 @@ RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BS
     }
     UNPROTECT(1);
     return rcpp_result_gen;
-}
-// mn_prior
-Rcpp::List mn_prior(const int& p, const double& lambda, const arma::vec& psi);
-RcppExport SEXP _bsvarSIGNs_mn_prior(SEXP pSEXP, SEXP lambdaSEXP, SEXP psiSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const double& >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type psi(psiSEXP);
-    rcpp_result_gen = Rcpp::wrap(mn_prior(p, lambda, psi));
-    return rcpp_result_gen;
-END_RCPP
-}
-// update_prior
-Rcpp::List update_prior(const int& p, const arma::vec& hyper, const arma::vec& model, const Rcpp::List& prior);
-RcppExport SEXP _bsvarSIGNs_update_prior(SEXP pSEXP, SEXP hyperSEXP, SEXP modelSEXP, SEXP priorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
-    rcpp_result_gen = Rcpp::wrap(update_prior(p, hyper, model, prior));
-    return rcpp_result_gen;
-END_RCPP
-}
-// extend_dummy
-Rcpp::List extend_dummy(const int& p, const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X);
-RcppExport SEXP _bsvarSIGNs_extend_dummy(SEXP pSEXP, SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(extend_dummy(p, hyper, model, Y, X));
-    return rcpp_result_gen;
-END_RCPP
 }
 // log_dgamma
 double log_dgamma(const double& x, const double& k, const double& theta);
@@ -708,52 +669,91 @@ BEGIN_RCPP
 END_RCPP
 }
 // log_ml
-double log_ml(const int& p, const arma::mat& b, const arma::mat& Omega, const arma::mat& Psi, const int& d, const arma::mat& inv_Omega, const arma::mat& Y, const arma::mat& X);
-RcppExport SEXP _bsvarSIGNs_log_ml(SEXP pSEXP, SEXP bSEXP, SEXP OmegaSEXP, SEXP PsiSEXP, SEXP dSEXP, SEXP inv_OmegaSEXP, SEXP YSEXP, SEXP XSEXP) {
+double log_ml(const arma::mat& b, const arma::mat& Omega, const arma::mat& Psi, const int& d, const arma::mat& Y, const arma::mat& X);
+RcppExport SEXP _bsvarSIGNs_log_ml(SEXP bSEXP, SEXP OmegaSEXP, SEXP PsiSEXP, SEXP dSEXP, SEXP YSEXP, SEXP XSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type b(bSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Omega(OmegaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Psi(PsiSEXP);
     Rcpp::traits::input_parameter< const int& >::type d(dSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type inv_Omega(inv_OmegaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_ml(p, b, Omega, Psi, d, inv_Omega, Y, X));
+    rcpp_result_gen = Rcpp::wrap(log_ml(b, Omega, Psi, d, Y, X));
     return rcpp_result_gen;
 END_RCPP
 }
 // log_ml_dummy
-double log_ml_dummy(const int& p, const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X, Rcpp::List prior);
-RcppExport SEXP _bsvarSIGNs_log_ml_dummy(SEXP pSEXP, SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
+double log_ml_dummy(const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X, const Rcpp::List& prior);
+RcppExport SEXP _bsvarSIGNs_log_ml_dummy(SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type prior(priorSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_ml_dummy(p, hyper, model, Y, X, prior));
-    return rcpp_result_gen;
-END_RCPP
-}
-// log_posterior_hyper
-double log_posterior_hyper(const int& p, const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X, const Rcpp::List& prior);
-RcppExport SEXP _bsvarSIGNs_log_posterior_hyper(SEXP pSEXP, SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_posterior_hyper(p, hyper, model, Y, X, prior));
+    rcpp_result_gen = Rcpp::wrap(log_ml_dummy(hyper, model, Y, X, prior));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_posterior_hyper
+double log_posterior_hyper(const arma::vec& hyper, const arma::vec& model, const arma::mat& Y, const arma::mat& X, const Rcpp::List& prior);
+RcppExport SEXP _bsvarSIGNs_log_posterior_hyper(SEXP hyperSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP priorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type hyper(hyperSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_posterior_hyper(hyper, model, Y, X, prior));
+    return rcpp_result_gen;
+END_RCPP
+}
+// extend_hyper
+arma::mat extend_hyper(const arma::vec& init, const arma::vec& model, const arma::mat& hypers);
+RcppExport SEXP _bsvarSIGNs_extend_hyper(SEXP initSEXP, SEXP modelSEXP, SEXP hypersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type init(initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type hypers(hypersSEXP);
+    rcpp_result_gen = Rcpp::wrap(extend_hyper(init, model, hypers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// narrow_hyper
+arma::mat narrow_hyper(const arma::vec& model, arma::mat hypers);
+RcppExport SEXP _bsvarSIGNs_narrow_hyper(SEXP modelSEXP, SEXP hypersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type hypers(hypersSEXP);
+    rcpp_result_gen = Rcpp::wrap(narrow_hyper(model, hypers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sample_hyper
+arma::mat sample_hyper(const int& S, const int& start, const arma::vec& init, const arma::vec& model, const arma::mat& Y, const arma::mat& X, const arma::mat& W, const Rcpp::List& prior);
+RcppExport SEXP _bsvarSIGNs_sample_hyper(SEXP SSEXP, SEXP startSEXP, SEXP initSEXP, SEXP modelSEXP, SEXP YSEXP, SEXP XSEXP, SEXP WSEXP, SEXP priorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const int& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type init(initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_hyper(S, start, init, model, Y, X, W, prior));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -879,7 +879,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
         signatures.insert("bool(*match_sign_irf)(const arma::mat&,const arma::cube&,const arma::cube&)");
-        signatures.insert("Rcpp::List(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
+        signatures.insert("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
         signatures.insert("arma::mat(*qr_sign_cpp)(const arma::mat&)");
         signatures.insert("arma::mat(*rortho_cpp)(const int&)");
         signatures.insert("bool(*match_sign)(const arma::mat&,const arma::mat&)");
@@ -927,19 +927,19 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_rzeroQ", (DL_FUNC) &_bsvarSIGNs_rzeroQ, 2},
     {"_bsvarSIGNs_rmatnorm_cpp", (DL_FUNC) &_bsvarSIGNs_rmatnorm_cpp, 3},
     {"_bsvarSIGNs_riwish_cpp", (DL_FUNC) &_bsvarSIGNs_riwish_cpp, 2},
-    {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 3},
+    {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 6},
     {"_bsvarSIGNs_match_sign_irf", (DL_FUNC) &_bsvarSIGNs_match_sign_irf, 3},
     {"_bsvarSIGNs_sample_Q", (DL_FUNC) &_bsvarSIGNs_sample_Q, 13},
-    {"_bsvarSIGNs_mn_prior", (DL_FUNC) &_bsvarSIGNs_mn_prior, 3},
-    {"_bsvarSIGNs_update_prior", (DL_FUNC) &_bsvarSIGNs_update_prior, 4},
-    {"_bsvarSIGNs_extend_dummy", (DL_FUNC) &_bsvarSIGNs_extend_dummy, 5},
     {"_bsvarSIGNs_log_dgamma", (DL_FUNC) &_bsvarSIGNs_log_dgamma, 3},
     {"_bsvarSIGNs_log_dinvgamma", (DL_FUNC) &_bsvarSIGNs_log_dinvgamma, 3},
     {"_bsvarSIGNs_log_prior_hyper", (DL_FUNC) &_bsvarSIGNs_log_prior_hyper, 3},
     {"_bsvarSIGNs_log_mvgamma", (DL_FUNC) &_bsvarSIGNs_log_mvgamma, 2},
-    {"_bsvarSIGNs_log_ml", (DL_FUNC) &_bsvarSIGNs_log_ml, 8},
-    {"_bsvarSIGNs_log_ml_dummy", (DL_FUNC) &_bsvarSIGNs_log_ml_dummy, 6},
-    {"_bsvarSIGNs_log_posterior_hyper", (DL_FUNC) &_bsvarSIGNs_log_posterior_hyper, 6},
+    {"_bsvarSIGNs_log_ml", (DL_FUNC) &_bsvarSIGNs_log_ml, 6},
+    {"_bsvarSIGNs_log_ml_dummy", (DL_FUNC) &_bsvarSIGNs_log_ml_dummy, 5},
+    {"_bsvarSIGNs_log_posterior_hyper", (DL_FUNC) &_bsvarSIGNs_log_posterior_hyper, 5},
+    {"_bsvarSIGNs_extend_hyper", (DL_FUNC) &_bsvarSIGNs_extend_hyper, 3},
+    {"_bsvarSIGNs_narrow_hyper", (DL_FUNC) &_bsvarSIGNs_narrow_hyper, 2},
+    {"_bsvarSIGNs_sample_hyper", (DL_FUNC) &_bsvarSIGNs_sample_hyper, 8},
     {"_bsvarSIGNs_qr_sign_cpp", (DL_FUNC) &_bsvarSIGNs_qr_sign_cpp, 1},
     {"_bsvarSIGNs_rortho_cpp", (DL_FUNC) &_bsvarSIGNs_rortho_cpp, 1},
     {"_bsvarSIGNs_match_sign", (DL_FUNC) &_bsvarSIGNs_match_sign, 2},

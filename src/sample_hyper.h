@@ -7,36 +7,15 @@ using namespace Rcpp;
 using namespace arma;
 
 
-Rcpp::List mn_prior(
-    const int&       p,
-    const double&    lambda,
-    const arma::vec& psi
-);
-
-
-Rcpp::List update_prior(
-    const int&        p,
-    const arma::vec&  hyper,
-    const Rcpp::List& prior
-);
-
-
-Rcpp::List extend_dummy(
-    const int&       p,
-    const arma::vec& hyper,
-    const arma::mat& Y,
-    const arma::mat& X
-);
-
-
 arma::mat sample_hyper(
     const int&        S,
-    const int&        p,
-    const double&     c,
+    const int&        start,
+    const arma::vec&  init,
+    const arma::vec&  model,
     const arma::mat&  Y,
     const arma::mat&  X,
+    const arma::mat&  W,
     const Rcpp::List& prior
 );
-
 
 #endif  // _SAMPLE_HYPER_H_

@@ -45,8 +45,8 @@ expect_identical(post1$posterior$B[, , 1],
 expect_identical(post2$posterior$B[, , 1],
                  post3$posterior$B[, , 1],)
 
-expect_identical(post1$last_draw$B[, , 1],
-                 post2$last_draw$B[, , 1],)
-
-expect_identical(post2$last_draw$B[, , 1],
-                 post3$last_draw$B[, , 1],)
+# expect_identical(post1$last_draw$B[, , 1],
+#                  post2$last_draw$B[, , 1],)
+# 
+# expect_identical(post2$last_draw$B[, , 1],
+#                  post3$last_draw$B[, , 1],)

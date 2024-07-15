@@ -19,4 +19,12 @@ arma::mat Df(
     double               h = 1e-10
 );
 
+arma::mat metropolis(
+    const int& T,
+    const int& t0,
+    arma::vec  x,
+    arma::mat  Sigma,
+    const std::function<double(const arma::vec&)>& log_target
+);
+
 #endif  // _UTILS_H_

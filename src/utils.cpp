@@ -1,7 +1,6 @@
 
 #include <functional>
 #include <iostream>
-
 #include <RcppArmadillo.h>
 
 using namespace arma;
@@ -50,9 +49,9 @@ bool match_sign(
 // Numerical derivative of f: R^n -> R^m, at x (Rcpp::export is not possible)
 // [[Rcpp:interface(cpp)]]
 arma::mat Df(
-    const  std::function<arma::colvec(const arma::colvec&)>& f,
-    const  arma::colvec& x,
-    double               h = 1e-10
+    const std::function<arma::vec(const arma::vec&)>& f,
+    const arma::vec& x,
+    const double     h = 1e-10
 )
 {
   colvec f_x = f(x);
@@ -77,13 +76,4 @@ arma::mat Df(
   
   return result;
 }
-
-
-
-
-
-
-
-
-
 

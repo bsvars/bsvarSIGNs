@@ -14,14 +14,14 @@ expect_identical(dim(spec$data_matrices$Y)[1],
 expect_identical(length(spec$data_matrices$get_data_matrices()),
                  2L)
 
-# expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
+expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
 
 expect_identical(class(spec$prior$get_prior()),
                  "list")
 
-# expect_true(det(spec$prior$V) > 0)
+expect_true(det(spec$prior$V) > 0)
 
-# expect_true(det(spec$prior$S) > 0)
+expect_true(det(spec$prior$S) > 0)
 
 expect_identical(class(spec$identification)[1],
                  "IdentificationBSVARSIGN")
@@ -57,14 +57,14 @@ expect_identical(dim(spec$data_matrices$Y)[1],
 expect_identical(length(spec$data_matrices$get_data_matrices()),
                  2L)
 
-# expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
+expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
 
 expect_identical(class(spec$prior$get_prior()),
                  "list")
 
-# expect_true(det(spec$prior$V) > 0)
+expect_true(det(spec$prior$V) > 0)
 
-# expect_true(det(spec$prior$S) > 0)
+expect_true(det(spec$prior$S) > 0)
 
 expect_identical(class(spec$identification)[1],
                  "IdentificationBSVARSIGN")

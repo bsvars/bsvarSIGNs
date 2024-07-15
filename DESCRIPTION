@@ -16,7 +16,8 @@ LinkingTo:
     bsvars, 
     Rcpp, 
     RcppArmadillo, 
-    RcppProgress
+    RcppProgress,
+    ramcmc
 Depends: 
     R (>= 2.10),
     bsvars
