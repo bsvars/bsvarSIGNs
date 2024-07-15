@@ -127,12 +127,12 @@ RcppExport SEXP _bsvarSIGNs_bsvarSIGNs_ir(SEXP posterior_BSEXP, SEXP posterior_T
     return rcpp_result_gen;
 }
 // bsvar_sign_cpp
-Rcpp::List bsvar_sign_cpp(const int& S, const int& lags, const arma::mat& Y, const arma::mat& X, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const Rcpp::List& prior, const Rcpp::List& starting_values, const bool show_progress, const int thin, const int& max_tries);
-static SEXP _bsvarSIGNs_bsvar_sign_cpp_try(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP show_progressSEXP, SEXP thinSEXP, SEXP max_triesSEXP) {
+Rcpp::List bsvar_sign_cpp(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const arma::field<arma::mat>& VB, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const Rcpp::List& prior, const Rcpp::List& starting_values, const bool show_progress, const int thin, const int& max_tries);
+static SEXP _bsvarSIGNs_bsvar_sign_cpp_try(SEXP SSEXP, SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP show_progressSEXP, SEXP thinSEXP, SEXP max_triesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const int& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const int& >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type VB(VBSEXP);
@@ -145,15 +145,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type show_progress(show_progressSEXP);
     Rcpp::traits::input_parameter< const int >::type thin(thinSEXP);
     Rcpp::traits::input_parameter< const int& >::type max_tries(max_triesSEXP);
-    rcpp_result_gen = Rcpp::wrap(bsvar_sign_cpp(S, lags, Y, X, VB, sign_irf, sign_narrative, sign_B, Z, prior, starting_values, show_progress, thin, max_tries));
+    rcpp_result_gen = Rcpp::wrap(bsvar_sign_cpp(S, p, Y, X, VB, sign_irf, sign_narrative, sign_B, Z, prior, starting_values, show_progress, thin, max_tries));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP lagsSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP show_progressSEXP, SEXP thinSEXP, SEXP max_triesSEXP) {
+RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP VBSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP priorSEXP, SEXP starting_valuesSEXP, SEXP show_progressSEXP, SEXP thinSEXP, SEXP max_triesSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvar_sign_cpp_try(SSEXP, lagsSEXP, YSEXP, XSEXP, VBSEXP, sign_irfSEXP, sign_narrativeSEXP, sign_BSEXP, ZSEXP, priorSEXP, starting_valuesSEXP, show_progressSEXP, thinSEXP, max_triesSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvar_sign_cpp_try(SSEXP, pSEXP, YSEXP, XSEXP, VBSEXP, sign_irfSEXP, sign_narrativeSEXP, sign_BSEXP, ZSEXP, priorSEXP, starting_valuesSEXP, show_progressSEXP, thinSEXP, max_triesSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {

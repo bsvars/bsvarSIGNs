@@ -17,7 +17,7 @@ using namespace arma;
 // [[Rcpp::export]]
 Rcpp::List bsvar_sign_cpp(
     const int&        S,                  // number of draws from the posterior
-    const int&        lags,               // number of lags
+    const int&        p,                  // number of lags
     const arma::mat&  Y,                  // NxT dependent variables
     const arma::mat&  X,                  // KxT dependent variables
     const arma::field<arma::mat>& VB,     // N-list
@@ -56,7 +56,7 @@ Rcpp::List bsvar_sign_cpp(
     Rcout << " Press Esc to interrupt the computations" << endl;
     Rcout << "**************************************************|" << endl;
   }
-  Progress p(50, show_progress);
+  Progress bar(50, show_progress);
   
   const int  T = Y.n_rows;
   const int  N = Y.n_cols;
@@ -104,9 +104,13 @@ Rcpp::List bsvar_sign_cpp(
       psi        = hyper.rows(3, N + 2);
       
       // update Minnesota prior
-      prior_v.rows(0, N * lags - 1) = lambda * lambda * 
-        prior_v.rows(0, N * lags - 1) % 
-        repmat(1 / psi, lags, 1);
+      prior_v.rows(0, N * p - 1) = lambda * lambda * 
+        prior_v.rows(0, N * p - 1) % 
+        repmat(1 / psi, p, 1);
+      
+      prior_V    = diagmat(lambda * lambda * prior_v %
+                           join_vert(repmat(1 / psi, p, 1),
+                                     ones<vec>(K - N * p)));
       prior_V    = diagmat(prior_v);
       prior_S    = diagmat(psi);
       
@@ -129,7 +133,7 @@ Rcpp::List bsvar_sign_cpp(
       B          = rmatnorm_cpp(post_B, post_V, Sigma);
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
-      result     = sample_Q(lags, Y, X, B, h_invp, chol_Sigma, prior, 
+      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
                             VB, sign_irf, sign_narrative, sign_B, Z, max_tries);
       Q          = result(0);
       shocks     = result(1);
@@ -148,14 +152,14 @@ Rcpp::List bsvar_sign_cpp(
     if (s % 200 == 0) checkUserInterrupt();
     
     // Increment progress bar
-    if (any(prog_rep_points == s)) p.increment();
+    if (any(prog_rep_points == s)) bar.increment();
     
     // if (omp_get_thread_num() == 0) {
     //   // Check for user interrupts
     //   if (s % 10 == 0) checkUserInterrupt();
     // 
     //   // Increment progress bar
-    //   if (any(prog_rep_points == s)) p.increment();
+    //   if (any(prog_rep_points == s)) bar.increment();
     // }
     
   } // END s loop

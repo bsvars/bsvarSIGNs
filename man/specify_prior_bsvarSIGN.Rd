@@ -45,17 +45,15 @@ prior$estimate_hyper(S = 5)
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{p}}{a positive integer - the number of lags.}
+
 \item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.}
 
-\item{\code{B}}{a \code{KxN} normal prior mean matrix for the autoregressive 
+\item{\code{A}}{a \code{NxK} normal prior mean matrix for the autoregressive 
 parameters.}
 
 \item{\code{V}}{a \code{KxK} matrix determining  the normal prior column-specific 
 covariance for the autoregressive parameters.}
-
-\item{\code{Vp}}{a \code{px1} vector of lag shrinkage level.}
-
-\item{\code{Vd}}{a \code{(d+1)x1} vector of (large) variances for constants.}
 
 \item{\code{S}}{an \code{NxN} matrix determining the inverted-Wishart prior scale 
 of error terms covariance matrix.}
@@ -65,17 +63,17 @@ inverted-Wishart prior for error terms covariance matrix.}
 
 \item{\code{data}}{an \code{TxN} matrix of observations.}
 
-\item{\code{Y}}{an \code{TxN} matrix of dependent variables.}
+\item{\code{Y}}{an \code{NxT} matrix of dependent variables.}
 
-\item{\code{X}}{an \code{TxK} matrix of independent variables.}
+\item{\code{X}}{an \code{KxT} matrix of independent variables.}
 
 \item{\code{Ysoc}}{an \code{NxN} matrix with the sum-of-coefficients dummy observations.}
 
-\item{\code{Xsoc}}{an \code{NxK} matrix with the sum-of-coefficients dummy observations.}
+\item{\code{Xsoc}}{an \code{KxN} matrix with the sum-of-coefficients dummy observations.}
 
 \item{\code{Ysur}}{an \code{NxN} matrix with the single-unit-root dummy observations.}
 
-\item{\code{Xsur}}{an \code{NxK} matrix with the single-unit-root dummy observations.}
+\item{\code{Xsur}}{an \code{KxN} matrix with the single-unit-root dummy observations.}
 
 \item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
@@ -114,7 +112,7 @@ Create a new prior specification PriorBSVAR.
   data,
   p,
   exogenous = NULL,
-  stationary = rep(FALSE, dim(data)[2])
+  stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
 }
 
