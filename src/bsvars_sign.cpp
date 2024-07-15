@@ -79,6 +79,7 @@ Rcpp::List bsvar_sign_cpp(
   double     w, mu, delta, lambda;
   
   vec        hyper, psi;
+  vec        prior_v = as<mat>(prior["V"]).diag();
   
   mat        B, Sigma, chol_Sigma, h_invp, Q, shocks;
   mat        prior_V, prior_S, post_B, post_V, post_S;
@@ -103,8 +104,10 @@ Rcpp::List bsvar_sign_cpp(
       psi        = hyper.rows(3, N + 2);
       
       // update Minnesota prior
-      prior_V    = diagmat(join_vert(lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
-                                     as<vec>(prior["Vd"])));
+      prior_v.rows(0, N * lags - 1) = lambda * lambda * 
+        prior_v.rows(0, N * lags - 1) % 
+        repmat(1 / psi, lags, 1);
+      prior_V    = diagmat(prior_v);
       prior_S    = diagmat(psi);
       
       // update dummy observation prior

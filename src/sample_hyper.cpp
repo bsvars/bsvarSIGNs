@@ -143,6 +143,7 @@ double log_ml_dummy(
 ) {
   
   int    N           = Y.n_cols;
+  int    p           = as<int>(prior["p"]);
   double mu          = hyper(0);
   double delta       = hyper(1);
   double lambda      = hyper(2);
@@ -150,9 +151,9 @@ double log_ml_dummy(
   
   // update Minnesota prior
   mat    prior_B     = as<mat>(prior["B"]);
-  mat    prior_V     = diagmat(join_vert(
-                               lambda*lambda * kron(as<vec>(prior["Vp"]), 1 / psi),
-                               as<vec>(prior["Vd"])));
+  vec    v           = as<mat>(prior["V"]).diag();
+  v.rows(0, N*p - 1) = lambda * lambda * v.rows(0, N*p - 1) % repmat(1 / psi, p, 1);
+  mat    prior_V     = diagmat(v);
   mat    prior_S     = diagmat(psi);
   int    prior_nu    = as<int>(prior["nu"]);
   
