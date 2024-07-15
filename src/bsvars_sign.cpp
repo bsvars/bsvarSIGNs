@@ -104,14 +104,9 @@ Rcpp::List bsvar_sign_cpp(
       psi        = hyper.rows(3, N + 2);
       
       // update Minnesota prior
-      prior_v.rows(0, N * p - 1) = lambda * lambda * 
-        prior_v.rows(0, N * p - 1) % 
-        repmat(1 / psi, p, 1);
-      
       prior_V    = diagmat(lambda * lambda * prior_v %
                            join_vert(repmat(1 / psi, p, 1),
                                      ones<vec>(K - N * p)));
-      prior_V    = diagmat(prior_v);
       prior_S    = diagmat(psi);
       
       // update dummy observation prior

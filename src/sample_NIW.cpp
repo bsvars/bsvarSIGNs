@@ -64,14 +64,15 @@ arma::field<arma::mat> niw_cpp(
   mat post_B      = post_V * (X.t() * Y + prior_V_inv * prior_B);
   
   // marginal posterior of Sigma
-  mat post_S  = prior_S + Y.t() * Y + prior_B.t() * prior_V_inv * prior_B - post_B.t() * post_V_inv * post_B;
-  post_S      = symmatu(post_S);
+  mat post_S  = prior_S + Y.t() * Y + 
+                prior_B.t() * prior_V_inv * prior_B - 
+                post_B.t() * post_V_inv * post_B;
   int post_nu = prior_nu + T;
   
   field<mat> post(4);
   post(0) = post_B;
   post(1) = post_V;
-  post(2) = post_S;
+  post(2) = symmatu(post_S);
   post(3) = mat(1, 1, fill::ones) * post_nu;
   
   return post;
