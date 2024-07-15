@@ -228,9 +228,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
       
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
       
-      data    = bsvars::specify_data_matrices$new(data, p, exogenous)
-      Y       = t(data$Y)
-      X       = t(data$X)
+      data_m  = bsvars::specify_data_matrices$new(data, p, exogenous)
+      Y       = t(data_m$Y)
+      X       = t(data_m$X)
       N       = ncol(Y)
       
       stopifnot("Argument stationary must be a logical vector of length equal to the number of columns in data." = length(stationary) == N & is.logical(stationary))
