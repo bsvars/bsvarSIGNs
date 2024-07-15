@@ -139,22 +139,19 @@ specify_prior_bsvarSIGN = R6::R6Class(
   "PriorBSVARSIGN",
   
   public = list(
+    #' @field p a positive integer - the number of lags.
+    p           = 1,
+    
     #' @field hyper a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.
     hyper      = matrix(),
     
-    #' @field B a \code{KxN} normal prior mean matrix for the autoregressive 
+    #' @field A a \code{NxK} normal prior mean matrix for the autoregressive 
     #' parameters.
-    B          = matrix(),
+    A          = matrix(),
     
     #' @field V a \code{KxK} matrix determining  the normal prior column-specific 
     #' covariance for the autoregressive parameters.
     V          = matrix(),
-    
-    #' @field Vp a \code{px1} vector of lag shrinkage level.
-    Vp         = matrix(),
-    
-    #' @field Vd a \code{(d+1)x1} vector of (large) variances for constants.
-    Vd         = matrix(),
     
     #' @field S an \code{NxN} matrix determining the inverted-Wishart prior scale 
     #' of error terms covariance matrix.
@@ -167,22 +164,22 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @field data an \code{TxN} matrix of observations.
     data        = matrix(),
     
-    #' @field Y an \code{TxN} matrix of dependent variables.
+    #' @field Y an \code{NxT} matrix of dependent variables.
     Y           = matrix(),
     
-    #' @field X an \code{TxK} matrix of independent variables.
+    #' @field X an \code{KxT} matrix of independent variables.
     X           = matrix(),
     
     #' @field Ysoc an \code{NxN} matrix with the sum-of-coefficients dummy observations.
     Ysoc        = matrix(),
     
-    #' @field Xsoc an \code{NxK} matrix with the sum-of-coefficients dummy observations.
+    #' @field Xsoc an \code{KxN} matrix with the sum-of-coefficients dummy observations.
     Xsoc        = matrix(),
     
     #' @field Ysur an \code{NxN} matrix with the single-unit-root dummy observations.
     Ysur        = matrix(),
     
-    #' @field Xsur an \code{NxK} matrix with the single-unit-root dummy observations.
+    #' @field Xsur an \code{KxN} matrix with the single-unit-root dummy observations.
     Xsur        = matrix(),
     
     #' @field mu.scale a positive scalar - the shape of the gamma prior for \eqn{\mu}.
@@ -224,7 +221,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
     #' prior$B # show autoregressive prior mean
     #' 
-    initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE, dim(data)[2])) {
+    initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE,  ncol(data))) {
       
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
       
@@ -245,9 +242,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
       B       = matrix(0, K, N)
       B[1:N,] = diag(!stationary)
       
-      Vp      = (1:p)^-2
-      Vd      = rep(100, 1 + d)
-      V       = diag(c(kronecker(Vp, rep(1, N)), Vd))
+      V       = diag(c(kronecker((1:p)^-2, rep(1, N)), rep(100, 1 + d)))
       
       s2.ols  = rep(NA, N)
       for (n in 1:N) {
@@ -282,20 +277,18 @@ specify_prior_bsvarSIGN = R6::R6Class(
       # }
       # Xstar   = cbind(Xstar, c(rep(0, N), 1), matrix(0, N + 1, d))
       
-      self$Y             = Y
-      self$X             = X
-      self$Vp            = Vp
-      self$Vd            = Vd
-      
+      self$p             = p
       self$hyper         = hyper
-      self$B             = B
+      self$A             = t(B)
       self$V             = V
       self$S             = diag(N)
       self$nu            = N + 2
-      self$Ysoc          = Ysoc
-      self$Xsoc          = Xsoc
-      self$Ysur          = Ysur
-      self$Xsur          = Xsur
+      self$Y             = t(Y)
+      self$X             = t(X)
+      self$Ysoc          = t(Ysoc)
+      self$Xsoc          = t(Xsoc)
+      self$Ysur          = t(Ysur)
+      self$Xsur          = t(Xsur)
       self$mu.scale      = scale
       self$mu.shape      = shape
       self$delta.scale   = scale
@@ -316,11 +309,10 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     get_prior = function(){
       list(
+        p            = self$p,
         hyper        = self$hyper,
-        B            = self$B,
+        A            = self$A,
         V            = self$V,
-        Vp           = self$Vp,
-        Vd           = self$Vd,
         S            = self$S,
         nu           = self$nu,
         Ysoc         = self$Ysoc,
@@ -373,10 +365,16 @@ specify_prior_bsvarSIGN = R6::R6Class(
       init   = narrow_hyper(model, hyper)
       prior  = self$get_prior()
       
+      prior$B    = t(prior$A)
+      prior$Ysoc = t(prior$Ysoc)
+      prior$Xsoc = t(prior$Xsoc)
+      prior$Ysur = t(prior$Ysur)
+      prior$Xsur = t(prior$Xsur)
+      
       result = stats::optim(
         init,
         \(x) -log_posterior_hyper(extend_hyper(hyper, model, matrix(x)), 
-                                  model, self$Y, self$X, prior),
+                                  model, t(self$Y), t(self$X), prior),
         method  = 'L-BFGS-B',
         lower   = rep(0, length(init)),
         upper   = init * 100,
@@ -393,7 +391,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
         variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
       }
       
-      self$hyper = sample_hyper(S, burn_in, mode, model, self$Y, self$X, variance, prior)
+      self$hyper = sample_hyper(S, burn_in, mode, model, 
+                                t(self$Y), t(self$X), variance, prior)
       self$hyper = self$hyper[, -(1:burn_in)]
     } # END estimate_hyper
     
@@ -716,15 +715,14 @@ specify_bsvarSIGN = R6::R6Class(
       B[lower.tri(B, diag = TRUE)] = TRUE
       
       self$data_matrices           = bsvars::specify_data_matrices$new(data, p, exogenous)
-      self$data_matrices$Y         = t(self$data_matrices$Y)
-      self$data_matrices$X         = t(self$data_matrices$X)
       self$identification          = specify_identification_bsvarSIGN$new(N,
                                                                           sign_irf,
                                                                           sign_narrative,
                                                                           sign_B,
                                                                           zero_irf,
                                                                           max_tries)
-      self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous, stationary)
+      self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous,
+                                                                 stationary)
       self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     

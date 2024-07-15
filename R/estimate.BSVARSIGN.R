@@ -96,16 +96,23 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
-  prior               = specification$prior
+  prior               = specification$prior$get_prior()
   starting_values     = specification$starting_values$get_starting_values()
   identification      = specification$identification$get_identification()
   max_tries           = identification$max_tries
   data_matrices       = specification$data_matrices$get_data_matrices()
   p                   = specification$p
+  
+  prior$B             = t(prior$A)
+  prior$Ysoc          = t(prior$Ysoc)
+  prior$Xsoc          = t(prior$Xsoc)
+  prior$Ysur          = t(prior$Ysur)
+  prior$Xsur          = t(prior$Xsur)
+  Y                   = t(data_matrices$Y)
+  X                   = t(data_matrices$X)
 
   # estimation
-  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, 
-                              data_matrices$Y, data_matrices$X, identification$VB, 
+  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, identification$VB, 
                               identification$sign_irf, identification$sign_narrative, 
                               identification$sign_B, identification$zero_irf,
                               prior, starting_values, show_progress, thin, max_tries)
