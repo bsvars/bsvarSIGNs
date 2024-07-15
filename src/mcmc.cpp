@@ -4,7 +4,6 @@
 #include <RcppArmadillo.h>
 #include "Rcpp/Rmath.h"
 #include "progress.hpp"
-#include "ramcmc.h"
 
 using namespace arma;
 
