@@ -2,6 +2,7 @@
 #include <RcppArmadillo.h>
 
 #include "utils.h"
+#include "mcmc.h"
 
 using namespace Rcpp;
 using namespace arma;
