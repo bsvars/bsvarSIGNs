@@ -109,6 +109,27 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
+    inline arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon) {
+        typedef SEXP(*Ptr_forecast_bsvarSIGNs)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_forecast_bsvarSIGNs p_forecast_bsvarSIGNs = NULL;
+        if (p_forecast_bsvarSIGNs == NULL) {
+            validateSignature("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
+            p_forecast_bsvarSIGNs = (Ptr_forecast_bsvarSIGNs)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_forecast_bsvarSIGNs(Shield<SEXP>(Rcpp::wrap(posterior_Sigma)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(X_T)), Shield<SEXP>(Rcpp::wrap(exogenous_forecast)), Shield<SEXP>(Rcpp::wrap(cond_forecast)), Shield<SEXP>(Rcpp::wrap(horizon)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::cube >(rcpp_result_gen);
+    }
+
     inline bool match_sign_narrative(const arma::mat& Epsilon, const arma::mat& sign_narrative, const arma::cube& irf) {
         typedef SEXP(*Ptr_match_sign_narrative)(SEXP,SEXP,SEXP);
         static Ptr_match_sign_narrative p_match_sign_narrative = NULL;
