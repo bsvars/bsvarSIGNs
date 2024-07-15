@@ -131,7 +131,7 @@ igamma_shape = function(mode, variance) {
 #' @examples
 #' # a prior for 3-variable example with one lag 
 #' data(oil)
-#' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+#' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 #' prior$B                                        # show autoregressive prior mean
 #' 
 #' @export
@@ -221,10 +221,10 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @examples 
     #' # a prior for 3-variable example with one lag and stationary data
     #' data(oil)
-    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
     #' prior$B # show autoregressive prior mean
     #' 
-    initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE, ncol(data))) {
+    initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE, dim(data)[2])) {
       
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
       
@@ -355,7 +355,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @examples 
     #' # a prior for 3-variable example with four lags
     #' data(oil)
-    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
     #' prior$estimate_hyper(S = 5)
     #' 
     estimate_hyper = function(

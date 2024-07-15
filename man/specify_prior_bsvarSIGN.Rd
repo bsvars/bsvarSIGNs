@@ -9,7 +9,7 @@ The class PriorBSVARSIGN presents a prior specification for the homoskedastic bs
 \examples{
 # a prior for 3-variable example with one lag 
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$B                                        # show autoregressive prior mean
 
 
@@ -19,7 +19,7 @@ prior$B                                        # show autoregressive prior mean
 
 # a prior for 3-variable example with one lag and stationary data
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$B # show autoregressive prior mean
 
 
@@ -38,7 +38,7 @@ prior$get_prior() # show the prior as list
 
 # a prior for 3-variable example with four lags
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$estimate_hyper(S = 5)
 
 }
@@ -114,7 +114,7 @@ Create a new prior specification PriorBSVAR.
   data,
   p,
   exogenous = NULL,
-  stationary = rep(FALSE, ncol(data))
+  stationary = rep(FALSE, dim(data)[2])
 )}\if{html}{\out{</div>}}
 }
 
@@ -140,7 +140,7 @@ A new prior specification PriorBSVARSIGN.
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{# a prior for 3-variable example with one lag and stationary data
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$B # show autoregressive prior mean
 
 }
@@ -211,7 +211,7 @@ variances in the Minnesota prior.}
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{# a prior for 3-variable example with four lags
 data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1, stationary = rep(TRUE, 3))
+prior = specify_prior_bsvarSIGN$new(oil, p = 1)
 prior$estimate_hyper(S = 5)
 
 }

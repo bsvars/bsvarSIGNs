@@ -3,7 +3,7 @@
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
 #include <bsvars.h>
-#include <omp.h>
+// #include <omp.h>
 
 #include "sample_hyper.h"
 #include "sample_Q.h"
@@ -38,11 +38,11 @@ Rcpp::List bsvar_sign_cpp(
   }
   
   // Progress bar setup
-  double num_threads;
-  #pragma omp parallel
-  {
-    num_threads = omp_get_num_threads();
-  }
+  double num_threads = 1;
+  // #pragma omp parallel
+  // {
+  //   num_threads = omp_get_num_threads();
+  // }
   vec prog_rep_points = arma::round(arma::linspace(0, S / num_threads, 50));
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
@@ -91,7 +91,7 @@ Rcpp::List bsvar_sign_cpp(
   
   field<mat> result;
   
-  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
+  // #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (int s = 0; s < S; s++) {
     
     w = 0;
@@ -126,11 +126,8 @@ Rcpp::List bsvar_sign_cpp(
       B          = rmatnorm_cpp(post_B, post_V, Sigma);
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
-      result     = sample_Q(lags, Y, X, 
-                            B, h_invp, chol_Sigma,
-                            prior, VB,
-                            sign_irf, sign_narrative, sign_B, Z,
-                            max_tries);
+      result     = sample_Q(lags, Y, X, B, h_invp, chol_Sigma, prior, 
+                            VB, sign_irf, sign_narrative, sign_B, Z, max_tries);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));
@@ -144,13 +141,20 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
     
-    if (omp_get_thread_num() == 0) {
-      // Check for user interrupts
-      if (s % 10 == 0) checkUserInterrupt();
-
-      // Increment progress bar
-      if (any(prog_rep_points == s)) p.increment();
-    }
+    // Check for user interrupts
+    if (s % 200 == 0) checkUserInterrupt();
+    
+    // Increment progress bar
+    if (any(prog_rep_points == s)) p.increment();
+    
+    // if (omp_get_thread_num() == 0) {
+    //   // Check for user interrupts
+    //   if (s % 10 == 0) checkUserInterrupt();
+    // 
+    //   // Increment progress bar
+    //   if (any(prog_rep_points == s)) p.increment();
+    // }
+    
   } // END s loop
   
   return List::create(
