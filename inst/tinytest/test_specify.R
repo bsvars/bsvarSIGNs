@@ -8,13 +8,13 @@ spec = specify_bsvarSIGN$new(oil)
 expect_identical(class(spec)[1],
                  "BSVARSIGN")
 
-expect_identical(dim(spec$data_matrices$Y)[1],
-                 dim(spec$data_matrices$X)[1])
+expect_identical(dim(spec$data_matrices$Y)[2],
+                 dim(spec$data_matrices$X)[2])
 
 expect_identical(length(spec$data_matrices$get_data_matrices()),
                  2L)
 
-expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
+expect_identical(dim(spec$prior$A)[2], dim(spec$data_matrices$X)[1])
 
 expect_identical(class(spec$prior$get_prior()),
                  "list")
@@ -51,13 +51,13 @@ spec           = specify_bsvarSIGN$new(oil,
 expect_identical(class(spec)[1],
                  "BSVARSIGN")
 
-expect_identical(dim(spec$data_matrices$Y)[1],
-                 dim(spec$data_matrices$X)[1])
+expect_identical(dim(spec$data_matrices$Y)[2],
+                 dim(spec$data_matrices$X)[2])
 
 expect_identical(length(spec$data_matrices$get_data_matrices()),
                  2L)
 
-expect_identical(dim(spec$prior$B)[1], dim(spec$data_matrices$X)[2])
+expect_identical(dim(spec$prior$A)[2], dim(spec$data_matrices$X)[1])
 
 expect_identical(class(spec$prior$get_prior()),
                  "list")
