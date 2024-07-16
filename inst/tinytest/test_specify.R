@@ -1,9 +1,9 @@
 
 # minimum example of specify_bsvarSIGN works
 
-data(oil)
+data(optimism)
 
-spec = specify_bsvarSIGN$new(oil)
+spec = specify_bsvarSIGN$new(optimism)
 
 expect_identical(class(spec)[1],
                  "BSVARSIGN")
@@ -35,18 +35,15 @@ expect_identical(class(spec$starting_values)[1],
 
 # "example specifying a reproduction of Antolín-Díaz & Rubio-Ramírez (2018, AER)",
 
-data(oil)
-sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
+data(optimism)
 
-sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
-                       dim = c(3, 3, 1))
+sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 
 set.seed(123)
 
-spec           = specify_bsvarSIGN$new(oil,
+spec           = specify_bsvarSIGN$new(optimism,
                                        p              = 12,
-                                       sign_irf       = sign_irf,
-                                       sign_narrative = sign_narrative)
+                                       sign_irf       = sign_irf)
 
 expect_identical(class(spec)[1],
                  "BSVARSIGN")

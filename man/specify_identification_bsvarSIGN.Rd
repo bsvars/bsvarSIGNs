@@ -7,11 +7,11 @@
 The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 }
 \examples{
-specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
+specify_identification_bsvarSIGN$new(N = 5) # recursive specification for a 5-variable system
 
 # an identification pattern with narrative sign restrictions
-sign_narrative <- matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) 
+sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf) 
 
 }
 \section{Public fields}{

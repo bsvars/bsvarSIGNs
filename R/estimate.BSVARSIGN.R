@@ -75,20 +75,15 @@
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #'
-#' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
-#' sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-#' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
-#'                        dim = c(3, 3, 1))
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' specification  = specify_bsvarSIGN$new(oil,
-#'                                        p              = 12,
-#'                                        sign_irf       = sign_irf,
-#'                                        sign_narrative = sign_narrative
-#'                                        )
+#' specification  = specify_bsvarSIGN$new(optimism * 100,
+#'                                        p        = 12,
+#'                                        sign_irf = sign_irf)
 #' posterior      = estimate(specification, S = 10)
 #' 
 #' @export

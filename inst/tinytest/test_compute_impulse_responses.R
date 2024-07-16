@@ -1,16 +1,16 @@
 
-data(oil)
+data(optimism)
 
 set.seed(1)
 suppressMessages(
-  specification_no1 <- specify_bsvarSIGN$new(oil)
+  specification_no1 <- specify_bsvarSIGN$new(optimism)
 )
 run_no1             <- estimate(specification_no1, 3, 1, show_progress = FALSE)
 irf                 <- compute_impulse_responses(run_no1, horizon = 2)
 
 set.seed(1)
 suppressMessages(
-  irf2              <- oil |>
+  irf2              <- optimism |>
     specify_bsvarSIGN$new() |>
     estimate(S = 3, thin = 1, show_progress = FALSE) |>
     compute_impulse_responses(horizon = 2)
@@ -30,14 +30,14 @@ expect_identical(
 
 set.seed(1)
 suppressMessages(
-  specification_no1 <- specify_bsvarSIGN$new(oil)
+  specification_no1 <- specify_bsvarSIGN$new(optimism)
 )
 run_no1             <- estimate(specification_no1, 3, 1, show_progress = FALSE)
 irf                 <- compute_impulse_responses(run_no1, horizon = 2, standardise = TRUE)
 
 set.seed(1)
 suppressMessages(
-  irf2              <- oil |>
+  irf2              <- optimism |>
     specify_bsvarSIGN$new() |>
     estimate(S = 3, thin = 1, show_progress = FALSE) |>
     compute_impulse_responses(horizon = 2, standardise = TRUE)

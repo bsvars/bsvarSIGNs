@@ -44,12 +44,12 @@ trajcetories of (some of the) variables.
 }
 \examples{
 # upload data
-data(oil)
+data(optimism)
 
 # specify the model and set seed
 set.seed(123)
-sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 
 # estimate the model
 posterior      = estimate(specification, 20)
@@ -60,7 +60,7 @@ predictive     = forecast(posterior, 4)
 # workflow with the pipe |>
 ############################################################
 set.seed(123)
-oil |>
+optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 20) |> 
   forecast(horizon = 4) -> predictive
@@ -68,14 +68,15 @@ oil |>
 # conditional forecasting 2 quarters ahead conditioning on 
 #  provided future values for the Gross Domestic Product 
 ############################################################
-cf        = matrix(NA , 2, 3)
-cf[,3]    = tail(oil, 1)[3]   # conditional forecasts equal to the last gdp observation
-predictive    = forecast(posterior, 2, conditional_forecast = cf)
+cf         = matrix(NA , 2, 5)
+# # conditional forecasts equal to the last consumption observation
+cf[,3]     = tail(optimism, 1)[3]
+predictive = forecast(posterior, 2, conditional_forecast = cf)
 
 # workflow with the pipe |>
 ############################################################
 set.seed(123)
-oil |>
+optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 10) |> 
   forecast(horizon = 2, conditional_forecast = cf) -> predictive

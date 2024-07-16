@@ -21,12 +21,12 @@
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -37,7 +37,7 @@
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 20) |> 
 #'   compute_structural_shocks() -> ss
@@ -81,12 +81,12 @@ compute_structural_shocks.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -97,7 +97,7 @@ compute_structural_shocks.PosteriorBSVARSIGN <- function(posterior) {
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 20) |> 
 #'   compute_fitted_values() -> fitted
@@ -151,12 +151,12 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -167,7 +167,7 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 10) |> 
 #'   compute_impulse_responses(horizon = 8) -> ir
@@ -223,12 +223,12 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -239,7 +239,7 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 10) |> 
 #'   compute_historical_decompositions() -> hd
@@ -300,12 +300,12 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -316,7 +316,7 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 10) |> 
 #'   compute_variance_decompositions(horizon = 8) -> fevd
@@ -365,12 +365,12 @@ compute_variance_decompositions.PosteriorBSVARSIGN <- function(posterior, horizo
 #' 
 #' @examples
 #' # upload data
-#' data(oil)
+#' data(optimism)
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
 #' posterior      = estimate(specification, 10)
@@ -381,7 +381,7 @@ compute_variance_decompositions.PosteriorBSVARSIGN <- function(posterior, horizo
 #' # workflow with the pipe |>
 #' ############################################################
 #' set.seed(123)
-#' oil |>
+#' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
 #'   estimate(S = 10) |> 
 #'   compute_conditional_sd() -> csd

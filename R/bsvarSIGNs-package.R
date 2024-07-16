@@ -24,9 +24,7 @@
 #'  
 #'  Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.
 #' @examples
-#' sign_irf       = matrix(NA, 5, 5)
-#' sign_irf[2, 1] = 1
-#' sign_irf[1, 1] = 0
+#' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' spec           = specify_bsvarSIGN$new(optimism * 100,
 #'                                        p        = 4,
 #'                                        sign_irf = sign_irf)

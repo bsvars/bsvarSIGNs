@@ -3,8 +3,8 @@
 
 # run 1
 set.seed(123)
-data(oil)
-spec1 = specify_bsvarSIGN$new(oil)
+data(optimism)
+spec1 = specify_bsvarSIGN$new(optimism)
 post1 = estimate(spec1,
                  S = 3,
                  thin = 1,
@@ -12,8 +12,8 @@ post1 = estimate(spec1,
 
 # run 2
 set.seed(123)
-data(oil)
-spec2 = specify_bsvarSIGN$new(oil)
+data(optimism)
+spec2 = specify_bsvarSIGN$new(optimism)
 post2 = estimate(spec2,
                  S = 3,
                  thin = 1,
@@ -21,8 +21,8 @@ post2 = estimate(spec2,
 
 # run 3 (pipe workflow)
 set.seed(123)
-data(oil)
-post3 = oil |>
+data(optimism)
+post3 = optimism |>
   specify_bsvarSIGN$new() |>
   estimate(S = 3,
            thin = 1,
