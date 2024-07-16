@@ -13,6 +13,14 @@ using namespace Rcpp;
 using namespace arma;
 
 
+/***
+All notations in the C++ code except for compute.cpp and forecast_bsvarSIGNs.cpp
+ are consistent with the notations in the papers:
+ Antolín-Díaz and Rubio-Ramírez (2018) and Arias, Rubio-Ramírez and Waggoner (2018)
+ which are different from the notations in the R code.
+***/
+
+
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 Rcpp::List bsvar_sign_cpp(
@@ -47,7 +55,7 @@ Rcpp::List bsvar_sign_cpp(
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
     Rcout << " bsvarSIGNs: Bayesian Structural VAR with zero,   |" << endl;
-    Rcout << "              sign and narrative restrictions     |" << endl;
+    Rcout << "             sign and narrative restrictions      |" << endl;
     Rcout << "**************************************************|" << endl;
     // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
     // Rcout << "**************************************************|" << endl;

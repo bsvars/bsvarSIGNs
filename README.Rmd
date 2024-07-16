@@ -55,7 +55,7 @@ data(monetary)
 # contractionary monetary policy shock
 sign_irf       = matrix(NA, 6, 6)
 sign_irf[, 1]  = c(NA, -1, -1, NA, -1, 1)
-sign_irf       = array(sign_irf, dim = c(6, 6, 5))
+sign_irf       = array(sign_irf, dim = c(6, 6, 6))
 
 # in October 1979
 sign_narrative = rbind(c(1, 1, NA, 1, 166, 0),   # is positive
