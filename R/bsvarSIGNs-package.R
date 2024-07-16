@@ -24,20 +24,12 @@
 #'  
 #'  Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.
 #' @examples
-#' # upload data
-#' data(oil)
-#'
-#' # restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
-#' sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-#' sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
-#'                        dim = c(3, 3, 1))
-#' 
-#' # specify the model and set seed
-#' set.seed(123)
-#' specification  = specify_bsvarSIGN$new(oil,
-#'                                        p              = 12,
-#'                                        sign_irf       = sign_irf,
-#'                                        sign_narrative = sign_narrative
-#'                                        )
-#' posterior      = estimate(specification, S = 10)
+#' sign_irf       = matrix(NA, 5, 5)
+#' sign_irf[2, 1] = 1
+#' sign_irf[1, 1] = 0
+#' spec           = specify_bsvarSIGN$new(optimism * 100,
+#'                                        p        = 4,
+#'                                        sign_irf = sign_irf)
+#' spec$prior$estimate_hyper()
+#' post           = estimate(spec, S = 1000)
 NULL

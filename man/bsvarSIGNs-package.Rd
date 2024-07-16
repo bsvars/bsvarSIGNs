@@ -17,22 +17,14 @@ This package is currently in active development. We give no
 warranty that anything here works.
 }
 \examples{
-# upload data
-data(oil)
-
-# restrictions as in Antolín-Díaz & Rubio-Ramírez (2018)
-sign_narrative = matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-sign_irf       = array(matrix(c(-1, -1, 1, 1, 1, 1, 1, -1, 1), nrow = 3),
-                       dim = c(3, 3, 1))
-
-# specify the model and set seed
-set.seed(123)
-specification  = specify_bsvarSIGN$new(oil,
-                                       p              = 12,
-                                       sign_irf       = sign_irf,
-                                       sign_narrative = sign_narrative
-                                       )
-posterior      = estimate(specification, S = 10)
+sign_irf       = matrix(NA, 5, 5)
+sign_irf[2, 1] = 1
+sign_irf[1, 1] = 0
+spec           = specify_bsvarSIGN$new(optimism * 100,
+                                       p        = 4,
+                                       sign_irf = sign_irf)
+spec$prior$estimate_hyper()
+post           = estimate(spec, S = 1000)
 }
 \references{
 Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.

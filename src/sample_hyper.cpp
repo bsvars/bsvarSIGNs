@@ -280,7 +280,6 @@ arma::mat sample_hyper(
     S, start, narrow_hyper(model, init), W,
     
     [init, model, Y, X, prior](const vec& x) {
-      
       vec extended = extend_hyper(init, model, x);
       return log_posterior_hyper(extended, model, Y, X, prior);
     }
