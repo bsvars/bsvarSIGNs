@@ -109,6 +109,27 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
+    inline arma::cube structural_shocks(const arma::cube& posterior_B, const arma::cube& posterior_A, const arma::mat& Y, const arma::mat& X) {
+        typedef SEXP(*Ptr_structural_shocks)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_structural_shocks p_structural_shocks = NULL;
+        if (p_structural_shocks == NULL) {
+            validateSignature("arma::cube(*structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
+            p_structural_shocks = (Ptr_structural_shocks)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_structural_shocks");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_structural_shocks(Shield<SEXP>(Rcpp::wrap(posterior_B)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::cube >(rcpp_result_gen);
+    }
+
     inline arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon) {
         typedef SEXP(*Ptr_forecast_bsvarSIGNs)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_forecast_bsvarSIGNs p_forecast_bsvarSIGNs = NULL;

@@ -173,6 +173,43 @@ RcppExport SEXP _bsvarSIGNs_bsvar_sign_cpp(SEXP SSEXP, SEXP pSEXP, SEXP YSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// structural_shocks
+arma::cube structural_shocks(const arma::cube& posterior_B, const arma::cube& posterior_A, const arma::mat& Y, const arma::mat& X);
+static SEXP _bsvarSIGNs_structural_shocks_try(SEXP posterior_BSEXP, SEXP posterior_ASEXP, SEXP YSEXP, SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::cube& >::type posterior_B(posterior_BSEXP);
+    Rcpp::traits::input_parameter< const arma::cube& >::type posterior_A(posterior_ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(structural_shocks(posterior_B, posterior_A, Y, X));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_structural_shocks(SEXP posterior_BSEXP, SEXP posterior_ASEXP, SEXP YSEXP, SEXP XSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_structural_shocks_try(posterior_BSEXP, posterior_ASEXP, YSEXP, XSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // forecast_bsvarSIGNs
 arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon);
 static SEXP _bsvarSIGNs_forecast_bsvarSIGNs_try(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP horizonSEXP) {
@@ -908,6 +945,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,int,const int&)");
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_ir)(arma::cube&,arma::cube&,const int,const int)");
         signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const Rcpp::List&,const Rcpp::List&,const bool,const int,const int&)");
+        signatures.insert("arma::cube(*structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
@@ -933,6 +971,7 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_ir1_cpp", (DL_FUNC)_bsvarSIGNs_ir1_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_ir", (DL_FUNC)_bsvarSIGNs_bsvarSIGNs_ir_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC)_bsvarSIGNs_bsvar_sign_cpp_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_structural_shocks", (DL_FUNC)_bsvarSIGNs_structural_shocks_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC)_bsvarSIGNs_forecast_bsvarSIGNs_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_narrative", (DL_FUNC)_bsvarSIGNs_match_sign_narrative_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_narrative", (DL_FUNC)_bsvarSIGNs_weight_narrative_try);
@@ -957,6 +996,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_ir1_cpp", (DL_FUNC) &_bsvarSIGNs_ir1_cpp, 4},
     {"_bsvarSIGNs_bsvarSIGNs_ir", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_ir, 4},
     {"_bsvarSIGNs_bsvar_sign_cpp", (DL_FUNC) &_bsvarSIGNs_bsvar_sign_cpp, 14},
+    {"_bsvarSIGNs_structural_shocks", (DL_FUNC) &_bsvarSIGNs_structural_shocks, 4},
     {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 6},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
     {"_bsvarSIGNs_weight_narrative", (DL_FUNC) &_bsvarSIGNs_weight_narrative, 3},
