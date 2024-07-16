@@ -66,6 +66,7 @@ Rcpp::List bsvar_sign_cpp(
   mat        posterior_hyper(N + 3, S);
   cube       posterior_A(N, K, S);
   cube       posterior_B(N, N, S);
+  cube       posterior_Q(N, N, S);
   cube       posterior_Sigma(N, N, S);
   cube       posterior_Theta0(N, N, S);
   cube       posterior_shocks(N, T, S);
@@ -139,6 +140,7 @@ Rcpp::List bsvar_sign_cpp(
     posterior_hyper.col(s)    = hyper;
     posterior_A.slice(s)      = B.t();
     posterior_B.slice(s)      = Q.t() * h_invp;
+    posterior_Q.slice(s)      = Q;
     posterior_Sigma.slice(s)  = Sigma;
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
@@ -165,6 +167,7 @@ Rcpp::List bsvar_sign_cpp(
       _["hyper"]    = posterior_hyper,
       _["A"]        = posterior_A,
       _["B"]        = posterior_B,
+      _["Q"]        = posterior_Q,
       _["Sigma"]    = posterior_Sigma,
       _["Theta0"]   = posterior_Theta0,
       _["shocks"]   = posterior_shocks
