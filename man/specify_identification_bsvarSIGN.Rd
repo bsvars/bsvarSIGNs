@@ -23,7 +23,7 @@ specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf)
 
 \item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions.}
 
-\item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+\item{\code{sign_relation}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations 
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
@@ -49,7 +49,7 @@ Create new identifying restrictions IdentificationBSVARSIGN.
   N,
   sign_irf,
   sign_narrative,
-  sign_B,
+  sign_relation,
   max_tries = 1
 )}\if{html}{\out{</div>}}
 }
@@ -82,7 +82,7 @@ Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restr
 if start=t and horizons=h the restriction in on periods t to t+h,
 e.g. when h=0 the restriction in only placed on period t.}
 
-\item{\code{sign_B}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+\item{\code{sign_relation}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}
@@ -116,7 +116,7 @@ Set new starting values StartingValuesBSVARSIGN.
   N,
   sign_irf,
   sign_narrative,
-  sign_B
+  sign_relation
 )}\if{html}{\out{</div>}}
 }
 
@@ -148,7 +148,7 @@ Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restr
 if start=t and horizons=h the restriction in on periods t to t+h,
 e.g. when h=0 the restriction in only placed on period t.}
 
-\item{\code{sign_B}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+\item{\code{sign_relation}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}

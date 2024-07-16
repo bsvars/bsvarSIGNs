@@ -72,8 +72,8 @@ verify_narrative = function(N, A) {
 }
 
 # verify all restrictions
-verify_all = function(N, sign_irf, sign_narrative, sign_B) {
-  verify_traditional(N, sign_B)
+verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
+  verify_traditional(N, sign_relation)
   
   verify_narrative(N, sign_narrative)
   
@@ -422,8 +422,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_irf = array(),
     #' @field sign_narrative a \code{Mx6} matrix of narrative sign restrictions.
     sign_narrative  = matrix(),
-    #' @field sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
-    sign_B   = matrix(),
+    #' @field sign_relation a \code{NxN} matrix of sign restrictions on contemporaneous relations.
+    sign_relation   = matrix(),
     #' @field max_tries a positive integer with the maximum number of iterations 
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     max_tries = 1,
@@ -452,14 +452,14 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_B a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
-    initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 1) {
+    initialize = function(N, sign_irf, sign_narrative, sign_relation, max_tries = 1) {
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
@@ -472,18 +472,18 @@ specify_identification_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_B)) {
+      if (missing(sign_relation)) {
         if (missing_all) {
-          sign_B = diag(N)
+          sign_relation = diag(N)
         } else {
-          sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_B)
+      verify_all(N, sign_irf, sign_narrative, sign_relation)
       
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -495,7 +495,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_B         = sign_B
+      self$sign_relation         = sign_relation
       self$max_tries      = max_tries
     }, # END initialize
     
@@ -507,7 +507,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         VB             = as.list(self$VB),
         sign_irf       = as.array(self$sign_irf),
         sign_narrative = as.matrix(self$sign_narrative),
-        sign_B         = as.matrix(self$sign_B),
+        sign_relation         = as.matrix(self$sign_relation),
         max_tries      = self$max_tries
         )
     }, # END get_identification
@@ -536,13 +536,13 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_B a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
-    set_identification = function(N, sign_irf, sign_narrative, sign_B) {
+    set_identification = function(N, sign_irf, sign_narrative, sign_relation) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -562,22 +562,22 @@ specify_identification_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_B)) {
+      if (missing(sign_relation)) {
         if (missing_all) {
-          sign_B = diag(N)
+          sign_relation = diag(N)
         } else {
-          sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_B)
+      verify_all(N, sign_irf, sign_narrative, sign_relation)
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_B         = sign_B
+      self$sign_relation         = sign_relation
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -644,7 +644,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_B a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
@@ -660,7 +660,7 @@ specify_bsvarSIGN = R6::R6Class(
     p = 1L,
     sign_irf,
     sign_narrative,
-    sign_B,
+    sign_relation,
     max_tries = 1,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
@@ -687,18 +687,18 @@ specify_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_B)) {
+      if (missing(sign_relation)) {
         if (missing_all) {
-          sign_B = diag(N)
+          sign_relation = diag(N)
         } else {
-          sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_B)
+      verify_all(N, sign_irf, sign_narrative, sign_relation)
       
       B                            = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -707,7 +707,7 @@ specify_bsvarSIGN = R6::R6Class(
       self$identification          = specify_identification_bsvarSIGN$new(N,
                                                                           sign_irf,
                                                                           sign_narrative,
-                                                                          sign_B,
+                                                                          sign_relation,
                                                                           max_tries)
       self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous,
                                                                  stationary)
