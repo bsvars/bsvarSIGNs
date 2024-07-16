@@ -103,7 +103,6 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   sign_irf,
   sign_narrative,
   sign_B,
-  zero_irf,
   max_tries = 1,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
@@ -144,9 +143,6 @@ e.g. when h=0 the restriction in only placed on period t.}
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}
-
-\item{\code{zero_irf}}{a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-contemporaneous impulse response functions.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
