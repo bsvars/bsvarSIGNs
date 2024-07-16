@@ -3,13 +3,6 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
-#include "bsvarTOOLs.h"
-
-using namespace Rcpp;
-using namespace arma;
-
-
 bool match_sign_narrative(
     const arma::mat&  Epsilon,
     const arma::mat&  sign_narrative,

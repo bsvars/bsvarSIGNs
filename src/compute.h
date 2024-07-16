@@ -38,4 +38,20 @@ arma::field<arma::cube> bsvarSIGNs_ir (
 );
 
 
+arma::field<arma::cube> bsvarSIGNs_hd (
+    arma::field<arma::cube>&    posterior_irf_T,    // output of bsvars_irf with irfs at T horizons
+    arma::cube&                 structural_shocks,  // NxTxS output bsvars_structural_shocks
+    const bool                  show_progress = true
+);
+
+
+arma::mat hd1_cpp(
+    const int&        var_i,   // i-th variable
+    const int&        t,       // start at period t
+    const int&        h,       // number of horizons
+    const arma::mat&  Epsilon, // structural shocks, NxT
+    const arma::cube& irf
+);
+
+
 #endif  // _COMPUTE_H_

@@ -3,9 +3,6 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
-#include "bsvarTOOLs.h"
-
 using namespace Rcpp;
 using namespace arma;
 

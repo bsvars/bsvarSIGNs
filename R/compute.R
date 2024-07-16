@@ -124,13 +124,13 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 
 
 
+#' @method compute_impulse_responses PosteriorBSVARSIGN
+#' 
 #' @title Computes posterior draws of impulse responses 
 #'
 #' @description Each of the draws from the posterior estimation of models from 
 #' packages \pkg{bsvars} or \pkg{bsvarSIGNs} is transformed into
 #' a draw from the posterior distribution of the impulse responses. 
-#' 
-#' @method compute_impulse_responses PosteriorBSVARSIGN
 #' 
 #' @param posterior posterior estimation outcome - an object of class 
 #' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
@@ -191,3 +191,82 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
   
   return(irfs)
 } # END compute_impulse_responses.PosteriorBSVARSIGN
+
+
+
+
+#' @method compute_historical_decompositions PosteriorBSVARSIGN
+#' 
+#' @title Computes posterior draws of historical decompositions
+#'
+#' @description Each of the draws from the posterior estimation of models from
+#' packages \pkg{bsvars} or \pkg{bsvarSIGNs} is transformed into
+#' a draw from the posterior distribution of the historical decompositions. 
+#' IMPORTANT! The historical decompositions are interpreted correctly for 
+#' covariance stationary data. Application to unit-root non-stationary data might
+#' result in non-interpretable outcomes.
+#' 
+#' @param posterior posterior estimation outcome - an object of class 
+#' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
+#' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
+#' 
+#' @return An object of class \code{PosteriorHD}, that is, an \code{NxNxTxS} array 
+#' with attribute \code{PosteriorHD} containing \code{S} draws of the historical 
+#' decompositions.
+#'
+#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#'
+#' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
+#' 
+#' @references 
+#' Kilian, L., & Lütkepohl, H. (2017). Structural VAR Tools, Chapter 4, In: Structural vector autoregressive analysis. Cambridge University Press.
+#' 
+#' @examples
+#' # upload data
+#' data(oil)
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' 
+#' # run the burn-in
+#' posterior      = estimate(specification, 10)
+#' 
+#' # compute historical decompositions
+#' hd            = compute_historical_decompositions(posterior)
+#' 
+#' # workflow with the pipe |>
+#' ############################################################
+#' set.seed(123)
+#' oil |>
+#'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
+#'   estimate(S = 10) |> 
+#'   compute_historical_decompositions() -> hd
+#'   
+#' @export
+compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show_progress = TRUE) {
+  
+  posterior_Theta0  = posterior$posterior$Theta0
+  posterior_B       = posterior$posterior$B
+  posterior_A       = posterior$posterior$A
+  posterior_At      = aperm(posterior_A, c(2, 1, 3))
+  
+  Y                 = posterior$last_draw$data_matrices$Y
+  X                 = posterior$last_draw$data_matrices$X
+  
+  N                 = nrow(Y)
+  T                 = ncol(Y)
+  p                 = posterior$last_draw$p
+  S                 = dim(posterior_A)[3]
+  
+  ss                = .Call(`_bsvarSIGNs_bsvarSIGNs_structural_shocks`, posterior_B, posterior_A, Y, X)
+  ir                = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_At, posterior_Theta0, T, p, TRUE)
+  qqq               = .Call(`_bsvarSIGNs_bsvarSIGNs_hd`, ir, ss, show_progress)
+  
+  hd                = array(NA, c(N, N, T, S))
+  for (s in 1:S) hd[,,,s] = qqq[s][[1]]
+  class(hd)         = "PosteriorHD"
+  
+  return(hd)
+} # END compute_historical_decompositions.PosteriorBSVARSIGN

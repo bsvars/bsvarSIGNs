@@ -1,5 +1,6 @@
 
 #include <RcppArmadillo.h>
+#include "progress.hpp"
 #include "bsvars.h"
 
 using namespace Rcpp;
@@ -90,3 +91,48 @@ arma::field<arma::cube> bsvarSIGNs_ir (
   
   return irfs;
 } // END bsvarSIGNs_ir
+
+
+
+// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::export]]
+arma::field<arma::cube> bsvarSIGNs_hd (
+    arma::field<arma::cube>&    posterior_irf_T,    // output of bsvars_irf with irfs at T horizons
+    arma::cube&                 structural_shocks,  // NxTxS output bsvars_structural_shocks
+    const bool                  show_progress = true
+) {
+  field<cube> hds = bsvars::bsvars_hd (posterior_irf_T, structural_shocks, show_progress);
+  return hds;
+} // END bsvarSIGNs_hd
+
+
+
+// compute historical decomposition from t to t+h of the i-th variable
+// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::export]]
+arma::mat hd1_cpp(
+    const int&        var_i,   // i-th variable
+    const int&        t,       // start at period t
+    const int&        h,       // number of horizons
+    const arma::mat&  Epsilon, // structural shocks, NxT
+    const arma::cube& irf
+) {
+  
+  int ii = var_i - 1;
+  int tt = t - 1;
+  int N  = Epsilon.n_rows;
+  
+  mat hd(N, h + 1);
+  
+  // for each shock jj
+  for(int jj = 0; jj < N; jj++) {
+    // for each horizon hh
+    for(int hh = 0; hh <= h; hh++) {
+      // for each lag ll
+      for(int ll = 0; ll <= hh; ll++) {
+        hd(jj, hh) += irf(ii, jj, ll) * Epsilon(jj, tt + hh - ll);
+      }
+    }
+  }
+  return hd;
+} // END hd1_cpp

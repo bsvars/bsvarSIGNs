@@ -3,12 +3,6 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
-
-using namespace Rcpp;
-using namespace arma;
-
-
 arma::mat rmatnorm_cpp(
     const arma::mat& M,
     const arma::mat& U,
