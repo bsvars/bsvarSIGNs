@@ -13,6 +13,14 @@ using namespace Rcpp;
 using namespace arma;
 
 
+/***
+All notations in the C++ code except for compute.cpp and forecast_bsvarSIGNs.cpp
+ are consistent with the notations in the papers:
+ Antolín-Díaz and Rubio-Ramírez (2018) and Arias, Rubio-Ramírez and Waggoner (2018)
+ which are different from the notations in the R code.
+***/
+
+
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 Rcpp::List bsvar_sign_cpp(
@@ -47,7 +55,7 @@ Rcpp::List bsvar_sign_cpp(
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
     Rcout << " bsvarSIGNs: Bayesian Structural VAR with zero,   |" << endl;
-    Rcout << "              sign and narrative restrictions     |" << endl;
+    Rcout << "             sign and narrative restrictions      |" << endl;
     Rcout << "**************************************************|" << endl;
     // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
     // Rcout << "**************************************************|" << endl;
@@ -96,32 +104,36 @@ Rcpp::List bsvar_sign_cpp(
   // #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (int s = 0; s < S; s++) {
     
-    w = 0;
+    hyper      = hypers.col(randi(distr_param(0, S_hyper)));
+    mu         = hyper(0);
+    delta      = hyper(1);
+    lambda     = hyper(2);
+    psi        = hyper.rows(3, N + 2);
+    
+    // update Minnesota prior
+    prior_V    = diagmat(prior_v %
+      join_vert(lambda * lambda * repmat(1 / psi, p, 1),
+                ones<vec>(K - N * p)));
+    prior_S    = diagmat(psi);
+    
+    // update dummy observation prior
+    Ystar      = join_vert(Ysoc / mu, Ysur / delta);
+    Xstar      = join_vert(Xsoc / mu, Xsur / delta);
+    Yplus      = join_vert(Ystar, Y);
+    Xplus      = join_vert(Xstar, X);
+    
+    // posterior parameters
+    result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    post_B     = result(0);
+    post_V     = result(1);
+    post_S     = result(2);
+    post_nu    = as_scalar(result(3));
+    
+    w          = 0;
+    
     while (w == 0) {
-      hyper      = hypers.col(randi(distr_param(0, S_hyper)));
-      mu         = hyper(0);
-      delta      = hyper(1);
-      lambda     = hyper(2);
-      psi        = hyper.rows(3, N + 2);
       
-      // update Minnesota prior
-      prior_V    = diagmat(prior_v %
-                           join_vert(lambda * lambda * repmat(1 / psi, p, 1),
-                                     ones<vec>(K - N * p)));
-      prior_S    = diagmat(psi);
-      
-      // update dummy observation prior
-      Ystar      = join_vert(Ysoc / mu, Ysur / delta);
-      Xstar      = join_vert(Xsoc / mu, Xsur / delta);
-      Yplus      = join_vert(Ystar, Y);
-      Xplus      = join_vert(Xstar, X);
-      
-      // posterior parameters
-      result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
-      post_B     = result(0);
-      post_V     = result(1);
-      post_S     = result(2);
-      post_nu    = as_scalar(result(3));
+      checkUserInterrupt();
       
       // sample reduced-form parameters
       Sigma      = iwishrnd(post_S, post_nu);
@@ -144,9 +156,6 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Sigma.slice(s)  = Sigma;
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
-    
-    // Check for user interrupts
-    if (s % 200 == 0) checkUserInterrupt();
     
     // Increment progress bar
     if (any(prog_rep_points == s)) bar.increment();
