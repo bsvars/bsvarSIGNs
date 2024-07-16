@@ -250,8 +250,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
         for (i in 1:(p + 5)) {
           x   = cbind(x, Y[(p + 5 + 1):T - i, n])
         }
-        s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / 
-          (T - p - 5)
+        s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / (T - p - 5)
       }
       
       hyper              = matrix(NA, N + 3, 1)
