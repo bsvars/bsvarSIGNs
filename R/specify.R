@@ -468,7 +468,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
       } else {
         missing_all = FALSE
       }
@@ -558,7 +558,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
       } else {
         missing_all = FALSE
       }
@@ -683,7 +683,7 @@ specify_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
       } else {
         missing_all = FALSE
       }

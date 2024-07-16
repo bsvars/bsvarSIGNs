@@ -146,7 +146,7 @@ Rcpp::List bsvar_sign_cpp(
     posterior_shocks.slice(s) = shocks;
     
     // Check for user interrupts
-    if (s % 200 == 0) checkUserInterrupt();
+    if (s % 1 == 0) checkUserInterrupt();
     
     // Increment progress bar
     if (any(prog_rep_points == s)) bar.increment();
