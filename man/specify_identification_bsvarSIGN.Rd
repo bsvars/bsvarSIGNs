@@ -25,8 +25,6 @@ specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative)
 
 \item{\code{sign_B}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
-\item{\code{zero_irf}}{a \code{NxNxH} array of zero restrictions on the impulse response functions.}
-
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations 
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
@@ -52,7 +50,6 @@ Create new identifying restrictions IdentificationBSVARSIGN.
   sign_irf,
   sign_narrative,
   sign_B,
-  zero_irf,
   max_tries = 1
 )}\if{html}{\out{</div>}}
 }
@@ -90,9 +87,6 @@ contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}
 
-\item{\code{zero_irf}}{a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-contemporaneous impulse response functions.}
-
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
 }
@@ -122,8 +116,7 @@ Set new starting values StartingValuesBSVARSIGN.
   N,
   sign_irf,
   sign_narrative,
-  sign_B,
-  zero_irf
+  sign_B
 )}\if{html}{\out{</div>}}
 }
 
@@ -159,9 +152,6 @@ e.g. when h=0 the restriction in only placed on period t.}
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
 of \code{B} is the contemporaneous impulse response function.}
-
-\item{\code{zero_irf}}{a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-contemporaneous impulse response functions.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}

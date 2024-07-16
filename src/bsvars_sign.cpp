@@ -105,8 +105,8 @@ Rcpp::List bsvar_sign_cpp(
       psi        = hyper.rows(3, N + 2);
       
       // update Minnesota prior
-      prior_V    = diagmat(lambda * lambda * prior_v %
-                           join_vert(repmat(1 / psi, p, 1),
+      prior_V    = diagmat(prior_v %
+                           join_vert(lambda * lambda * repmat(1 / psi, p, 1),
                                      ones<vec>(K - N * p)));
       prior_S    = diagmat(psi);
       
@@ -121,7 +121,7 @@ Rcpp::List bsvar_sign_cpp(
       post_B     = result(0);
       post_V     = result(1);
       post_S     = result(2);
-      // post_nu    = as_scalar(post(3));
+      post_nu    = as_scalar(result(3));
       
       // sample reduced-form parameters
       Sigma      = iwishrnd(post_S, post_nu);

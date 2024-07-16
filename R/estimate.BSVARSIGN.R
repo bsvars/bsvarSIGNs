@@ -110,13 +110,15 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   prior$Xsur          = t(prior$Xsur)
   Y                   = t(data_matrices$Y)
   X                   = t(data_matrices$X)
+  
+  Z                   = get_Z(identification$sign_irf)
+  sign                = identification$sign_irf
+  sign[is.na(sign)]   = 0
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, identification$VB, 
-                              identification$sign_irf, identification$sign_narrative, 
-                              identification$sign_B, identification$zero_irf,
+                              sign, identification$sign_narrative, identification$sign_B, Z,
                               prior, starting_values, show_progress, thin, max_tries)
-
   
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)

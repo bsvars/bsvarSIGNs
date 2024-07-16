@@ -1,6 +1,9 @@
 
 # construct Z_j matrices
-get_Z = function(zero_irf) {
+get_Z = function(sign_irf) {
+  zero_irf = sign_irf[, , 1] == 0
+  zero_irf[is.na(zero_irf)] = 0
+  
   if (sum(zero_irf) == 0) {
     return(NULL)
   }
@@ -36,7 +39,7 @@ verify_traditional = function(N, A) {
   if (!(is.matrix(A) && all(dim(A) == c(N, N)))) {
     stop("Sign restriction matrix is not NxN.")
   }
-  if (!(all(A %in% c(-1, 0, 1)))) {
+  if (!(all(A %in% c(-1, 0, 1, NA)))) {
     stop("Sign restriction matrix has entries that are not in {-1, 0, 1}.")
   }
 }
@@ -74,10 +77,6 @@ verify_all = function(N, sign_irf, sign_narrative, sign_B) {
   
   verify_narrative(N, sign_narrative)
   
-  dim_irf = dim(sign_irf)
-  if (length(dim_irf) != 3) {
-    stop("Sign restriction array is not 3-dimensional.")
-  }
   for (h in 1:dim(sign_irf)[3]) {
     verify_traditional(N, sign_irf[,,h])
   }
@@ -251,8 +250,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
         for (i in 1:(p + 5)) {
           x   = cbind(x, Y[(p + 5 + 1):T - i, n])
         }
-        s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / 
-          (T - p - 5)
+        s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / (T - p - 5)
       }
       
       hyper              = matrix(NA, N + 3, 1)
@@ -426,8 +424,6 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_narrative  = matrix(),
     #' @field sign_B a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     sign_B   = matrix(),
-    #' @field zero_irf a \code{NxNxH} array of zero restrictions on the impulse response functions.
-    zero_irf = array(),
     #' @field max_tries a positive integer with the maximum number of iterations 
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     max_tries = 1,
@@ -460,12 +456,10 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
-    #' @param zero_irf a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-    #' contemporaneous impulse response functions.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
-    initialize = function(N, sign_irf, sign_narrative, sign_B, zero_irf, max_tries = 1) {
+    initialize = function(N, sign_irf, sign_narrative, sign_B, max_tries = 1) {
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
@@ -485,8 +479,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
           sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
-      if (missing(zero_irf)) {
-        zero_irf = matrix(rep(0, N^2), ncol = N, nrow = N)
+      
+      if (is.matrix(sign_irf)) {
+        sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
       verify_all(N, sign_irf, sign_narrative, sign_B)
       
@@ -501,7 +496,6 @@ specify_identification_bsvarSIGN = R6::R6Class(
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
       self$sign_B         = sign_B
-      self$zero_irf       = get_Z(zero_irf)
       self$max_tries      = max_tries
     }, # END initialize
     
@@ -514,7 +508,6 @@ specify_identification_bsvarSIGN = R6::R6Class(
         sign_irf       = as.array(self$sign_irf),
         sign_narrative = as.matrix(self$sign_narrative),
         sign_B         = as.matrix(self$sign_B),
-        zero_irf       = as.list(self$zero_irf),
         max_tries      = self$max_tries
         )
     }, # END get_identification
@@ -547,11 +540,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
-    #' @param zero_irf a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-    #' contemporaneous impulse response functions.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
-    set_identification = function(N, sign_irf, sign_narrative, sign_B, zero_irf) {
+    set_identification = function(N, sign_irf, sign_narrative, sign_B) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -578,15 +569,15 @@ specify_identification_bsvarSIGN = R6::R6Class(
           sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
-      if (missing(zero_irf)) {
-        zero_irf = matrix(rep(0, N^2), ncol = N, nrow = N)
+      
+      if (is.matrix(sign_irf)) {
+        sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
       verify_all(N, sign_irf, sign_narrative, sign_B)
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
       self$sign_B         = sign_B
-      self$zero_irf       = get_Z(zero_irf)
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -657,8 +648,6 @@ specify_bsvarSIGN = R6::R6Class(
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
     #' of \code{B} is the contemporaneous impulse response function.
-    #' @param zero_irf a \code{NxN} matrix with entries in (0, 1), zero restrictions on the
-    #' contemporaneous impulse response functions.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
@@ -672,7 +661,6 @@ specify_bsvarSIGN = R6::R6Class(
     sign_irf,
     sign_narrative,
     sign_B,
-    zero_irf,
     max_tries = 1,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
@@ -706,8 +694,9 @@ specify_bsvarSIGN = R6::R6Class(
           sign_B = matrix(rep(0, N^2), ncol = N, nrow = N)  
         }
       }
-      if (missing(zero_irf)) {
-        zero_irf = matrix(rep(0, N^2), ncol = N, nrow = N)
+      
+      if (is.matrix(sign_irf)) {
+        sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
       verify_all(N, sign_irf, sign_narrative, sign_B)
       
@@ -719,7 +708,6 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           sign_irf,
                                                                           sign_narrative,
                                                                           sign_B,
-                                                                          zero_irf,
                                                                           max_tries)
       self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous,
                                                                  stationary)
