@@ -1,16 +1,16 @@
 
-data(oil)
+data(optimism)
 
 set.seed(1)
 suppressMessages(
-  specification_no1 <- specify_bsvarSIGN$new(oil)
+  specification_no1 <- specify_bsvarSIGN$new(optimism)
 )
 run_no1             <- estimate(specification_no1, 3, 1, show_progress = FALSE)
 hd                  <- compute_historical_decompositions(run_no1)
 
 set.seed(1)
 suppressMessages(
-  hd2               <- oil |>
+  hd2               <- optimism |>
     specify_bsvarSIGN$new() |>
     estimate(S = 3, thin = 1, show_progress = FALSE) |>
     compute_historical_decompositions()

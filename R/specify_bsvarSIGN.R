@@ -128,10 +128,10 @@ igamma_shape = function(mode, variance) {
 #' The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 #' 
 #' @examples
-#' # a prior for 3-variable example with one lag 
-#' data(oil)
-#' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
-#' prior$B                                        # show autoregressive prior mean
+#' # a prior for 5-variable example with one lag 
+#' data(optimism)
+#' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
+#' prior$A  # show autoregressive prior mean
 #' 
 #' @export
 specify_prior_bsvarSIGN = R6::R6Class(
@@ -215,9 +215,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' otherwise to random walk.
     #' @return A new prior specification PriorBSVARSIGN.
     #' @examples 
-    #' # a prior for 3-variable example with one lag and stationary data
-    #' data(oil)
-    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+    #' # a prior for 5-variable example with one lag and stationary data
+    #' data(optimism)
+    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
     #' prior$B # show autoregressive prior mean
     #' 
     initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE,  ncol(data))) {
@@ -301,8 +301,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' Returns the elements of the prior specification PriorBSVAR as a \code{list}.
     #' 
     #' @examples 
-    #' # a prior for 3-variable example with four lags
-    #' prior = specify_prior_bsvar$new(N = 3, p = 4)
+    #' # a prior for 5-variable example with four lags
+    #' prior = specify_prior_bsvar$new(N = 5, p = 4)
     #' prior$get_prior() # show the prior as list
     #' 
     get_prior = function(){
@@ -343,9 +343,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @param burn_in number of burn-in draws.
     #' 
     #' @examples 
-    #' # a prior for 3-variable example with four lags
-    #' data(oil)
-    #' prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+    #' # a prior for 5-variable example with four lags
+    #' data(optimism)
+    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
     #' prior$estimate_hyper(S = 5)
     #' 
     estimate_hyper = function(
@@ -404,11 +404,11 @@ specify_prior_bsvarSIGN = R6::R6Class(
 #' The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 #'
 #' @examples 
-#' specify_identification_bsvarSIGN$new(N = 3) # recursive specification for a 3-variable system
+#' specify_identification_bsvarSIGN$new(N = 5) # recursive specification for a 5-variable system
 #' 
 #' # an identification pattern with narrative sign restrictions
-#' sign_narrative <- matrix(c(2, -1, 3, 2, 236, 0), ncol = 6)
-#' specify_identification_bsvarSIGN$new(N = 3, sign_narrative = sign_narrative) 
+#' sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+#' specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf) 
 #'
 #' @export
 specify_identification_bsvarSIGN = R6::R6Class(
@@ -592,9 +592,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
 #' 
 #' @examples 
-#' data(oil)
+#' data(optimism)
 #' specification = specify_bsvarSIGN$new(
-#'    data = oil,
+#'    data = optimism,
 #'    p = 4
 #' )
 #'
@@ -718,9 +718,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the data matrices as the DataMatricesBSVAR object.
     #'
     #' @examples 
-    #' data(oil)
+    #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
-    #'    data = oil,
+    #'    data = optimism,
     #'    p = 4
     #' )
     #' spec$get_data_matrices()
@@ -733,9 +733,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the identifying restrictions as the IdentificationBSVARSIGN object.
     #'
     #' @examples 
-    #' data(oil)
+    #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
-    #'    data = oil,
+    #'    data = optimism,
     #'    p = 4
     #' )
     #' spec$get_identification()
@@ -748,9 +748,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the prior specification as the PriorBSVAR object.
     #'
     #' @examples 
-    #' data(oil)
+    #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
-    #'    data = oil,
+    #'    data = optimism,
     #'    p = 4
     #' )
     #' spec$get_prior()
@@ -763,9 +763,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the starting values as the StartingValuesBSVAR object.
     #'
     #' @examples 
-    #' data(oil)
+    #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
-    #'    data = oil,
+    #'    data = optimism,
     #'    p = 4
     #' )
     #' spec$get_starting_values()
@@ -790,8 +790,8 @@ specify_bsvarSIGN = R6::R6Class(
 #' 
 #' @examples 
 #' # This is a function that is used within estimate()
-#' data(oil)
-#' specification  = specify_bsvarSIGN$new(oil, p = 4)
+#' data(optimism)
+#' specification  = specify_bsvarSIGN$new(optimism, p = 4)
 #' set.seed(123)
 #' posterior      = estimate(specification, 50)
 #' class(posterior)
@@ -835,8 +835,8 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
     #'
     #' @examples 
-    #' data(oil)
-    #' specification  = specify_bsvarSIGN$new(oil)
+    #' data(optimism)
+    #' specification  = specify_bsvarSIGN$new(optimism)
     #' set.seed(123)
     #' estimate       = estimate(specification, 50)
     #' estimate$get_posterior()
@@ -850,8 +850,8 @@ specify_posterior_bsvarSIGN = R6::R6Class(
     #' and \code{FALSE} otherwise.
     #'
     #' @examples
-    #' data(oil)
-    #' specification  = specify_bsvarSIGN$new(oil)
+    #' data(optimism)
+    #' specification  = specify_bsvarSIGN$new(optimism)
     #' set.seed(123)
     #' estimate       = estimate(specification, 20)
     #' 

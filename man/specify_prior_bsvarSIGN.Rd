@@ -7,19 +7,19 @@
 The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 }
 \examples{
-# a prior for 3-variable example with one lag 
-data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
-prior$B                                        # show autoregressive prior mean
+# a prior for 5-variable example with one lag 
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
+prior$A  # show autoregressive prior mean
 
 
 ## ------------------------------------------------
 ## Method `specify_prior_bsvarSIGN$new`
 ## ------------------------------------------------
 
-# a prior for 3-variable example with one lag and stationary data
-data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+# a prior for 5-variable example with one lag and stationary data
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$B # show autoregressive prior mean
 
 
@@ -27,8 +27,8 @@ prior$B # show autoregressive prior mean
 ## Method `specify_prior_bsvarSIGN$get_prior`
 ## ------------------------------------------------
 
-# a prior for 3-variable example with four lags
-prior = specify_prior_bsvar$new(N = 3, p = 4)
+# a prior for 5-variable example with four lags
+prior = specify_prior_bsvar$new(N = 5, p = 4)
 prior$get_prior() # show the prior as list
 
 
@@ -36,9 +36,9 @@ prior$get_prior() # show the prior as list
 ## Method `specify_prior_bsvarSIGN$estimate_hyper`
 ## ------------------------------------------------
 
-# a prior for 3-variable example with four lags
-data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+# a prior for 5-variable example with four lags
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$estimate_hyper(S = 5)
 
 }
@@ -136,9 +136,9 @@ A new prior specification PriorBSVARSIGN.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 3-variable example with one lag and stationary data
-data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+\preformatted{# a prior for 5-variable example with one lag and stationary data
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$B # show autoregressive prior mean
 
 }
@@ -158,8 +158,8 @@ Returns the elements of the prior specification PriorBSVAR as a \code{list}.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 3-variable example with four lags
-prior = specify_prior_bsvar$new(N = 3, p = 4)
+\preformatted{# a prior for 5-variable example with four lags
+prior = specify_prior_bsvar$new(N = 5, p = 4)
 prior$get_prior() # show the prior as list
 
 }
@@ -207,9 +207,9 @@ variances in the Minnesota prior.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 3-variable example with four lags
-data(oil)
-prior = specify_prior_bsvarSIGN$new(oil, p = 1)
+\preformatted{# a prior for 5-variable example with four lags
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$estimate_hyper(S = 5)
 
 }

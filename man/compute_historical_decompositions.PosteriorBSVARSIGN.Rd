@@ -27,12 +27,12 @@ result in non-interpretable outcomes.
 }
 \examples{
 # upload data
-data(oil)
+data(optimism)
 
 # specify the model and set seed
 set.seed(123)
-sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
-specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 
 # run the burn-in
 posterior      = estimate(specification, 10)
@@ -43,7 +43,7 @@ hd            = compute_historical_decompositions(posterior)
 # workflow with the pipe |>
 ############################################################
 set.seed(123)
-oil |>
+optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
   estimate(S = 10) |> 
   compute_historical_decompositions() -> hd

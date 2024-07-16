@@ -17,9 +17,7 @@ This package is currently in active development. We give no
 warranty that anything here works.
 }
 \examples{
-sign_irf       = matrix(NA, 5, 5)
-sign_irf[2, 1] = 1
-sign_irf[1, 1] = 0
+sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 spec           = specify_bsvarSIGN$new(optimism * 100,
                                        p        = 4,
                                        sign_irf = sign_irf)

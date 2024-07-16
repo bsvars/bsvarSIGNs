@@ -11,8 +11,8 @@ might not be equal to the last draw provided in element \code{posterior}.
 }
 \examples{
 # This is a function that is used within estimate()
-data(oil)
-specification  = specify_bsvarSIGN$new(oil, p = 4)
+data(optimism)
+specification  = specify_bsvarSIGN$new(optimism, p = 4)
 set.seed(123)
 posterior      = estimate(specification, 50)
 class(posterior)
@@ -22,8 +22,8 @@ class(posterior)
 ## Method `specify_posterior_bsvarSIGN$get_posterior`
 ## ------------------------------------------------
 
-data(oil)
-specification  = specify_bsvarSIGN$new(oil)
+data(optimism)
+specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 50)
 estimate$get_posterior()
@@ -33,8 +33,8 @@ estimate$get_posterior()
 ## Method `specify_posterior_bsvarSIGN$is_normalised`
 ## ------------------------------------------------
 
-data(oil)
-specification  = specify_bsvarSIGN$new(oil)
+data(optimism)
+specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 20)
 
@@ -101,8 +101,8 @@ an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS}
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(oil)
-specification  = specify_bsvarSIGN$new(oil)
+\preformatted{data(optimism)
+specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 50)
 estimate$get_posterior()
@@ -125,8 +125,8 @@ and \code{FALSE} otherwise.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(oil)
-specification  = specify_bsvarSIGN$new(oil)
+\preformatted{data(optimism)
+specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 20)
 
