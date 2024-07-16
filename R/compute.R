@@ -118,4 +118,76 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
   class(fv)       = "PosteriorFitted"
   
   return(fv)
-}
+} # END compute_fitted_values.PosteriorBSVARSIGN
+
+
+
+
+
+#' @title Computes posterior draws of impulse responses 
+#'
+#' @description Each of the draws from the posterior estimation of models from 
+#' packages \pkg{bsvars} or \pkg{bsvarSIGNs} is transformed into
+#' a draw from the posterior distribution of the impulse responses. 
+#' 
+#' @method compute_impulse_responses PosteriorBSVARSIGN
+#' 
+#' @param posterior posterior estimation outcome - an object of class 
+#' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
+#' @param horizon a positive integer number denoting the forecast horizon for the impulse responses computations.
+#' @param standardise a logical value. If \code{TRUE}, the impulse responses are standardised 
+#' so that the variables' own shocks at horizon 0 are equal to 1. Otherwise, the parameter estimates 
+#' determine this magnitude.
+#' 
+#' @return An object of class PosteriorIR, that is, an \code{NxNx(horizon+1)xS} array with attribute PosteriorIR 
+#' containing \code{S} draws of the impulse responses.
+#'
+#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#'
+#' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
+#' 
+#' @references 
+#' Kilian, L., & Lütkepohl, H. (2017). Structural VAR Tools, Chapter 4, In: Structural vector autoregressive analysis. Cambridge University Press.
+#' 
+#' @examples
+#' # upload data
+#' data(oil)
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' 
+#' # run the burn-in
+#' posterior      = estimate(specification, 10)
+#' 
+#' # compute impulse responses 2 years ahead
+#' irf           = compute_impulse_responses(posterior, horizon = 8)
+#' 
+#' # workflow with the pipe |>
+#' ############################################################
+#' set.seed(123)
+#' oil |>
+#'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
+#'   estimate(S = 10) |> 
+#'   compute_impulse_responses(horizon = 8) -> ir
+#' 
+#' 
+#' @export
+compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, standardise = FALSE) {
+  
+  posterior_Theta0  = posterior$posterior$Theta0
+  posterior_A       = posterior$posterior$A
+  posterior_A       = aperm(posterior_A, c(2, 1, 3))
+  N                 = dim(posterior_A)[2]
+  p                 = posterior$last_draw$p
+  S                 = dim(posterior_A)[3]
+  
+  qqq               = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_A, posterior_Theta0, horizon, p, standardise)
+  
+  irfs              = array(NA, c(N, N, horizon + 1, S))
+  for (s in 1:S) irfs[,,,s] = qqq[s][[1]]
+  class(irfs)       = "PosteriorIR"
+  
+  return(irfs)
+} # END compute_impulse_responses.PosteriorBSVARSIGN
