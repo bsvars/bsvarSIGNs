@@ -2,7 +2,7 @@
 #include <RcppArmadillo.h>
 
 #include "utils.h"
-#include "bsvarTOOLs.h"
+#include "compute.h"
 
 using namespace Rcpp;
 using namespace arma;

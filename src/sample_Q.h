@@ -3,11 +3,6 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
-
-using namespace Rcpp;
-using namespace arma;
-
 arma::field<arma::mat> sample_Q(    
     const int&                    p,
     const arma::mat&              Y,

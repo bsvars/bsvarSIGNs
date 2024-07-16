@@ -1,14 +1,7 @@
 #ifndef _MCMC_H_
 #define _MCMC_H_
 
-
-#include <functional>
-#include <iostream>
 #include <RcppArmadillo.h>
-#include "Rcpp/Rmath.h"
-#include "progress.hpp"
-
-using namespace arma;
 
 
 arma::mat metropolis(

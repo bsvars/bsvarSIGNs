@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "restrictions_narrative.h"
 #include "restrictions_zero.h"
-#include "bsvarTOOLs.h"
+#include "compute.h"
 
 using namespace Rcpp;
 using namespace arma;

@@ -3,9 +3,6 @@
 
 #include <RcppArmadillo.h>
 
-using namespace Rcpp;
-using namespace arma;
-
 
 arma::mat sample_hyper(
     const int&        S,

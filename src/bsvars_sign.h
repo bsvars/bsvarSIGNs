@@ -2,15 +2,6 @@
 #define _BSVARS_SIGN_H_
 
 #include <RcppArmadillo.h>
-#include "progress.hpp"
-#include "Rcpp/Rmath.h"
-
-#include <bsvars.h>
-
-#include "sample_Q.h"
-
-using namespace Rcpp;
-using namespace arma;
 
 Rcpp::List bsvar_sign_cpp(
         const int&        S,                  // number of draws from the posterior
