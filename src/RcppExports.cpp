@@ -284,6 +284,40 @@ RcppExport SEXP _bsvarSIGNs_hd1_cpp(SEXP var_iSEXP, SEXP tSEXP, SEXP hSEXP, SEXP
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// bsvarSIGNs_fevd
+arma::field<arma::cube> bsvarSIGNs_fevd(arma::field<arma::cube>& posterior_irf);
+static SEXP _bsvarSIGNs_bsvarSIGNs_fevd_try(SEXP posterior_irfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< arma::field<arma::cube>& >::type posterior_irf(posterior_irfSEXP);
+    rcpp_result_gen = Rcpp::wrap(bsvarSIGNs_fevd(posterior_irf));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_bsvarSIGNs_fevd(SEXP posterior_irfSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_bsvarSIGNs_fevd_try(posterior_irfSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // forecast_bsvarSIGNs
 arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon);
 static SEXP _bsvarSIGNs_forecast_bsvarSIGNs_try(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP horizonSEXP) {
@@ -1022,6 +1056,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_ir)(arma::cube&,arma::cube&,const int,const int,const bool)");
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_hd)(arma::field<arma::cube>&,arma::cube&,const bool)");
         signatures.insert("arma::mat(*hd1_cpp)(const int&,const int&,const int&,const arma::mat&,const arma::cube&)");
+        signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_fevd)(arma::field<arma::cube>&)");
         signatures.insert("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
@@ -1050,6 +1085,7 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_ir", (DL_FUNC)_bsvarSIGNs_bsvarSIGNs_ir_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_hd", (DL_FUNC)_bsvarSIGNs_bsvarSIGNs_hd_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_hd1_cpp", (DL_FUNC)_bsvarSIGNs_hd1_cpp_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_fevd", (DL_FUNC)_bsvarSIGNs_bsvarSIGNs_fevd_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC)_bsvarSIGNs_forecast_bsvarSIGNs_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_narrative", (DL_FUNC)_bsvarSIGNs_match_sign_narrative_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_narrative", (DL_FUNC)_bsvarSIGNs_weight_narrative_try);
@@ -1077,6 +1113,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_bsvarSIGNs_ir", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_ir, 5},
     {"_bsvarSIGNs_bsvarSIGNs_hd", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_hd, 3},
     {"_bsvarSIGNs_hd1_cpp", (DL_FUNC) &_bsvarSIGNs_hd1_cpp, 5},
+    {"_bsvarSIGNs_bsvarSIGNs_fevd", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_fevd, 1},
     {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 6},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
     {"_bsvarSIGNs_weight_narrative", (DL_FUNC) &_bsvarSIGNs_weight_narrative, 3},

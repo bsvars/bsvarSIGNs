@@ -27,7 +27,7 @@
 #'  \item{Y}{an \eqn{NxT} matrix with the data on dependent variables}
 #' }
 #' 
-#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #' 
 #' @author Tomasz Woźniak \email{wozniak.tom@pm.me} and Xiaolei Wang \email{adamwang15@gmail.com}
 #' 
@@ -37,7 +37,7 @@
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 #' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 #' 
 #' # estimate the model

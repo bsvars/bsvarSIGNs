@@ -172,6 +172,27 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::mat >(rcpp_result_gen);
     }
 
+    inline arma::field<arma::cube> bsvarSIGNs_fevd(arma::field<arma::cube>& posterior_irf) {
+        typedef SEXP(*Ptr_bsvarSIGNs_fevd)(SEXP);
+        static Ptr_bsvarSIGNs_fevd p_bsvarSIGNs_fevd = NULL;
+        if (p_bsvarSIGNs_fevd == NULL) {
+            validateSignature("arma::field<arma::cube>(*bsvarSIGNs_fevd)(arma::field<arma::cube>&)");
+            p_bsvarSIGNs_fevd = (Ptr_bsvarSIGNs_fevd)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_fevd");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_bsvarSIGNs_fevd(Shield<SEXP>(Rcpp::wrap(posterior_irf)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::field<arma::cube> >(rcpp_result_gen);
+    }
+
     inline arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon) {
         typedef SEXP(*Ptr_forecast_bsvarSIGNs)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_forecast_bsvarSIGNs p_forecast_bsvarSIGNs = NULL;

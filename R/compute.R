@@ -15,7 +15,7 @@
 #' array with attribute \code{PosteriorShocks} containing \code{S} draws of the 
 #' structural shocks.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
@@ -25,7 +25,7 @@
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 #' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
@@ -75,7 +75,7 @@ compute_structural_shocks.PosteriorBSVARSIGN <- function(posterior) {
 #' array with attribute \code{PosteriorFitted} containing \code{S} draws from 
 #' the data predictive density.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
@@ -85,7 +85,7 @@ compute_structural_shocks.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 #' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
@@ -142,7 +142,7 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' @return An object of class PosteriorIR, that is, an \code{NxNx(horizon+1)xS} array with attribute PosteriorIR 
 #' containing \code{S} draws of the impulse responses.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
@@ -155,7 +155,7 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 #' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
@@ -214,7 +214,7 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
 #' with attribute \code{PosteriorHD} containing \code{S} draws of the historical 
 #' decompositions.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
@@ -227,7 +227,7 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
-#' sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 #' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 #' 
 #' # run the burn-in
@@ -270,3 +270,133 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
   
   return(hd)
 } # END compute_historical_decompositions.PosteriorBSVARSIGN
+
+
+
+
+#' @method compute_variance_decompositions PosteriorBSVARSIGN
+#' 
+#' @title Computes posterior draws of the forecast error variance decomposition
+#' 
+#' @description Each of the draws from the posterior estimation of the model
+#' is transformed into a draw from the posterior distribution of the forecast 
+#' error variance decomposition. 
+#' 
+#' @param posterior posterior estimation outcome - an object of class 
+#' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
+#' @param horizon a positive integer number denoting the forecast horizon for 
+#' the impulse responses computations.
+#' 
+#' @return An object of class \code{PosteriorFEVD}, that is, an \code{NxNx(horizon+1)xS} 
+#' array with attribute \code{PosteriorFEVD} containing \code{S} draws of the 
+#' forecast error variance decomposition.
+#'
+#' @seealso \code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{normalise_posterior}}, \code{\link{summary}}, \code{\link{plot}}
+#'
+#' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
+#' 
+#' @references 
+#' Kilian, L., & Lütkepohl, H. (2017). Structural VAR Tools, Chapter 4, In: Structural vector autoregressive analysis. Cambridge University Press.
+#' 
+#' @examples
+#' # upload data
+#' data(oil)
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
+#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' 
+#' # run the burn-in
+#' posterior      = estimate(specification, 10)
+#' 
+#' # compute forecast error variance decomposition 2 years ahead
+#' fevd           = compute_variance_decompositions(posterior, horizon = 8)
+#' 
+#' # workflow with the pipe |>
+#' ############################################################
+#' set.seed(123)
+#' oil |>
+#'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
+#'   estimate(S = 10) |> 
+#'   compute_variance_decompositions(horizon = 8) -> fevd
+#'   
+#' @export
+compute_variance_decompositions.PosteriorBSVARSIGN <- function(posterior, horizon) {
+  
+  posterior_Theta0  = posterior$posterior$Theta0
+  posterior_A       = posterior$posterior$A
+  posterior_A       = aperm(posterior_A, c(2, 1, 3))
+  N                 = dim(posterior_A)[2]
+  p                 = posterior$last_draw$p
+  S                 = dim(posterior_A)[3]
+  
+  posterior_irf     = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_A, posterior_Theta0, horizon, p, TRUE)
+  qqq               = .Call(`_bsvarSIGNs_bsvarSIGNs_fevd`, posterior_irf)
+  
+  fevd              = array(NA, c(N, N, horizon + 1, S))
+  for (s in 1:S) fevd[,,,s] = qqq[s][[1]]
+  class(fevd)       = "PosteriorFEVD"
+  
+  return(fevd)
+} # END compute_variance_decompositions.PosteriorBSVARSIGN
+
+
+
+
+#' @method compute_conditional_sd PosteriorBSVARSIGN
+#' 
+#' @title Computes posterior draws of structural shock conditional standard deviations
+#'
+#' @description Each of the draws from the posterior estimation of models is 
+#' transformed into a draw from the posterior distribution of the structural 
+#' shock conditional standard deviations. 
+#' 
+#' @param posterior posterior estimation outcome - an object of class 
+#' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
+#' 
+#' @return An object of class \code{PosteriorSigma}, that is, an \code{NxTxS} 
+#' array with attribute \code{PosteriorSigma} containing \code{S} draws of the 
+#' structural shock conditional standard deviations.
+#'
+#' @seealso \code{\link{estimate.BSVARSIGN}}
+#'
+#' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
+#' 
+#' @examples
+#' # upload data
+#' data(oil)
+#' 
+#' # specify the model and set seed
+#' set.seed(123)
+#' sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
+#' specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
+#' 
+#' # run the burn-in
+#' posterior      = estimate(specification, 10)
+#' 
+#' # compute structural shocks' conditional standard deviations
+#' sigma          = compute_conditional_sd(posterior)
+#' 
+#' # workflow with the pipe |>
+#' ############################################################
+#' set.seed(123)
+#' oil |>
+#'   specify_bsvarSIGN$new(sign_irf = sign_irf) |> 
+#'   estimate(S = 10) |> 
+#'   compute_conditional_sd() -> csd
+#' 
+#' @export
+compute_conditional_sd.PosteriorBSVARSIGN <- function(posterior) {
+  
+  Y     = posterior$last_draw$data_matrices$Y
+  N     = nrow(Y)
+  T     = ncol(Y)
+  S     = dim(posterior$posterior$A)[3]
+  
+  posterior_sigma       = array(1, c(N, T, S))
+  message("The model is homoskedastic. Returning an NxTxS matrix of conditional sd all equal to 1.")
+  class(posterior_sigma)  = "PosteriorSigma"
+  
+  return(posterior_sigma)
+} # END compute_conditional_sd.PosteriorBSVARSIGN

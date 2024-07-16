@@ -31,7 +31,7 @@ data(oil)
 
 # specify the model and set seed
 set.seed(123)
-sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
+sign_irf       = array(matrix(c(-1, -1, 1, rep(NA, 6)), nrow = 3), dim = c(3, 3, 1))
 specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 
 # run the burn-in
@@ -54,7 +54,7 @@ oil |>
 Kilian, L., & Lütkepohl, H. (2017). Structural VAR Tools, Chapter 4, In: Structural vector autoregressive analysis. Cambridge University Press.
 }
 \seealso{
-\code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
+\code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 }
 \author{
 Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}

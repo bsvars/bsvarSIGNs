@@ -136,3 +136,14 @@ arma::mat hd1_cpp(
   }
   return hd;
 } // END hd1_cpp
+
+
+
+// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::export]]
+arma::field<arma::cube> bsvarSIGNs_fevd (
+    arma::field<arma::cube>&    posterior_irf   // output of bsvars_irf
+) {
+  field<cube>     fevds = bsvars::bsvars_fevd_homosk (posterior_irf);
+  return fevds;
+} // END bsvarSIGNs_fevd

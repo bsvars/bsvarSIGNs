@@ -54,4 +54,9 @@ arma::mat hd1_cpp(
 );
 
 
+arma::field<arma::cube> bsvarSIGNs_fevd (
+    arma::field<arma::cube>&    posterior_irf   // output of bsvars_irf
+);
+
+
 #endif  // _COMPUTE_H_
