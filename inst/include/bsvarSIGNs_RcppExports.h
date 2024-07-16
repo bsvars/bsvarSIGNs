@@ -109,17 +109,38 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline arma::cube structural_shocks(const arma::cube& posterior_B, const arma::cube& posterior_A, const arma::mat& Y, const arma::mat& X) {
-        typedef SEXP(*Ptr_structural_shocks)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_structural_shocks p_structural_shocks = NULL;
-        if (p_structural_shocks == NULL) {
-            validateSignature("arma::cube(*structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
-            p_structural_shocks = (Ptr_structural_shocks)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_structural_shocks");
+    inline arma::cube bsvarSIGNs_structural_shocks(const arma::cube& posterior_B, const arma::cube& posterior_A, const arma::mat& Y, const arma::mat& X) {
+        typedef SEXP(*Ptr_bsvarSIGNs_structural_shocks)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_bsvarSIGNs_structural_shocks p_bsvarSIGNs_structural_shocks = NULL;
+        if (p_bsvarSIGNs_structural_shocks == NULL) {
+            validateSignature("arma::cube(*bsvarSIGNs_structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
+            p_bsvarSIGNs_structural_shocks = (Ptr_bsvarSIGNs_structural_shocks)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_structural_shocks");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_structural_shocks(Shield<SEXP>(Rcpp::wrap(posterior_B)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)));
+            rcpp_result_gen = p_bsvarSIGNs_structural_shocks(Shield<SEXP>(Rcpp::wrap(posterior_B)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::cube >(rcpp_result_gen);
+    }
+
+    inline arma::cube bsvarSIGNs_fitted_values(arma::cube& posterior_A, arma::cube& posterior_B, arma::cube& posterior_sigma, arma::mat& X) {
+        typedef SEXP(*Ptr_bsvarSIGNs_fitted_values)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_bsvarSIGNs_fitted_values p_bsvarSIGNs_fitted_values = NULL;
+        if (p_bsvarSIGNs_fitted_values == NULL) {
+            validateSignature("arma::cube(*bsvarSIGNs_fitted_values)(arma::cube&,arma::cube&,arma::cube&,arma::mat&)");
+            p_bsvarSIGNs_fitted_values = (Ptr_bsvarSIGNs_fitted_values)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_fitted_values");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_bsvarSIGNs_fitted_values(Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(posterior_B)), Shield<SEXP>(Rcpp::wrap(posterior_sigma)), Shield<SEXP>(Rcpp::wrap(X)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
