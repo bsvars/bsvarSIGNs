@@ -47,7 +47,7 @@ Rcpp::List bsvar_sign_cpp(
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
     Rcout << " bsvarSIGNs: Bayesian Structural VAR with zero,   |" << endl;
-    Rcout << "              sign and narrative restriction      |" << endl;
+    Rcout << "              sign and narrative restrictions     |" << endl;
     Rcout << "**************************************************|" << endl;
     // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
     // Rcout << "**************************************************|" << endl;
