@@ -38,7 +38,9 @@ draws from the predictive density and data. The output list includes element:
 Samples from the joint predictive density of all of the dependent 
 variables for models from packages \pkg{bsvars}, \pkg{bsvarSIGNs} or 
 \pkg{bvarPANELs} at forecast horizons from 1 to \code{horizon} specified as 
-an argument of the function.
+an argument of the function. Also facilitates forecasting using models with 
+exogenous variables and conditional forecasting given projected future 
+trajcetories of (some of the) variables.
 }
 \examples{
 # upload data
@@ -47,7 +49,7 @@ data(oil)
 # specify the model and set seed
 set.seed(123)
 sign_irf       = array(matrix(c(-1, -1, 1, rep(0, 6)), nrow = 3), dim = c(3, 3, 1))
-specification  = specify_bsvarSIGN$new(oil, p = 12, sign_irf = sign_irf)
+specification  = specify_bsvarSIGN$new(oil, sign_irf = sign_irf)
 
 # estimate the model
 posterior      = estimate(specification, 20)
@@ -59,7 +61,7 @@ predictive     = forecast(posterior, 4)
 ############################################################
 set.seed(123)
 oil |>
-  specify_bsvarSIGN$new(p = 12, sign_irf = sign_irf) |>
+  specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 20) |> 
   forecast(horizon = 4) -> predictive
 
@@ -74,10 +76,13 @@ predictive    = forecast(posterior, 2, conditional_forecast = cf)
 ############################################################
 set.seed(123)
 oil |>
-  specify_bsvarSIGN$new(p = 12, sign_irf = sign_irf) |>
+  specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 10) |> 
   forecast(horizon = 2, conditional_forecast = cf) -> predictive
 
+}
+\seealso{
+\code{\link{estimate}}, \code{\link{summary}}, \code{\link{plot}}
 }
 \author{
 Tomasz Woźniak \email{wozniak.tom@pm.me} and Xiaolei Wang \email{adamwang15@gmail.com}
