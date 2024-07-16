@@ -463,7 +463,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
-        sign_irf = array(rep(0, N^2), dim = c(N, N, 1))
+        sign_irf = array(rep(NA, N^2), dim = c(N, N, 1))
       } else {
         missing_all = FALSE
       }
@@ -553,7 +553,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       missing_all   = TRUE
       if (missing(sign_irf)) {
-        sign_irf = array(rep(0, N^2), dim = c(N, N, 1))
+        sign_irf = array(rep(NA, N^2), dim = c(N, N, 1))
       } else {
         missing_all = FALSE
       }
@@ -678,7 +678,7 @@ specify_bsvarSIGN = R6::R6Class(
       
       missing_all   = TRUE
       if (missing(sign_irf)) {
-        sign_irf = array(rep(0, N^2), dim = c(N, N, 1))
+        sign_irf = array(rep(NA, N^2), dim = c(N, N, 1))
       } else {
         missing_all = FALSE
       }
