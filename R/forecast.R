@@ -75,8 +75,8 @@ forecast.PosteriorBSVARSIGN = function(
   
   posterior_Sigma = posterior$posterior$Sigma
   posterior_A     = posterior$posterior$A
-  T               = nrow(posterior$last_draw$data_matrices$X)
-  X_T             = posterior$last_draw$data_matrices$X[T,]
+  T               = ncol(posterior$last_draw$data_matrices$X)
+  X_T             = posterior$last_draw$data_matrices$X[,T]
   Y               = posterior$last_draw$data_matrices$Y
   
   N               = nrow(posterior_Sigma)
