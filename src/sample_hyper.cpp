@@ -275,6 +275,10 @@ arma::mat sample_hyper(
     const Rcpp::List& prior
 ) {
   
+  Rcout << "**************************************************|" << endl;
+  Rcout << " Adaptive Metropolis MCMC: hyper parameters       |" << endl;
+  Rcout << "**************************************************|" << endl;
+  
   mat hypers = metropolis(
     
     S, start, narrow_hyper(model, init), W,
