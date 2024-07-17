@@ -480,10 +480,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
@@ -570,10 +569,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
@@ -695,10 +693,9 @@ specify_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
