@@ -111,11 +111,12 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   sign[is.na(sign)]   = 0
   narrative           = identification$sign_narrative
   narrative[, 5]      = narrative[, 5] - p
+  rel                 = identification$sign_relation
+  rel[is.na(rel)]     = 0
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
-                              identification$VB, sign, narrative,
-                              identification$sign_relation, Z, prior, 
+                              identification$VB, sign, narrative, rel, Z, prior, 
                               starting_values, show_progress, thin, max_tries)
   
   specification$starting_values$set_starting_values(qqq$last_draw)

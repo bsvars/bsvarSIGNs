@@ -1,15 +1,19 @@
 
 # construct Z_j matrices
 get_Z = function(sign_irf) {
+  h = dim(sign_irf)[3]
+  if (h >= 2) {
+    test = sign_irf[, , 1:h]
+    if (any(test[!is.na(test)] == 0)) {
+      stop("Zero restrictions are not allowed for horizons >= 1")
+    }
+  }
+  
   zero_irf = sign_irf[, , 1] == 0
   zero_irf[is.na(zero_irf)] = 0
   
   if (sum(zero_irf) == 0) {
     return(NULL)
-  }
-  
-  if (!(all(zero_irf %in% c(0, 1)))) {
-    stop("Zero restriction matrix has entries that are not in {0, 1}.")
   }
   
   N = dim(zero_irf)[2]
@@ -40,7 +44,7 @@ verify_traditional = function(N, A) {
     stop("Sign restriction matrix is not NxN.")
   }
   if (!(all(A %in% c(-1, 0, 1, NA)))) {
-    stop("Sign restriction matrix has entries that are not in {-1, 0, 1}.")
+    stop("Sign restriction matrix has entries that are not in {-1, 0, 1, NA}.")
   }
 }
 
@@ -74,6 +78,9 @@ verify_narrative = function(N, A) {
 # verify all restrictions
 verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
   verify_traditional(N, sign_relation)
+  if (any(sign_relation[!is.na(sign_relation)] == 0)) {
+    stop("Zero restrictions are not allowed for sign_relation")
+  }
   
   verify_narrative(N, sign_narrative)
   
@@ -420,7 +427,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     VB       = list(),
     #' @field sign_irf a \code{NxNxH} array of sign restrictions on the impulse response functions.
     sign_irf = array(),
-    #' @field sign_narrative a \code{Mx6} matrix of narrative sign restrictions.
+    #' @field sign_narrative a \code{ANYx6} matrix of narrative sign restrictions.
     sign_narrative  = matrix(),
     #' @field sign_relation a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     sign_relation   = matrix(),
@@ -431,11 +438,12 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
     #' each row of the matrix corresponds to a different restriction,
     #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
     #' Column 1 (type):
@@ -452,10 +460,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
@@ -476,7 +483,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         if (missing_all) {
           sign_relation = diag(N)
         } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
         }
       }
       
@@ -495,7 +502,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation         = sign_relation
+      self$sign_relation  = sign_relation
       self$max_tries      = max_tries
     }, # END initialize
     
@@ -507,7 +514,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         VB             = as.list(self$VB),
         sign_irf       = as.array(self$sign_irf),
         sign_narrative = as.matrix(self$sign_narrative),
-        sign_relation         = as.matrix(self$sign_relation),
+        sign_relation  = as.matrix(self$sign_relation),
         max_tries      = self$max_tries
         )
     }, # END get_identification
@@ -515,11 +522,12 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @description
     #' Set new starting values StartingValuesBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
     #' each row of the matrix corresponds to a different restriction,
     #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
     #' Column 1 (type):
@@ -536,10 +544,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     set_identification = function(N, sign_irf, sign_narrative, sign_relation) {
@@ -566,7 +573,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         if (missing_all) {
           sign_relation = diag(N)
         } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
         }
       }
       
@@ -577,7 +584,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation         = sign_relation
+      self$sign_relation  = sign_relation
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -623,11 +630,12 @@ specify_bsvarSIGN = R6::R6Class(
     #' Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
     #' @param data a \code{(T+p)xN} matrix with time series data.
     #' @param p a positive integer providing model's autoregressive lag order.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
     #' each row of the matrix corresponds to a different restriction,
     #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
     #' Column 1 (type):
@@ -644,10 +652,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
     #' if start=t and horizons=h the restriction in on periods t to t+h,
     #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
@@ -691,7 +698,7 @@ specify_bsvarSIGN = R6::R6Class(
         if (missing_all) {
           sign_relation = diag(N)
         } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)  
         }
       }
       
