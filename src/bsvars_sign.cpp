@@ -26,12 +26,12 @@ All notations in the C++ code except for compute.cpp and forecast_bsvarSIGNs.cpp
 Rcpp::List bsvar_sign_cpp(
     const int&        S,                  // number of draws from the posterior
     const int&        p,                  // number of lags
-    const arma::mat&  Y,                  // NxT dependent variables
-    const arma::mat&  X,                  // KxT dependent variables
+    const arma::mat&  Y,                  // TxN dependent variables
+    const arma::mat&  X,                  // TxK dependent variables
     const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
-    const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
-    const arma::mat&  sign_B,             // Mx6 matrix of signs for B
+    const arma::mat&  sign_narrative,     // ANYx6 matrix of signs for historical decomposition
+    const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
