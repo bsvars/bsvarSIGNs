@@ -36,6 +36,7 @@ navbar:
     email:
       icon: envelope
       href: mailto:bsvars@pm.me
+      aria-label: email
 reference:
 - title: 'bsvarSIGNs: Bayesian Estimation of Structural Vector Autoregressions Identified
     by Sign, Zero, and Narrative Restrictions'
