@@ -254,10 +254,19 @@ variances in the Minnesota prior.</p></dd>
 </div>
 <div class="section">
 <h4 id="examples-2">Examples<a class="anchor" aria-label="anchor" href="#examples-2"></a></h4>
-<p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># a prior for 5-variable example with four lags</span></span>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify the model and set seed</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
-<span><span class="va">prior</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_prior_bsvarSIGN.html">specify_prior_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">prior</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">prior</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_prior_bsvarSIGN.html">specify_prior_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># estimate hyper parameters with adaptive Metropolis algorithm</span></span>
+<span><span class="va">prior</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10</span>, psi <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># prior$estimate_hyper(S = 10000, psi = TRUE)</span></span>
+<span></span>
+<span><span class="co"># trace plot</span></span>
+<span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"delta"</span>, <span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span>
 <span></span></code></pre></div><p></p></div>
 </div>
 
@@ -284,7 +293,7 @@ variances in the Minnesota prior.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># a prior for 5-variable example with one lag </span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># a prior for 5-variable example with one lag</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prior</span> <span class="op">=</span> <span class="va">specify_prior_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prior</span><span class="op">$</span><span class="va">A</span>  <span class="co"># show autoregressive prior mean</span></span></span>
@@ -415,13 +424,23 @@ variances in the Minnesota prior.</p></dd>
 <span class="r-in"><span><span class="co">## Method `specify_prior_bsvarSIGN$estimate_hyper`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># a prior for 5-variable example with four lags</span></span></span>
+<span class="r-in"><span><span class="co"># specify the model and set seed</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">prior</span> <span class="op">=</span> <span class="va">specify_prior_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">prior</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">prior</span> <span class="op">=</span> <span class="va">specify_prior_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate hyper parameters with adaptive Metropolis algorithm</span></span></span>
+<span class="r-in"><span><span class="va">prior</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10</span>, psi <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Adaptive Metropolis MCMC: hyper parameters       |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
+<span class="r-in"><span><span class="co"># prior$estimate_hyper(S = 10000, psi = TRUE)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># trace plot</span></span></span>
+<span class="r-in"><span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"delta"</span>, <span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="specify_prior_bsvarSIGN-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

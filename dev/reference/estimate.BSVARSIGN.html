@@ -158,9 +158,12 @@ where \(Q\) is an <code>NxN</code> rotation matrix and \(P\) is an <code>NxN</co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># upload data</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># investigate the effects of the optimism shock</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># specify identifying restrictions:</span></span></span>
+<span class="r-in"><span><span class="co"># + no effect on productivity (zero restriction)</span></span></span>
+<span class="r-in"><span><span class="co"># + positive effect on stock prices (positive sign restriction) </span></span></span>
 <span class="r-in"><span><span class="va">sign_irf</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">23</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specify the model and set seed</span></span></span>
@@ -168,6 +171,8 @@ where \(Q\) is an <code>NxN</code> rotation matrix and \(P\) is an <code>NxN</co
 <span class="r-in"><span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span> <span class="op">*</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>                                       p        <span class="op">=</span> <span class="fl">12</span>,</span></span>
 <span class="r-in"><span>                                       sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                       </span></span>
+<span class="r-in"><span><span class="co"># estimate the model</span></span></span>
 <span class="r-in"><span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  bsvarSIGNs: Bayesian Structural VAR with sign,   |</span>

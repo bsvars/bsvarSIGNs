@@ -198,7 +198,8 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions.</p></d
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">specify_identification_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># recursive specification for a 5-variable system</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># recursive specification for a 5-variable system</span></span></span>
+<span class="r-in"><span><span class="va">specify_identification_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;IdentificationBSVARSIGN&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     VB: list</span>
@@ -211,7 +212,9 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions.</p></d
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_narrative: list</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_relation: 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA  ...</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># an identification pattern with narrative sign restrictions</span></span></span>
+<span class="r-in"><span><span class="co"># specify sign restrictions of the first shock on the contemporaneous IRF</span></span></span>
+<span class="r-in"><span><span class="co"># + no effect on the first variable</span></span></span>
+<span class="r-in"><span><span class="co"># + positive effect on the second variable</span></span></span>
 <span class="r-in"><span><span class="va">sign_irf</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">23</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">specify_identification_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">5</span>, sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;IdentificationBSVARSIGN&gt;</span>

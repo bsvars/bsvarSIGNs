@@ -95,10 +95,13 @@ containing <code>S</code> draws of the impulse responses.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specify the model and set seed</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># + no effect on productivity (zero restriction)</span></span></span>
+<span class="r-in"><span><span class="co"># + positive effect on stock prices (positive sign restriction) </span></span></span>
 <span class="r-in"><span><span class="va">sign_irf</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">23</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># run the burn-in</span></span></span>
+<span class="r-in"><span><span class="co"># estimate the model</span></span></span>
 <span class="r-in"><span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  bsvarSIGNs: Bayesian Structural VAR with sign,   |</span>
