@@ -168,6 +168,7 @@ The package is under intensive development. Your help is most welcome! Please, h
 <a href="mailto:adamwang15@gmail.com"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/> </a> 
 <a href="https://github.com/adamwang15"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/> </a> 
 <a href="https://orcid.org/0009-0005-6192-9061"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg" width="40" height="40"/> </a> 
+<a href="https://www.linkedin.com/in/xiaolei-adam-wang/"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg" width="40" height="40"/> </a>
 
 **Tomasz** is a Bayesian econometrician and a Senior Lecturer at the University of Melbourne. He develops methodology for empirical macroeconomic analyses and programs in **R** and **cpp** using **Rcpp**.
 

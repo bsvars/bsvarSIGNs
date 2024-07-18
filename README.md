@@ -149,10 +149,10 @@ Replication of the results by [Antolín-Díaz and Rubio-Ramírez
 data(monetary)
 
 # specify identifying restrictions:
-# + sign restrictions on the impulse responses at horizons from 0 to 4
+# + sign restrictions on the impulse responses at horizons from 0 to 5
 sign_irf       = matrix(NA, 6, 6)
 sign_irf[, 1]  = c(NA, -1, -1, NA, -1, 1)
-sign_irf       = array(sign_irf, dim = c(6, 6, 5))
+sign_irf       = array(sign_irf, dim = c(6, 6, 6))
 
 # + narrative sign restriction: the shock is positive in October 1979
 sign_narrative = list(
@@ -217,6 +217,8 @@ author and maintainer of the **bsvarSIGNs** package.
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
 </a> <a href="https://orcid.org/0009-0005-6192-9061">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg" width="40" height="40"/>
+</a> <a href="https://www.linkedin.com/in/xiaolei-adam-wang/">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg" width="40" height="40"/>
 </a>
 
 **Tomasz** is a Bayesian econometrician and a Senior Lecturer at the
