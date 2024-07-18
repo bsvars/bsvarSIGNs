@@ -24,10 +24,10 @@
 #'
 #' @description Implements state-of-the-art algorithms for the Bayesian analysis 
 #' of Structural Vector Autoregressions identified by sign, zero, and narrative 
-#' restrictions. The core model is based on the flexible Vector Autoregression 
-#' with the estimated hyper-parameters of the Minnesota prior as in 
+#' restrictions. The core model is based on a flexible Vector Autoregression with 
+#' estimated hyper-parameters of the Minnesota prior as in  
 #' Giannone, Lenza, Primiceri (2015) <doi:10.1162/REST_a_00483>. The sign 
-#' restrictions are implemented employing the methods outlined by 
+#' restrictions are implemented employing the methods proposed by 
 #' Rubio-Ramírez, Waggoner & Zha (2010) <doi:10.1111/j.1467-937X.2009.00578.x>, 
 #' while identification through sign and zero restrictions follows the approach 
 #' developed by Arias, Rubio-Ramírez, & Waggoner (2018) <doi:10.3982/ECTA14468>. 
@@ -40,8 +40,8 @@
 #' forecasting and conditional forecasting, as well as analyses of structural 
 #' shocks and fitted values. All this is complemented by colourful plots, 
 #' user-friendly summary functions, and comprehensive documentation. The 
-#' `bsvarSIGNs` package is aligned regarding code structure, objects, and 
-#' workflows with the R package 'bsvars' by 
+#' `bsvarSIGNs` package is aligned regarding objects, workflows, and code 
+#' structure with the R package 'bsvars' by 
 #' Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, and they constitute an 
 #' integrated toolset.
 #' 
@@ -127,17 +127,24 @@
 #'  Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.1, <doi:10.32614/CRAN.package.bsvars>.
 #'  
 #' @examples
-#' # specify sign and zero restrictions on the impulse response
+#' # investigate the effects of the optimism shock
+#' data(optimism)
+#' 
+#' # specify identifying restrictions:
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction)
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' 
 #' # specify the model
-#' spec           = specify_bsvarSIGN$new(optimism * 100,
+#' specification  = specify_bsvarSIGN$new(optimism * 100,
 #'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
-#' 
-#' # estimate the hyper-parameters
-#' spec$prior$estimate_hyper()
-#' 
+#'                                        
 #' # estimate the model
-#' post           = estimate(spec, S = 1000)
+#' posterior      = estimate(specification, S = 100)
+#' 
+#' # compute and plot impulse responses
+#' irf            = compute_impulse_responses(posterior, horizon = 40)
+#' plot(irf, probability = 0.68)
+#' 
 NULL
