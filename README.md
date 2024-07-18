@@ -155,7 +155,10 @@ sign_irf[, 1]  = c(NA, -1, -1, NA, -1, 1)
 sign_irf       = array(sign_irf, dim = c(6, 6, 5))
 
 # + narrative sign restriction: the shock is positive in October 1979
-sign_narrative = t(c(1, 1, NA, 1, 166, 0))
+sign_narrative = list(
+  specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1),
+  specify_narrative(start = 166, periods = 1, type = "B", sign = 1, shock = 1, var = 6)
+)
 
 # specify the model
 specification  = specify_bsvarSIGN$new(monetary       * 100,
