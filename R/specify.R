@@ -22,7 +22,7 @@
 #' @param var positive integer - the index of the variable to which the narrative restriction applies.
 #' 
 #' @examples
-#' # a prior for 5-variable example with one lag 
+#' # specify a narrative restriction
 #' specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
 #' 
 #' @export
@@ -178,7 +178,7 @@ igamma_shape = function(mode, variance) {
 #' The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 #' 
 #' @examples
-#' # a prior for 5-variable example with one lag 
+#' # a prior for 5-variable example with one lag
 #' data(optimism)
 #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 #' prior$A  # show autoregressive prior mean
@@ -393,10 +393,19 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @param burn_in number of burn-in draws.
     #' 
     #' @examples 
-    #' # a prior for 5-variable example with four lags
+    #' # specify the model and set seed
+    #' set.seed(123)
     #' data(optimism)
-    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
-    #' prior$estimate_hyper(S = 5)
+    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
+    #' 
+    #' # estimate hyper parameters with adaptive Metropolis algorithm
+    #' prior$estimate_hyper(S = 10, psi = TRUE)
+    #' # prior$estimate_hyper(S = 10000, psi = TRUE)
+    #'
+    #' # trace plot
+    #' hyper = t(prior$hyper)
+    #' colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+    #' plot.ts(hyper)
     #' 
     estimate_hyper = function(
       S = 10000, burn_in = S / 2,
@@ -454,9 +463,12 @@ specify_prior_bsvarSIGN = R6::R6Class(
 #' The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 #'
 #' @examples 
-#' specify_identification_bsvarSIGN$new(N = 5) # recursive specification for a 5-variable system
+#' # recursive specification for a 5-variable system
+#' specify_identification_bsvarSIGN$new(N = 5)
 #' 
-#' # an identification pattern with narrative sign restrictions
+#' # specify sign restrictions of the first shock on the contemporaneous IRF
+#' # + no effect on the first variable
+#' # + positive effect on the second variable
 #' sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf) 
 #'
@@ -607,7 +619,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #'
 #' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
 #' 
-#' @examples 
+#' @examples
+#' # specify a model with the optimism data and 4 lags
+#' 
 #' data(optimism)
 #' specification = specify_bsvarSIGN$new(
 #'    data = optimism,
@@ -716,12 +730,16 @@ specify_bsvarSIGN = R6::R6Class(
     #' @description
     #' Returns the data matrices as the DataMatricesBSVAR object.
     #'
-    #' @examples 
+    #' @examples
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the data matrices
     #' spec$get_data_matrices()
     #'
     get_data_matrices = function() {
@@ -732,11 +750,14 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the identifying restrictions as the IdentificationBSVARSIGN object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the identifying restrictions
     #' spec$get_identification()
     #'
     get_identification = function() {
@@ -747,11 +768,15 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the prior specification as the PriorBSVAR object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the prior specification
     #' spec$get_prior()
     #'
     get_prior = function() {
@@ -762,11 +787,15 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the starting values as the StartingValuesBSVAR object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the starting values
     #' spec$get_starting_values()
     #'
     get_starting_values = function() {

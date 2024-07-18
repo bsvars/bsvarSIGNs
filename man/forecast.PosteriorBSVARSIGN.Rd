@@ -48,11 +48,14 @@ data(optimism)
 
 # specify the model and set seed
 set.seed(123)
+
+# + no effect on productivity (zero restriction)
+# + positive effect on stock prices (positive sign restriction) 
 sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 
 # estimate the model
-posterior      = estimate(specification, 20)
+posterior      = estimate(specification, 10)
 
 # sample from predictive density 1 year ahead
 predictive     = forecast(posterior, 4)

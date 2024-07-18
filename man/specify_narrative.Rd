@@ -35,7 +35,7 @@ of shock to var is the greater/less than the sum of all other shocks.}
 The class narrative specifies a single narrative restriction.
 }
 \examples{
-# a prior for 5-variable example with one lag 
+# specify a narrative restriction
 specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
 
 }

@@ -7,6 +7,8 @@
 The class BSVARSIGN presents complete specification for the Bayesian Structural VAR model with sign and narrative restrictions.
 }
 \examples{
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 specification = specify_bsvarSIGN$new(
    data = optimism,
@@ -18,11 +20,15 @@ specification = specify_bsvarSIGN$new(
 ## Method `specify_bsvarSIGN$get_data_matrices`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the data matrices
 spec$get_data_matrices()
 
 
@@ -30,11 +36,14 @@ spec$get_data_matrices()
 ## Method `specify_bsvarSIGN$get_identification`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the identifying restrictions
 spec$get_identification()
 
 
@@ -42,11 +51,15 @@ spec$get_identification()
 ## Method `specify_bsvarSIGN$get_prior`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the prior specification
 spec$get_prior()
 
 
@@ -54,11 +67,15 @@ spec$get_prior()
 ## Method `specify_bsvarSIGN$get_starting_values`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the starting values
 spec$get_starting_values()
 
 }
@@ -154,11 +171,15 @@ Returns the data matrices as the DataMatricesBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the data matrices
 spec$get_data_matrices()
 
 }
@@ -178,11 +199,14 @@ Returns the identifying restrictions as the IdentificationBSVARSIGN object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the identifying restrictions
 spec$get_identification()
 
 }
@@ -202,11 +226,15 @@ Returns the prior specification as the PriorBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the prior specification
 spec$get_prior()
 
 }
@@ -226,11 +254,15 @@ Returns the starting values as the StartingValuesBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the starting values
 spec$get_starting_values()
 
 }
