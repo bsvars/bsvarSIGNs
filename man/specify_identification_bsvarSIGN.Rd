@@ -65,23 +65,7 @@ on the impulse response functions, ±1 for positive/negative sign restriction
 the \code{h}-th slice \code{NxN} matrix contains the
 restrictions on the \code{h-1} horizon.}
 
-\item{\code{sign_narrative}}{a \code{ANYx6} matrix of narrative sign restrictions,
-each row of the matrix corresponds to a different restriction,
-columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-Column 1 (type):
-0 if no restriction;
-1 if restriction on structural shock;
-2 if type A restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-3 if type B restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-if start=t and horizons=h the restriction in on periods t to t+h,
-e.g. when h=0 the restriction in only placed on period t.}
+\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
 \item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
@@ -131,23 +115,7 @@ on the impulse response functions, ±1 for positive/negative sign restriction
 the \code{h}-th slice \code{NxN} matrix contains the
 restrictions on the \code{h-1} horizon.}
 
-\item{\code{sign_narrative}}{a \code{ANYx6} matrix of narrative sign restrictions,
-each row of the matrix corresponds to a different restriction,
-columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-Column 1 (type):
-0 if no restriction;
-1 if restriction on structural shock;
-2 if type A restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-3 if type B restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-if start=t and horizons=h the restriction in on periods t to t+h,
-e.g. when h=0 the restriction in only placed on period t.}
+\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
 \item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and

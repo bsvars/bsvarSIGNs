@@ -1,4 +1,49 @@
 
+#' vector specifying one narrative restriction
+#'
+#' @description
+#' The class narrative specifies a single narrative restriction.
+#' 
+#' @examples
+#' # a prior for 5-variable example with one lag 
+#' specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
+#' 
+#' @export
+specify_narrative = function(start, periods = 1, type = "S", sign = 1, shock = 1, var = NA) {
+  
+  if (start %% 1 != 0 || start <= 0) {
+    stop("start must be a positive integer")
+  }
+  if (periods %% 1 != 0 || periods <= 0) {
+    stop("periods must be a positive integer")
+  }
+  if (!(type %in% c("S", "A", "B"))) {
+    stop("type must be one of 'S', 'A', 'B'")
+  }
+  if (!(sign %in% c(-1, 1))) {
+    stop("sign must be one of -1, 1")
+  }
+  if (shock %% 1 != 0 || shock <= 0) {
+    stop("shock must be a positive integer")
+  }
+  if (!is.na(var)) {
+    if (var %% 1 != 0 || var <= 0) {
+      stop("var must be a positive integer")
+    }
+  }
+  
+  narrative = list(
+    start   = start,
+    periods = periods,
+    type    = type,
+    sign    = sign,
+    shock   = shock,
+    var     = var
+  )
+  class(narrative) = "narrative"
+  narrative
+}
+
 # construct Z_j matrices
 get_Z = function(sign_irf) {
   h = dim(sign_irf)[3]
@@ -48,33 +93,6 @@ verify_traditional = function(N, A) {
   }
 }
 
-# verify if narrative sign restriciton matrix is valid, i.e.
-# 1. has 6 columns
-# 2. each column satisfies its definition
-verify_narrative = function(N, A) {
-  if (!(is.matrix(A) && dim(A)[2] == 6)) {
-    stop("Narrative sign restriction matrix does not have exactly 6 columns.")
-  }
-  if (!(all(A[,1] %in% c(0, 1, 2, 3)))) {
-    stop("Narrative sign restriction matrix column 1 (type) has entries that are not in {0, 1, 2, 3}.")
-  }
-  if (!(all(A[,2] %in% c(-1, 1)))) {
-    stop("Narrative sign restriction matrix column 2 (sign) has entries that are not in {-1, 1}.")
-  }
-  if (!(all(A[,3] %in% c(1:N, NA)))) {
-    stop("Narrative sign restriction matrix column 3 (var_i) has entries that are not in 1:N.")
-  }
-  if (!(all(A[,4] %in% 1:N))) {
-    stop("Narrative sign restriction matrix column 4 (shock_j) has entries that are not in 1:N.")
-  }
-  if (!(all(A[,5] == floor(A[,5])))) {
-    stop("Narrative sign restriction matrix column 5 (start_t) has entries that are not in 1:T.")
-  }
-  if (!(all(A[,6] == floor(A[,6])))) {
-    stop("Narrative sign restriction matrix column 6 (horizons_h) has entries that are not in 1:(T-start).")
-  }
-}
-
 # verify all restrictions
 verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
   verify_traditional(N, sign_relation)
@@ -82,7 +100,15 @@ verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
     stop("Zero restrictions are not allowed for sign_relation")
   }
   
-  verify_narrative(N, sign_narrative)
+  if (!is.list(sign_narrative)) {
+    stop("sign_narrative must be a list")
+  } else if (length(sign_narrative) > 0) {
+    for (i in 1:length(sign_narrative)) {
+      if (!inherits(sign_narrative[[i]], "narrative")) {
+        stop("Each element of sign_narrative must be of class 'narrative'")
+      }
+    }
+  }
   
   for (h in 1:dim(sign_irf)[3]) {
     verify_traditional(N, sign_irf[,,h])
@@ -443,23 +469,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' 0 for zero restrictions and NA for no restrictions,
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
-    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
     #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
@@ -475,7 +485,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }
@@ -512,7 +522,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       list(
         VB             = as.list(self$VB),
         sign_irf       = as.array(self$sign_irf),
-        sign_narrative = as.matrix(self$sign_narrative),
+        sign_narrative = self$sign_narrative,
         sign_relation  = as.matrix(self$sign_relation),
         max_tries      = self$max_tries
         )
@@ -526,23 +536,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' 0 for zero restrictions and NA for no restrictions,
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
-    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
     #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
@@ -564,7 +558,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }
@@ -633,23 +627,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' 0 for zero restrictions and NA for no restrictions,
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
-    #' @param sign_narrative a \code{ANYx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
     #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
@@ -688,7 +666,7 @@ specify_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 1), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }

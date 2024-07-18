@@ -109,8 +109,23 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   Z                   = get_Z(identification$sign_irf)
   sign                = identification$sign_irf
   sign[is.na(sign)]   = 0
-  narrative           = identification$sign_narrative
-  narrative[, 5]      = narrative[, 5] - p
+  
+  n_narratives        = length(identification$sign_narrative)
+  get_type            = list("S" = 1, "A" = 2, "B" = 3)
+  if (n_narratives > 0) {
+    narrative         = matrix(NA, n_narratives, 6)
+    for (i in 1:n_narratives) {
+      narrative_list  = identification$sign_narrative[[i]]
+      narrative[i, 1] = get_type[[narrative_list$type]]
+      narrative[i, 2] = narrative_list$sign
+      narrative[i, 3] = narrative_list$var
+      narrative[i, 4] = narrative_list$shock
+      narrative[i, 5] = narrative_list$start - p
+      narrative[i, 6] = narrative_list$periods - 1
+    }
+  } else {
+    narrative         = t(c(0, 1, 1, 1, 1, 1))
+  }
   rel                 = identification$sign_relation
   rel[is.na(rel)]     = 0
 
