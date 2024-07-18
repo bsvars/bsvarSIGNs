@@ -63,16 +63,16 @@ reference:
 - contents:
   - matches("estimate")
   - matches("specify_posterior")
-- title: Posterior summaries
-  desc: Analyse the posterior summaries of the posterior estimation outcomes
-- contents: matches("summary")
 - title: Forecasting
   desc: Predict future values of your variables
 - contents: matches("forecast")
 - title: Structural analyses
   desc: Compute interpretable outcomes
 - contents: matches("compute")
+- title: Posterior summaries
+  desc: Analyse the posterior summaries of the posterior estimation outcomes using function `summary()`
+- contents: matches("summary")
 - title: Plot your results
-  desc: Prepare beautiful and informative plots for your analyses
+  desc: Prepare beautiful and informative plots for your analyses using function `plot()`
 - contents: matches("plot")
 
