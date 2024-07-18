@@ -5,38 +5,8 @@ development:
   mode: auto
 navbar:
   structure:
-    right:
-    - github
-    - twitter
-    - instagram
-    - mastodon
-    - bluesky
-    - email
-  components:
-    github:
-      icon: github
-      href: https://github.com/bsvars
-      aria-label: github
-    twitter:
-      icon: twitter
-      href: https://x.com/bsvars
-      aria-label: twitter
-    instagram:
-      icon: instagram
-      href: https://www.instagram.com/bsvarsoninsta/
-      aria-label: instagram
-    mastodon:
-      icon: bi-mastodon
-      href: https://fosstodon.org/@bsvars
-      aria-label: mastodon
-    bluesky:
-      icon: cloud
-      href: https://bsky.app/profile/bsvars.bsky.social
-      aria-label: bluesky
-    email:
-      icon: envelope
-      href: mailto:bsvars@pm.me
-      aria-label: email
+    right: [github]
+
 reference:
 - title: 'bsvarSIGNs: Bayesian Estimation of Structural Vector Autoregressions Identified
     by Sign, Zero, and Narrative Restrictions'
