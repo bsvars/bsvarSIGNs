@@ -81,7 +81,7 @@ double weight_narrative(
   
   const int M         = 1e+3;  // number of draws to approximate normal distribution
   
-  double    n_success = 1.0e-15;
+  double    n_success = 1e-6;
   
   cube      Z(irf.n_rows, sign_narrative.col(5).max() + 1, M, fill::randn);
   // cube      Z(irf.n_rows, T, M, fill::randn);

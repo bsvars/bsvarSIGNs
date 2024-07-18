@@ -7,6 +7,8 @@
 The class BSVARSIGN presents complete specification for the Bayesian Structural VAR model with sign and narrative restrictions.
 }
 \examples{
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 specification = specify_bsvarSIGN$new(
    data = optimism,
@@ -18,11 +20,15 @@ specification = specify_bsvarSIGN$new(
 ## Method `specify_bsvarSIGN$get_data_matrices`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the data matrices
 spec$get_data_matrices()
 
 
@@ -30,11 +36,14 @@ spec$get_data_matrices()
 ## Method `specify_bsvarSIGN$get_identification`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the identifying restrictions
 spec$get_identification()
 
 
@@ -42,11 +51,15 @@ spec$get_identification()
 ## Method `specify_bsvarSIGN$get_prior`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the prior specification
 spec$get_prior()
 
 
@@ -54,11 +67,15 @@ spec$get_prior()
 ## Method `specify_bsvarSIGN$get_starting_values`
 ## ------------------------------------------------
 
+# specify a model with the optimism data and 4 lags
+
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the starting values
 spec$get_starting_values()
 
 }
@@ -116,33 +133,17 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
 
 \item{\code{p}}{a positive integer providing model's autoregressive lag order.}
 
-\item{\code{sign_irf}}{a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-on the contemporaneous impulse response function.}
+\item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
+on the impulse response functions, ±1 for positive/negative sign restriction
+0 for zero restrictions and NA for no restrictions,
+the \code{h}-th slice \code{NxN} matrix contains the
+restrictions on the \code{h-1} horizon.}
 
-\item{\code{sign_narrative}}{a \code{Mx6} matrix of narrative sign restrictions,
-each row of the matrix corresponds to a different restriction,
-columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-Column 1 (type):
-0 if no restriction;
-1 if restriction on structural shock;
-2 if type A restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-3 if type B restriction on historical decomposition
-i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-if start=t and horizons=h the restriction in on periods t to t+h,
-e.g. when h=0 the restriction in only placed on period t.}
+\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+\item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
-structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-of \code{B} is the contemporaneous impulse response function.}
+structural shocks \code{U} where \code{BE=U}.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
@@ -170,11 +171,15 @@ Returns the data matrices as the DataMatricesBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the data matrices
 spec$get_data_matrices()
 
 }
@@ -194,11 +199,14 @@ Returns the identifying restrictions as the IdentificationBSVARSIGN object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the identifying restrictions
 spec$get_identification()
 
 }
@@ -218,11 +226,15 @@ Returns the prior specification as the PriorBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the prior specification
 spec$get_prior()
 
 }
@@ -242,11 +254,15 @@ Returns the starting values as the StartingValuesBSVAR object.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data(optimism)
+\preformatted{# specify a model with the optimism data and 4 lags
+
+data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
    p = 4
 )
+
+# get the starting values
 spec$get_starting_values()
 
 }

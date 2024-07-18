@@ -7,7 +7,7 @@
 The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 }
 \examples{
-# a prior for 5-variable example with one lag 
+# a prior for 5-variable example with one lag
 data(optimism)
 prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$A  # show autoregressive prior mean
@@ -36,10 +36,19 @@ prior$get_prior() # show the prior as list
 ## Method `specify_prior_bsvarSIGN$estimate_hyper`
 ## ------------------------------------------------
 
-# a prior for 5-variable example with four lags
+# specify the model and set seed
+set.seed(123)
 data(optimism)
-prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
-prior$estimate_hyper(S = 5)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
+
+# estimate hyper parameters with adaptive Metropolis algorithm
+prior$estimate_hyper(S = 10, psi = TRUE)
+# prior$estimate_hyper(S = 10000, psi = TRUE)
+
+# trace plot
+hyper = t(prior$hyper)
+colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+plot.ts(hyper)
 
 }
 \section{Public fields}{
@@ -207,10 +216,19 @@ variances in the Minnesota prior.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 5-variable example with four lags
+\preformatted{# specify the model and set seed
+set.seed(123)
 data(optimism)
-prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
-prior$estimate_hyper(S = 5)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
+
+# estimate hyper parameters with adaptive Metropolis algorithm
+prior$estimate_hyper(S = 10, psi = TRUE)
+# prior$estimate_hyper(S = 10000, psi = TRUE)
+
+# trace plot
+hyper = t(prior$hyper)
+colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+plot.ts(hyper)
 
 }
 \if{html}{\out{</div>}}

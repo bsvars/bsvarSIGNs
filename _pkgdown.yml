@@ -1,0 +1,78 @@
+url: https://bsvars.github.io/bsvarSIGNs/
+template:
+  bootstrap: 5
+development:
+  mode: auto
+navbar:
+  structure:
+    right:
+    - github
+    - twitter
+    - instagram
+    - mastodon
+    - bluesky
+    - email
+  components:
+    github:
+      icon: github
+      href: https://github.com/bsvars
+      aria-label: github
+    twitter:
+      icon: twitter
+      href: https://x.com/bsvars
+      aria-label: twitter
+    instagram:
+      icon: instagram
+      href: https://www.instagram.com/bsvarsoninsta/
+      aria-label: instagram
+    mastodon:
+      icon: bi-mastodon
+      href: https://fosstodon.org/@bsvars
+      aria-label: mastodon
+    bluesky:
+      icon: cloud
+      href: https://bsky.app/profile/bsvars.bsky.social
+      aria-label: bluesky
+    email:
+      icon: envelope
+      href: mailto:bsvars@pm.me
+reference:
+- title: 'bsvarSIGNs: Bayesian Estimation of Structural Vector Autoregressions Identified
+    by Sign, Zero, and Narrative Restrictions'
+  desc: Browse package information
+- contents:
+  - bsvarSIGNs-package
+  - bsvarSIGNs
+- title: Data
+  desc: Upload sample data set
+- contents:
+  - optimism
+  - monetary
+- title: Model specification
+  desc: Choose a model to work with
+- contents: matches("specify_")
+- title: More detailed model specification
+  desc: Adjust or inspect the specified model
+- contents:
+  - matches("specify_data")
+  - matches("specify_iden")
+  - matches("specify_prior")
+  - matches("specify_start")
+- title: Estimation
+  desc: Run Bayesian estimation of your model and inspect the outputs
+- contents:
+  - matches("estimate")
+  - matches("specify_posterior")
+- title: Forecasting
+  desc: Predict future values of your variables
+- contents: matches("forecast")
+- title: Structural analyses
+  desc: Compute interpretable outcomes
+- contents: matches("compute")
+- title: Posterior summaries
+  desc: Analyse the posterior summaries of the posterior estimation outcomes using function `summary()`
+- contents: matches("summary")
+- title: Plot your results
+  desc: Prepare beautiful and informative plots for your analyses using function `plot()`
+- contents: matches("plot")
+

@@ -1,15 +1,81 @@
 
+#' vector specifying one narrative restriction
+#'
+#' @description
+#' The class narrative specifies a single narrative restriction.
+#' 
+#' @param start positive integer - the period in which the narrative starts (greater than the number of lags).
+#' 
+#' @param periods positive integer - the number of periods the narrative restriction lasts.
+#' 
+#' @param type character - the type of the narrative restriction (one of "S", "A", "B"), where:
+#' "S" for restrictions on structural shocks;
+#' "A" for type A restrictions on historical decomposition, i.e. if the absolute value of the historical decomposition
+#' of shock to var is the greatest/least among all shocks;
+#' "B" for type B restrictions on historical decomposition, i.e. if the absolute value of the historical decomposition
+#' of shock to var is the greater/less than the sum of all other shocks.
+#' 
+#' @param sign integer - the sign of the narrative restriction (1 or -1).
+#' 
+#' @param shock positive integer - the index of the shock to which the narrative restriction applies.
+#' 
+#' @param var positive integer - the index of the variable to which the narrative restriction applies.
+#' 
+#' @examples
+#' # specify a narrative restriction
+#' specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
+#' 
+#' @export
+specify_narrative = function(start, periods = 1, type = "S", sign = 1, shock = 1, var = NA) {
+  
+  if (start %% 1 != 0 || start <= 0) {
+    stop("start must be a positive integer")
+  }
+  if (periods %% 1 != 0 || periods <= 0) {
+    stop("periods must be a positive integer")
+  }
+  if (!(type %in% c("S", "A", "B"))) {
+    stop("type must be one of 'S', 'A', 'B'")
+  }
+  if (!(sign %in% c(-1, 1))) {
+    stop("sign must be one of -1, 1")
+  }
+  if (shock %% 1 != 0 || shock <= 0) {
+    stop("shock must be a positive integer")
+  }
+  if (!is.na(var)) {
+    if (var %% 1 != 0 || var <= 0) {
+      stop("var must be a positive integer")
+    }
+  }
+  
+  narrative = list(
+    start   = start,
+    periods = periods,
+    type    = type,
+    sign    = sign,
+    shock   = shock,
+    var     = var
+  )
+  class(narrative) = "narrative"
+  narrative
+}
+
 # construct Z_j matrices
 get_Z = function(sign_irf) {
+  h = dim(sign_irf)[3]
+  if (h >= 2) {
+    test = sign_irf[, , 1:h]
+    if (any(test[!is.na(test)] == 0)) {
+      stop("Zero restrictions are not allowed for horizons >= 1")
+    }
+  }
+  
   zero_irf = sign_irf[, , 1] == 0
   zero_irf[is.na(zero_irf)] = 0
   
   if (sum(zero_irf) == 0) {
     return(NULL)
-  }
-  
-  if (!(all(zero_irf %in% c(0, 1)))) {
-    stop("Zero restriction matrix has entries that are not in {0, 1}.")
   }
   
   N = dim(zero_irf)[2]
@@ -40,42 +106,26 @@ verify_traditional = function(N, A) {
     stop("Sign restriction matrix is not NxN.")
   }
   if (!(all(A %in% c(-1, 0, 1, NA)))) {
-    stop("Sign restriction matrix has entries that are not in {-1, 0, 1}.")
-  }
-}
-
-# verify if narrative sign restriciton matrix is valid, i.e.
-# 1. has 6 columns
-# 2. each column satisfies its definition
-verify_narrative = function(N, A) {
-  if (!(is.matrix(A) && dim(A)[2] == 6)) {
-    stop("Narrative sign restriction matrix does not have exactly 6 columns.")
-  }
-  if (!(all(A[,1] %in% c(0, 1, 2, 3)))) {
-    stop("Narrative sign restriction matrix column 1 (type) has entries that are not in {0, 1, 2, 3}.")
-  }
-  if (!(all(A[,2] %in% c(-1, 1)))) {
-    stop("Narrative sign restriction matrix column 2 (sign) has entries that are not in {-1, 1}.")
-  }
-  if (!(all(A[,3] %in% c(1:N, NA)))) {
-    stop("Narrative sign restriction matrix column 3 (var_i) has entries that are not in 1:N.")
-  }
-  if (!(all(A[,4] %in% 1:N))) {
-    stop("Narrative sign restriction matrix column 4 (shock_j) has entries that are not in 1:N.")
-  }
-  if (!(all(A[,5] == floor(A[,5])))) {
-    stop("Narrative sign restriction matrix column 5 (start_t) has entries that are not in 1:T.")
-  }
-  if (!(all(A[,6] == floor(A[,6])))) {
-    stop("Narrative sign restriction matrix column 6 (horizons_h) has entries that are not in 1:(T-start).")
+    stop("Sign restriction matrix has entries that are not in {-1, 0, 1, NA}.")
   }
 }
 
 # verify all restrictions
 verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
   verify_traditional(N, sign_relation)
+  if (any(sign_relation[!is.na(sign_relation)] == 0)) {
+    stop("Zero restrictions are not allowed for sign_relation")
+  }
   
-  verify_narrative(N, sign_narrative)
+  if (!is.list(sign_narrative)) {
+    stop("sign_narrative must be a list")
+  } else if (length(sign_narrative) > 0) {
+    for (i in 1:length(sign_narrative)) {
+      if (!inherits(sign_narrative[[i]], "narrative")) {
+        stop("Each element of sign_narrative must be of class 'narrative'")
+      }
+    }
+  }
   
   for (h in 1:dim(sign_irf)[3]) {
     verify_traditional(N, sign_irf[,,h])
@@ -128,7 +178,7 @@ igamma_shape = function(mode, variance) {
 #' The class PriorBSVARSIGN presents a prior specification for the homoskedastic bsvar model.
 #' 
 #' @examples
-#' # a prior for 5-variable example with one lag 
+#' # a prior for 5-variable example with one lag
 #' data(optimism)
 #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 #' prior$A  # show autoregressive prior mean
@@ -343,10 +393,19 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @param burn_in number of burn-in draws.
     #' 
     #' @examples 
-    #' # a prior for 5-variable example with four lags
+    #' # specify the model and set seed
+    #' set.seed(123)
     #' data(optimism)
-    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
-    #' prior$estimate_hyper(S = 5)
+    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
+    #' 
+    #' # estimate hyper parameters with adaptive Metropolis algorithm
+    #' prior$estimate_hyper(S = 10, psi = TRUE)
+    #' # prior$estimate_hyper(S = 10000, psi = TRUE)
+    #'
+    #' # trace plot
+    #' hyper = t(prior$hyper)
+    #' colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+    #' plot.ts(hyper)
     #' 
     estimate_hyper = function(
       S = 10000, burn_in = S / 2,
@@ -404,9 +463,12 @@ specify_prior_bsvarSIGN = R6::R6Class(
 #' The class IdentificationBSVARSIGN presents the identifying restrictions for the Bayesian Structural VAR models with sign and narrative restrictions.
 #'
 #' @examples 
-#' specify_identification_bsvarSIGN$new(N = 5) # recursive specification for a 5-variable system
+#' # recursive specification for a 5-variable system
+#' specify_identification_bsvarSIGN$new(N = 5)
 #' 
-#' # an identification pattern with narrative sign restrictions
+#' # specify sign restrictions of the first shock on the contemporaneous IRF
+#' # + no effect on the first variable
+#' # + positive effect on the second variable
 #' sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf) 
 #'
@@ -420,7 +482,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     VB       = list(),
     #' @field sign_irf a \code{NxNxH} array of sign restrictions on the impulse response functions.
     sign_irf = array(),
-    #' @field sign_narrative a \code{Mx6} matrix of narrative sign restrictions.
+    #' @field sign_narrative a \code{ANYx6} matrix of narrative sign restrictions.
     sign_narrative  = matrix(),
     #' @field sign_relation a \code{NxN} matrix of sign restrictions on contemporaneous relations.
     sign_relation   = matrix(),
@@ -431,31 +493,15 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
@@ -468,15 +514,14 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
@@ -495,7 +540,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation         = sign_relation
+      self$sign_relation  = sign_relation
       self$max_tries      = max_tries
     }, # END initialize
     
@@ -506,8 +551,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
       list(
         VB             = as.list(self$VB),
         sign_irf       = as.array(self$sign_irf),
-        sign_narrative = as.matrix(self$sign_narrative),
-        sign_relation         = as.matrix(self$sign_relation),
+        sign_narrative = self$sign_narrative,
+        sign_relation  = as.matrix(self$sign_relation),
         max_tries      = self$max_tries
         )
     }, # END get_identification
@@ -515,31 +560,15 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @description
     #' Set new starting values StartingValuesBSVARSIGN.
     #' @param N a positive integer - the number of dependent variables in the model.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     set_identification = function(N, sign_irf, sign_narrative, sign_relation) {
@@ -558,15 +587,14 @@ specify_identification_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
@@ -577,7 +605,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation         = sign_relation
+      self$sign_relation  = sign_relation
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -591,7 +619,9 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #'
 #' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
 #' 
-#' @examples 
+#' @examples
+#' # specify a model with the optimism data and 4 lags
+#' 
 #' data(optimism)
 #' specification = specify_bsvarSIGN$new(
 #'    data = optimism,
@@ -623,31 +653,15 @@ specify_bsvarSIGN = R6::R6Class(
     #' Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
     #' @param data a \code{(T+p)xN} matrix with time series data.
     #' @param p a positive integer providing model's autoregressive lag order.
-    #' @param sign_irf a \code{NxNxH} array with entries in (-1 ,0, 1), sign restrictions on the
-    #' impulse response functions, the \code{h}-th slice \code{NxN} matrix contains the
-    #' sign restrictions on the \code{h-1} horizon, e.g. \code{sign_irf[,,0]} contains restrictions
-    #' on the contemporaneous impulse response function.
-    #' @param sign_narrative a \code{Mx6} matrix of narrative sign restrictions,
-    #' each row of the matrix corresponds to a different restriction,
-    #' columns are (type, sign, var_i, shock_j, start_t, horizons_h) with detailed definitions: \cr\cr
-    #' Column 1 (type):
-    #' 0 if no restriction;
-    #' 1 if restriction on structural shock;
-    #' 2 if type A restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is greater (less) than 0;
-    #' 3 if type B restriction on historical decomposition
-    #' i.e. historical decomposition of shock_j on var_i is the largest (smallest); \cr
-    #' Column 2 (sign): depending on type, 1 if greater/largest, -1 if less/smallest. \cr
-    #' Column 3 (var_i): an integer in 1:N (or NA when type = 0), index of the restricted variable. \cr
-    #' Column 4 (shock_j): an integer in 1:N, index of the restricted shock. \cr
-    #' Column 5 (start_t): an integer in 1:T, starting period of the restriction; \cr
-    #' Column 6 (horizons_h): an integer in 1:(T-start_t), number horizons of the restriction,
-    #' if start=t and horizons=h the restriction in on periods t to t+h,
-    #' e.g. when h=0 the restriction in only placed on period t.
-    #' @param sign_relation a \code{NxN} matrix with entries in (-1 ,0, 1), sign restrictions on the
+    #' @param sign_irf a \code{NxNxH} array - sign and zero restrictions 
+    #' on the impulse response functions, ±1 for positive/negative sign restriction
+    #' 0 for zero restrictions and NA for no restrictions,
+    #' the \code{h}-th slice \code{NxN} matrix contains the
+    #' restrictions on the \code{h-1} horizon.
+    #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
+    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
-    #' structural shocks \code{U}. Recall the structural equation \code{BE=U}, the inverse
-    #' of \code{B} is the contemporaneous impulse response function.
+    #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
@@ -683,15 +697,14 @@ specify_bsvarSIGN = R6::R6Class(
         missing_all = FALSE
       }
       if (missing(sign_narrative)) {
-        sign_narrative = matrix(c(0, 1, 1, 1, 1, 0), ncol = 6, nrow = 1)
+        sign_narrative = list()
       } else {
         missing_all = FALSE
       }
       if (missing(sign_relation)) {
+        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          sign_relation = diag(N)
-        } else {
-          sign_relation = matrix(rep(0, N^2), ncol = N, nrow = N)  
+          diag(sign_relation) = 1
         }
       }
       
@@ -717,12 +730,16 @@ specify_bsvarSIGN = R6::R6Class(
     #' @description
     #' Returns the data matrices as the DataMatricesBSVAR object.
     #'
-    #' @examples 
+    #' @examples
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the data matrices
     #' spec$get_data_matrices()
     #'
     get_data_matrices = function() {
@@ -733,11 +750,14 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the identifying restrictions as the IdentificationBSVARSIGN object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the identifying restrictions
     #' spec$get_identification()
     #'
     get_identification = function() {
@@ -748,11 +768,15 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the prior specification as the PriorBSVAR object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the prior specification
     #' spec$get_prior()
     #'
     get_prior = function() {
@@ -763,11 +787,15 @@ specify_bsvarSIGN = R6::R6Class(
     #' Returns the starting values as the StartingValuesBSVAR object.
     #'
     #' @examples 
+    #' # specify a model with the optimism data and 4 lags
+    #' 
     #' data(optimism)
     #' spec = specify_bsvarSIGN$new(
     #'    data = optimism,
     #'    p = 4
     #' )
+    #' 
+    #' # get the starting values
     #' spec$get_starting_values()
     #'
     get_starting_values = function() {

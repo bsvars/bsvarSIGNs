@@ -13,25 +13,17 @@ using namespace Rcpp;
 using namespace arma;
 
 
-/***
-All notations in the C++ code except for compute.cpp and forecast_bsvarSIGNs.cpp
- are consistent with the notations in the papers:
- Antolín-Díaz and Rubio-Ramírez (2018) and Arias, Rubio-Ramírez and Waggoner (2018)
- which are different from the notations in the R code.
-***/
-
-
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 Rcpp::List bsvar_sign_cpp(
     const int&        S,                  // number of draws from the posterior
     const int&        p,                  // number of lags
-    const arma::mat&  Y,                  // NxT dependent variables
-    const arma::mat&  X,                  // KxT dependent variables
+    const arma::mat&  Y,                  // TxN dependent variables
+    const arma::mat&  X,                  // TxK dependent variables
     const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
-    const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
-    const arma::mat&  sign_B,             // Mx6 matrix of signs for B
+    const arma::mat&  sign_narrative,     // ANYx6 matrix of signs for historical decomposition
+    const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
     const Rcpp::List& starting_values,    // a list of starting values
@@ -54,8 +46,8 @@ Rcpp::List bsvar_sign_cpp(
   vec prog_rep_points = arma::round(arma::linspace(0, S / num_threads, 50));
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
-    Rcout << " bsvarSIGNs: Bayesian Structural VAR with zero,   |" << endl;
-    Rcout << "             sign and narrative restrictions      |" << endl;
+    Rcout << " bsvarSIGNs: Bayesian Structural VAR with sign,   |" << endl;
+    Rcout << "             zero and narrative restrictions      |" << endl;
     Rcout << "**************************************************|" << endl;
     // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
     // Rcout << "**************************************************|" << endl;
@@ -104,32 +96,31 @@ Rcpp::List bsvar_sign_cpp(
   // #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (int s = 0; s < S; s++) {
     
-    hyper      = hypers.col(randi(distr_param(0, S_hyper)));
-    mu         = hyper(0);
-    delta      = hyper(1);
-    lambda     = hyper(2);
-    psi        = hyper.rows(3, N + 2);
+    hyper        = hypers.col(randi(distr_param(0, S_hyper)));
+    mu           = hyper(0);
+    delta        = hyper(1);
+    lambda       = hyper(2);
+    psi          = hyper.rows(3, N + 2);
     
     // update Minnesota prior
-    prior_V    = diagmat(prior_v %
-      join_vert(lambda * lambda * repmat(1 / psi, p, 1),
-                ones<vec>(K - N * p)));
-    prior_S    = diagmat(psi);
+    prior_V      = diagmat(prior_v % join_vert(lambda * lambda * repmat(1 / psi, p, 1),
+                                               ones<vec>(K - N * p)));
+    prior_S      = diagmat(psi);
     
     // update dummy observation prior
-    Ystar      = join_vert(Ysoc / mu, Ysur / delta);
-    Xstar      = join_vert(Xsoc / mu, Xsur / delta);
-    Yplus      = join_vert(Ystar, Y);
-    Xplus      = join_vert(Xstar, X);
+    Ystar        = join_vert(Ysoc / mu, Ysur / delta);
+    Xstar        = join_vert(Xsoc / mu, Xsur / delta);
+    Yplus        = join_vert(Ystar, Y);
+    Xplus        = join_vert(Xstar, X);
     
     // posterior parameters
-    result     = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
-    post_B     = result(0);
-    post_V     = result(1);
-    post_S     = result(2);
-    post_nu    = as_scalar(result(3));
+    result       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    post_B       = result(0);
+    post_V       = result(1);
+    post_S       = result(2);
+    post_nu      = as_scalar(result(3));
     
-    w          = 0;
+    w            = 0;
     
     while (w == 0) {
       

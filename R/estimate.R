@@ -74,9 +74,12 @@
 #' @method estimate BSVARSIGN
 #' 
 #' @examples
-#' # upload data
+#' # investigate the effects of the optimism shock
 #' data(optimism)
 #'
+#' # specify identifying restrictions:
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' 
 #' # specify the model and set seed
@@ -84,6 +87,8 @@
 #' specification  = specify_bsvarSIGN$new(optimism * 100,
 #'                                        p        = 12,
 #'                                        sign_irf = sign_irf)
+#'                                        
+#' # estimate the model
 #' posterior      = estimate(specification, S = 10)
 #' 
 #' @export
@@ -109,11 +114,29 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   Z                   = get_Z(identification$sign_irf)
   sign                = identification$sign_irf
   sign[is.na(sign)]   = 0
+  
+  n_narratives        = length(identification$sign_narrative)
+  get_type            = list("S" = 1, "A" = 2, "B" = 3)
+  if (n_narratives > 0) {
+    narrative         = matrix(NA, n_narratives, 6)
+    for (i in 1:n_narratives) {
+      narrative_list  = identification$sign_narrative[[i]]
+      narrative[i, 1] = get_type[[narrative_list$type]]
+      narrative[i, 2] = narrative_list$sign
+      narrative[i, 3] = narrative_list$var
+      narrative[i, 4] = narrative_list$shock
+      narrative[i, 5] = narrative_list$start - p
+      narrative[i, 6] = narrative_list$periods - 1
+    }
+  } else {
+    narrative         = t(c(0, 1, 1, 1, 1, 1))
+  }
+  rel                 = identification$sign_relation
+  rel[is.na(rel)]     = 0
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
-                              identification$VB, sign, identification$sign_narrative,
-                              identification$sign_relation, Z, prior, 
+                              identification$VB, sign, narrative, rel, Z, prior, 
                               starting_values, show_progress, thin, max_tries)
   
   specification$starting_values$set_starting_values(qqq$last_draw)

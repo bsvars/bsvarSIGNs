@@ -25,10 +25,13 @@
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute structural shocks
@@ -85,10 +88,13 @@ compute_structural_shocks.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute draws from in-sample predictive density
@@ -155,10 +161,13 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute impulse responses 2 years ahead
@@ -227,10 +236,13 @@ compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, sta
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute historical decompositions
@@ -304,10 +316,13 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute forecast error variance decomposition 2 years ahead
@@ -369,10 +384,13 @@ compute_variance_decompositions.PosteriorBSVARSIGN <- function(posterior, horizo
 #' 
 #' # specify the model and set seed
 #' set.seed(123)
+#' 
+#' # + no effect on productivity (zero restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
 #' 
-#' # run the burn-in
+#' # estimate the model
 #' posterior      = estimate(specification, 10)
 #' 
 #' # compute structural shocks' conditional standard deviations
