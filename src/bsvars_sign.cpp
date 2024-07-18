@@ -20,13 +20,11 @@ Rcpp::List bsvar_sign_cpp(
     const int&        p,                  // number of lags
     const arma::mat&  Y,                  // TxN dependent variables
     const arma::mat&  X,                  // TxK dependent variables
-    const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
     const arma::mat&  sign_narrative,     // ANYx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
-    const Rcpp::List& starting_values,    // a list of starting values
     const bool        show_progress = true,
     const int         thin = 100,         // introduce thinning
     const int&        max_tries = 10000   // maximum tries for Q draw
@@ -114,7 +112,10 @@ Rcpp::List bsvar_sign_cpp(
     Xplus        = join_vert(Xstar, X);
     
     // posterior parameters
+    // #pragma omp critical
+    // {
     result       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    // }
     post_B       = result(0);
     post_V       = result(1);
     post_S       = result(2);
@@ -133,7 +134,7 @@ Rcpp::List bsvar_sign_cpp(
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
       result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
-                            VB, sign_irf, sign_narrative, sign_B, Z, max_tries);
+                            sign_irf, sign_narrative, sign_B, Z, max_tries);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));
@@ -150,14 +151,6 @@ Rcpp::List bsvar_sign_cpp(
     
     // Increment progress bar
     if (any(prog_rep_points == s)) bar.increment();
-    
-    // if (omp_get_thread_num() == 0) {
-    //   // Check for user interrupts
-    //   if (s % 10 == 0) checkUserInterrupt();
-    // 
-    //   // Increment progress bar
-    //   if (any(prog_rep_points == s)) bar.increment();
-    // }
     
   } // END s loop
   
