@@ -3,7 +3,19 @@
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
 #include <bsvars.h>
-// #include <omp.h>
+
+#ifdef _OPENMP
+  #include <omp.h>
+#else
+  // for machines with compilers void of openmp support
+  #define omp_get_num_threads()  1
+  #define omp_get_thread_num()   0
+  #define omp_get_max_threads()  1
+  #define omp_get_thread_limit() 1
+  #define omp_get_num_procs()    1
+  #define omp_set_nested(a)   // empty statement to remove the call
+  #define omp_get_wtime()        0
+#endif
 
 #include "sample_hyper.h"
 #include "sample_Q.h"
@@ -39,10 +51,12 @@ Rcpp::List bsvar_sign_cpp(
   
   // Progress bar setup
   double num_threads = 1;
-  // #pragma omp parallel
-  // {
-  //   num_threads = omp_get_num_threads();
-  // }
+  #ifdef _OPENMP
+  #pragma omp parallel
+  #endif
+  {
+    num_threads = omp_get_num_threads();
+  }
   vec prog_rep_points = arma::round(arma::linspace(0, S / num_threads, 50));
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
@@ -93,8 +107,12 @@ Rcpp::List bsvar_sign_cpp(
   
   field<mat> result;
   
-  // #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
+  #ifdef _OPENMP
+  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
+  #endif
   for (int s = 0; s < S; s++) {
+    
+    cout << s << endl;
     
     hyper        = hypers.col(randi(distr_param(0, S_hyper)));
     mu           = hyper(0);
@@ -148,16 +166,10 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
     
-    // Increment progress bar
-    if (any(prog_rep_points == s)) bar.increment();
-    
-    // if (omp_get_thread_num() == 0) {
-    //   // Check for user interrupts
-    //   if (s % 10 == 0) checkUserInterrupt();
-    // 
-    //   // Increment progress bar
-    //   if (any(prog_rep_points == s)) bar.increment();
-    // }
+    // Increment progress bar for the first thread
+    if (omp_get_thread_num() == 0 and any(prog_rep_points == s)) {
+      bar.increment();
+    }
     
   } // END s loop
   
