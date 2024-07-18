@@ -4,3 +4,6 @@
 ^bsvarSIGNs\.Rproj$
 ^\.Rproj\.user$
 ^/inst/varia$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -56,3 +56,4 @@ rsconnect/
 .DS_Store
 .quarto
 *.so
+docs
