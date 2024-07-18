@@ -2,20 +2,9 @@
 #include <RcppArmadillo.h>
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
-#include <bsvars.h>
+#include <omp.h>
 
-#ifdef _OPENMP
-  #include <omp.h>
-#else
-  // for machines with compilers void of openmp support
-  #define omp_get_num_threads()  1
-  #define omp_get_thread_num()   0
-  #define omp_get_max_threads()  1
-  #define omp_get_thread_limit() 1
-  #define omp_get_num_procs()    1
-  #define omp_set_nested(a)   // empty statement to remove the call
-  #define omp_get_wtime()        0
-#endif
+#include <bsvars.h>
 
 #include "sample_hyper.h"
 #include "sample_Q.h"
@@ -51,9 +40,7 @@ Rcpp::List bsvar_sign_cpp(
   
   // Progress bar setup
   double num_threads = 1;
-  #ifdef _OPENMP
   #pragma omp parallel
-  #endif
   {
     num_threads = omp_get_num_threads();
   }
@@ -65,7 +52,7 @@ Rcpp::List bsvar_sign_cpp(
     Rcout << "**************************************************|" << endl;
     // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
     // Rcout << "**************************************************|" << endl;
-    Rcout << " Progress of simulation for " << S << " independent draws" << endl;
+    Rcout << " Simulation progress for " << S << " independent draws" << endl;
     // Rcout << "    Every " << oo << "draw is saved via MCMC thinning" << endl;
     Rcout << " Press Esc to interrupt the computations" << endl;
     Rcout << "**************************************************|" << endl;
@@ -107,12 +94,8 @@ Rcpp::List bsvar_sign_cpp(
   
   field<mat> result;
   
-  #ifdef _OPENMP
-  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
-  #endif
+  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, post_nu, w, Sigma, chol_Sigma, B, h_invp, Q, shocks)
   for (int s = 0; s < S; s++) {
-    
-    cout << s << endl;
     
     hyper        = hypers.col(randi(distr_param(0, S_hyper)));
     mu           = hyper(0);
@@ -132,31 +115,34 @@ Rcpp::List bsvar_sign_cpp(
     Xplus        = join_vert(Xstar, X);
     
     // posterior parameters
+    #pragma omp critical
+    {
     result       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    }
     post_B       = result(0);
     post_V       = result(1);
     post_S       = result(2);
     post_nu      = as_scalar(result(3));
-    
+
     w            = 0;
     
     while (w == 0) {
-      
-      checkUserInterrupt();
+
+      if (omp_get_thread_num() == 0) checkUserInterrupt();
       
       // sample reduced-form parameters
       Sigma      = iwishrnd(post_S, post_nu);
       chol_Sigma = chol(Sigma, "lower");
-      B          = rmatnorm_cpp(post_B, post_V, Sigma);
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
+      B          = rmatnorm_cpp(post_B, post_V, Sigma);
       
-      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
+      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior,
                             VB, sign_irf, sign_narrative, sign_B, Z, max_tries);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));
     }
-    
+
     posterior_w(s)            = w;
     posterior_hyper.col(s)    = hyper;
     posterior_A.slice(s)      = B.t();
@@ -166,7 +152,7 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
     
-    // Increment progress bar for the first thread
+    // // Increment progress bar for the first thread
     if (omp_get_thread_num() == 0 and any(prog_rep_points == s)) {
       bar.increment();
     }
