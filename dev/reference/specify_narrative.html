@@ -51,6 +51,39 @@
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
+<dl><dt id="arg-start">start<a class="anchor" aria-label="anchor" href="#arg-start"></a></dt>
+<dd><p>positive integer - the period in which the narrative starts (greater than the number of lags).</p></dd>
+
+
+<dt id="arg-periods">periods<a class="anchor" aria-label="anchor" href="#arg-periods"></a></dt>
+<dd><p>positive integer - the number of periods the narrative restriction lasts.</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>character - the type of the narrative restriction (one of "S", "A", "B"), where:
+"S" for restrictions on structural shocks;
+"A" for type A restrictions on historical decomposition, i.e. if the absolute value of the historical decomposition
+of shock to var is the greatest/least among all shocks;
+"B" for type B restrictions on historical decomposition, i.e. if the absolute value of the historical decomposition
+of shock to var is the greater/less than the sum of all other shocks.</p></dd>
+
+
+<dt id="arg-sign">sign<a class="anchor" aria-label="anchor" href="#arg-sign"></a></dt>
+<dd><p>integer - the sign of the narrative restriction (1 or -1).</p></dd>
+
+
+<dt id="arg-shock">shock<a class="anchor" aria-label="anchor" href="#arg-shock"></a></dt>
+<dd><p>positive integer - the index of the shock to which the narrative restriction applies.</p></dd>
+
+
+<dt id="arg-var">var<a class="anchor" aria-label="anchor" href="#arg-var"></a></dt>
+<dd><p>positive integer - the index of the variable to which the narrative restriction applies.</p></dd>
+
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
