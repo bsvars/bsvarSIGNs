@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bsvarSIGNs
+# bsvarSIGNs <a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" align="right" height="139" alt="bsvarSIGNs website" /></a>
 
 An **R** package for Bayesian Estimation of Structural Vector
 Autoregressions Identified by Sign, Zero, and Narrative Restrictions
@@ -110,7 +110,7 @@ file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs
 
 <p>
 </p>
-<a href="https://bsvars.github.io/bsvars/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
+<a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
 </p>
 
@@ -229,8 +229,6 @@ macroeconomic analyses and programs in **R** and **cpp** using **Rcpp**.
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/>
 </a> <a href="https://github.com/donotdespair">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
-</a> <a href="https://gitlab.com/tomaszwozniak">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/gitlab.svg" width="40" height="40"/>
 </a> <a href="https://orcid.org/0000-0003-2212-2378">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg" width="40" height="40"/>
 </a> <a href="http://scholar.google.com/citations?user=2uWpFrYAAAAJ&hl">
