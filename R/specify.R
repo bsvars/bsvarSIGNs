@@ -111,10 +111,10 @@ verify_traditional = function(N, A) {
 }
 
 # verify all restrictions
-verify_all = function(N, sign_irf, sign_narrative, sign_relation) {
-  verify_traditional(N, sign_relation)
-  if (any(sign_relation[!is.na(sign_relation)] == 0)) {
-    stop("Zero restrictions are not allowed for sign_relation")
+verify_all = function(N, sign_irf, sign_narrative, sign_structural) {
+  verify_traditional(N, sign_structural)
+  if (any(sign_structural[!is.na(sign_structural)] == 0)) {
+    stop("Zero restrictions are not allowed for sign_structural")
   }
   
   if (!is.list(sign_narrative)) {
@@ -484,8 +484,8 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_irf = array(),
     #' @field sign_narrative a \code{ANYx6} matrix of narrative sign restrictions.
     sign_narrative  = matrix(),
-    #' @field sign_relation a \code{NxN} matrix of sign restrictions on contemporaneous relations.
-    sign_relation   = matrix(),
+    #' @field sign_structural a \code{NxN} matrix of sign restrictions on contemporaneous relations.
+    sign_structural   = matrix(),
     #' @field max_tries a positive integer with the maximum number of iterations 
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     max_tries = Inf,
@@ -499,13 +499,13 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
     #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
-    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+    #' @param sign_structural a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
-    initialize = function(N, sign_irf, sign_narrative, sign_relation, max_tries = Inf) {
+    initialize = function(N, sign_irf, sign_narrative, sign_structural, max_tries = Inf) {
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
@@ -518,17 +518,17 @@ specify_identification_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_relation)) {
-        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
+      if (missing(sign_structural)) {
+        sign_structural = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          diag(sign_relation) = 1
+          diag(sign_structural) = 1
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_relation)
+      verify_all(N, sign_irf, sign_narrative, sign_structural)
       
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -540,7 +540,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation  = sign_relation
+      self$sign_structural  = sign_structural
       self$max_tries      = max_tries
     }, # END initialize
     
@@ -552,7 +552,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
         VB             = as.list(self$VB),
         sign_irf       = as.array(self$sign_irf),
         sign_narrative = self$sign_narrative,
-        sign_relation  = as.matrix(self$sign_relation),
+        sign_structural  = as.matrix(self$sign_structural),
         max_tries      = self$max_tries
         )
     }, # END get_identification
@@ -566,12 +566,12 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
     #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
-    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+    #' @param sign_structural a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
-    set_identification = function(N, sign_irf, sign_narrative, sign_relation) {
+    set_identification = function(N, sign_irf, sign_narrative, sign_structural) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
       
@@ -591,21 +591,21 @@ specify_identification_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_relation)) {
-        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
+      if (missing(sign_structural)) {
+        sign_structural = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          diag(sign_relation) = 1
+          diag(sign_structural) = 1
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_relation)
+      verify_all(N, sign_irf, sign_narrative, sign_structural)
       
       self$sign_irf       = sign_irf
       self$sign_narrative = sign_narrative
-      self$sign_relation  = sign_relation
+      self$sign_structural  = sign_structural
     } # END set_identification
   ) # END public
 ) # END specify_identification_bsvarSIGN
@@ -659,7 +659,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' the \code{h}-th slice \code{NxN} matrix contains the
     #' restrictions on the \code{h-1} horizon.
     #' @param sign_narrative a list of objects of class "narrative" - narrative sign restrictions.
-    #' @param sign_relation a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+    #' @param sign_structural a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
@@ -674,7 +674,7 @@ specify_bsvarSIGN = R6::R6Class(
     p = 1L,
     sign_irf,
     sign_narrative,
-    sign_relation,
+    sign_structural,
     max_tries = Inf,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
@@ -701,17 +701,17 @@ specify_bsvarSIGN = R6::R6Class(
       } else {
         missing_all = FALSE
       }
-      if (missing(sign_relation)) {
-        sign_relation = matrix(rep(NA, N^2), ncol = N, nrow = N)
+      if (missing(sign_structural)) {
+        sign_structural = matrix(rep(NA, N^2), ncol = N, nrow = N)
         if (missing_all) {
-          diag(sign_relation) = 1
+          diag(sign_structural) = 1
         }
       }
       
       if (is.matrix(sign_irf)) {
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
-      verify_all(N, sign_irf, sign_narrative, sign_relation)
+      verify_all(N, sign_irf, sign_narrative, sign_structural)
       
       B                            = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -720,7 +720,7 @@ specify_bsvarSIGN = R6::R6Class(
       self$identification          = specify_identification_bsvarSIGN$new(N,
                                                                           sign_irf,
                                                                           sign_narrative,
-                                                                          sign_relation,
+                                                                          sign_structural,
                                                                           max_tries)
       self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous,
                                                                  stationary)
