@@ -21,6 +21,8 @@
 #' 
 #' @param var positive integer - the index of the variable to which the narrative restriction applies.
 #' 
+#' @return An object of class \code{narrative} specifying one narrative restriction.
+#' 
 #' @examples
 #' # specify a narrative restriction
 #' specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
