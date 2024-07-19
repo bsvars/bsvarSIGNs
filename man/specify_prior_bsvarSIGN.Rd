@@ -43,7 +43,6 @@ prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 
 # estimate hyper parameters with adaptive Metropolis algorithm
 prior$estimate_hyper(S = 10, psi = TRUE)
-# prior$estimate_hyper(S = 10000, psi = TRUE)
 
 # trace plot
 hyper = t(prior$hyper)
@@ -223,7 +222,6 @@ prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 
 # estimate hyper parameters with adaptive Metropolis algorithm
 prior$estimate_hyper(S = 10, psi = TRUE)
-# prior$estimate_hyper(S = 10000, psi = TRUE)
 
 # trace plot
 hyper = t(prior$hyper)

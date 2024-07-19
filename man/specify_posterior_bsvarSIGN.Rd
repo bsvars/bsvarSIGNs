@@ -43,7 +43,7 @@ posterior$is_normalised()
 
 }
 \seealso{
-\code{\link{estimate}}, \code{\link{specify_bsvarSIGN}}
+\code{\link{estimate.BSVARSIGN}}, \code{\link{specify_bsvarSIGN}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

@@ -80,7 +80,7 @@ spec$get_starting_values()
 
 }
 \seealso{
-\code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
+\code{\link{estimate.BSVARSIGN}}, \code{\link{specify_posterior_bsvarSIGN}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

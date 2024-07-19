@@ -31,6 +31,9 @@ of shock to var is the greater/less than the sum of all other shocks.}
 
 \item{var}{positive integer - the index of the variable to which the narrative restriction applies.}
 }
+\value{
+An object of class \code{narrative} specifying one narrative restriction.
+}
 \description{
 The class narrative specifies a single narrative restriction.
 }
