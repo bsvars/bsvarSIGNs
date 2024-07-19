@@ -74,6 +74,7 @@ Rcpp::List bsvar_sign_cpp(
   int        S_hyper  = hypers.n_cols - 1;
   int        prior_nu = as<int>(prior["nu"]);
   int        post_nu  = prior_nu + T;
+  int        n_tries;
   
   double     w, mu, delta, lambda;
   
@@ -122,8 +123,9 @@ Rcpp::List bsvar_sign_cpp(
     post_nu      = as_scalar(result(3));
     
     w            = 0;
+    n_tries      = 0;
     
-    while (w == 0) {
+    while (w == 0 and (n_tries < max_tries or max_tries == 0)) {
       
       checkUserInterrupt();
       
@@ -134,7 +136,7 @@ Rcpp::List bsvar_sign_cpp(
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
       result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
-                            sign_irf, sign_narrative, sign_B, Z, max_tries);
+                            sign_irf, sign_narrative, sign_B, Z, 1);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));

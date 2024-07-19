@@ -488,7 +488,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     sign_relation   = matrix(),
     #' @field max_tries a positive integer with the maximum number of iterations 
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
-    max_tries = 1,
+    max_tries = Inf,
     
     #' @description
     #' Create new identifying restrictions IdentificationBSVARSIGN.
@@ -505,7 +505,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
     #' @return Identifying restrictions IdentificationBSVARSIGN.
-    initialize = function(N, sign_irf, sign_narrative, sign_relation, max_tries = 1) {
+    initialize = function(N, sign_irf, sign_narrative, sign_relation, max_tries = Inf) {
         
       missing_all   = TRUE
       if (missing(sign_irf)) {
@@ -570,7 +570,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
-    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
     set_identification = function(N, sign_irf, sign_narrative, sign_relation) {
       B     = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE
@@ -663,7 +663,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' contemporaneous relations \code{B} between reduced-form errors \code{E} and
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
-    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.
+    #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
@@ -675,7 +675,7 @@ specify_bsvarSIGN = R6::R6Class(
     sign_irf,
     sign_narrative,
     sign_relation,
-    max_tries = 1,
+    max_tries = Inf,
     exogenous = NULL,
     stationary = rep(FALSE, ncol(data))
     ) {

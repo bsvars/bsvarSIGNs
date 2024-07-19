@@ -120,7 +120,7 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   sign_irf,
   sign_narrative,
   sign_relation,
-  max_tries = 1,
+  max_tries = Inf,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -146,7 +146,7 @@ contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
-for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 

@@ -99,6 +99,7 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   prior               = specification$prior$get_prior()
   identification      = specification$identification$get_identification()
   max_tries           = identification$max_tries
+  max_tries           = ifelse(max_tries == Inf, 0, max_tries)
   data_matrices       = specification$data_matrices$get_data_matrices()
   p                   = specification$p
   
