@@ -119,7 +119,7 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   p = 1L,
   sign_irf,
   sign_narrative,
-  sign_relation,
+  sign_structural,
   max_tries = Inf,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
@@ -141,7 +141,7 @@ restrictions on the \code{h-1} horizon.}
 
 \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
 

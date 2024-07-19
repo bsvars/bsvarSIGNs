@@ -26,7 +26,7 @@ specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf)
 
 \item{\code{sign_narrative}}{a \code{ANYx6} matrix of narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+\item{\code{sign_structural}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations 
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
@@ -52,7 +52,7 @@ Create new identifying restrictions IdentificationBSVARSIGN.
   N,
   sign_irf,
   sign_narrative,
-  sign_relation,
+  sign_structural,
   max_tries = Inf
 )}\if{html}{\out{</div>}}
 }
@@ -70,7 +70,7 @@ restrictions on the \code{h-1} horizon.}
 
 \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
 
@@ -103,7 +103,7 @@ Set new starting values StartingValuesBSVARSIGN.
   N,
   sign_irf,
   sign_narrative,
-  sign_relation
+  sign_structural
 )}\if{html}{\out{</div>}}
 }
 
@@ -120,7 +120,7 @@ restrictions on the \code{h-1} horizon.}
 
 \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
 
