@@ -618,7 +618,7 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #' @description
 #' The class BSVARSIGN presents complete specification for the Bayesian Structural VAR model with sign and narrative restrictions.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{specify_posterior_bsvarSIGN}}
 #' 
 #' @examples
 #' # specify a model with the optimism data and 4 lags
@@ -815,7 +815,7 @@ specify_bsvarSIGN = R6::R6Class(
 #' Note that due to the thinning of the MCMC output the starting value in element \code{last_draw}
 #' might not be equal to the last draw provided in element \code{posterior}.
 #'
-#' @seealso \code{\link{estimate}}, \code{\link{specify_bsvarSIGN}}
+#' @seealso \code{\link{estimate.BSVARSIGN}}, \code{\link{specify_bsvarSIGN}}
 #' 
 #' @examples 
 #' # This is a function that is used within estimate()
