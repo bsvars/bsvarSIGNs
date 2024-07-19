@@ -84,8 +84,8 @@
 <span>  p <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  <span class="va">sign_irf</span>,</span>
 <span>  <span class="va">sign_narrative</span>,</span>
-<span>  <span class="va">sign_relation</span>,</span>
-<span>  max_tries <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">sign_structural</span>,</span>
+<span>  max_tries <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  exogenous <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stationary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -113,7 +113,7 @@ restrictions on the <code>h-1</code> horizon.</p></dd>
 <dd><p>a list of objects of class "narrative" - narrative sign restrictions.</p></dd>
 
 
-<dt><code>sign_relation</code></dt>
+<dt><code>sign_structural</code></dt>
 <dd><p>a <code>NxN</code> matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations <code>B</code> between reduced-form errors <code>E</code> and
 structural shocks <code>U</code> where <code>BE=U</code>.</p></dd>
@@ -121,7 +121,7 @@ structural shocks <code>U</code> where <code>BE=U</code>.</p></dd>
 
 <dt><code>max_tries</code></dt>
 <dd><p>a positive integer with the maximum number of iterations
-for finding a rotation matrix \(Q\) that would satisfy sign restrictions.</p></dd>
+for finding a rotation matrix \(Q\) that would satisfy sign restrictions</p></dd>
 
 
 <dt><code>exogenous</code></dt>
@@ -304,12 +304,12 @@ otherwise to random walk.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     VB: list</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_identification: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_relation, max_tries = 1) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     max_tries: 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_relation) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_structural, max_tries = Inf) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     max_tries: Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_structural) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_irf: NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_narrative: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_relation: 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA  ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_structural: 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA  ...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
