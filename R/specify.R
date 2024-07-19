@@ -402,7 +402,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     #' # estimate hyper parameters with adaptive Metropolis algorithm
     #' prior$estimate_hyper(S = 10, psi = TRUE)
-    #' # prior$estimate_hyper(S = 10000, psi = TRUE)
     #'
     #' # trace plot
     #' hyper = t(prior$hyper)
