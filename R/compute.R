@@ -319,7 +319,7 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
 #' array with attribute \code{PosteriorFEVD} containing \code{S} draws of the 
 #' forecast error variance decomposition.
 #'
-#' @seealso \code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{normalise_posterior}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
