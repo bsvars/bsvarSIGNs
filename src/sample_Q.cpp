@@ -40,7 +40,6 @@ arma::field<arma::mat> sample_Q(
     arma::mat&                    h_invp,
     arma::mat&                    chol_Sigma,
     const Rcpp::List&             prior,
-    const arma::field<arma::mat>& VB,
     const arma::cube&             sign_irf,
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,

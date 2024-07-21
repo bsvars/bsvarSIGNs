@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bsvarSIGNs
+# bsvarSIGNs <a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" align="right" height="139" alt="bsvarSIGNs website" /></a>
 
 An **R** package for Bayesian Estimation of Structural Vector
 Autoregressions Identified by Sign, Zero, and Narrative Restrictions
@@ -14,8 +14,8 @@ Autoregressions Identified by Sign, Zero, and Narrative Restrictions
 Implements state-of-the-art algorithms for the Bayesian analysis of
 Structural Vector Autoregressions identified by sign, zero, and
 narrative restrictions. The core model is based on a flexible Vector
-Autoregression with estimated hyper-parameters of the Minnesota prior as
-in [Giannone, Lenza, Primiceri
+Autoregression with estimated hyper-parameters of the Minnesota prior
+and the dummy observation priors as in [Giannone, Lenza, Primiceri
 (2015)](http://doi.org/10.1162/REST_a_00483). The sign restrictions are
 implemented employing the methods proposed by [Rubio-Ramírez, Waggoner &
 Zha (2010)](http://doi.org/10.1111/j.1467-937X.2009.00578.x), while
@@ -36,6 +36,20 @@ regarding objects, workflows, and code structure with the **R** package
 **bsvars** by [Woźniak
 (2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
 constitute an integrated toolset.
+
+<a href="mailto:bsvars@pm.me">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/>
+</a> <a href="https://github.com/bsvars/bsvarSIGNs">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
+</a> <a href="https://fosstodon.org/@bsvars">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
+</a> <a href="https://bsky.app/profile/bsvars.bsky.social">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
+</a> <a href="https://x.com/bsvars">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/twitter.svg" width="50" height="50"/>
+</a> <a href="https://www.instagram.com/bsvarsoninsta/">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/instagram.svg" width="50" height="50"/>
+</a>
 
 ## Features
 
@@ -110,7 +124,7 @@ file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs
 
 <p>
 </p>
-<a href="https://bsvars.github.io/bsvars/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
+<a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
 </p>
 
@@ -229,16 +243,14 @@ macroeconomic analyses and programs in **R** and **cpp** using **Rcpp**.
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/>
 </a> <a href="https://github.com/donotdespair">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
-</a> <a href="https://gitlab.com/tomaszwozniak">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/gitlab.svg" width="40" height="40"/>
 </a> <a href="https://orcid.org/0000-0003-2212-2378">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg" width="40" height="40"/>
+</a> <a href="https://www.linkedin.com/in/tomaszwwozniak">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg" width="40" height="40"/>
 </a> <a href="http://scholar.google.com/citations?user=2uWpFrYAAAAJ&hl">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/google.svg" width="40" height="40"/>
 </a> <a href="https://arxiv.org/a/wozniak_t_1">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/circle-xmark.svg" width="40" height="40"/>
-</a> <a href="https://www.linkedin.com/in/tomaszwwozniak">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg" width="40" height="40"/>
 </a> <a href="https://fosstodon.org/@tomaszwozniak">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
 </a> <a href="https://bsky.app/profile/tomaszwozniak.bsky.social">

@@ -60,3 +60,19 @@ expect_identical(
   info = "compute_impulse_responses: identical for normal and pipe workflow."
 )
 
+
+# zero IRF on the main diagonal 
+
+set.seed(1)
+suppressMessages(
+  specification_no1 <- specify_bsvarSIGN$new(optimism, sign_irf = matrix(c(0,rep(NA, 24)),5,5))
+)
+run_no1             <- estimate(specification_no1, 3, 1, show_progress = FALSE)
+
+expect_message(
+  compute_impulse_responses(run_no1, horizon = 2, standardise = TRUE),
+  pattern = "zero",
+  info = "compute_impulse_responses: zero IRF on the main diagonal and IRF standarisation"
+)
+
+

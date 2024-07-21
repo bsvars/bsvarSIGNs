@@ -54,7 +54,7 @@ optimism |>
 Kilian, L., & Lütkepohl, H. (2017). Structural VAR Tools, Chapter 4, In: Structural vector autoregressive analysis. Cambridge University Press.
 }
 \seealso{
-\code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{normalise_posterior}}, \code{\link{summary}}, \code{\link{plot}}
+\code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 }
 \author{
 Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}

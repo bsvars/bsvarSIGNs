@@ -21,13 +21,11 @@ Rcpp::List bsvar_sign_cpp(
     const int&        p,                  // number of lags
     const arma::mat&  Y,                  // TxN dependent variables
     const arma::mat&  X,                  // TxK dependent variables
-    const arma::field<arma::mat>& VB,     // N-list
     const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
     const arma::mat&  sign_narrative,     // ANYx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
-    const Rcpp::List& starting_values,    // a list of starting values
     const bool        show_progress = true,
     const int         thin = 100,         // introduce thinning
     const int&        max_tries = 10000   // maximum tries for Q draw
@@ -77,6 +75,7 @@ Rcpp::List bsvar_sign_cpp(
   int        S_hyper  = hypers.n_cols - 1;
   int        prior_nu = as<int>(prior["nu"]);
   int        post_nu  = prior_nu + T;
+  int        n_tries;
   
   double     w, mu, delta, lambda;
   
@@ -115,20 +114,21 @@ Rcpp::List bsvar_sign_cpp(
     Xplus        = join_vert(Xstar, X);
     
     // posterior parameters
-    #pragma omp critical
-    {
+    // #pragma omp critical
+    // {
     result       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
-    }
+    // }
     post_B       = result(0);
     post_V       = result(1);
     post_S       = result(2);
     post_nu      = as_scalar(result(3));
 
     w            = 0;
+    n_tries      = 0;
     
-    while (w == 0) {
-
-      if (omp_get_thread_num() == 0) checkUserInterrupt();
+    while (w == 0 and (n_tries < max_tries or max_tries == 0)) {
+      
+      checkUserInterrupt();
       
       // sample reduced-form parameters
       Sigma      = iwishrnd(post_S, post_nu);
@@ -136,8 +136,8 @@ Rcpp::List bsvar_sign_cpp(
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       B          = rmatnorm_cpp(post_B, post_V, Sigma);
       
-      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior,
-                            VB, sign_irf, sign_narrative, sign_B, Z, max_tries);
+      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
+                            sign_irf, sign_narrative, sign_B, Z, 1);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));
@@ -151,11 +151,9 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Sigma.slice(s)  = Sigma;
     posterior_Theta0.slice(s) = chol_Sigma * Q;
     posterior_shocks.slice(s) = shocks;
-    
-    // // Increment progress bar for the first thread
-    if (omp_get_thread_num() == 0 and any(prog_rep_points == s)) {
-      bar.increment();
-    }
+
+    // Increment progress bar
+    if (any(prog_rep_points == s)) bar.increment();
     
   } // END s loop
   

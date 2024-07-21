@@ -80,7 +80,7 @@ spec$get_starting_values()
 
 }
 \seealso{
-\code{\link{estimate}}, \code{\link{specify_posterior_bsvarSIGN}}
+\code{\link{estimate.BSVARSIGN}}, \code{\link{specify_posterior_bsvarSIGN}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -119,8 +119,8 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   p = 1L,
   sign_irf,
   sign_narrative,
-  sign_relation,
-  max_tries = 1,
+  sign_structural,
+  max_tries = Inf,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -141,12 +141,12 @@ restrictions on the \code{h-1} horizon.}
 
 \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
 
-\item{\code{sign_relation}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
-for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
+for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 

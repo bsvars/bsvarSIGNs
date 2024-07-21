@@ -185,6 +185,14 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
 #' @export
 compute_impulse_responses.PosteriorBSVARSIGN <- function(posterior, horizon, standardise = FALSE) {
   
+  if ( 
+    any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0) &
+    !is.na(any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0))
+  ) {
+    standardise = FALSE
+    message("Argument standardise is forcibly set to FALSE due to zero restrictions imposed on the diagonal element(s) of the on-impact impulse response matrix.")
+  }
+  
   posterior_Theta0  = posterior$posterior$Theta0
   posterior_A       = posterior$posterior$A
   posterior_A       = aperm(posterior_A, c(2, 1, 3))
@@ -272,8 +280,16 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
   p                 = posterior$last_draw$p
   S                 = dim(posterior_A)[3]
   
+  standardise       = TRUE
+  if ( 
+    any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0) &
+    !is.na(any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0))
+  ) {
+    standardise     = FALSE
+  }
+  
   ss                = .Call(`_bsvarSIGNs_bsvarSIGNs_structural_shocks`, posterior_B, posterior_A, Y, X)
-  ir                = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_At, posterior_Theta0, T, p, TRUE)
+  ir                = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_At, posterior_Theta0, T, p, standardise)
   qqq               = .Call(`_bsvarSIGNs_bsvarSIGNs_hd`, ir, ss, show_progress)
   
   hd                = array(NA, c(N, N, T, S))
@@ -303,7 +319,7 @@ compute_historical_decompositions.PosteriorBSVARSIGN <- function(posterior, show
 #' array with attribute \code{PosteriorFEVD} containing \code{S} draws of the 
 #' forecast error variance decomposition.
 #'
-#' @seealso \code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{normalise_posterior}}, \code{\link{summary}}, \code{\link{plot}}
+#' @seealso \code{\link{compute_impulse_responses.PosteriorBSVARSIGN}}, \code{\link{estimate.BSVARSIGN}}, \code{\link{summary}}, \code{\link{plot}}
 #'
 #' @author Xiaolei Wang \email{adamwang15@gmail.com} and Tomasz Woźniak \email{wozniak.tom@pm.me}
 #' 
@@ -346,7 +362,15 @@ compute_variance_decompositions.PosteriorBSVARSIGN <- function(posterior, horizo
   p                 = posterior$last_draw$p
   S                 = dim(posterior_A)[3]
   
-  posterior_irf     = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_A, posterior_Theta0, horizon, p, TRUE)
+  standardise       = TRUE
+  if ( 
+    any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0) &
+    !is.na(any(diag(posterior$last_draw$identification$sign_irf[,,1]) == 0))
+  ) {
+    standardise     = FALSE
+  }
+  
+  posterior_irf     = .Call(`_bsvarSIGNs_bsvarSIGNs_ir`, posterior_A, posterior_Theta0, horizon, p, standardise)
   qqq               = .Call(`_bsvarSIGNs_bsvarSIGNs_fevd`, posterior_irf)
   
   fevd              = array(NA, c(N, N, horizon + 1, S))

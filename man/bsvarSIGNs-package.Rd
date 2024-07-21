@@ -9,8 +9,8 @@ by Sign, Zero, and Narrative Restrictions}
 Implements state-of-the-art algorithms for the Bayesian analysis 
 of Structural Vector Autoregressions identified by sign, zero, and narrative 
 restrictions. The core model is based on a flexible Vector Autoregression with 
-estimated hyper-parameters of the Minnesota prior as in  
-Giannone, Lenza, Primiceri (2015) <doi:10.1162/REST_a_00483>. The sign 
+estimated hyper-parameters of the Minnesota prior and the dummy observation priors
+as in Giannone, Lenza, Primiceri (2015) <doi:10.1162/REST_a_00483>. The sign 
 restrictions are implemented employing the methods proposed by 
 Rubio-Ramírez, Waggoner & Zha (2010) <doi:10.1111/j.1467-937X.2009.00578.x>, 
 while identification through sign and zero restrictions follows the approach 
