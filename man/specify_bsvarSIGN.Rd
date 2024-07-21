@@ -87,6 +87,8 @@ spec$get_starting_values()
 \describe{
 \item{\code{p}}{a non-negative integer specifying the autoregressive lag order of the model.}
 
+\item{\code{parallel}}{a logical value indicating if the model is estimated in parallel.}
+
 \item{\code{identification}}{an object IdentificationBSVARSIGN with the identifying restrictions.}
 
 \item{\code{prior}}{an object PriorBSVARSIGN with the prior specification.}
@@ -121,6 +123,7 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   sign_narrative,
   sign_structural,
   max_tries = Inf,
+  parallel = FALSE,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
 )}\if{html}{\out{</div>}}
@@ -147,6 +150,8 @@ structural shocks \code{U} where \code{BE=U}.}
 
 \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
+
+\item{\code{parallel}}{a logical value, experimental feature: if \code{TRUE} the sampler is run in parallel with OpenMP, which makes the estimation about 2x faster but loses reproducibility with \code{set.seed()}}
 
 \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
 

@@ -37,7 +37,7 @@
 #' 
 #' @param specification an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.
 #' @param S a positive integer, the number of posterior draws to be generated
-#' @param thin a positive integer, specifying the frequency of MCMC output thinning
+#' @param thin a positive integer, specifying the frequency of MCMC output thinning (this parameter exists for compatibility with `bsvars`, but it is not used in the current implementation since the samples here are independent)
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
 #' 
 #' @return An object of class PosteriorBSVARSIGN containing the Bayesian estimation output and containing two elements:
@@ -95,13 +95,13 @@
 estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) {
   
   # get the inputs to estimation
-  # prior               = specification$last_draw$prior$get_prior()
   prior               = specification$prior$get_prior()
   identification      = specification$identification$get_identification()
   max_tries           = identification$max_tries
   max_tries           = ifelse(max_tries == Inf, 0, max_tries)
   data_matrices       = specification$data_matrices$get_data_matrices()
   p                   = specification$p
+  parallel            = specification$parallel
   
   prior$B             = t(prior$A)
   prior$Ysoc          = t(prior$Ysoc)
@@ -137,7 +137,7 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
                               sign, narrative, struc, Z, prior, 
-                              show_progress, thin, max_tries)
+                              show_progress, parallel, max_tries)
   
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)

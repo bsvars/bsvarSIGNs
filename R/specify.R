@@ -638,6 +638,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' @field p a non-negative integer specifying the autoregressive lag order of the model.
     p                      = numeric(),
     
+    #' @field parallel a logical value indicating if the model is estimated in parallel.
+    parallel               = numeric(),
+    
     #' @field identification an object IdentificationBSVARSIGN with the identifying restrictions.
     identification         = list(),
     
@@ -665,6 +668,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' structural shocks \code{U} where \code{BE=U}.
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
+    #' @param parallel a logical value, experimental feature: if \code{TRUE} the sampler is run in parallel with OpenMP, which makes the estimation about 2x faster but loses reproducibility with \code{set.seed()}
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
@@ -676,22 +680,24 @@ specify_bsvarSIGN = R6::R6Class(
     sign_irf,
     sign_narrative,
     sign_structural,
-    max_tries = Inf,
-    exogenous = NULL,
+    max_tries  = Inf,
+    parallel   = FALSE,
+    exogenous  = NULL,
     stationary = rep(FALSE, ncol(data))
     ) {
       stopifnot("Argument p has to be a positive integer." = ((p %% 1) == 0 & p > 0))
-      self$p        = p
+      self$p         = p
+      self$parallel  = parallel
       
-      TT            = nrow(data)
-      T             = TT - self$p
-      N             = ncol(data)
-      d             = 0
+      TT             = nrow(data)
+      T              = TT - self$p
+      N              = ncol(data)
+      d              = 0
       if (!is.null(exogenous)) {
-        d           = ncol(exogenous)
+        d            = ncol(exogenous)
       }
       
-      missing_all   = TRUE
+      missing_all = TRUE
       if (missing(sign_irf)) {
         sign_irf = array(rep(NA, N^2), dim = c(N, N, 1))
       } else {

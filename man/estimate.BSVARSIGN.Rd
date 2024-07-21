@@ -12,7 +12,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 
 \item{S}{a positive integer, the number of posterior draws to be generated}
 
-\item{thin}{a positive integer, specifying the frequency of MCMC output thinning}
+\item{thin}{a positive integer, specifying the frequency of MCMC output thinning (this parameter exists for compatibility with `bsvars`, but it is not used in the current implementation since the samples here are independent)}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
 }

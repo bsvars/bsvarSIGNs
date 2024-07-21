@@ -2,9 +2,8 @@
 #include <RcppArmadillo.h>
 #include "progress.hpp"
 #include "Rcpp/Rmath.h"
-#include <omp.h>
-
 #include <bsvars.h>
+#include <omp.h>
 
 #include "sample_hyper.h"
 #include "sample_Q.h"
@@ -26,36 +25,28 @@ Rcpp::List bsvar_sign_cpp(
     const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
     const Rcpp::List& prior,              // a list of priors
-    const bool        show_progress = true,
-    const int         thin = 100,         // introduce thinning
-    const int&        max_tries = 10000   // maximum tries for Q draw
+    const bool        show_progress,
+    const bool        parallel,
+    const int&        max_tries           // maximum tries for Q draw
 ) {
   
-  std::string oo = "";
-  if ( thin != 1 ) {
-    oo      = bsvars::ordinal(thin) + " ";
+  if (parallel) {
+    omp_set_num_threads(omp_get_num_procs());
+  } else {
+    omp_set_num_threads(1);
   }
   
   // Progress bar setup
-  double num_threads = 1;
-  #pragma omp parallel
-  {
-    num_threads = omp_get_num_threads();
-  }
-  vec prog_rep_points = arma::round(arma::linspace(0, S / num_threads, 50));
   if (show_progress) {
     Rcout << "**************************************************|" << endl;
     Rcout << " bsvarSIGNs: Bayesian Structural VAR with sign,   |" << endl;
-    Rcout << "             zero and narrative restrictions      |" << endl;
+    Rcout << "             zero, and narrative restrictions      |" << endl;
     Rcout << "**************************************************|" << endl;
-    // Rcout << " Gibbs sampler for the SVAR model                 |" << endl;
-    // Rcout << "**************************************************|" << endl;
-    Rcout << " Simulation progress for " << S << " independent draws" << endl;
-    // Rcout << "    Every " << oo << "draw is saved via MCMC thinning" << endl;
+    Rcout << " Progress of simulation for " << S << " independent draws" << endl;
     Rcout << " Press Esc to interrupt the computations" << endl;
     Rcout << "**************************************************|" << endl;
   }
-  Progress bar(50, show_progress);
+  Progress bar(S, show_progress);
   
   const int  T = Y.n_rows;
   const int  N = Y.n_cols;
@@ -74,69 +65,61 @@ Rcpp::List bsvar_sign_cpp(
   
   int        S_hyper  = hypers.n_cols - 1;
   int        prior_nu = as<int>(prior["nu"]);
-  int        post_nu  = prior_nu + T;
-  int        n_tries;
   
-  double     w, mu, delta, lambda;
-  
-  vec        hyper, psi;
   vec        prior_v = as<mat>(prior["V"]).diag();
   
-  mat        B, Sigma, chol_Sigma, h_invp, Q, shocks;
-  mat        prior_V, prior_S, post_B, post_V, post_S;
-  mat        Ystar, Xstar, Yplus, Xplus;
   mat        prior_B = as<mat>(prior["B"]);
+  
   mat        Ysoc    = as<mat>(prior["Ysoc"]);
   mat        Xsoc    = as<mat>(prior["Xsoc"]);
   mat        Ysur    = as<mat>(prior["Ysur"]);
   mat        Xsur    = as<mat>(prior["Xsur"]);
   
-  field<mat> result;
-  
-  #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, post_nu, w, Sigma, chol_Sigma, B, h_invp, Q, shocks)
+  #pragma omp parallel for shared(posterior_w, posterior_hyper, posterior_A, posterior_B, posterior_Q, posterior_Sigma, posterior_Theta0, posterior_shocks)
   for (int s = 0; s < S; s++) {
-    
-    hyper        = hypers.col(randi(distr_param(0, S_hyper)));
-    mu           = hyper(0);
-    delta        = hyper(1);
-    lambda       = hyper(2);
-    psi          = hyper.rows(3, N + 2);
-    
+
+    vec hyper       = hypers.col(randi(distr_param(0, S_hyper)));
+    double mu       = hyper(0);
+    double delta    = hyper(1);
+    double lambda   = hyper(2);
+    vec psi         = hyper.rows(3, N + 2);
+
     // update Minnesota prior
-    prior_V      = diagmat(prior_v % join_vert(lambda * lambda * repmat(1 / psi, p, 1),
-                                               ones<vec>(K - N * p)));
-    prior_S      = diagmat(psi);
-    
+    mat prior_V     = diagmat(prior_v % 
+                              join_vert(lambda * lambda * repmat(1 / psi, p, 1),
+                                        ones<vec>(K - N * p)));
+    mat prior_S     = diagmat(psi);
+
     // update dummy observation prior
-    Ystar        = join_vert(Ysoc / mu, Ysur / delta);
-    Xstar        = join_vert(Xsoc / mu, Xsur / delta);
-    Yplus        = join_vert(Ystar, Y);
-    Xplus        = join_vert(Xstar, X);
+    mat Ystar       = join_vert(Ysoc / mu, Ysur / delta);
+    mat Xstar       = join_vert(Xsoc / mu, Xsur / delta);
+    mat Yplus       = join_vert(Ystar, Y);
+    mat Xplus       = join_vert(Xstar, X);
     
     // posterior parameters
-    // #pragma omp critical
-    // {
-    result       = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
-    // }
-    post_B       = result(0);
-    post_V       = result(1);
-    post_S       = result(2);
-    post_nu      = as_scalar(result(3));
+    field<mat> post = niw_cpp(Yplus, Xplus, prior_B, prior_V, prior_S, prior_nu);
+    mat post_B      = post(0);
+    mat post_V      = post(1);
+    mat post_S      = post(2);
+    int post_nu     = as_scalar(post(3));
 
-    w            = 0;
-    n_tries      = 0;
-    
+    int n_tries     = 0;
+    double w        = 0;
+    mat Sigma, chol_Sigma, B, h_invp, Q, shocks;
+    field<mat> result;
+
     while (w == 0 and (n_tries < max_tries or max_tries == 0)) {
-      
-      checkUserInterrupt();
-      
+
+      if (n_tries % 100 == 0) Progress::check_abort();
+      n_tries++;
+
       // sample reduced-form parameters
       Sigma      = iwishrnd(post_S, post_nu);
       chol_Sigma = chol(Sigma, "lower");
-      h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       B          = rmatnorm_cpp(post_B, post_V, Sigma);
-      
-      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
+      h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
+
+      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior,
                             sign_irf, sign_narrative, sign_B, Z, 1);
       Q          = result(0);
       shocks     = result(1);
@@ -153,8 +136,8 @@ Rcpp::List bsvar_sign_cpp(
     posterior_shocks.slice(s) = shocks;
 
     // Increment progress bar
-    if (any(prog_rep_points == s)) bar.increment();
-    
+    bar.increment();
+
   } // END s loop
   
   return List::create(
