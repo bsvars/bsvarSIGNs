@@ -37,7 +37,7 @@
 #' 
 #' @param specification an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.
 #' @param S a positive integer, the number of posterior draws to be generated
-#' @param thin a positive integer, specifying the frequency of MCMC output thinning (this parameter exists for compatibility with `bsvars`, but it is not used in the current implementation since the samples here are independent)
+#' @param thin a positive integer, specifying the frequency of MCMC output thinning (this parameter exists for compatibility with 'bsvars', but it is not used in the current implementation since the samples here are independent)
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
 #' 
 #' @return An object of class PosteriorBSVARSIGN containing the Bayesian estimation output and containing two elements:
