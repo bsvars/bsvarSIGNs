@@ -24,7 +24,7 @@ impulse responses, forecast error variance and historical decompositions,
 forecasting and conditional forecasting, as well as analyses of structural 
 shocks and fitted values. All this is complemented by colourful plots, 
 user-friendly summary functions, and comprehensive documentation. The 
-`bsvarSIGNs` package is aligned regarding objects, workflows, and code 
+'bsvarSIGNs' package is aligned regarding objects, workflows, and code 
 structure with the R package 'bsvars' by 
 Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, and they constitute an 
 integrated toolset.
