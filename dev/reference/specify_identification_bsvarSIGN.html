@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bsvarSIGNs</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.0.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
 <dd><p>a <code>ANYx6</code> matrix of narrative sign restrictions.</p></dd>
 
 
-<dt><code>sign_relation</code></dt>
+<dt><code>sign_structural</code></dt>
 <dd><p>a <code>NxN</code> matrix of sign restrictions on contemporaneous relations.</p></dd>
 
 
@@ -78,7 +78,7 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions.</p></d
 <span>  <span class="va">N</span>,</span>
 <span>  <span class="va">sign_irf</span>,</span>
 <span>  <span class="va">sign_narrative</span>,</span>
-<span>  <span class="va">sign_relation</span>,</span>
+<span>  <span class="va">sign_structural</span>,</span>
 <span>  max_tries <span class="op">=</span> <span class="cn">Inf</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -101,7 +101,7 @@ restrictions on the <code>h-1</code> horizon.</p></dd>
 <dd><p>a list of objects of class "narrative" - narrative sign restrictions.</p></dd>
 
 
-<dt><code>sign_relation</code></dt>
+<dt><code>sign_structural</code></dt>
 <dd><p>a <code>NxN</code> matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations <code>B</code> between reduced-form errors <code>E</code> and
 structural shocks <code>U</code> where <code>BE=U</code>.</p></dd>
@@ -135,7 +135,7 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions.</p></d
 <span>  <span class="va">N</span>,</span>
 <span>  <span class="va">sign_irf</span>,</span>
 <span>  <span class="va">sign_narrative</span>,</span>
-<span>  <span class="va">sign_relation</span></span>
+<span>  <span class="va">sign_structural</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -157,7 +157,7 @@ restrictions on the <code>h-1</code> horizon.</p></dd>
 <dd><p>a list of objects of class "narrative" - narrative sign restrictions.</p></dd>
 
 
-<dt><code>sign_relation</code></dt>
+<dt><code>sign_structural</code></dt>
 <dd><p>a <code>NxN</code> matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations <code>B</code> between reduced-form errors <code>E</code> and
 structural shocks <code>U</code> where <code>BE=U</code>.</p></dd>
@@ -200,12 +200,12 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions</p></dd
 <span class="r-out co"><span class="r-pr">#&gt;</span>     VB: list</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_identification: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_relation, max_tries = Inf) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_structural, max_tries = Inf) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     max_tries: Inf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_relation) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_structural) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_irf: NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_narrative: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_relation: 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA  ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_structural: 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA NA NA NA NA 1 NA  ...</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specify sign restrictions of the first shock on the contemporaneous IRF</span></span></span>
 <span class="r-in"><span><span class="co"># + no effect on the first variable</span></span></span>
@@ -217,12 +217,12 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions</p></dd
 <span class="r-out co"><span class="r-pr">#&gt;</span>     VB: list</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_identification: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_relation, max_tries = Inf) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (N, sign_irf, sign_narrative, sign_structural, max_tries = Inf) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     max_tries: Inf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_relation) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_identification: function (N, sign_irf, sign_narrative, sign_structural) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_irf: 0 1 NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA N ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sign_narrative: list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_relation: NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sign_structural: NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA ...</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
