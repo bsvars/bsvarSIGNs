@@ -1,6 +1,8 @@
-# bsvarSIGNs 1.0
+# bsvarSIGNs (development version)
 
 The package is under intensive development, and more functionality will be provided soon! To see the package [ROADMAP](https://github.com/bsvars/bsvarSIGNs/milestones) towards the next version.
+
+# bsvarSIGNs 1.0
 
 1. The package includes **cpp** code for estimation and analysis of SVARs identified with sign, zero, and narrative restrictions.
 2. The package includes methods for estimation, forecasting, and structural analyses.
