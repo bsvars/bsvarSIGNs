@@ -8,6 +8,7 @@ Autoregressions Identified by Sign, Zero, and Narrative Restrictions
 
 <!-- badges: start -->
 
+[![](https://www.r-pkg.org/badges/version/bsvarSIGNs)](https://cran.r-project.org/package=bsvarSIGNs)
 [![R-CMD-check](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bsvars/bsvarSIGNs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
