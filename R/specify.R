@@ -25,7 +25,16 @@
 #' 
 #' @examples
 #' # specify a narrative restriction
-#' specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1, var = 6)
+#' narrative       = specify_narrative(
+#'                     start = 166, 
+#'                     periods = 1, 
+#'                     type = "S", 
+#'                     sign = 1, 
+#'                     shock = 1, 
+#'                     var = 6
+#'                   )
+#' # use it to specify the model
+#' specification   = specify_bsvarSIGN$new(monetary, sign_narrative = list(narrative))
 #' 
 #' @export
 specify_narrative = function(start, periods = 1, type = "S", sign = 1, shock = 1, var = NA) {
