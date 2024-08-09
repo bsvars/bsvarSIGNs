@@ -136,7 +136,7 @@
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' 
 #' # specify the model
-#' specification  = specify_bsvarSIGN$new(optimism * 100,
+#' specification  = specify_bsvarSIGN$new(optimism,
 #'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
 #'                                        
