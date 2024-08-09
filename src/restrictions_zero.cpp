@@ -12,7 +12,7 @@ using namespace arma;
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::field<arma::mat> ZIRF(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::mat&              irf_0
 ) {
   
@@ -30,7 +30,7 @@ arma::field<arma::mat> ZIRF(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::colvec zero_restrictions(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     arma::vec vec_structural
 ) {
   int N  = Z(0).n_cols;
@@ -41,8 +41,7 @@ arma::colvec zero_restrictions(
   
   vec z = ZF(0).col(0);
   for (int j = 1; j < ZF.n_elem; j++) {
-    vec zj = ZF(j).col(j);
-    z      = join_vert(z, zj);
+    z = join_vert(z, ZF(j).col(j));
   }
   
   return z;
@@ -53,7 +52,7 @@ arma::colvec zero_restrictions(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::colvec g_fh(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::mat& A0,
     const arma::mat& Aplus
 ) {
@@ -88,7 +87,7 @@ arma::colvec g_fh(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::colvec g_fh_vec(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::colvec            vec_structural
 ) {
   int N = Z(0).n_cols;
@@ -106,14 +105,21 @@ arma::colvec g_fh_vec(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_volume_element(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::mat&              A0,
     const arma::mat&              Aplus
 ) {
   colvec vec_structural = join_vert(vectorise(A0), vectorise(Aplus));
   
-  mat Dz  = Df([Z](const colvec& x) { return zero_restrictions(Z, x); }, vec_structural);
-  mat Dgf = Df([Z](const colvec& x) { return g_fh_vec(Z, x); }, vec_structural);
+  mat Dz  = Df([Z](const colvec& x) { 
+    field<mat> ZZ = Z;
+    return zero_restrictions(ZZ, x); 
+    }, vec_structural);
+  
+  mat Dgf = Df([Z](const colvec& x) { 
+    field<mat> ZZ = Z;
+    return g_fh_vec(ZZ, x); 
+    }, vec_structural);
   
   mat DN  = Dgf * null(Dz);
   
@@ -125,7 +131,7 @@ double log_volume_element(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double weight_zero(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,
     const arma::mat&              Q
@@ -147,7 +153,7 @@ double weight_zero(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat rzeroQ(
-    const arma::field<arma::mat>& Z,
+    arma::field<arma::mat>& Z,
     const arma::mat&              irf_0
 ) {
   // Algorithm 2 in ARRW (2018)

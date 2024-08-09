@@ -15,7 +15,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // bsvar_sign_cpp
-Rcpp::List bsvar_sign_cpp(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const Rcpp::List& prior, const bool show_progress, const int thin, const int& max_tries);
+Rcpp::List bsvar_sign_cpp(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, arma::field<arma::mat>& Z, const Rcpp::List& prior, const bool show_progress, const int thin, const int& max_tries);
 static SEXP _bsvarSIGNs_bsvar_sign_cpp_try(SEXP SSEXP, SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP priorSEXP, SEXP show_progressSEXP, SEXP thinSEXP, SEXP max_triesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -26,7 +26,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::cube& >::type sign_irf(sign_irfSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_narrative(sign_narrativeSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_B(sign_BSEXP);
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type prior(priorSEXP);
     Rcpp::traits::input_parameter< const bool >::type show_progress(show_progressSEXP);
     Rcpp::traits::input_parameter< const int >::type thin(thinSEXP);
@@ -428,11 +428,11 @@ RcppExport SEXP _bsvarSIGNs_weight_narrative(SEXP TSEXP, SEXP sign_narrativeSEXP
     return rcpp_result_gen;
 }
 // ZIRF
-arma::field<arma::mat> ZIRF(const arma::field<arma::mat>& Z, const arma::mat& irf_0);
+arma::field<arma::mat> ZIRF(arma::field<arma::mat>& Z, const arma::mat& irf_0);
 static SEXP _bsvarSIGNs_ZIRF_try(SEXP ZSEXP, SEXP irf_0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type irf_0(irf_0SEXP);
     rcpp_result_gen = Rcpp::wrap(ZIRF(Z, irf_0));
     return rcpp_result_gen;
@@ -463,11 +463,11 @@ RcppExport SEXP _bsvarSIGNs_ZIRF(SEXP ZSEXP, SEXP irf_0SEXP) {
     return rcpp_result_gen;
 }
 // zero_restrictions
-arma::colvec zero_restrictions(const arma::field<arma::mat>& Z, arma::vec vec_structural);
+arma::colvec zero_restrictions(arma::field<arma::mat>& Z, arma::vec vec_structural);
 static SEXP _bsvarSIGNs_zero_restrictions_try(SEXP ZSEXP, SEXP vec_structuralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type vec_structural(vec_structuralSEXP);
     rcpp_result_gen = Rcpp::wrap(zero_restrictions(Z, vec_structural));
     return rcpp_result_gen;
@@ -498,11 +498,11 @@ RcppExport SEXP _bsvarSIGNs_zero_restrictions(SEXP ZSEXP, SEXP vec_structuralSEX
     return rcpp_result_gen;
 }
 // g_fh
-arma::colvec g_fh(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus);
+arma::colvec g_fh(arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus);
 static SEXP _bsvarSIGNs_g_fh_try(SEXP ZSEXP, SEXP A0SEXP, SEXP AplusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type A0(A0SEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Aplus(AplusSEXP);
     rcpp_result_gen = Rcpp::wrap(g_fh(Z, A0, Aplus));
@@ -534,11 +534,11 @@ RcppExport SEXP _bsvarSIGNs_g_fh(SEXP ZSEXP, SEXP A0SEXP, SEXP AplusSEXP) {
     return rcpp_result_gen;
 }
 // g_fh_vec
-arma::colvec g_fh_vec(const arma::field<arma::mat>& Z, const arma::colvec vec_structural);
+arma::colvec g_fh_vec(arma::field<arma::mat>& Z, const arma::colvec vec_structural);
 static SEXP _bsvarSIGNs_g_fh_vec_try(SEXP ZSEXP, SEXP vec_structuralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::colvec >::type vec_structural(vec_structuralSEXP);
     rcpp_result_gen = Rcpp::wrap(g_fh_vec(Z, vec_structural));
     return rcpp_result_gen;
@@ -569,11 +569,11 @@ RcppExport SEXP _bsvarSIGNs_g_fh_vec(SEXP ZSEXP, SEXP vec_structuralSEXP) {
     return rcpp_result_gen;
 }
 // log_volume_element
-double log_volume_element(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus);
+double log_volume_element(arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus);
 static SEXP _bsvarSIGNs_log_volume_element_try(SEXP ZSEXP, SEXP A0SEXP, SEXP AplusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type A0(A0SEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Aplus(AplusSEXP);
     rcpp_result_gen = Rcpp::wrap(log_volume_element(Z, A0, Aplus));
@@ -605,11 +605,11 @@ RcppExport SEXP _bsvarSIGNs_log_volume_element(SEXP ZSEXP, SEXP A0SEXP, SEXP Apl
     return rcpp_result_gen;
 }
 // weight_zero
-double weight_zero(const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q);
+double weight_zero(arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q);
 static SEXP _bsvarSIGNs_weight_zero_try(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type h_inv(h_invSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
@@ -642,11 +642,11 @@ RcppExport SEXP _bsvarSIGNs_weight_zero(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, 
     return rcpp_result_gen;
 }
 // rzeroQ
-arma::mat rzeroQ(const arma::field<arma::mat>& Z, const arma::mat& irf_0);
+arma::mat rzeroQ(arma::field<arma::mat>& Z, const arma::mat& irf_0);
 static SEXP _bsvarSIGNs_rzeroQ_try(SEXP ZSEXP, SEXP irf_0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type irf_0(irf_0SEXP);
     rcpp_result_gen = Rcpp::wrap(rzeroQ(Z, irf_0));
     return rcpp_result_gen;
@@ -754,7 +754,7 @@ RcppExport SEXP _bsvarSIGNs_match_sign_irf(SEXP QSEXP, SEXP sign_irfSEXP, SEXP i
     return rcpp_result_gen;
 }
 // sample_Q
-arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries);
+arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, arma::field<arma::mat>& Z, const int& max_tries);
 static SEXP _bsvarSIGNs_sample_Q_try(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BSEXP, SEXP h_invpSEXP, SEXP chol_SigmaSEXP, SEXP priorSEXP, SEXP sign_irfSEXP, SEXP sign_narrativeSEXP, SEXP sign_BSEXP, SEXP ZSEXP, SEXP max_triesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -768,7 +768,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::cube& >::type sign_irf(sign_irfSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_narrative(sign_narrativeSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sign_B(sign_BSEXP);
-    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const int& >::type max_tries(max_triesSEXP);
     rcpp_result_gen = Rcpp::wrap(sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, sign_irf, sign_narrative, sign_B, Z, max_tries));
     return rcpp_result_gen;
@@ -1046,7 +1046,7 @@ RcppExport SEXP _bsvarSIGNs_match_sign(SEXP ASEXP, SEXP signSEXP) {
 static int _bsvarSIGNs_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const Rcpp::List&,const bool,const int,const int&)");
+        signatures.insert("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::cube&,const arma::mat&,const arma::mat&,arma::field<arma::mat>&,const Rcpp::List&,const bool,const int,const int&)");
         signatures.insert("arma::cube(*bsvarSIGNs_structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::cube(*bsvarSIGNs_fitted_values)(arma::cube&,arma::cube&,arma::cube&,arma::mat&)");
         signatures.insert("arma::cube(*ir1_cpp)(const arma::mat&,const arma::mat&,int,const int&)");
@@ -1057,15 +1057,15 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
-        signatures.insert("arma::field<arma::mat>(*ZIRF)(const arma::field<arma::mat>&,const arma::mat&)");
-        signatures.insert("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,arma::vec)");
-        signatures.insert("arma::colvec(*g_fh)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
-        signatures.insert("arma::colvec(*g_fh_vec)(const arma::field<arma::mat>&,const arma::colvec)");
-        signatures.insert("double(*log_volume_element)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
-        signatures.insert("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
-        signatures.insert("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
+        signatures.insert("arma::field<arma::mat>(*ZIRF)(arma::field<arma::mat>&,const arma::mat&)");
+        signatures.insert("arma::colvec(*zero_restrictions)(arma::field<arma::mat>&,arma::vec)");
+        signatures.insert("arma::colvec(*g_fh)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
+        signatures.insert("arma::colvec(*g_fh_vec)(arma::field<arma::mat>&,const arma::colvec)");
+        signatures.insert("double(*log_volume_element)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
+        signatures.insert("double(*weight_zero)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
+        signatures.insert("arma::mat(*rzeroQ)(arma::field<arma::mat>&,const arma::mat&)");
         signatures.insert("bool(*match_sign_irf)(const arma::mat&,const arma::cube&,const arma::cube&)");
-        signatures.insert("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
+        signatures.insert("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::cube&,const arma::mat&,const arma::mat&,arma::field<arma::mat>&,const int&)");
         signatures.insert("arma::mat(*qr_sign_cpp)(const arma::mat&)");
         signatures.insert("arma::mat(*rortho_cpp)(const int&)");
         signatures.insert("bool(*match_sign)(const arma::mat&,const arma::mat&)");

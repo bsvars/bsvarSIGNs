@@ -25,11 +25,11 @@ namespace bsvarSIGNs {
         }
     }
 
-    inline Rcpp::List bsvar_sign_cpp(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const Rcpp::List& prior, const bool show_progress = true, const int thin = 100, const int& max_tries = 10000) {
+    inline Rcpp::List bsvar_sign_cpp(const int& S, const int& p, const arma::mat& Y, const arma::mat& X, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, arma::field<arma::mat>& Z, const Rcpp::List& prior, const bool show_progress = true, const int thin = 100, const int& max_tries = 10000) {
         typedef SEXP(*Ptr_bsvar_sign_cpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_bsvar_sign_cpp p_bsvar_sign_cpp = NULL;
         if (p_bsvar_sign_cpp == NULL) {
-            validateSignature("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const Rcpp::List&,const bool,const int,const int&)");
+            validateSignature("Rcpp::List(*bsvar_sign_cpp)(const int&,const int&,const arma::mat&,const arma::mat&,const arma::cube&,const arma::mat&,const arma::mat&,arma::field<arma::mat>&,const Rcpp::List&,const bool,const int,const int&)");
             p_bsvar_sign_cpp = (Ptr_bsvar_sign_cpp)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_cpp");
         }
         RObject rcpp_result_gen;
@@ -256,11 +256,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline arma::field<arma::mat> ZIRF(const arma::field<arma::mat>& Z, const arma::mat& irf_0) {
+    inline arma::field<arma::mat> ZIRF(arma::field<arma::mat>& Z, const arma::mat& irf_0) {
         typedef SEXP(*Ptr_ZIRF)(SEXP,SEXP);
         static Ptr_ZIRF p_ZIRF = NULL;
         if (p_ZIRF == NULL) {
-            validateSignature("arma::field<arma::mat>(*ZIRF)(const arma::field<arma::mat>&,const arma::mat&)");
+            validateSignature("arma::field<arma::mat>(*ZIRF)(arma::field<arma::mat>&,const arma::mat&)");
             p_ZIRF = (Ptr_ZIRF)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_ZIRF");
         }
         RObject rcpp_result_gen;
@@ -277,11 +277,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::field<arma::mat> >(rcpp_result_gen);
     }
 
-    inline arma::colvec zero_restrictions(const arma::field<arma::mat>& Z, arma::vec vec_structural) {
+    inline arma::colvec zero_restrictions(arma::field<arma::mat>& Z, arma::vec vec_structural) {
         typedef SEXP(*Ptr_zero_restrictions)(SEXP,SEXP);
         static Ptr_zero_restrictions p_zero_restrictions = NULL;
         if (p_zero_restrictions == NULL) {
-            validateSignature("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,arma::vec)");
+            validateSignature("arma::colvec(*zero_restrictions)(arma::field<arma::mat>&,arma::vec)");
             p_zero_restrictions = (Ptr_zero_restrictions)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_zero_restrictions");
         }
         RObject rcpp_result_gen;
@@ -298,11 +298,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::colvec >(rcpp_result_gen);
     }
 
-    inline arma::colvec g_fh(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus) {
+    inline arma::colvec g_fh(arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus) {
         typedef SEXP(*Ptr_g_fh)(SEXP,SEXP,SEXP);
         static Ptr_g_fh p_g_fh = NULL;
         if (p_g_fh == NULL) {
-            validateSignature("arma::colvec(*g_fh)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
+            validateSignature("arma::colvec(*g_fh)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
             p_g_fh = (Ptr_g_fh)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh");
         }
         RObject rcpp_result_gen;
@@ -319,11 +319,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::colvec >(rcpp_result_gen);
     }
 
-    inline arma::colvec g_fh_vec(const arma::field<arma::mat>& Z, const arma::colvec vec_structural) {
+    inline arma::colvec g_fh_vec(arma::field<arma::mat>& Z, const arma::colvec vec_structural) {
         typedef SEXP(*Ptr_g_fh_vec)(SEXP,SEXP);
         static Ptr_g_fh_vec p_g_fh_vec = NULL;
         if (p_g_fh_vec == NULL) {
-            validateSignature("arma::colvec(*g_fh_vec)(const arma::field<arma::mat>&,const arma::colvec)");
+            validateSignature("arma::colvec(*g_fh_vec)(arma::field<arma::mat>&,const arma::colvec)");
             p_g_fh_vec = (Ptr_g_fh_vec)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh_vec");
         }
         RObject rcpp_result_gen;
@@ -340,11 +340,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::colvec >(rcpp_result_gen);
     }
 
-    inline double log_volume_element(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus) {
+    inline double log_volume_element(arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus) {
         typedef SEXP(*Ptr_log_volume_element)(SEXP,SEXP,SEXP);
         static Ptr_log_volume_element p_log_volume_element = NULL;
         if (p_log_volume_element == NULL) {
-            validateSignature("double(*log_volume_element)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
+            validateSignature("double(*log_volume_element)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
             p_log_volume_element = (Ptr_log_volume_element)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_log_volume_element");
         }
         RObject rcpp_result_gen;
@@ -361,11 +361,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline double weight_zero(const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q) {
+    inline double weight_zero(arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q) {
         typedef SEXP(*Ptr_weight_zero)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_weight_zero p_weight_zero = NULL;
         if (p_weight_zero == NULL) {
-            validateSignature("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
+            validateSignature("double(*weight_zero)(arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
             p_weight_zero = (Ptr_weight_zero)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_zero");
         }
         RObject rcpp_result_gen;
@@ -382,11 +382,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline arma::mat rzeroQ(const arma::field<arma::mat>& Z, const arma::mat& irf_0) {
+    inline arma::mat rzeroQ(arma::field<arma::mat>& Z, const arma::mat& irf_0) {
         typedef SEXP(*Ptr_rzeroQ)(SEXP,SEXP);
         static Ptr_rzeroQ p_rzeroQ = NULL;
         if (p_rzeroQ == NULL) {
-            validateSignature("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
+            validateSignature("arma::mat(*rzeroQ)(arma::field<arma::mat>&,const arma::mat&)");
             p_rzeroQ = (Ptr_rzeroQ)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_rzeroQ");
         }
         RObject rcpp_result_gen;
@@ -424,11 +424,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<bool >(rcpp_result_gen);
     }
 
-    inline arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& max_tries) {
+    inline arma::field<arma::mat> sample_Q(const int& p, const arma::mat& Y, const arma::mat& X, arma::mat& B, arma::mat& h_invp, arma::mat& chol_Sigma, const Rcpp::List& prior, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, arma::field<arma::mat>& Z, const int& max_tries) {
         typedef SEXP(*Ptr_sample_Q)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_sample_Q p_sample_Q = NULL;
         if (p_sample_Q == NULL) {
-            validateSignature("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&)");
+            validateSignature("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::cube&,const arma::mat&,const arma::mat&,arma::field<arma::mat>&,const int&)");
             p_sample_Q = (Ptr_sample_Q)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_sample_Q");
         }
         RObject rcpp_result_gen;
