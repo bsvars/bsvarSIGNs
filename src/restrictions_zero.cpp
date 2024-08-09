@@ -18,7 +18,7 @@ arma::field<arma::mat> ZIRF(
   
   arma::field<arma::mat> ZIRF(Z.n_elem);
   
-  for (int j=0; j<Z.n_elem; j++) {
+  for (int j = 0; j < Z.n_elem; j++) {
     ZIRF(j) = Z(j) * irf_0;
   }
   
@@ -31,15 +31,17 @@ arma::field<arma::mat> ZIRF(
 // [[Rcpp::export]]
 arma::colvec zero_restrictions(
     const arma::field<arma::mat>& Z,
-    const arma::colvec            vec_structural
+    arma::vec vec_structural
 ) {
   int N  = Z(0).n_cols;
-  mat A0 = reshape(vec_structural.rows(0, N*N-1), N, N);
+  
+  mat A0 = vec_structural.rows(0, N * N - 1);
+  A0     = reshape(A0, N, N);
   
   arma::field<arma::mat> ZF = ZIRF(Z, inv(A0.t()));
   
   colvec z;
-  for (int j=0; j<ZF.n_elem; j++) {
+  for (int j = 0; j < ZF.n_elem; j++) {
     z = join_vert(z, ZF(j).col(j));
   }
   
