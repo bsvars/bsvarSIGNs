@@ -277,11 +277,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::field<arma::mat> >(rcpp_result_gen);
     }
 
-    inline arma::colvec zero_restrictions(arma::field<arma::mat>& Z, arma::vec vec_structural) {
+    inline arma::colvec zero_restrictions(arma::field<arma::mat> Z, arma::vec vec_structural) {
         typedef SEXP(*Ptr_zero_restrictions)(SEXP,SEXP);
         static Ptr_zero_restrictions p_zero_restrictions = NULL;
         if (p_zero_restrictions == NULL) {
-            validateSignature("arma::colvec(*zero_restrictions)(arma::field<arma::mat>&,arma::vec)");
+            validateSignature("arma::colvec(*zero_restrictions)(arma::field<arma::mat>,arma::vec)");
             p_zero_restrictions = (Ptr_zero_restrictions)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_zero_restrictions");
         }
         RObject rcpp_result_gen;
