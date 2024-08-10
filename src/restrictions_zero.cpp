@@ -42,7 +42,7 @@ arma::colvec zero_restrictions(
   
   Rcout << "debug 2" << std::endl;
   
-  field<mat> ZF = ZIRF(Z, inv(A0.t()));
+  // field<mat> ZF = ZIRF(Z, inv(A0.t()));
   
   Rcout << "debug 3" << std::endl;
   
@@ -50,12 +50,18 @@ arma::colvec zero_restrictions(
   
   Rcout << "debug 4" << std::endl;
   
-  for (int j=0; j<ZF.n_elem; j++) {
-    z = join_vert(z, ZF(j).col(j));
+  mat irf_0 = inv(A0.t());
+  
+  for (int j=0; j<Z.n_elem; j++) {
+    mat ZF = Z(j) * irf_0;
     Rcout << "debug 5" << std::endl;
+    vec ZF_j = ZF.col(j);
+    Rcout << "debug 6" << std::endl;
+    z = join_vert(z, ZF_j);
+    Rcout << "debug 7" << std::endl;
   }
   
-  Rcout << "debug 6" << std::endl;
+  Rcout << "debug 8" << std::endl;
   
   return z;
 }
