@@ -144,7 +144,7 @@ data(optimism)
 sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 
 # specify the model
-specification  = specify_bsvarSIGN$new(optimism,
+specification  = specify_bsvarSIGN$new(optimism * 100,
                                        p        = 4,
                                        sign_irf = sign_irf)
 
@@ -176,7 +176,7 @@ sign_narrative = list(
 )
 
 # specify the model
-specification  = specify_bsvarSIGN$new(monetary,
+specification  = specify_bsvarSIGN$new(monetary       * 100,
                                        p              = 12,
                                        sign_irf       = sign_irf,
                                        sign_narrative = sign_narrative)
