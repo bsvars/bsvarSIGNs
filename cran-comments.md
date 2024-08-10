@@ -27,9 +27,6 @@ It also shows:
 
 This is not a problem as `RcppArmadillo` is used in the package and is not a problem to be in `Depends` or `Imports`. We tested various scenarios of includeing `RcppArmadillo` in dependencies, and only the current setup compiles and installs the package correctly. It shows this note nevertheless.
 
-
-
-
 ## Checks using `devtools::check_win_devel()`
 
 This show as well:
@@ -51,10 +48,12 @@ This show as well:
 
 All are correct and used intentionally. Thanks!
 
-
-
-
-
 ## Done some more tests from `usethis::use_release_issue()`
 
 All good here!
+
+## Submission notes bsvarSIGNs v1.0.1
+
+## Checks using `rhub::rhub_check()`
+
+Passes the Undefined Behavior Sanitizer check as shown [here](https://github.com/bsvars/bsvarSIGNs/actions/runs/10328718577). Thanks!
