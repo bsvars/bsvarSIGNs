@@ -30,7 +30,7 @@ arma::field<arma::mat> ZIRF(
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::colvec zero_restrictions(
-    arma::field<arma::mat> Z,
+    arma::field<arma::mat>& Z,
     arma::vec vec_structural
 ) {
   int N  = Z(0).n_cols;
