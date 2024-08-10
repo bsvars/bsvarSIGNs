@@ -463,12 +463,12 @@ RcppExport SEXP _bsvarSIGNs_ZIRF(SEXP ZSEXP, SEXP irf_0SEXP) {
     return rcpp_result_gen;
 }
 // zero_restrictions
-arma::colvec zero_restrictions(const arma::field<arma::mat>& Z, const arma::colvec vec_structural);
+arma::colvec zero_restrictions(const arma::field<arma::mat>& Z, const arma::vec vec_structural);
 static SEXP _bsvarSIGNs_zero_restrictions_try(SEXP ZSEXP, SEXP vec_structuralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
-    Rcpp::traits::input_parameter< const arma::colvec >::type vec_structural(vec_structuralSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type vec_structural(vec_structuralSEXP);
     rcpp_result_gen = Rcpp::wrap(zero_restrictions(Z, vec_structural));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -1130,7 +1130,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
         signatures.insert("arma::field<arma::mat>(*ZIRF)(const arma::field<arma::mat>&,const arma::mat&)");
-        signatures.insert("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,const arma::colvec)");
+        signatures.insert("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,const arma::vec)");
         signatures.insert("arma::colvec(*g_fh)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::colvec(*g_fh_vec)(const arma::field<arma::mat>&,const arma::colvec)");
         signatures.insert("arma::mat(*D_z)(const arma::field<arma::mat>&,const arma::vec&,const double)");
