@@ -98,14 +98,12 @@ sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 
 # specify the model and set seed
 set.seed(123)
-specification  = specify_bsvarSIGN$new(optimism, sign_irf = sign_irf)
+specification  = specify_bsvarSIGN$new(optimism,
+                                       p        = 4,
+                                       sign_irf = sign_irf)
                                        
 # estimate the model
 posterior      = estimate(specification, S = 10)
-
-# compute and plot impulse responses
-irf            = compute_impulse_responses(posterior, horizon = 40)
-plot(irf, probability = 0.68)
 
 }
 \references{
