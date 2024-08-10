@@ -40,8 +40,8 @@ arma::colvec zero_restrictions(
   
   arma::field<arma::mat> ZF = ZIRF(Z, inv(A0.t()));
   
-  vec z = ZF(0).col(0);
-  for (int j = 1; j < ZF.n_elem; j++) {
+  colvec z;
+  for (int j = 0; j < ZF.n_elem; j++) {
     z = join_vert(z, ZF(j).col(j));
   }
   
