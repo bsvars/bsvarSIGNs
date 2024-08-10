@@ -101,9 +101,6 @@ set.seed(123)
 specification  = specify_bsvarSIGN$new(optimism,
                                        p        = 4,
                                        sign_irf = sign_irf)
-                                       
-# estimate the model
-posterior      = estimate(specification, S = 10)
 
 }
 \references{
