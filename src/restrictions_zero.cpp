@@ -37,12 +37,12 @@ arma::colvec zero_restrictions(
   
   mat A0 = reshape(vec_structural.rows(0, N * N - 1), N, N);
   
-  mat irf_0 = inv(A0.t());
+  field<mat> ZF = ZIRF(Z, inv(A0.t()));
   
   vec z;
-  for (int j = 0; j < Z.n_elem; j++) {
-    mat ZF   = Z(j) * irf_0;
-    z        = join_vert(z, ZF.col(j));
+  for (int j = 0; j < ZF.n_elem; j++) {
+    mat ZF_j = ZF(j);
+    z        = join_vert(z, ZF_j.col(j));
   }
   
   return z;
