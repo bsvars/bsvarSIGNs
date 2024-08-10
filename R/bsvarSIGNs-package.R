@@ -137,7 +137,7 @@
 #' 
 #' # specify the model
 #' specification  = specify_bsvarSIGN$new(optimism,
-#'                                        p        = 12,
+#'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
 #'                                        
 #' # estimate the model
