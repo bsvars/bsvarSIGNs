@@ -129,13 +129,14 @@
 #' @examples
 #' # investigate the effects of the optimism shock
 #' data(optimism)
-#' 
+#'
 #' # specify identifying restrictions:
 #' # + no effect on productivity (zero restriction)
-#' # + positive effect on stock prices (positive sign restriction)
+#' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 #' 
-#' # specify the model
+#' # specify the model and set seed
+#' set.seed(123)
 #' specification  = specify_bsvarSIGN$new(optimism,
 #'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
