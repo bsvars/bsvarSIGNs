@@ -1,5 +1,4 @@
 
-#define ARMA_WARN_LEVEL 1
 #include <RcppArmadillo.h>
 
 #include "utils.h"
@@ -112,8 +111,7 @@ double log_ml(
   mat    inv_Omega = diagmat(1 / Omega.diag());
   
   try {
-    mat XX   = X.t() * X + inv_Omega;
-    mat Bhat = solve(XX, X.t() * Y + inv_Omega * b, solve_opts::likely_sympd);
+    mat Bhat = inv_sympd(X.t() * X + inv_Omega) * (X.t() * Y + inv_Omega * b);
     mat ehat = Y - X * Bhat;
     
     log_ml += - N * T / 2.0 * log(M_PI);
@@ -121,11 +119,11 @@ double log_ml(
     log_ml += -log_mvgamma(N, d / 2.0);
     log_ml += - N / 2.0 * log_det_sympd(Omega);
     log_ml += d / 2.0 * log_det_sympd(Psi);
-    log_ml += - N / 2.0 * log_det_sympd(XX);
+    log_ml += - N / 2.0 * log_det_sympd(X.t() * X + inv_Omega);
     mat A   = Psi + ehat.t() * ehat + (Bhat - b).t() * inv_Omega * (Bhat - b);
     log_ml += - (T + d) / 2.0 * log_det_sympd(A);
     
-  } catch(std::runtime_error) {
+  } catch(...) {
     log_ml = -1e+10;
   }
   
