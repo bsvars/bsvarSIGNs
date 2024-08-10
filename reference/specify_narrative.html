@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bsvarSIGNs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>vector specifying one narrative restriction</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bsvars/bsvarSIGNs/blob/v1.0/R/specify.R" class="external-link"><code>R/specify.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bsvars/bsvarSIGNs/blob/main/R/specify.R" class="external-link"><code>R/specify.R</code></a></small>
       <div class="d-none name"><code>specify_narrative.Rd</code></div>
     </div>
 
@@ -87,27 +87,16 @@ of shock to var is the greater/less than the sum of all other shocks.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># specify a narrative restriction</span></span></span>
-<span class="r-in"><span><span class="fu">specify_narrative</span><span class="op">(</span>start <span class="op">=</span> <span class="fl">166</span>, periods <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"S"</span>, sign <span class="op">=</span> <span class="fl">1</span>, shock <span class="op">=</span> <span class="fl">1</span>, var <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $start</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 166</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $periods</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "S"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sign</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $shock</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $var</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "narrative"</span>
+<span class="r-in"><span><span class="va">narrative</span>       <span class="op">=</span> <span class="fu">specify_narrative</span><span class="op">(</span></span></span>
+<span class="r-in"><span>                    start <span class="op">=</span> <span class="fl">166</span>, </span></span>
+<span class="r-in"><span>                    periods <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>                    type <span class="op">=</span> <span class="st">"S"</span>, </span></span>
+<span class="r-in"><span>                    sign <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>                    shock <span class="op">=</span> <span class="fl">1</span>, </span></span>
+<span class="r-in"><span>                    var <span class="op">=</span> <span class="fl">6</span></span></span>
+<span class="r-in"><span>                  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># use it to specify the model</span></span></span>
+<span class="r-in"><span><span class="va">specification</span>   <span class="op">=</span> <span class="va"><a href="specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">monetary</span>, sign_narrative <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">narrative</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

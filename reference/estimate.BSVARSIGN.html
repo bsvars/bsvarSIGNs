@@ -33,7 +33,7 @@ See section Details for the model equations."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">bsvarSIGNs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ See section Details for the model equations."><meta property="og:image" content=
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Bayesian estimation of a Structural Vector Autoregression with traditional and narrative sign restrictions via Gibbs sampler</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bsvars/bsvarSIGNs/blob/v1.0/R/estimate.R" class="external-link"><code>R/estimate.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bsvars/bsvarSIGNs/blob/main/R/estimate.R" class="external-link"><code>R/estimate.R</code></a></small>
       <div class="d-none name"><code>estimate.BSVARSIGN.Rd</code></div>
     </div>
 
@@ -101,7 +101,7 @@ draws are resampled with <code>algorithm 1</code> in Antolín-Díaz &amp; Rubio-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class PosteriorBSVARSIGN containing the Bayesian estimation output and containing two elements:</p>
+    <p>An object of class <code>PosteriorBSVARSIGN</code> containing the Bayesian estimation output and containing two elements:</p>
 <p><code>posterior</code> a list with a collection of <code>S</code> draws from the posterior distribution generated via Gibbs sampler containing:</p><dl><dt>A</dt>
 <dd><p>an <code>NxKxS</code> array with the posterior draws for matrix \(A\)</p></dd>
 
@@ -138,13 +138,10 @@ where \(Q\) is an <code>NxN</code> rotation matrix and \(P\) is an <code>NxN</co
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Sampling from the generalised-normal full conditional posterior distribution of matrix \(B\) is implemented using the Gibbs sampler by:</p>
-<p>Waggoner, D.F., and Zha, T., (2003) A Gibbs sampler for structural vector autoregressions. <em>Journal of Economic Dynamics and Control</em>, <b>28</b>, 349–366, <a href="https://doi.org/10.1016/S0165-1889%2802%2900168-9" class="external-link">doi:10.1016/S0165-1889(02)00168-9</a>
-.</p>
-<p>Sampling from the multivariate normal full conditional posterior distribution of each of the \(A\) matrix row is implemented using the sampler by:</p>
-<p>Chan, J.C.C., Koop, G, and Yu, X. (2021) Large Order-Invariant Bayesian VARs with Stochastic Volatility.</p>
-<p>Narrative sign restrictions are implemented using algorithm 1 in:</p>
-<p>Antolín-Díaz, J., &amp; Rubio-Ramírez, J. F. (2018). Narrative sign restrictions for SVARs.</p>
+    <p>Antolín-Díaz &amp; Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, &lt;doi:10.1257/aer.20161852&gt;.</p>
+<p>Arias, Rubio-Ramírez, &amp; Waggoner (2018), Inference Based on Structural Vector Autoregressions Identified With Sign and Zero Restrictions: Theory and Applications, Econometrica, 86(2), 685-720, &lt;doi:10.3982/ECTA14468&gt;.</p>
+<p>Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 &lt;doi:10.1162/REST_a_00483&gt;.</p>
+<p>Rubio-Ramírez, Waggoner &amp; Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, &lt;doi:10.1111/j.1467-937X.2009.00578.x&gt;.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
