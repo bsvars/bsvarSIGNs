@@ -101,69 +101,6 @@ arma::colvec g_fh_vec(
   return g_fh(Z, A0, Aplus);
 }
 
-// [[Rcpp::interfaces(cpp)]]
-// [[Rcpp::export]]
-arma::mat D_z(
-    const arma::field<arma::mat>& Z,
-    const arma::vec& x,
-    const double     h = 1e-10
-)
-{
-  vec f_x = zero_restrictions(Z, x);
-  
-  int n  = x.n_elem;
-  int m  = f_x.n_elem;
-  
-  mat result(m, n);
-  
-  for (int i = 0; i < n; i++)
-  {
-    vec x_plus_h  = x;
-    x_plus_h(i)  += h;
-    
-    vec f_plus_h = zero_restrictions(Z, x_plus_h);
-    
-    for (int j = 0; j < m; j++)
-    {
-      result(j, i) = (f_plus_h(j) - f_x(j)) / h;
-    }
-  }
-  
-  return result;
-}
-
-
-// [[Rcpp::interfaces(cpp)]]
-// [[Rcpp::export]]
-arma::mat D_gf(
-    const arma::field<arma::mat>& Z,
-    const arma::vec& x,
-    const double     h = 1e-10
-)
-{
-  vec f_x = g_fh_vec(Z, x);
-  
-  int n  = x.n_elem;
-  int m  = f_x.n_elem;
-  
-  mat result(m, n);
-  
-  for (int i = 0; i < n; i++)
-  {
-    vec x_plus_h  = x;
-    x_plus_h(i)  += h;
-    
-    vec f_plus_h = g_fh_vec(Z, x_plus_h);
-    
-    for (int j = 0; j < m; j++)
-    {
-      result(j, i) = (f_plus_h(j) - f_x(j)) / h;
-    }
-  }
-  
-  return result;
-}
-
 
 // log volume element
 // [[Rcpp::interfaces(cpp)]]
@@ -175,8 +112,8 @@ double log_volume_element(
 ) {
   colvec vec_structural = join_vert(vectorise(A0), vectorise(Aplus));
   
-  mat Dz  = D_z(Z, vec_structural);
-  mat Dgf = D_gf(Z, vec_structural);
+  mat Dz  = Df([Z](const colvec& x) { return zero_restrictions(Z, x); }, vec_structural);
+  mat Dgf = Df([Z](const colvec& x) { return g_fh_vec(Z, x); }, vec_structural);
   
   mat DN  = Dgf * null(Dz);
   
