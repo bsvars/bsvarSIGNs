@@ -31,31 +31,19 @@ arma::field<arma::mat> ZIRF(
 // [[Rcpp::export]]
 arma::colvec zero_restrictions(
     const arma::field<arma::mat>& Z,
-    const arma::vec               vec_structural
+    const arma::colvec            vec_structural
 ) {
   int N  = Z(0).n_cols;
-  
-  Rcout << "debug 1" << std::endl;
   
   mat A0 = vec_structural.rows(0, N * N - 1);
   A0     = reshape(A0, N, N);
   
-  Rcout << "debug 2" << std::endl;
+  arma::field<arma::mat> ZF = ZIRF(Z, inv(A0.t()));
   
-  field<mat> ZF = ZIRF(Z, inv(A0.t()));
-  
-  Rcout << "debug 3" << std::endl;
-  
-  vec z = vec();
-  
-  Rcout << "debug 4" << std::endl;
-  
+  colvec z;
   for (int j=0; j<ZF.n_elem; j++) {
     z = join_vert(z, ZF(j).col(j));
-    Rcout << "debug 5" << std::endl;
   }
-  
-  Rcout << "debug 6" << std::endl;
   
   return z;
 }
