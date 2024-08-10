@@ -50,12 +50,10 @@ bool match_sign(
 // [[Rcpp:interface(cpp)]]
 arma::mat Df(
     const std::function<arma::vec(const arma::vec&)>& f,
-    const arma::vec& x
+    const arma::vec& x,
+    const double     h = 1e-10
 )
 {
-  
-  double h   = 1e-10;
-  
   colvec f_x = f(x);
   
   int n  = x.n_elem;

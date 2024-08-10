@@ -14,8 +14,9 @@ bool match_sign(
 );
 
 arma::mat Df(
-    const std::function<arma::vec(const arma::vec&)>& f,
-    const arma::vec& x
+    const  std::function<arma::colvec(const arma::colvec&)>& f,
+    const  arma::colvec& x,
+    double               h = 1e-10
 );
 
 arma::mat metropolis(
