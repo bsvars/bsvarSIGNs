@@ -35,7 +35,8 @@ arma::colvec zero_restrictions(
 ) {
   int N  = Z(0).n_cols;
   
-  mat A0 = reshape(vec_structural.rows(0, N * N - 1), N, N);
+  mat A0 = vec_structural.rows(0, N * N - 1);
+  A0     = reshape(A0, N, N);
   
   arma::field<arma::mat> ZF = ZIRF(Z, inv(A0.t()));
   
