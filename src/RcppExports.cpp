@@ -568,6 +568,78 @@ RcppExport SEXP _bsvarSIGNs_g_fh_vec(SEXP ZSEXP, SEXP vec_structuralSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// D_z
+arma::mat D_z(const arma::field<arma::mat>& Z, const arma::vec& x, const double h);
+static SEXP _bsvarSIGNs_D_z_try(SEXP ZSEXP, SEXP xSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(D_z(Z, x, h));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_D_z(SEXP ZSEXP, SEXP xSEXP, SEXP hSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_D_z_try(ZSEXP, xSEXP, hSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// D_gf
+arma::mat D_gf(const arma::field<arma::mat>& Z, const arma::vec& x, const double h);
+static SEXP _bsvarSIGNs_D_gf_try(SEXP ZSEXP, SEXP xSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(D_gf(Z, x, h));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_D_gf(SEXP ZSEXP, SEXP xSEXP, SEXP hSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_D_gf_try(ZSEXP, xSEXP, hSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // log_volume_element
 double log_volume_element(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus);
 static SEXP _bsvarSIGNs_log_volume_element_try(SEXP ZSEXP, SEXP A0SEXP, SEXP AplusSEXP) {
@@ -1061,6 +1133,8 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,const arma::colvec)");
         signatures.insert("arma::colvec(*g_fh)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::colvec(*g_fh_vec)(const arma::field<arma::mat>&,const arma::colvec)");
+        signatures.insert("arma::mat(*D_z)(const arma::field<arma::mat>&,const arma::vec&,const double)");
+        signatures.insert("arma::mat(*D_gf)(const arma::field<arma::mat>&,const arma::vec&,const double)");
         signatures.insert("double(*log_volume_element)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
         signatures.insert("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
@@ -1090,6 +1164,8 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_zero_restrictions", (DL_FUNC)_bsvarSIGNs_zero_restrictions_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh", (DL_FUNC)_bsvarSIGNs_g_fh_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh_vec", (DL_FUNC)_bsvarSIGNs_g_fh_vec_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_D_z", (DL_FUNC)_bsvarSIGNs_D_z_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_D_gf", (DL_FUNC)_bsvarSIGNs_D_gf_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_volume_element", (DL_FUNC)_bsvarSIGNs_log_volume_element_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_zero", (DL_FUNC)_bsvarSIGNs_weight_zero_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_rzeroQ", (DL_FUNC)_bsvarSIGNs_rzeroQ_try);
@@ -1118,6 +1194,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_zero_restrictions", (DL_FUNC) &_bsvarSIGNs_zero_restrictions, 2},
     {"_bsvarSIGNs_g_fh", (DL_FUNC) &_bsvarSIGNs_g_fh, 3},
     {"_bsvarSIGNs_g_fh_vec", (DL_FUNC) &_bsvarSIGNs_g_fh_vec, 2},
+    {"_bsvarSIGNs_D_z", (DL_FUNC) &_bsvarSIGNs_D_z, 3},
+    {"_bsvarSIGNs_D_gf", (DL_FUNC) &_bsvarSIGNs_D_gf, 3},
     {"_bsvarSIGNs_log_volume_element", (DL_FUNC) &_bsvarSIGNs_log_volume_element, 3},
     {"_bsvarSIGNs_weight_zero", (DL_FUNC) &_bsvarSIGNs_weight_zero, 4},
     {"_bsvarSIGNs_rzeroQ", (DL_FUNC) &_bsvarSIGNs_rzeroQ, 2},

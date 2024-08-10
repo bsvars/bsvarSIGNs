@@ -340,6 +340,48 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::colvec >(rcpp_result_gen);
     }
 
+    inline arma::mat D_z(const arma::field<arma::mat>& Z, const arma::vec& x, const double h = 1e-10) {
+        typedef SEXP(*Ptr_D_z)(SEXP,SEXP,SEXP);
+        static Ptr_D_z p_D_z = NULL;
+        if (p_D_z == NULL) {
+            validateSignature("arma::mat(*D_z)(const arma::field<arma::mat>&,const arma::vec&,const double)");
+            p_D_z = (Ptr_D_z)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_D_z");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_D_z(Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(h)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::mat >(rcpp_result_gen);
+    }
+
+    inline arma::mat D_gf(const arma::field<arma::mat>& Z, const arma::vec& x, const double h = 1e-10) {
+        typedef SEXP(*Ptr_D_gf)(SEXP,SEXP,SEXP);
+        static Ptr_D_gf p_D_gf = NULL;
+        if (p_D_gf == NULL) {
+            validateSignature("arma::mat(*D_gf)(const arma::field<arma::mat>&,const arma::vec&,const double)");
+            p_D_gf = (Ptr_D_gf)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_D_gf");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_D_gf(Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(h)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::mat >(rcpp_result_gen);
+    }
+
     inline double log_volume_element(const arma::field<arma::mat>& Z, const arma::mat& A0, const arma::mat& Aplus) {
         typedef SEXP(*Ptr_log_volume_element)(SEXP,SEXP,SEXP);
         static Ptr_log_volume_element p_log_volume_element = NULL;
