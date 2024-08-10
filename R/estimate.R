@@ -83,7 +83,7 @@
 #' # specify the model and set seed
 #' set.seed(123)
 #' specification  = specify_bsvarSIGN$new(optimism,
-#'                                        p        = 12,
+#'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
 #'                                        
 #' # estimate the model

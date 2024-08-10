@@ -137,11 +137,11 @@
 #' 
 #' # specify the model
 #' specification  = specify_bsvarSIGN$new(optimism,
-#'                                        p        = 12,
+#'                                        p        = 4,
 #'                                        sign_irf = sign_irf)
 #'                                        
 #' # estimate the model
-#' posterior      = estimate(specification, S = 100)
+#' posterior      = estimate(specification, S = 10)
 #' 
 #' # compute and plot impulse responses
 #' irf            = compute_impulse_responses(posterior, horizon = 40)
