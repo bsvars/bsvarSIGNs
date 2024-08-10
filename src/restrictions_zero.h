@@ -8,14 +8,14 @@ using namespace arma;
 
 
 double weight_zero(
-    arma::field<arma::mat>& Z,
+    const arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,
     const arma::mat&              Q
 );
 
 arma::mat rzeroQ(
-    arma::field<arma::mat>& Z,
+    const arma::field<arma::mat>& Z,
     const arma::mat&              irf_0
 );
 

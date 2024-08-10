@@ -11,7 +11,7 @@ Rcpp::List bsvar_sign_cpp(
         const arma::cube& sign_irf,           // NxNxh cube of signs for impulse response function
         const arma::mat&  sign_narrative,     // Mx6 matrix of signs for historical decomposition
         const arma::mat&  sign_B,             // Mx6 matrix of signs for B
-        arma::field<arma::mat>& Z,            // a list of zero restrictions
+        const arma::field<arma::mat>& Z,      // a list of zero restrictions
         const Rcpp::List& prior,              // a list of priors
         const bool        show_progress = true,
         const int         thin = 100,         // introduce thinning
