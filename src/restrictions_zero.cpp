@@ -41,8 +41,7 @@ arma::colvec zero_restrictions(
   
   vec z = ZF(0).col(0);
   for (int j = 1; j < ZF.n_elem; j++) {
-    vec zj = ZF(j).col(j);
-    z      = join_vert(z, zj);
+    z = join_vert(z, ZF(j).col(j));
   }
   
   return z;
