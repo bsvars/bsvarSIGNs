@@ -1,5 +1,5 @@
 #  #####################################################################################
-#  R package bsvarSIGNs by Xiaolei Wang Tomasz Woźniak Copyright (C) 2024
+#  R package bsvarSIGNs by Xiaolei Wang and Tomasz Woźniak Copyright (C) 2024
 #
 #  This file is part of the R package bsvarSIGNs: Bayesian Estimation of Structural 
 #  Vector Autoregressions Identified by Sign, Zero, and Narrative Restrictions
