@@ -46,10 +46,6 @@ constitute an integrated toolset.
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
 </a> <a href="https://bsky.app/profile/bsvars.bsky.social">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
-</a> <a href="https://x.com/bsvars">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/twitter.svg" width="50" height="50"/>
-</a> <a href="https://www.instagram.com/bsvarsoninsta/">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/instagram.svg" width="50" height="50"/>
 </a>
 
 ## Features
