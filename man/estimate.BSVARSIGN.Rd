@@ -8,7 +8,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 \method{estimate}{BSVARSIGN}(specification, S, thin = 1, show_progress = TRUE)
 }
 \arguments{
-\item{specification}{an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.}
+\item{specification}{an object of class \code{BSVARSIGN} generated using the \code{specify_bsvarSIGN$new()} function.}
 
 \item{S}{a positive integer, the number of posterior draws to be generated}
 
@@ -28,11 +28,14 @@ An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation 
  the Gibbs sampler performs a total of S+skipped iterations,
  when the sampler does not find a valid rotation matrix \code{Q} within \code{max_tries},
  the current iteration is skipped (i.e. the current draw of \code{A,B} is not saved).
- A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the total number of draws returned.
+ A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the 
+ total number of draws returned.
  }
 }
 
-\code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
+\code{last_draw} an object of class \code{BSVARSIGN} with the last draw of 
+the current MCMC run as the starting value to be passed to the continuation 
+of the MCMC estimation using \code{estimate()}.
 }
 \description{
 Estimates Bayesian Structural Vector Autoregression model

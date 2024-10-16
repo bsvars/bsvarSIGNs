@@ -35,7 +35,7 @@
 #' 
 #' Finally, the structural shocks, \code{U}, are temporally and contemporaneously independent and jointly normally distributed with zero mean and unit variances.
 #' 
-#' @param specification an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.
+#' @param specification an object of class \code{BSVARSIGN} generated using the \code{specify_bsvarSIGN$new()} function.
 #' @param S a positive integer, the number of posterior draws to be generated
 #' @param thin a positive integer, specifying the frequency of MCMC output thinning
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
@@ -51,11 +51,14 @@
 #'  the Gibbs sampler performs a total of S+skipped iterations,
 #'  when the sampler does not find a valid rotation matrix \code{Q} within \code{max_tries},
 #'  the current iteration is skipped (i.e. the current draw of \code{A,B} is not saved).
-#'  A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the total number of draws returned.
+#'  A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the 
+#'  total number of draws returned.
 #'  }
 #' }
 #' 
-#' \code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}. 
+#' \code{last_draw} an object of class \code{BSVARSIGN} with the last draw of 
+#' the current MCMC run as the starting value to be passed to the continuation 
+#' of the MCMC estimation using \code{estimate()}. 
 #'
 #' @author Tomasz Woźniak \email{wozniak.tom@pm.me}, Xiaolei Wang \email{adamwang15@gmail.com}
 #' 
