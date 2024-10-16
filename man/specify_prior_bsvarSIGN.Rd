@@ -185,10 +185,10 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 \if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$estimate_hyper(
   S = 10000,
   burn_in = S/2,
-  mu = FALSE,
-  delta = FALSE,
+  mu = TRUE,
+  delta = TRUE,
   lambda = TRUE,
-  psi = FALSE
+  psi = TRUE
 )}\if{html}{\out{</div>}}
 }
 

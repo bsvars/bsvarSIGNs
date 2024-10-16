@@ -143,30 +143,6 @@ verify_all = function(N, sign_irf, sign_narrative, sign_structural) {
   }
 }
 
-
-# Minnesota prior of Normal-Inverse-Wishart form
-# niw_prior = function(Y,
-#                      p,
-#                      non_stationary,
-#                      lambda = 0.2) {
-#   T = nrow(Y)
-#   N = ncol(Y)
-#   K = 1 + N * p
-#   
-#   B           = matrix(0, K, N)
-#   B[1:N, 1:N] = diag(non_stationary)
-#   
-#   sigma2                  = sapply(1:N, \(i) summary(lm(Y[2:T, i] ~ Y[1:(T - 1), i]))$sigma^2)
-#   V                       = matrix(0, K, K)
-#   V[K, K]                 = 1e+6
-#   V[1:(K - 1), 1:(K - 1)] = diag(lambda^2 * kronecker((1:p)^-2, sigma2^-1))
-#   
-#   S  = diag(sigma2)
-#   nu = N + 2
-#   
-#   list(B = B, V = V, S = S, nu = nu)
-# }
-
 gamma_scale = function(mode, variance) {
   (2 * mode * variance) / (mode^2 + sqrt(mode^4 + 4 * variance * mode^2))
 }
@@ -418,9 +394,13 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' plot.ts(hyper)
     #' 
     estimate_hyper = function(
-      S = 10000, burn_in = S / 2,
-      mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE
-      ) {
+      S = 10000, 
+      burn_in = S / 2,
+      mu = TRUE, 
+      delta = TRUE, 
+      lambda = TRUE, 
+      psi = TRUE
+    ) {
       
       model = c(mu, delta, lambda, psi)
       
@@ -458,8 +438,16 @@ specify_prior_bsvarSIGN = R6::R6Class(
         variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
       }
       
-      self$hyper = sample_hyper(S, burn_in, mode, model, 
-                                t(self$Y), t(self$X), variance, prior)
+      self$hyper =  sample_hyper(
+                      S, 
+                      burn_in, 
+                      mode, 
+                      model, 
+                      t(self$Y), 
+                      t(self$X), 
+                      variance, 
+                      prior
+                    )
       self$hyper = self$hyper[, -(1:burn_in)]
     } # END estimate_hyper
     
