@@ -76,7 +76,7 @@ specify_narrative = function(start, periods = 1, type = "S", sign = 1, shock = 1
 get_Z = function(sign_irf) {
   h = dim(sign_irf)[3]
   if (h >= 2) {
-    test = sign_irf[, , 1:h]
+    test = sign_irf[, , 2:h]
     if (any(test[!is.na(test)] == 0)) {
       stop("Zero restrictions are not allowed for horizons >= 1")
     }
