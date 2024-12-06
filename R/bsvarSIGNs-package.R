@@ -43,7 +43,8 @@
 #' 'bsvarSIGNs' package is aligned regarding objects, workflows, and code 
 #' structure with the R package 'bsvars' by 
 #' Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, and they constitute an 
-#' integrated toolset.
+#' integrated toolset. It was granted the Di Cook Open-Source Statistical 
+#' Software Award by the Statistical Society of Australia in 2024.
 #' 
 #' @details
 #' 

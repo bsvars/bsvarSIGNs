@@ -27,7 +27,8 @@ user-friendly summary functions, and comprehensive documentation. The
 'bsvarSIGNs' package is aligned regarding objects, workflows, and code 
 structure with the R package 'bsvars' by 
 Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, and they constitute an 
-integrated toolset.
+integrated toolset. It was granted the Di Cook Open-Source Statistical 
+Software Award by the Statistical Society of Australia in 2024.
 }
 \details{
 \strong{Models.} All the SVAR models in this package are specified by two 
