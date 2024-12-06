@@ -6,6 +6,9 @@
 An **R** package for Bayesian Estimation of Structural Vector
 Autoregressions Identified by Sign, Zero, and Narrative Restrictions
 
+*The First Prize laureate of the Di Cook Open-Source Statistical
+Software Award granted by the Statistical Society of Australia in 2024*
+
 <!-- badges: start -->
 
 [![](https://www.r-pkg.org/badges/version/bsvarSIGNs)](https://cran.r-project.org/package=bsvarSIGNs)
@@ -36,16 +39,18 @@ comprehensive documentation. The **bsvarSIGNs** package is aligned
 regarding objects, workflows, and code structure with the **R** package
 **bsvars** by [Woźniak
 (2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
-constitute an integrated toolset.
+constitute an integrated toolset. It was granted the Di Cook Open-Source
+Statistical Software Award by the Statistical Society of Australia in
+2024.
 
 <a href="mailto:bsvars@pm.me">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/>
 </a> <a href="https://github.com/bsvars/bsvarSIGNs">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
+</a> <a href="https://bsky.app/profile/bsvars.org">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
 </a> <a href="https://fosstodon.org/@bsvars">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
-</a> <a href="https://bsky.app/profile/bsvars.bsky.social">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
 </a>
 
 ## Features
