@@ -35,23 +35,29 @@ analyses using impulse responses, forecast error variance and historical
 decompositions, forecasting and conditional forecasting, as well as
 analyses of structural shocks and fitted values. All this is
 complemented by colourful plots, user-friendly summary functions, and
-comprehensive documentation. The **bsvarSIGNs** package is aligned
-regarding objects, workflows, and code structure with the **R** package
-**bsvars** by [Woźniak
-(2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
+comprehensive documentation including the vignette by Wang & Woźniak
+(2024). The **bsvarSIGNs** package is aligned regarding objects,
+workflows, and code structure with the **R** package **bsvars** by
+[Woźniak (2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
 constitute an integrated toolset. It was granted the Di Cook Open-Source
 Statistical Software Award by the Statistical Society of Australia in
 2024.
 
-<a href="mailto:bsvars@pm.me">
+<a href="https://bsvars.org">
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/house.svg" width="40" height="40"/>
+</a> <a href="mailto:contact@bsvars.org">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg" width="40" height="40"/>
 </a> <a href="https://github.com/bsvars/bsvarSIGNs">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg" width="40" height="40"/>
-</a> <a href="https://bsky.app/profile/bsvars.org">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
 </a> <a href="https://fosstodon.org/@bsvars">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
+</a> <a href="https://bsky.app/profile/bsvars.org">
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg" width="40" height="40"/>
 </a>
+
+<a href="https://bsvars.org/"><img src="https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvars.org/bsvars.org.png" width="120" alt="bsvars.org website" /></a>
+<a href="https://bsvars.org/bsvars/"><img src="https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvars/bsvars.png" width="120" alt="bsvars website" /></a>
+<a href="https://bsvars.org/bsvarSIGNs/"><img src="https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvarSIGNs/bsvarSIGNs.png" width="120" alt="bsvarSIGNs website" /></a>
 
 ## Features
 
@@ -129,6 +135,40 @@ file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs
 <a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
 </p>
+
+## Resources
+
+- a vignette by [Wang & Woźniak (2025)]()
+- a [reference
+  manual](https://cran.r-project.org/web/packages/bsvarSIGNs/bsvarSIGNs.pdf)
+- a website of the family of packages [bsvars.org](https://bsvars.org/)
+- **bsvarSIGNs** on
+  [CRAN](https://cran.r-project.org/package=bsvarSIGNs)
+- presentations:
+  - for students at [Szkoła Główna Handlowa](https://www.sgh.waw.pl/)
+    given in Warsaw in December 2024 [featuring **bsvars** 3.2 and
+    **bsvarSIGNs** 1.0.1](https://bsvars.org/2024-12-sgh/)\]
+  - at [Uniwersytet Warszawski](https://www.wne.uw.edu.pl/) given in
+    Warsaw in December 2024 [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-uwwne/)
+  - for students and researchers at [Uniwersytet Ekonomiczny w
+    Krakowie](https://uek.krakow.pl/) given in Cracow in December 2024
+    [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-uek/)
+  - a [youtube recording](https://youtu.be/QT02OTZWW14)\] for
+    \[[Forecasting for Social Good](https://www.f4sg.org/)
+  - for [Forecasting for Social Good](https://www.f4sg.org/) given
+    online in December 2024 [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-F4SG/)\]
+  - for Bayesian Econometrics students at the University of Melbourne
+    given in October 2024 [featuring **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-10-be24-bsvarSIGNs/)
+  - for the [QuantEcon](https://quantecon.org/) lab at the Australian
+    National University given in August 2024 [featuring **bsvars** 3.1
+    and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-08-bsvars-QuantEcon/)
+  - at Monash University given in August 2024 [featuring **bsvars** 3.1
+    and **bsvarSIGNs** 1.0](https://bsvars.org/2024-08-bsvars-monash/)
 
 ## Examples
 
@@ -250,11 +290,11 @@ macroeconomic analyses and programs in **R** and **cpp** using **Rcpp**.
 </a> <a href="https://www.linkedin.com/in/tomaszwwozniak">
 <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg" width="40" height="40"/>
 </a> <a href="http://scholar.google.com/citations?user=2uWpFrYAAAAJ&hl">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/google.svg" width="40" height="40"/>
+<img src="https://raw.githubusercontent.com/jpswalsh/academicons/refs/heads/master/svg/google-scholar-square.svg" width="40" height="40"/>
 </a> <a href="https://arxiv.org/a/wozniak_t_1">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/circle-xmark.svg" width="40" height="40"/>
+<img src="https://raw.githubusercontent.com/jpswalsh/academicons/refs/heads/master/svg/arxiv-square.svg" width="40" height="40"/>
 </a> <a href="https://fosstodon.org/@tomaszwozniak">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="50" height="50"/>
+<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg" width="40" height="40"/>
 </a> <a href="https://bsky.app/profile/tomaszwozniak.bsky.social">
-<img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/cloud.svg" width="50" height="50"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg" width="40" height="40"/>
 </a>
