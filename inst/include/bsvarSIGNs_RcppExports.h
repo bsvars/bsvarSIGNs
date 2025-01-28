@@ -46,11 +46,11 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline arma::cube bsvarSIGNs_structural_shocks(const arma::cube& posterior_B, const arma::cube& posterior_A, const arma::mat& Y, const arma::mat& X) {
+    inline arma::cube bsvarSIGNs_structural_shocks(arma::cube& posterior_B, arma::cube& posterior_A, arma::mat& Y, arma::mat& X) {
         typedef SEXP(*Ptr_bsvarSIGNs_structural_shocks)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_bsvarSIGNs_structural_shocks p_bsvarSIGNs_structural_shocks = NULL;
         if (p_bsvarSIGNs_structural_shocks == NULL) {
-            validateSignature("arma::cube(*bsvarSIGNs_structural_shocks)(const arma::cube&,const arma::cube&,const arma::mat&,const arma::mat&)");
+            validateSignature("arma::cube(*bsvarSIGNs_structural_shocks)(arma::cube&,arma::cube&,arma::mat&,arma::mat&)");
             p_bsvarSIGNs_structural_shocks = (Ptr_bsvarSIGNs_structural_shocks)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_structural_shocks");
         }
         RObject rcpp_result_gen;
