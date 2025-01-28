@@ -1,5 +1,7 @@
 # bsvarSIGNs (development version)
 
+1. Fixing C++ code to avoid problems with future check [#59](https://github.com/bsvars/bsvarSIGNs/issues/59)
+
 # bsvarSIGNs 1.0.1
 
 1. Fixed additional issues [here](https://github.com/bsvars/bsvarSIGNs/issues/43).
