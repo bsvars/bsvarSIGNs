@@ -1,6 +1,7 @@
-# bsvarSIGNs (development version)
+# bsvarSIGNs 2.0
 
-1. Fixing C++ code to avoid problems with future check [#59](https://github.com/bsvars/bsvarSIGNs/issues/59)
+1. The package has a [vignette](https://doi.org/10.48550/arXiv.2501.16711) now! ...and better citation information [#53](https://github.com/bsvars/bsvarSIGNs/issues/53)
+2. Fixing C++ code to avoid problems with future check [#59](https://github.com/bsvars/bsvarSIGNs/issues/59)
 
 # bsvarSIGNs 1.0.1
 

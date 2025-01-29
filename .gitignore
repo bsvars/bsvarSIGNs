@@ -57,3 +57,5 @@ rsconnect/
 .quarto
 *.so
 docs
+/doc/
+/Meta/

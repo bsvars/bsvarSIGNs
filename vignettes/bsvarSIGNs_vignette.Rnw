@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs}
+%\VignetteKeywords{Bayesian inference, Structural VARs, Gibbs sampler, sign restrictions, zero restrictions, narrative restrictions, forecasting, structural analysis, R}
+%\VignettePackage{bsvarSIGNs}
+%\VignetteEncoding{UTF-8}
+%\VignetteEngine{knitr::knitr}
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{pdf/bsvarSIGNs.pdf}
+\end{document}
