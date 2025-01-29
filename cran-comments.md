@@ -1,5 +1,5 @@
-# Submission notes bsvarSIGNs v1.0.1
+# Submission notes bsvarSIGNs v2.0
 
-## Checks using `rhub::rhub_check()`
+Removed `const` keyword in C++ code when calling dependent package.
 
-Passes the Undefined Behavior Sanitizer check as shown [here](https://github.com/bsvars/bsvarSIGNs/actions/runs/10328718577). Thanks!
+Passed `rhub::rhub_check()` and `devtools::check()`.
