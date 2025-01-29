@@ -132,9 +132,12 @@ This beautiful logo can be reproduced in R using [this
 file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
 
 <p>
+
 </p>
+
 <a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
+
 </p>
 
 ## Resources
