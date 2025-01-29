@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bsvarSIGNs <a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" align="right" height="139" alt="bsvarSIGNs website" /></a>
+# bsvarSIGNs <a href="https://bsvars.org/bsvarSIGNs/"><img src="man/figures/logo.png" align="right" height="139" alt="bsvarSIGNs website" /></a>
 
 An **R** package for Bayesian Estimation of Structural Vector
 Autoregressions Identified by Sign, Zero, and Narrative Restrictions
@@ -132,12 +132,9 @@ This beautiful logo can be reproduced in R using [this
 file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
 
 <p>
-
 </p>
-
-<a href="https://bsvars.github.io/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
+<a href="https://bsvars.org/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
-
 </p>
 
 ## Resources
