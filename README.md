@@ -24,10 +24,10 @@ and the dummy observation priors as in [Giannone, Lenza, Primiceri
 implemented employing the methods proposed by [Rubio-Ramírez, Waggoner &
 Zha (2010)](http://doi.org/10.1111/j.1467-937X.2009.00578.x), while
 identification through sign and zero restrictions follows the approach
-developed by [Arias, Rubio-Ramírez, & Waggoner
+developed by [Arias, Rubio-Ramírez, Waggoner
 (2018)](http://doi.org/10.3982/ECTA14468). Furthermore, our tool
 provides algorithms for identification via sign and narrative
-restrictions, in line with the methods introduced by [Antolín-Díaz and
+restrictions, in line with the methods introduced by [Antolín-Díaz &
 Rubio-Ramírez (2018)](http://doi.org/10.1257/aer.20161852). Users can
 also estimate a model with sign, zero, and narrative restrictions
 imposed at once. The package facilitates predictive and structural
@@ -35,10 +35,11 @@ analyses using impulse responses, forecast error variance and historical
 decompositions, forecasting and conditional forecasting, as well as
 analyses of structural shocks and fitted values. All this is
 complemented by colourful plots, user-friendly summary functions, and
-comprehensive documentation including the vignette by Wang & Woźniak
-(2024). The **bsvarSIGNs** package is aligned regarding objects,
-workflows, and code structure with the **R** package **bsvars** by
-[Woźniak (2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
+comprehensive documentation including the vignette by [Wang & Woźniak
+(2024)](https://doi.org/10.48550/arXiv.2501.16711). The **bsvarSIGNs**
+package is aligned regarding objects, workflows, and code structure with
+the **R** package **bsvars** by [Woźniak
+(2024)](http://doi.org/10.32614/CRAN.package.bsvars), and they
 constitute an integrated toolset. It was granted the Di Cook Open-Source
 Statistical Software Award by the Statistical Society of Australia in
 2024.
@@ -138,7 +139,8 @@ file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs
 
 ## Resources
 
-- a vignette by [Wang & Woźniak (2025)]()
+- a vignette by [Wang & Woźniak
+  (2025)](https://doi.org/10.48550/arXiv.2501.16711)
 - a [reference
   manual](https://cran.r-project.org/web/packages/bsvarSIGNs/bsvarSIGNs.pdf)
 - a website of the family of packages [bsvars.org](https://bsvars.org/)
