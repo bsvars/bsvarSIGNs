@@ -17,6 +17,6 @@ bibentry(bibtype = "article",
   year         = 2025,
   journal      = "University of Melbourne Working Paper",
   pages        = "1--21",
-  doi           = "10.48550/arXiv.2410.",
-  textVersion = "Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, DOI: ."
+  doi           = "10.48550/arXiv.2501.16711",
+  textVersion = "Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, DOI: 10.48550/arXiv.2501.16711."
 )
