@@ -4,4 +4,4 @@ Removed `const` keyword in C++ code when calling dependent package, which resolv
 
 Passed `rhub::rhub_check()` and `devtools::check()`.
 
-Updated R version dependency to 4.1.0 for pipe operator. Changed status 301 URL to the corresponding new URL. The other URL is not a link to CRAN package, it is a link to the reference manual and is only available in the current form.
+Updated R version dependency to 4.1.0 for pipe operator. Changed status 301 URL to the corresponding new URL. The other URL is not a link to CRAN package, removed the not canonical link to reference manual on CRAN.

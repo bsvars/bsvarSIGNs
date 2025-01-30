@@ -132,17 +132,18 @@ This beautiful logo can be reproduced in R using [this
 file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
 
 <p>
+
 </p>
+
 <a href="https://bsvars.org/bsvarSIGNs/"><img src="man/figures/logo.png" height="400" alt="bsvars website" /></a>
 <p>
+
 </p>
 
 ## Resources
 
 - a vignette by [Wang & Woźniak
   (2025)](https://doi.org/10.48550/arXiv.2501.16711)
-- a [reference
-  manual](https://cran.r-project.org/web/packages/bsvarSIGNs/bsvarSIGNs.pdf)
 - a website of the family of packages [bsvars.org](https://bsvars.org/)
 - **bsvarSIGNs** on
   [CRAN](https://cran.r-project.org/package=bsvarSIGNs)
