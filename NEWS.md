@@ -1,3 +1,5 @@
+# bsvarSIGNs (development version)
+
 # bsvarSIGNs 2.0
 
 1. The package has a [vignette](https://doi.org/10.48550/arXiv.2501.16711) now! ...and better citation information [#53](https://github.com/bsvars/bsvarSIGNs/issues/53)
