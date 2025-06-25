@@ -1,7 +1,7 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
+#include "utils_bsvarsigns.h"
 #include "compute.h"
 
 using namespace Rcpp;

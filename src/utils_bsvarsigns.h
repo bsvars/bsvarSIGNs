@@ -1,5 +1,5 @@
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#ifndef _UTILS_BSVARSIGNS_H_
+#define _UTILS_BSVARSIGNS_H_
 
 #include <RcppArmadillo.h>
 
@@ -27,4 +27,4 @@ arma::mat metropolis(
     const std::function<double(const arma::vec&)>& log_target
 );
 
-#endif  // _UTILS_H_
+#endif  // _UTILS_BSVARSIGNS_H_

@@ -2,7 +2,7 @@
 #define ARMA_WARN_LEVEL 1
 #include <RcppArmadillo.h>
 
-#include "utils.h"
+#include "utils_bsvarsigns.h"
 #include "mcmc.h"
 
 using namespace Rcpp;
@@ -10,7 +10,7 @@ using namespace arma;
 
 
 // log density of gamma distribution
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_dgamma(
     const double& x,
@@ -23,7 +23,7 @@ double log_dgamma(
 
 
 // log density of inverse gamma distribution
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_dinvgamma(
     const double& x,
@@ -36,7 +36,7 @@ double log_dinvgamma(
 
 
 // log prior density of hyper-parameters
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_prior_hyper(
     const arma::vec&  hyper,
@@ -77,7 +77,7 @@ double log_prior_hyper(
 
 
 // log multivariate gamma function
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_mvgamma(
     const int&    n,
@@ -94,7 +94,7 @@ double log_mvgamma(
 
 
 // log marginal likelihood, notation as in Giannone, Lenza & Primiceri (2014)
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_ml(
     const arma::mat& b,
@@ -134,7 +134,7 @@ double log_ml(
 
 
 // log marginal likelihood with dummy observations
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_ml_dummy(
     const arma::vec&  hyper,
@@ -175,7 +175,7 @@ double log_ml_dummy(
 
 
 // log posterior of hyper-parameters (up to a constant)
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 double log_posterior_hyper(
     const arma::vec&  hyper,
@@ -197,7 +197,7 @@ double log_posterior_hyper(
 }
 
 
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat extend_hyper(
     const arma::vec& init,
@@ -232,7 +232,7 @@ arma::mat extend_hyper(
 }
 
 
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat narrow_hyper(
     const arma::vec& model,
@@ -264,7 +264,7 @@ arma::mat narrow_hyper(
 
 
 // sample hyper-parameters
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat sample_hyper(
     const int&        S,

@@ -1,14 +1,14 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
+#include "utils_bsvarsigns.h"
 
 using namespace Rcpp;
 using namespace arma;
 
 
 // sample from matrix normal, U = var between rows, V = var between columns
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat rmatnorm_cpp(const arma::mat& M,
                       const arma::mat& U,
@@ -20,7 +20,7 @@ arma::mat rmatnorm_cpp(const arma::mat& M,
 
 
 // sample from inverse Wishart
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat riwish_cpp (
     const arma::mat&  S, 
@@ -44,7 +44,7 @@ arma::mat riwish_cpp (
 }
 
 
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::field<arma::mat> niw_cpp(
     const arma::mat& Y,

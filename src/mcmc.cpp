@@ -9,7 +9,8 @@ using namespace arma;
 
 
 // adaptive Metropolis algorithm for strictly positive parameters
-// [[Rcpp:interfaces(cpp)]]
+// // [[Rcpp::interfaces(cpp)]]
+// // [[Rcpp::export]]
 arma::mat metropolis(
     const int& T,
     const int& t0,

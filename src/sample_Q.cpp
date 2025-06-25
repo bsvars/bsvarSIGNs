@@ -1,7 +1,7 @@
 
 #include <RcppArmadillo.h>
 
-#include "utils.h"
+#include "utils_bsvarsigns.h"
 #include "restrictions_narrative.h"
 #include "restrictions_zero.h"
 #include "compute.h"

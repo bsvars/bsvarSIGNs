@@ -7,7 +7,7 @@ using namespace arma;
 
 
 // QR decomposition, where the diagonal elements of R are positive
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat qr_sign_cpp(const arma::mat& A) {
   int N = A.n_rows;
@@ -28,7 +28,7 @@ arma::mat qr_sign_cpp(const arma::mat& A) {
 
 
 // Sample uniformly from the space of NxN orthogonal matrices
-// [[Rcpp:interface(cpp)]]
+// [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
 arma::mat rortho_cpp(const int& N) {
   return qr_sign_cpp(arma::mat(N, N, fill::randn));
