@@ -175,7 +175,7 @@ double log_ml_dummy(
 
 
 // log posterior of hyper-parameters (up to a constant)
-// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
 double log_posterior_hyper(
     const arma::vec&  hyper,
@@ -197,7 +197,7 @@ double log_posterior_hyper(
 }
 
 
-// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
 arma::mat extend_hyper(
     const arma::vec& init,
@@ -232,7 +232,7 @@ arma::mat extend_hyper(
 }
 
 
-// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
 arma::mat narrow_hyper(
     const arma::vec& model,
@@ -264,7 +264,7 @@ arma::mat narrow_hyper(
 
 
 // sample hyper-parameters
-// [[Rcpp::interfaces(cpp)]]
+// [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
 arma::mat sample_hyper(
     const int&        S,

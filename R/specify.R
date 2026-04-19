@@ -429,7 +429,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
       }
       
       hyper  = matrix(self$hyper[, ncol(self$hyper)])
-      init   = narrow_hyper(model, hyper)
+      init   = .Call(`_bsvarSIGNs_narrow_hyper`, model, hyper)
       prior  = self$get_prior()
       
       prior$B    = t(prior$A)
@@ -440,15 +440,16 @@ specify_prior_bsvarSIGN = R6::R6Class(
       
       result = stats::optim(
         init,
-        \(x) -log_posterior_hyper(extend_hyper(hyper, model, matrix(x)), 
-                                  model, t(self$Y), t(self$X), prior),
+        \(x) -.Call(`_bsvarSIGNs_log_posterior_hyper`,
+              .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(x)),
+              model, t(self$Y), t(self$X), prior),
         method  = 'L-BFGS-B',
         lower   = rep(0, length(init)),
         upper   = init * 100,
         hessian = TRUE
         )
 
-      mode       = extend_hyper(hyper, model, matrix(result$par))
+      mode       = .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(result$par))
       variance   = result$hessian
 
       if (length(init) == 1){
@@ -458,8 +459,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
         variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
       }
       
-      self$hyper = sample_hyper(S, burn_in, mode, model, 
-                                t(self$Y), t(self$X), variance, prior)
+      self$hyper = .Call(`_bsvarSIGNs_sample_hyper`, S, burn_in, mode, model,
+             t(self$Y), t(self$X), variance, prior)
       self$hyper = self$hyper[, -(1:burn_in)]
     } # END estimate_hyper
     
