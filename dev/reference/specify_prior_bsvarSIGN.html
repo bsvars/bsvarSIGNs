@@ -211,7 +211,8 @@ otherwise to random walk.</p></dd>
 <span>  mu <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  delta <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  lambda <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  psi <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  psi <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  covid <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -245,6 +246,11 @@ shrinkage in the Minnesota prior.</p></dd>
 variances in the Minnesota prior.</p></dd>
 
 
+<dt><code>covid</code></dt>
+<dd><p>NULL or positive integer indicating the start of
+the COVID-19 pandemic</p></dd>
+
+
 </dl><p></p></div>
 </div>
 <div class="section">
@@ -258,8 +264,8 @@ variances in the Minnesota prior.</p></dd>
 <span><span class="va">prior</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10</span>, psi <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># trace plot</span></span>
-<span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"delta"</span>, <span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span><span class="op">[</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span>
 <span></span></code></pre></div><p></p></div>
 </div>
@@ -430,11 +436,10 @@ variances in the Minnesota prior.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># trace plot</span></span></span>
-<span class="r-in"><span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"delta"</span>, <span class="st">"lambda"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dimnames(x) &lt;- dn:</span> length of 'dimnames' [2] not equal to array extent</span>
+<span class="r-in"><span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span><span class="op">[</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plotts(x = x, y = y, plot.type = plot.type, xy.labels = xy.labels,     xy.lines = xy.lines, panel = panel, nc = nc, xlabel = xlabel,     ylabel = ylabel, axes = axes, ...):</span> cannot plot more than 10 series as "multiple"</span>
+<span class="r-plt img"><img src="specify_prior_bsvarSIGN-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
