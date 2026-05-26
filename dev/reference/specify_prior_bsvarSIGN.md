@@ -394,6 +394,7 @@ prior$estimate_hyper(S = 10, psi = TRUE)
 # trace plot
 hyper = t(prior$hyper)
 colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+#> Error in dimnames(x) <- dn: length of 'dimnames' [2] not equal to array extent
 plot.ts(hyper)
-
+#> Error in plotts(x = x, y = y, plot.type = plot.type, xy.labels = xy.labels,     xy.lines = xy.lines, panel = panel, nc = nc, xlabel = xlabel,     ylabel = ylabel, axes = axes, ...): cannot plot more than 10 series as "multiple"
 ```

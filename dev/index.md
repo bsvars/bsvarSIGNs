@@ -65,12 +65,12 @@ website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvarSIGNs
 - All the models feature a hierarchical Minnesota prior following the
   specification proposed by Giannone, Lenza, Primiceri (2015)
 - The identification of the SVAR model is achieved by imposing:
-  - sign restrictions on the structural matrix $\mathbf{B}$,
+  - sign restrictions on the structural matrix $`\mathbf{B}`$,
   - sign and zero restrictions on the zero-horizon impulse responses
-    $\mathbf{\Theta}_{0} = \mathbf{B}^{- 1}$,
+    $`\mathbf{\Theta}_0 = \mathbf{B}^{-1}`$,
   - sign restrictions on the impulse responses at other horizons
-    $\mathbf{\Theta}_{i}$ for $i = 1,2,\ldots$,
-  - sign restrictions on selected structural shocks $\mathbf{u}_{t}$,
+    $`\mathbf{\Theta}_i`$ for $`i = 1, 2, \ldots`$,
+  - sign restrictions on selected structural shocks $`\mathbf{u}_t`$,
   - two types of sign restrictions on the historical decompositions.
 
 #### Simple workflows
@@ -162,6 +162,7 @@ Replication of the results by [Arias, Rubio-Ramírez, & Waggoner
 (2018)](http://doi.org/10.3982/ECTA14468).
 
 ``` r
+
 # investigate the effects of the optimism shock
 data(optimism)
 
@@ -187,6 +188,7 @@ Replication of the results by [Antolín-Díaz and Rubio-Ramírez
 (2018)](http://doi.org/10.1257/aer.20161852).
 
 ``` r
+
 # investigate the effects of the contractionary monetary policy shock
 data(monetary)
 
