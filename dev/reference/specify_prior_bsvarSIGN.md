@@ -94,6 +94,11 @@ homoskedastic bsvar model.
   a positive scalar - the shape of the inverted gamma prior for
   \\\psi\\.
 
+- `covid`:
+
+  NULL or a positive integer indicating the start of the COVID-19
+  pandemic.
+
 ## Methods
 
 ### Public methods

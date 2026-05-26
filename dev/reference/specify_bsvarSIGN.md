@@ -309,6 +309,7 @@ spec$get_prior()
 #>     Ysoc: 
 #>     Ysur: 
 #>     clone: function (deep = FALSE) 
+#>     covid: NULL
 #>     data: NA
 #>     delta.scale: 0.618033988749895
 #>     delta.shape: 2.61803398874989
