@@ -266,6 +266,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @field psi.shape a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.
     psi.shape   = NA,
     
+    #' @field covid NULL or a positive integer indicating the start of the COVID-19 pandemic.
+    covid       = NULL,
+    
     #' @description
     #' Create a new prior specification PriorBSVAR.
     #' @param data the \code{TxN} data matrix of observations.
@@ -371,7 +374,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
         lambda.scale = self$lambda.scale,
         lambda.shape = self$lambda.shape,
         psi.scale    = self$psi.scale,
-        psi.shape    = self$psi.shape
+        psi.shape    = self$psi.shape,
+        covid        = ifelse(is.null(self$covid), -1, self$covid)
       )
     }, # END get_prior
     
@@ -457,11 +461,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
       
       prior  = self$get_prior()
       
-      if (!is.null(covid)) {
-        prior$covid = covid
-      } else {
-        prior$covid = -1
-      }
+      self$covid = covid
       
       prior$B    = t(prior$A)
       prior$Ysoc = t(prior$Ysoc)

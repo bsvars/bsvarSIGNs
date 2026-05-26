@@ -98,6 +98,8 @@ inverted-Wishart prior for error terms covariance matrix.}
 \item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
 
 \item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
+
+\item{\code{covid}}{NULL or a positive integer indicating the start of the COVID-19 pandemic.}
 }
 \if{html}{\out{</div>}}
 }

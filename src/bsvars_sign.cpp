@@ -109,8 +109,31 @@ Rcpp::List bsvar_sign_cpp(
     // update dummy observation prior
     Ystar        = join_vert(Ysoc / mu, Ysur / delta);
     Xstar        = join_vert(Xsoc / mu, Xsur / delta);
-    Yplus        = join_vert(Ystar, Y);
-    Xplus        = join_vert(Xstar, X);
+    
+    mat Y_scaled = Y;
+    mat X_scaled = X;
+    int covid = as<int>(prior["covid"]);
+    if (covid > 0 && covid <= T) {
+      int c_idx = covid - 1;
+      double s0 = hyper(N + 3);
+      double s1 = hyper(N + 4);
+      double s2 = hyper(N + 5);
+      double rho = hyper(N + 6);
+      
+      vec s = ones<vec>(T);
+      if (c_idx < T) s(c_idx) = s0;
+      if (c_idx + 1 < T) s(c_idx + 1) = s1;
+      if (c_idx + 2 < T) s(c_idx + 2) = s2;
+      for (int t = c_idx + 3; t < T; t++) {
+        s(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
+      }
+      
+      Y_scaled.each_col() /= s;
+      X_scaled.each_col() /= s;
+    }
+    
+    Yplus        = join_vert(Ystar, Y_scaled);
+    Xplus        = join_vert(Xstar, X_scaled);
     
     // posterior parameters
     // #pragma omp critical
@@ -135,7 +158,7 @@ Rcpp::List bsvar_sign_cpp(
       B          = rmatnorm_cpp(post_B, post_V, Sigma);
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
-      result     = sample_Q(p, Y, X, B, h_invp, chol_Sigma, prior, 
+      result     = sample_Q(p, Y_scaled, X_scaled, B, h_invp, chol_Sigma, prior, 
                             sign_irf, sign_narrative, sign_B, Z, 1);
       Q          = result(0);
       shocks     = result(1);
