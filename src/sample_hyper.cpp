@@ -202,11 +202,9 @@ double log_ml_dummy(
       s(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
     }
     
-    for (int t = 0; t < T; t++) {
-      Y_scaled.row(t) /= s(t);
-      X_scaled.row(t) /= s(t);
-      jacobian -= N * std::log(s(t));
-    }
+    Y_scaled.each_col() /= s;
+    X_scaled.each_col() /= s;
+    jacobian -= N * arma::accu(arma::log(s));
   }
 
   mat    Yplus       = join_vert(Ystar, Y_scaled);
