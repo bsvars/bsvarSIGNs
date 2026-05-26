@@ -386,6 +386,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' shrinkage in the Minnesota prior.
     #' @param psi whether to estimate the hyper-parameter of the 
     #' variances in the Minnesota prior.
+    #' @param covid NULL or positive integer indicating the start of
+    #' the COVID-19 pandemic
     #' @param S number of MCMC draws.
     #' @param burn_in number of burn-in draws.
     #' 
@@ -399,8 +401,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior$estimate_hyper(S = 10, psi = TRUE)
     #'
     #' # trace plot
-    #' hyper = t(prior$hyper)
-    #' colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+    #' hyper = t(prior$hyper)[, 4:8]
+    #' colnames(hyper) = paste("psi", 1:5, sep = "")
     #' plot.ts(hyper)
     #' 
     estimate_hyper = function(

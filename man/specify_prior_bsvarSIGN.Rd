@@ -45,8 +45,8 @@ prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 prior$estimate_hyper(S = 10, psi = TRUE)
 
 # trace plot
-hyper = t(prior$hyper)
-colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+hyper = t(prior$hyper)[, 4:8]
+colnames(hyper) = paste("psi", 1:5, sep = "")
 plot.ts(hyper)
 
 }
@@ -188,7 +188,8 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
   mu = FALSE,
   delta = FALSE,
   lambda = TRUE,
-  psi = FALSE
+  psi = FALSE,
+  covid = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -210,6 +211,9 @@ shrinkage in the Minnesota prior.}
 
 \item{\code{psi}}{whether to estimate the hyper-parameter of the 
 variances in the Minnesota prior.}
+
+\item{\code{covid}}{NULL or positive integer indicating the start of
+the COVID-19 pandemic}
 }
 \if{html}{\out{</div>}}
 }
@@ -224,8 +228,8 @@ prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 prior$estimate_hyper(S = 10, psi = TRUE)
 
 # trace plot
-hyper = t(prior$hyper)
-colnames(hyper) = c("mu", "delta", "lambda", paste("psi", 1:5, sep = ""))
+hyper = t(prior$hyper)[, 4:8]
+colnames(hyper) = paste("psi", 1:5, sep = "")
 plot.ts(hyper)
 
 }
