@@ -60,16 +60,16 @@ Rcpp::List bsvar_sign_cpp(
   const int  N = Y.n_cols;
   const int  K = X.n_cols;
   
+  mat        hypers = as<mat>(prior["hyper"]);
+  
   vec        posterior_w(S);
-  mat        posterior_hyper(N + 3, S);
+  mat        posterior_hyper(hypers.n_rows, S);
   cube       posterior_A(N, K, S);
   cube       posterior_B(N, N, S);
   cube       posterior_Q(N, N, S);
   cube       posterior_Sigma(N, N, S);
   cube       posterior_Theta0(N, N, S);
   cube       posterior_shocks(N, T, S);
-  
-  mat        hypers = as<mat>(prior["hyper"]);
   
   int        S_hyper  = hypers.n_cols - 1;
   int        prior_nu = as<int>(prior["nu"]);

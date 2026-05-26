@@ -45,6 +45,7 @@ double log_prior_hyper(
 ) {
   
   double log_prior = 0, shape, scale;
+  int N = hyper.n_elem - 7;
   
   if (model(0)) {
     shape      = as<double>(prior["mu.shape"]);
@@ -67,8 +68,22 @@ double log_prior_hyper(
   if (model(3)) {
     shape      = as<double>(prior["psi.shape"]);
     scale      = as<double>(prior["psi.scale"]);
-    for (int i = 3; i < hyper.n_elem; i++) {
+    for (int i = 3; i < N + 3; i++) {
       log_prior += log_dinvgamma(hyper(i), shape, scale);
+    }
+  }
+  
+  if (model.n_elem > 4 && model(4)) {
+    double s0 = hyper(N + 3);
+    double s1 = hyper(N + 4);
+    double s2 = hyper(N + 5);
+    double rho = hyper(N + 6);
+    
+    if (s0 < 1.0 || s1 < 1.0 || s2 < 1.0 || rho <= 0.0 || rho >= 1.0) {
+      log_prior += -1e10;
+    } else {
+      log_prior += -2.0 * std::log(s0) - 2.0 * std::log(s1) - 2.0 * std::log(s2);
+      log_prior += 2.0 * std::log(rho) + 0.5 * std::log(1.0 - rho);
     }
   }
   
@@ -146,6 +161,7 @@ double log_ml_dummy(
 ) {
   
   int    N           = Y.n_cols;
+  int    T           = Y.n_rows;
   int    p           = as<int>(prior["p"]);
   double mu          = hyper(0);
   double delta       = hyper(1);
@@ -165,13 +181,41 @@ double log_ml_dummy(
                                  as<mat>(prior["Ysur"]) / delta);
   mat    Xstar       = join_vert(as<mat>(prior["Xsoc"]) / mu, 
                                  as<mat>(prior["Xsur"]) / delta);
-  mat    Yplus       = join_vert(Ystar, Y);
-  mat    Xplus       = join_vert(Xstar, X);
+                                 
+  mat    Y_scaled    = Y;
+  mat    X_scaled    = X;
+  double jacobian    = 0;
+  
+  int covid = as<int>(prior["covid"]);
+  if (covid > 0 && covid <= T) {
+    int c_idx = covid - 1;
+    double s0 = hyper(N + 3);
+    double s1 = hyper(N + 4);
+    double s2 = hyper(N + 5);
+    double rho = hyper(N + 6);
+    
+    vec s = ones<vec>(T);
+    if (c_idx < T) s(c_idx) = s0;
+    if (c_idx + 1 < T) s(c_idx + 1) = s1;
+    if (c_idx + 2 < T) s(c_idx + 2) = s2;
+    for (int t = c_idx + 3; t < T; t++) {
+      s(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
+    }
+    
+    for (int t = 0; t < T; t++) {
+      Y_scaled.row(t) /= s(t);
+      X_scaled.row(t) /= s(t);
+      jacobian -= N * std::log(s(t));
+    }
+  }
+
+  mat    Yplus       = join_vert(Ystar, Y_scaled);
+  mat    Xplus       = join_vert(Xstar, X_scaled);
   
   double log_ml_plus = log_ml(prior_B, prior_V, prior_S, prior_nu, Yplus, Xplus);
   double log_ml_star = log_ml(prior_B, prior_V, prior_S, prior_nu, Ystar, Xstar);
   
-  return log_ml_plus - log_ml_star;
+  return log_ml_plus - log_ml_star + jacobian;
 }
 
 
@@ -226,7 +270,14 @@ arma::mat extend_hyper(
   }
   
   if (model(3)) {
-    extended.rows(3, extended.n_rows - 1) = hypers.rows(i, hypers.n_rows - 1);
+    int N = extended.n_rows - 7;
+    extended.rows(3, N + 2) = hypers.rows(i, i + N - 1);
+    i += N;
+  }
+  
+  if (model.n_elem > 4 && model(4)) {
+    int N = extended.n_rows - 7;
+    extended.rows(N + 3, N + 6) = hypers.rows(i, i + 3);
   }
   
   return extended;
@@ -241,6 +292,7 @@ arma::mat narrow_hyper(
 ) {
   
   uvec indices;
+  int N = hypers.n_rows - 7;
   
   if (!model(0)) {
     indices = join_vert(indices, uvec({0}));
@@ -255,7 +307,13 @@ arma::mat narrow_hyper(
   }
   
   if (!model(3)) {
-    indices = join_vert(indices, regspace<uvec>(3, hypers.n_rows - 1));
+    indices = join_vert(indices, regspace<uvec>(3, N + 2));
+  }
+  
+  if (model.n_elem > 4 && !model(4)) {
+    indices = join_vert(indices, regspace<uvec>(N + 3, N + 6));
+  } else if (model.n_elem <= 4) {
+    indices = join_vert(indices, regspace<uvec>(N + 3, N + 6));
   }
   
   hypers.shed_rows(indices);

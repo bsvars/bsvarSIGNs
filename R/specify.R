@@ -314,27 +314,13 @@ specify_prior_bsvarSIGN = R6::R6Class(
         s2.ols[n] = sum(((diag(T - p - 5) - x %*% solve(t(x) %*% x) %*% t(x)) %*% y)^2) / (T - p - 5)
       }
       
-      hyper              = matrix(NA, N + 3, 1)
+      hyper              = matrix(NA, N + 3 + 4, 1)
       hyper[1:3]         = c(1, 1, 0.2)
       hyper[4:(N + 3),]  = s2.ols
+      hyper[(N + 4):(N + 7),] = c(1, 1, 1, 0.8)
       
       scale   = gamma_scale(1, 1)
       shape   = gamma_shape(1, 1)
-      
-      ybar    = colMeans(matrix(Y[1:p,], ncol = N))
-      Ysoc    = diag(ybar)
-      Ysur    = t(ybar)
-      Xsoc    = cbind(kronecker(t(rep(1, p)), Ysoc), matrix(0, N, d + 1))
-      Xsur    = cbind(kronecker(t(rep(1, p)), Ysur), 1, matrix(0, 1, d))
-      
-      # Ystar   = rbind(diag(ybar), ybar)
-      # Xstar   = Ystar
-      # if (p > 1) {
-      #   for (i in 2:p) {
-      #     Xstar = cbind(Xstar, Ystar)
-      #   }
-      # }
-      # Xstar   = cbind(Xstar, c(rep(0, N), 1), matrix(0, N + 1, d))
       
       self$p             = p
       self$hyper         = hyper
@@ -344,10 +330,10 @@ specify_prior_bsvarSIGN = R6::R6Class(
       self$nu            = N + 2
       self$Y             = t(Y)
       self$X             = t(X)
-      self$Ysoc          = t(Ysoc)
-      self$Xsoc          = t(Xsoc)
-      self$Ysur          = t(Ysur)
-      self$Xsur          = t(Xsur)
+      self$Ysoc          = matrix(NA, N, 0)
+      self$Xsoc          = matrix(NA, K, 0)
+      self$Ysur          = matrix(NA, N, 0)
+      self$Xsur          = matrix(NA, K, 0)
       self$mu.scale      = scale
       self$mu.shape      = shape
       self$delta.scale   = scale
@@ -419,18 +405,61 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     estimate_hyper = function(
       S = 10000, burn_in = S / 2,
-      mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE
+      mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE, covid = NULL
       ) {
       
-      model = c(mu, delta, lambda, psi)
+      model = c(mu, delta, lambda, psi, !is.null(covid))
       
       if (all(!model)) {
         stop("At least one of the hyper-parameters must be estimated.")
       }
       
+      if (!is.null(covid)) {
+        if (covid %% 1 != 0 || covid <= 0) {
+          stop("covid must be a positive integer or NULL")
+        }
+      }
+      
       hyper  = matrix(self$hyper[, ncol(self$hyper)])
       init   = .Call(`_bsvarSIGNs_narrow_hyper`, model, hyper)
+      
+      Y_temp = t(self$Y)
+      N      = ncol(Y_temp)
+      p      = self$p
+      K      = nrow(self$X)
+      d      = K - 1 - N * p
+      
+      if (mu || delta) {
+        ybar = colMeans(matrix(Y_temp[1:p,], ncol = N))
+      }
+      
+      if (mu) {
+        Ysoc = diag(ybar)
+        Xsoc = cbind(kronecker(t(rep(1, p)), Ysoc), matrix(0, N, d + 1))
+        self$Ysoc = t(Ysoc)
+        self$Xsoc = t(Xsoc)
+      } else {
+        self$Ysoc = matrix(NA, N, 0)
+        self$Xsoc = matrix(NA, K, 0)
+      }
+      
+      if (delta) {
+        Ysur = t(ybar)
+        Xsur = cbind(kronecker(t(rep(1, p)), Ysur), 1, matrix(0, 1, d))
+        self$Ysur = t(Ysur)
+        self$Xsur = t(Xsur)
+      } else {
+        self$Ysur = matrix(NA, N, 0)
+        self$Xsur = matrix(NA, K, 0)
+      }
+      
       prior  = self$get_prior()
+      
+      if (!is.null(covid)) {
+        prior$covid = covid
+      } else {
+        prior$covid = -1
+      }
       
       prior$B    = t(prior$A)
       prior$Ysoc = t(prior$Ysoc)
