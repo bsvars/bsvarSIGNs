@@ -172,6 +172,9 @@ file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs
     1.0.1](https://bsvars.org/2024-08-bsvars-QuantEcon/)
   - at Monash University given in August 2024 [featuring **bsvars** 3.1
     and **bsvarSIGNs** 1.0](https://bsvars.org/2024-08-bsvars-monash/)
+  - a [youtube recording](https://www.youtube.com/watch?v=0UqwxWD0s_4)
+    for [Di Cook Open-Source Statistical Software
+    Award](https://statsoc.org.au/Di-Cook-Award) in February 2025
 
 ## Examples
 
