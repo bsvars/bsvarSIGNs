@@ -315,7 +315,7 @@ spec$get_prior()
 #>     delta.shape: 2.61803398874989
 #>     estimate_hyper: function (S = 10000, burn_in = S/2, mu = FALSE, delta = FALSE, 
 #>     get_prior: function () 
-#>     hyper: 1 1 0.2 6.63317874236153e-05 0.00655120654449836 1.68010 ...
+#>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...
 #>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, 
 #>     lambda.scale: 0.540312423743285
 #>     lambda.shape: 1.37015621187164
