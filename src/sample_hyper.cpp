@@ -74,17 +74,15 @@ double log_prior_hyper(
   }
   
   if (model.n_elem > 4 && model(4)) {
-    double s0 = hyper(N + 3);
-    double s1 = hyper(N + 4);
-    double s2 = hyper(N + 5);
-    double rho = hyper(N + 6);
+    double s0 = std::max(1.0, hyper(N + 3));
+    double s1 = std::max(1.0, hyper(N + 4));
+    double s2 = std::max(1.0, hyper(N + 5));
+    double rho = std::max(1e-10, std::min(1.0 - 1e-10, hyper(N + 6)));
     
-    if (s0 < 1.0 || s1 < 1.0 || s2 < 1.0 || rho <= 0.0 || rho >= 1.0) {
-      log_prior += -1e10;
-    } else {
-      log_prior += -2.0 * std::log(s0) - 2.0 * std::log(s1) - 2.0 * std::log(s2);
-      log_prior += 2.0 * std::log(rho) + 0.5 * std::log(1.0 - rho);
-    }
+    // Pareto(1, 1) prior for s0, s1, s2
+    log_prior += -2.0 * std::log(s0) - 2.0 * std::log(s1) - 2.0 * std::log(s2);
+    // Beta(3, 1.5) prior for rho s.t. mode = 0.8 and sd = 0.2
+    log_prior += 2.0 * std::log(rho) + 0.5 * std::log(1.0 - rho);
   }
   
   return log_prior;
@@ -189,10 +187,10 @@ double log_ml_dummy(
   int covid = as<int>(prior["covid"]);
   if (covid > 0 && covid <= T) {
     int c_idx = covid - 1;
-    double s0 = hyper(N + 3);
-    double s1 = hyper(N + 4);
-    double s2 = hyper(N + 5);
-    double rho = hyper(N + 6);
+    double s0 = std::max(1.0, hyper(N + 3));
+    double s1 = std::max(1.0, hyper(N + 4));
+    double s2 = std::max(1.0, hyper(N + 5));
+    double rho = std::max(1e-10, std::min(1.0 - 1e-10, hyper(N + 6)));
     
     vec s = ones<vec>(T);
     if (c_idx < T) s(c_idx) = s0;
@@ -211,7 +209,10 @@ double log_ml_dummy(
   mat    Xplus       = join_vert(Xstar, X_scaled);
   
   double log_ml_plus = log_ml(prior_B, prior_V, prior_S, prior_nu, Yplus, Xplus);
-  double log_ml_star = log_ml(prior_B, prior_V, prior_S, prior_nu, Ystar, Xstar);
+  double log_ml_star = 0;
+  if (Ystar.n_rows > 0) {
+    log_ml_star = log_ml(prior_B, prior_V, prior_S, prior_nu, Ystar, Xstar);
+  }
   
   return log_ml_plus - log_ml_star + jacobian;
 }

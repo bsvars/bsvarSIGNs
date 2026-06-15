@@ -424,6 +424,9 @@ specify_prior_bsvarSIGN = R6::R6Class(
         if (covid %% 1 != 0 || covid <= 0) {
           stop("covid must be a positive integer or NULL")
         }
+        if (covid > ncol(self$Y)) {
+          stop(paste0("covid must be less than or equal to the number of observations used for estimation (T = ", ncol(self$Y), "). Please remember that the first p observations are used as lags."))
+        }
       }
       
       hyper  = matrix(self$hyper[, ncol(self$hyper)])
@@ -469,14 +472,23 @@ specify_prior_bsvarSIGN = R6::R6Class(
       prior$Ysur = t(prior$Ysur)
       prior$Xsur = t(prior$Xsur)
       
+      lb = rep(0, length(init))
+      ub = init * 100
+      
+      if (!is.null(covid)) {
+        idx = (length(init) - 3):length(init)
+        lb[idx] = c(1, 1, 1, 0)
+        ub[idx] = c(Inf, Inf, Inf, 1)
+      }
+      
       result = stats::optim(
         init,
         \(x) -.Call(`_bsvarSIGNs_log_posterior_hyper`,
               .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(x)),
               model, t(self$Y), t(self$X), prior),
         method  = 'L-BFGS-B',
-        lower   = rep(0, length(init)),
-        upper   = init * 100,
+        lower   = lb,
+        upper   = ub,
         hessian = TRUE
         )
 
