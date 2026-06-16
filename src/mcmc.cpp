@@ -9,8 +9,7 @@ using namespace arma;
 
 
 // adaptive Metropolis algorithm for strictly positive parameters
-// // [[Rcpp::interfaces(cpp)]]
-// // [[Rcpp::export]]
+// [[Rcpp::interfaces(cpp)]]
 arma::mat metropolis(
     const int& T,
     const int& t0,
@@ -68,3 +67,17 @@ arma::mat metropolis(
 
 
 
+
+// [[Rcpp::export(name = "metropolis")]]
+arma::mat metropolis_R(
+    const int T,
+    const int t0,
+    arma::vec  x,
+    arma::mat  Sigma,
+    Rcpp::Function log_target
+) {
+  std::function<double(const arma::vec&)> log_target_cpp = [&](const arma::vec& x_vec) -> double {
+    return Rcpp::as<double>(log_target(x_vec));
+  };
+  return metropolis(T, t0, x, Sigma, log_target_cpp);
+}
