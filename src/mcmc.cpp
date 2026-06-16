@@ -62,12 +62,6 @@ arma::mat metropolis(
 }
 
 
-
-
-
-
-
-
 // [[Rcpp::export(name = "metropolis")]]
 arma::mat metropolis_R(
     const int T,

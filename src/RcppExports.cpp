@@ -355,6 +355,44 @@ RcppExport SEXP _bsvarSIGNs_forecast_bsvarSIGNs(SEXP posterior_SigmaSEXP, SEXP p
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// metropolis_R
+arma::mat metropolis_R(const int T, const int t0, arma::vec x, arma::mat Sigma, Rcpp::Function log_target);
+static SEXP _bsvarSIGNs_metropolis_R_try(SEXP TSEXP, SEXP t0SEXP, SEXP xSEXP, SEXP SigmaSEXP, SEXP log_targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const int >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const int >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Function >::type log_target(log_targetSEXP);
+    rcpp_result_gen = Rcpp::wrap(metropolis_R(T, t0, x, Sigma, log_target));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_metropolis_R(SEXP TSEXP, SEXP t0SEXP, SEXP xSEXP, SEXP SigmaSEXP, SEXP log_targetSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_metropolis_R_try(TSEXP, t0SEXP, xSEXP, SigmaSEXP, log_targetSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // match_sign_narrative
 bool match_sign_narrative(const arma::mat& Epsilon, const arma::mat& sign_narrative, const arma::cube& irf);
 static SEXP _bsvarSIGNs_match_sign_narrative_try(SEXP EpsilonSEXP, SEXP sign_narrativeSEXP, SEXP irfSEXP) {
@@ -1354,6 +1392,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::mat(*hd1_cpp)(const int&,const int&,const int&,const arma::mat&,const arma::cube&)");
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_fevd)(arma::field<arma::cube>&)");
         signatures.insert("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
+        signatures.insert("arma::mat(*metropolis)(const int,const int,arma::vec,arma::mat,Rcpp::Function)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
         signatures.insert("arma::field<arma::mat>(*ZIRF)(const arma::field<arma::mat>&,const arma::mat&)");
@@ -1396,6 +1435,7 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_hd1_cpp", (DL_FUNC)_bsvarSIGNs_hd1_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvarSIGNs_fevd", (DL_FUNC)_bsvarSIGNs_bsvarSIGNs_fevd_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC)_bsvarSIGNs_forecast_bsvarSIGNs_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_metropolis", (DL_FUNC)_bsvarSIGNs_metropolis_R_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_narrative", (DL_FUNC)_bsvarSIGNs_match_sign_narrative_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_narrative", (DL_FUNC)_bsvarSIGNs_weight_narrative_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_ZIRF", (DL_FUNC)_bsvarSIGNs_ZIRF_try);
@@ -1437,6 +1477,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_hd1_cpp", (DL_FUNC) &_bsvarSIGNs_hd1_cpp, 5},
     {"_bsvarSIGNs_bsvarSIGNs_fevd", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_fevd, 1},
     {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 6},
+    {"_bsvarSIGNs_metropolis_R", (DL_FUNC) &_bsvarSIGNs_metropolis_R, 5},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
     {"_bsvarSIGNs_weight_narrative", (DL_FUNC) &_bsvarSIGNs_weight_narrative, 3},
     {"_bsvarSIGNs_ZIRF", (DL_FUNC) &_bsvarSIGNs_ZIRF, 2},

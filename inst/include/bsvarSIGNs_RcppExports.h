@@ -214,6 +214,27 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::cube >(rcpp_result_gen);
     }
 
+    inline arma::mat metropolis(const int T, const int t0, arma::vec x, arma::mat Sigma, Rcpp::Function log_target) {
+        typedef SEXP(*Ptr_metropolis)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_metropolis p_metropolis = NULL;
+        if (p_metropolis == NULL) {
+            validateSignature("arma::mat(*metropolis)(const int,const int,arma::vec,arma::mat,Rcpp::Function)");
+            p_metropolis = (Ptr_metropolis)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_metropolis");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_metropolis(Shield<SEXP>(Rcpp::wrap(T)), Shield<SEXP>(Rcpp::wrap(t0)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(Sigma)), Shield<SEXP>(Rcpp::wrap(log_target)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::mat >(rcpp_result_gen);
+    }
+
     inline bool match_sign_narrative(const arma::mat& Epsilon, const arma::mat& sign_narrative, const arma::cube& irf) {
         typedef SEXP(*Ptr_match_sign_narrative)(SEXP,SEXP,SEXP);
         static Ptr_match_sign_narrative p_match_sign_narrative = NULL;
