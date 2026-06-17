@@ -341,13 +341,5 @@ spec = specify_bsvarSIGN$new(
 
 # get the starting values
 spec$get_starting_values()
-#> <StartingValuesBSVAR>
-#>   Public:
-#>     A: 0.492827306268737 0 0 0 0 0 0.616342768538743 0 0 0 0 0  ...
-#>     B: 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1
-#>     clone: function (deep = FALSE) 
-#>     get_starting_values: function () 
-#>     hyper: 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 ...
-#>     initialize: function (N, p, d = 0) 
-#>     set_starting_values: function (last_draw) 
+#> Error in spec$get_starting_values(): attempt to apply non-function
 ```
