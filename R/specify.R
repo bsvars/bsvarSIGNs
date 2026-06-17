@@ -778,7 +778,7 @@ specify_bsvarSIGN = R6::R6Class(
                                                                           max_tries)
       self$prior                   = specify_prior_bsvarSIGN$new(data, p, exogenous,
                                                                  stationary)
-      self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
+      # self$starting_values         = bsvars::specify_starting_values_bsvar$new(N, self$p, d)
     }, # END initialize
     
     #' @description
