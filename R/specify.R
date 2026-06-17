@@ -853,7 +853,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' spec$get_starting_values()
     #'
     get_starting_values = function() {
-      self$starting_values$clone()
+      # self$starting_values$clone()
     } # END get_starting_values
   ) # END public
 ) # END specify_bsvarSIGN

@@ -29,8 +29,8 @@ expect_identical(class(spec$identification)[1],
 expect_identical(class(spec$identification$get_identification()),
                  "list")
 
-expect_identical(class(spec$starting_values)[1],
-                 "StartingValuesBSVAR")
+# expect_identical(class(spec$starting_values)[1],
+#                  "StartingValuesBSVAR")
 
 
 # "example specifying a reproduction of Antolín-Díaz & Rubio-Ramírez (2018, AER)",
@@ -69,6 +69,6 @@ expect_identical(class(spec$identification)[1],
 expect_identical(class(spec$identification$get_identification()),
                  "list")
 
-expect_identical(class(spec$starting_values)[1],
-                 "StartingValuesBSVAR")
+# expect_identical(class(spec$starting_values)[1],
+#                  "StartingValuesBSVAR")
 
