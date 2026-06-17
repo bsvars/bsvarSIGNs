@@ -341,5 +341,5 @@ spec = specify_bsvarSIGN$new(
 
 # get the starting values
 spec$get_starting_values()
-#> Error in spec$get_starting_values(): attempt to apply non-function
+#> NULL
 ```
