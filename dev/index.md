@@ -178,9 +178,9 @@ sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 specification  = specify_bsvarSIGN$new(optimism * 100,
                                        p        = 4,
                                        sign_irf = sign_irf)
+specification$prior$no_dummy()
 
 # estimate the model
-specification$prior$no_dummy()
 posterior      = estimate(specification, S = 100)
 
 # compute and plot impulse responses
@@ -213,9 +213,9 @@ specification  = specify_bsvarSIGN$new(monetary       * 100,
                                        p              = 12,
                                        sign_irf       = sign_irf,
                                        sign_narrative = sign_narrative)
+specification$prior$no_dummy()
 
 # estimate the model
-specification$prior$no_dummy()
 posterior      = estimate(specification, S = 100)
 
 # compute and plot impulse responses

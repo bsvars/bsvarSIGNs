@@ -185,9 +185,9 @@
 <span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span> <span class="op">*</span> <span class="fl">100</span>,</span>
 <span>                                       p        <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                                       sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span></span>
+<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># estimate the model</span></span>
-<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute and plot impulse responses</span></span>
@@ -215,9 +215,9 @@
 <span>                                       p              <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>                                       sign_irf       <span class="op">=</span> <span class="va">sign_irf</span>,</span>
 <span>                                       sign_narrative <span class="op">=</span> <span class="va">sign_narrative</span><span class="op">)</span></span>
+<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># estimate the model</span></span>
-<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute and plot impulse responses</span></span>
