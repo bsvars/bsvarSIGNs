@@ -39,6 +39,10 @@ Structural VAR model with sign and narrative restrictions.
 
 - [`specify_bsvarSIGN$get_data_matrices()`](#method-BSVARSIGN-get_data_matrices)
 
+- [`specify_bsvarSIGN$no_dummy_observations()`](#method-BSVARSIGN-no_dummy_observations)
+
+- [`specify_bsvarSIGN$estimate_hyper()`](#method-BSVARSIGN-estimate_hyper)
+
 - [`specify_bsvarSIGN$get_identification()`](#method-BSVARSIGN-get_identification)
 
 - [`specify_bsvarSIGN$get_prior()`](#method-BSVARSIGN-get_prior)
@@ -64,7 +68,12 @@ sign and narrative restrictions BSVARSIGN.
       sign_structural,
       max_tries = Inf,
       exogenous = NULL,
-      stationary = rep(FALSE, ncol(data))
+      stationary = rep(FALSE, ncol(data)),
+      hyper_mu = TRUE,
+      hyper_delta = TRUE,
+      hyper_lambda = TRUE,
+      hyper_psi = TRUE,
+      hyper_covid = NULL
     )
 
 #### Arguments
@@ -109,6 +118,31 @@ sign and narrative restrictions BSVARSIGN.
   for the autoregressive parameters of the `N`th equation to the white
   noise process, otherwise to random walk.
 
+- `hyper_mu`:
+
+  whether to estimate the hyper-parameter in the sum-of-coefficients
+  dummy prior.
+
+- `hyper_delta`:
+
+  whether to estimate the hyper-parameter in the single-unit-root dummy
+  prior.
+
+- `hyper_lambda`:
+
+  whether to estimate the hyper-parameter of the shrinkage in the
+  Minnesota prior.
+
+- `hyper_psi`:
+
+  whether to estimate the hyper-parameter of the variances in the
+  Minnesota prior.
+
+- `hyper_covid`:
+
+  NULL or positive integer indicating the start of the COVID-19
+  pandemic.
+
 #### Returns
 
 A new complete specification for the Bayesian Structural VAR model
@@ -136,6 +170,59 @@ Returns the data matrices as the DataMatricesBSVAR object.
 
     # get the data matrices
     spec$get_data_matrices()
+
+------------------------------------------------------------------------
+
+### Method `no_dummy_observations()`
+
+Sets the sum-of-coefficients and single-unit-root dummy observations to
+zero (removes the dummy observation prior).
+
+#### Usage
+
+    specify_bsvarSIGN$no_dummy_observations()
+
+#### Examples
+
+    # specify the model
+    data(optimism)
+    spec = specify_bsvarSIGN$new(optimism, p = 4)
+    spec$no_dummy_observations() # remove dummy observations
+
+------------------------------------------------------------------------
+
+### Method `estimate_hyper()`
+
+Estimates hyper-parameters with adaptive Metropolis algorithm.
+
+#### Usage
+
+    specify_bsvarSIGN$estimate_hyper(S = 10000, burn_in = S/2)
+
+#### Arguments
+
+- `S`:
+
+  number of MCMC draws.
+
+- `burn_in`:
+
+  number of burn-in draws.
+
+#### Examples
+
+    # specify the model and set seed
+    set.seed(123)
+    data(optimism)
+    spec = specify_bsvarSIGN$new(optimism, p = 4)
+
+    # estimate hyper parameters with adaptive Metropolis algorithm
+    spec$estimate_hyper(S = 10)
+
+    # trace plot
+    hyper = t(spec$prior$hyper)[, 4:8]
+    colnames(hyper) = paste("psi", 1:5, sep = "")
+    plot.ts(hyper)
 
 ------------------------------------------------------------------------
 
@@ -258,6 +345,38 @@ spec$get_data_matrices()
 
 
 ## ------------------------------------------------
+## Method `specify_bsvarSIGN$no_dummy_observations`
+## ------------------------------------------------
+
+# specify the model
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+spec$no_dummy_observations() # remove dummy observations
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$estimate_hyper`
+## ------------------------------------------------
+
+# specify the model and set seed
+set.seed(123)
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+
+# estimate hyper parameters with adaptive Metropolis algorithm
+spec$estimate_hyper(S = 10)
+#> **************************************************|
+#>  Adaptive Metropolis MCMC: hyper parameters       |
+#> **************************************************|
+
+# trace plot
+hyper = t(spec$prior$hyper)[, 4:8]
+colnames(hyper) = paste("psi", 1:5, sep = "")
+plot.ts(hyper)
+
+
+
+## ------------------------------------------------
 ## Method `specify_bsvarSIGN$get_identification`
 ## ------------------------------------------------
 
@@ -313,7 +432,6 @@ spec$get_prior()
 #>     data: NA
 #>     delta.scale: 0.618033988749895
 #>     delta.shape: 2.61803398874989
-#>     estimate_hyper: function (S = 10000, burn_in = S/2, mu = TRUE, delta = TRUE, 
 #>     get_prior: function () 
 #>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...
 #>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, 
@@ -321,7 +439,6 @@ spec$get_prior()
 #>     lambda.shape: 1.37015621187164
 #>     mu.scale: 0.618033988749895
 #>     mu.shape: 2.61803398874989
-#>     no_dummy: function () 
 #>     nu: 7
 #>     p: 4
 #>     psi.scale: 0.000799362037821841

@@ -107,10 +107,6 @@ homoskedastic bsvar model.
 
 - [`specify_prior_bsvarSIGN$get_prior()`](#method-PriorBSVARSIGN-get_prior)
 
-- [`specify_prior_bsvarSIGN$no_dummy()`](#method-PriorBSVARSIGN-no_dummy)
-
-- [`specify_prior_bsvarSIGN$estimate_hyper()`](#method-PriorBSVARSIGN-estimate_hyper)
-
 - [`specify_prior_bsvarSIGN$clone()`](#method-PriorBSVARSIGN-clone)
 
 ------------------------------------------------------------------------
@@ -174,91 +170,6 @@ Returns the elements of the prior specification PriorBSVAR as a `list`.
     # a prior for 5-variable example with four lags
     prior = specify_prior_bsvar$new(N = 5, p = 4)
     prior$get_prior() # show the prior as list
-
-------------------------------------------------------------------------
-
-### Method `no_dummy()`
-
-Sets the sum-of-coefficients and single-unit-root dummy observations to
-zero (removes the dummy observation prior).
-
-#### Usage
-
-    specify_prior_bsvarSIGN$no_dummy()
-
-#### Examples
-
-    # a prior for 5-variable example with four lags
-    data(optimism)
-    prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-    prior$no_dummy() # remove dummy observations
-
-------------------------------------------------------------------------
-
-### Method `estimate_hyper()`
-
-Estimates hyper-parameters with adaptive Metropolis algorithm.
-
-#### Usage
-
-    specify_prior_bsvarSIGN$estimate_hyper(
-      S = 10000,
-      burn_in = S/2,
-      mu = TRUE,
-      delta = TRUE,
-      lambda = TRUE,
-      psi = TRUE,
-      covid = NULL
-    )
-
-#### Arguments
-
-- `S`:
-
-  number of MCMC draws.
-
-- `burn_in`:
-
-  number of burn-in draws.
-
-- `mu`:
-
-  whether to estimate the hyper-parameter in the sum-of-coefficients
-  dummy prior.
-
-- `delta`:
-
-  whether to estimate the hyper-parameter in the single-unit-root dummy
-  prior.
-
-- `lambda`:
-
-  whether to estimate the hyper-parameter of the shrinkage in the
-  Minnesota prior.
-
-- `psi`:
-
-  whether to estimate the hyper-parameter of the variances in the
-  Minnesota prior.
-
-- `covid`:
-
-  NULL or positive integer indicating the start of the COVID-19 pandemic
-
-#### Examples
-
-    # specify the model and set seed
-    set.seed(123)
-    data(optimism)
-    prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-
-    # estimate hyper parameters with adaptive Metropolis algorithm
-    prior$estimate_hyper(S = 10, psi = TRUE)
-
-    # trace plot
-    hyper = t(prior$hyper)[, 4:8]
-    colnames(hyper) = paste("psi", 1:5, sep = "")
-    plot.ts(hyper)
 
 ------------------------------------------------------------------------
 
@@ -404,36 +315,4 @@ prior$get_prior() # show the prior as list
 #> $hyper_nu_AA
 #> [1] 10
 #> 
-
-
-## ------------------------------------------------
-## Method `specify_prior_bsvarSIGN$no_dummy`
-## ------------------------------------------------
-
-# a prior for 5-variable example with four lags
-data(optimism)
-prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-prior$no_dummy() # remove dummy observations
-
-
-## ------------------------------------------------
-## Method `specify_prior_bsvarSIGN$estimate_hyper`
-## ------------------------------------------------
-
-# specify the model and set seed
-set.seed(123)
-data(optimism)
-prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-
-# estimate hyper parameters with adaptive Metropolis algorithm
-prior$estimate_hyper(S = 10, psi = TRUE)
-#> **************************************************|
-#>  Adaptive Metropolis MCMC: hyper parameters       |
-#> **************************************************|
-
-# trace plot
-hyper = t(prior$hyper)[, 4:8]
-colnames(hyper) = paste("psi", 1:5, sep = "")
-plot.ts(hyper)
-
 ```

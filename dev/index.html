@@ -179,19 +179,19 @@
 <span><span class="co"># specify identifying restrictions:</span></span>
 <span><span class="co"># + no effect on productivity (zero restriction)</span></span>
 <span><span class="co"># + positive effect on stock prices (positive sign restriction)</span></span>
-<span><span class="va">sign_irf</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">23</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">sign_irf</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">23</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># specify the model</span></span>
-<span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span> <span class="op">*</span> <span class="fl">100</span>,</span>
-<span>                                       p        <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>                                       sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span></span>
-<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">spec</span>     <span class="op">=</span> <span class="va"><a href="reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>                                 p        <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                 sign_irf <span class="op">=</span> <span class="va">sign_irf</span><span class="op">)</span></span>
+<span><span class="va">spec</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># estimate the model</span></span>
-<span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">post</span>     <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute and plot impulse responses</span></span>
-<span><span class="va">irf</span>            <span class="op">=</span> <span class="fu">compute_impulse_responses</span><span class="op">(</span><span class="va">posterior</span>, horizon <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
+<span><span class="va">irf</span>      <span class="op">=</span> <span class="fu">compute_impulse_responses</span><span class="op">(</span><span class="va">posterior</span>, horizon <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">irf</span>, probability <span class="op">=</span> <span class="fl">0.68</span><span class="op">)</span></span></code></pre></div>
 <p>Replication of the results by <a href="http://doi.org/10.1257/aer.20161852" class="external-link">Antolín-Díaz and Rubio-Ramírez (2018)</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -211,14 +211,14 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># specify the model</span></span>
-<span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">monetary</span>       <span class="op">*</span> <span class="fl">100</span>,</span>
+<span><span class="va">spec</span>           <span class="op">=</span> <span class="va"><a href="reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">monetary</span>       <span class="op">*</span> <span class="fl">100</span>,</span>
 <span>                                       p              <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>                                       sign_irf       <span class="op">=</span> <span class="va">sign_irf</span>,</span>
 <span>                                       sign_narrative <span class="op">=</span> <span class="va">sign_narrative</span><span class="op">)</span></span>
-<span><span class="va">specification</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="fu">no_dummy</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">spec</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># estimate the model</span></span>
-<span><span class="va">posterior</span>      <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">post</span>           <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, S <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute and plot impulse responses</span></span>
 <span><span class="va">irf</span>            <span class="op">=</span> <span class="fu">compute_impulse_responses</span><span class="op">(</span><span class="va">posterior</span>, horizon <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>

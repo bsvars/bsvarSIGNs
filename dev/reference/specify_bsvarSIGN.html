@@ -71,6 +71,8 @@
 
 <ul><li><p><a href="#method-BSVARSIGN-new"><code>specify_bsvarSIGN$new()</code></a></p></li>
 <li><p><a href="#method-BSVARSIGN-get_data_matrices"><code>specify_bsvarSIGN$get_data_matrices()</code></a></p></li>
+<li><p><a href="#method-BSVARSIGN-no_dummy_observations"><code>specify_bsvarSIGN$no_dummy_observations()</code></a></p></li>
+<li><p><a href="#method-BSVARSIGN-estimate_hyper"><code>specify_bsvarSIGN$estimate_hyper()</code></a></p></li>
 <li><p><a href="#method-BSVARSIGN-get_identification"><code>specify_bsvarSIGN$get_identification()</code></a></p></li>
 <li><p><a href="#method-BSVARSIGN-get_prior"><code>specify_bsvarSIGN$get_prior()</code></a></p></li>
 <li><p><a href="#method-BSVARSIGN-get_starting_values"><code>specify_bsvarSIGN$get_starting_values()</code></a></p></li>
@@ -87,7 +89,12 @@
 <span>  <span class="va">sign_structural</span>,</span>
 <span>  max_tries <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  exogenous <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  stationary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
+<span>  stationary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  hyper_mu <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hyper_delta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hyper_lambda <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hyper_psi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hyper_covid <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -134,6 +141,26 @@ the prior mean for the autoregressive parameters of the <code>N</code>th equatio
 otherwise to random walk.</p></dd>
 
 
+<dt><code>hyper_mu</code></dt>
+<dd><p>whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.</p></dd>
+
+
+<dt><code>hyper_delta</code></dt>
+<dd><p>whether to estimate the hyper-parameter in the single-unit-root dummy prior.</p></dd>
+
+
+<dt><code>hyper_lambda</code></dt>
+<dd><p>whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.</p></dd>
+
+
+<dt><code>hyper_psi</code></dt>
+<dd><p>whether to estimate the hyper-parameter of the variances in the Minnesota prior.</p></dd>
+
+
+<dt><code>hyper_covid</code></dt>
+<dd><p>NULL or positive integer indicating the start of the COVID-19 pandemic.</p></dd>
+
+
 </dl><p></p></div>
 </div>
 <div class="section">
@@ -164,15 +191,70 @@ otherwise to random walk.</p></dd>
 </div>
 
 
-</div><p></p><hr><a id="method-BSVARSIGN-get_identification"></a><div class="section">
-<h3 id="method-get-identification-">Method <code>get_identification()</code><a class="anchor" aria-label="anchor" href="#method-get-identification-"></a></h3>
-<p>Returns the identifying restrictions as the IdentificationBSVARSIGN object.</p><div class="section">
+</div><p></p><hr><a id="method-BSVARSIGN-no_dummy_observations"></a><div class="section">
+<h3 id="method-no-dummy-observations-">Method <code>no_dummy_observations()</code><a class="anchor" aria-label="anchor" href="#method-no-dummy-observations-"></a></h3>
+<p>Sets the sum-of-coefficients and single-unit-root dummy observations to zero
+(removes the dummy observation prior).</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">get_identification</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="examples-1">Examples<a class="anchor" aria-label="anchor" href="#examples-1"></a></h4>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify the model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
+<span><span class="va">spec</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">spec</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span> <span class="co"># remove dummy observations</span></span>
+<span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-BSVARSIGN-estimate_hyper"></a><div class="section">
+<h3 id="method-estimate-hyper-">Method <code>estimate_hyper()</code><a class="anchor" aria-label="anchor" href="#method-estimate-hyper-"></a></h3>
+<p>Estimates hyper-parameters with adaptive Metropolis algorithm.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10000</span>, burn_in <span class="op">=</span> <span class="va">S</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>S</code></dt>
+<dd><p>number of MCMC draws.</p></dd>
+
+
+<dt><code>burn_in</code></dt>
+<dd><p>number of burn-in draws.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="examples-2">Examples<a class="anchor" aria-label="anchor" href="#examples-2"></a></h4>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify the model and set seed</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
+<span><span class="va">spec</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># estimate hyper parameters with adaptive Metropolis algorithm</span></span>
+<span><span class="va">spec</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># trace plot</span></span>
+<span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">spec</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span><span class="op">[</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span>
+<span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-BSVARSIGN-get_identification"></a><div class="section">
+<h3 id="method-get-identification-">Method <code>get_identification()</code><a class="anchor" aria-label="anchor" href="#method-get-identification-"></a></h3>
+<p>Returns the identifying restrictions as the IdentificationBSVARSIGN object.</p><div class="section">
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">get_identification</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="examples-3">Examples<a class="anchor" aria-label="anchor" href="#examples-3"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify a model with the optimism data and 4 lags</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
 <span><span class="va">spec</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -189,12 +271,12 @@ otherwise to random walk.</p></dd>
 </div><p></p><hr><a id="method-BSVARSIGN-get_prior"></a><div class="section">
 <h3 id="method-get-prior-">Method <code>get_prior()</code><a class="anchor" aria-label="anchor" href="#method-get-prior-"></a></h3>
 <p>Returns the prior specification as the PriorBSVAR object.</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">get_prior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="examples-2">Examples<a class="anchor" aria-label="anchor" href="#examples-2"></a></h4>
+<h4 id="examples-4">Examples<a class="anchor" aria-label="anchor" href="#examples-4"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify a model with the optimism data and 4 lags</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
@@ -212,12 +294,12 @@ otherwise to random walk.</p></dd>
 </div><p></p><hr><a id="method-BSVARSIGN-get_starting_values"></a><div class="section">
 <h3 id="method-get-starting-values-">Method <code>get_starting_values()</code><a class="anchor" aria-label="anchor" href="#method-get-starting-values-"></a></h3>
 <p>Returns the starting values as the StartingValuesBSVAR object.</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">get_starting_values</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="examples-3">Examples<a class="anchor" aria-label="anchor" href="#examples-3"></a></h4>
+<h4 id="examples-5">Examples<a class="anchor" aria-label="anchor" href="#examples-5"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># specify a model with the optimism data and 4 lags</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
@@ -235,12 +317,12 @@ otherwise to random walk.</p></dd>
 </div><p></p><hr><a id="method-BSVARSIGN-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -284,6 +366,38 @@ otherwise to random walk.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_data_matrices: function () </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (data, p = 1L, exogenous = NULL) </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `specify_bsvarSIGN$no_dummy_observations`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># specify the model</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spec</span> <span class="op">=</span> <span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spec</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span> <span class="co"># remove dummy observations</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `specify_bsvarSIGN$estimate_hyper`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># specify the model and set seed</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spec</span> <span class="op">=</span> <span class="va">specify_bsvarSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate hyper parameters with adaptive Metropolis algorithm</span></span></span>
+<span class="r-in"><span><span class="va">spec</span><span class="op">$</span><span class="fu">estimate_hyper</span><span class="op">(</span>S <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Adaptive Metropolis MCMC: hyper parameters       |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> **************************************************|</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># trace plot</span></span></span>
+<span class="r-in"><span><span class="va">hyper</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">spec</span><span class="op">$</span><span class="va">prior</span><span class="op">$</span><span class="va">hyper</span><span class="op">)</span><span class="op">[</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"psi"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/plot.ts.html" class="external-link">plot.ts</a></span><span class="op">(</span><span class="va">hyper</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="specify_bsvarSIGN-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
@@ -342,7 +456,6 @@ otherwise to random walk.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data: NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     delta.scale: 0.618033988749895</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     delta.shape: 2.61803398874989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     estimate_hyper: function (S = 10000, burn_in = S/2, mu = TRUE, delta = TRUE, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_prior: function () </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, </span>
@@ -350,7 +463,6 @@ otherwise to random walk.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lambda.shape: 1.37015621187164</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     mu.scale: 0.618033988749895</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     mu.shape: 2.61803398874989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     no_dummy: function () </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     nu: 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     p: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     psi.scale: 0.000799362037821841</span>
