@@ -333,10 +333,16 @@ specify_prior_bsvarSIGN = R6::R6Class(
       self$nu            = N + 2
       self$Y             = t(Y)
       self$X             = t(X)
-      self$Ysoc          = matrix(NA, N, 0)
-      self$Xsoc          = matrix(NA, K, 0)
-      self$Ysur          = matrix(NA, N, 0)
-      self$Xsur          = matrix(NA, K, 0)
+      ybar    = colMeans(matrix(Y[1:p,], ncol = N))
+      Ysoc    = diag(ybar)
+      Xsoc    = cbind(kronecker(t(rep(1, p)), Ysoc), matrix(0, N, d + 1))
+      Ysur    = t(ybar)
+      Xsur    = cbind(kronecker(t(rep(1, p)), Ysur), 1, matrix(0, 1, d))
+      
+      self$Ysoc          = t(Ysoc)
+      self$Xsoc          = t(Xsoc)
+      self$Ysur          = t(Ysur)
+      self$Xsur          = t(Xsur)
       self$mu.scale      = scale
       self$mu.shape      = shape
       self$delta.scale   = scale
@@ -378,6 +384,22 @@ specify_prior_bsvarSIGN = R6::R6Class(
         covid        = ifelse(is.null(self$covid), -1, self$covid)
       )
     }, # END get_prior
+    
+    #' @description
+    #' Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
+    #' (removes the dummy observation prior).
+    #' 
+    #' @examples
+    #' # a prior for 5-variable example with four lags
+    #' prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+    #' prior$no_dummy() # remove dummy observations
+    #' 
+    no_dummy = function() {
+      self$Ysoc = matrix(NA, ncol(self$Y), 0)
+      self$Xsoc = matrix(NA, nrow(self$X), 0)
+      self$Ysur = matrix(NA, ncol(self$Y), 0)
+      self$Xsur = matrix(NA, nrow(self$X), 0)
+    }, # END no_dummy
     
     #' @description
     #' Estimates hyper-parameters with adaptive Metropolis algorithm.
@@ -437,30 +459,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
       p      = self$p
       K      = nrow(self$X)
       d      = K - 1 - N * p
-      
-      if (mu || delta) {
-        ybar = colMeans(matrix(Y_temp[1:p,], ncol = N))
-      }
-      
-      if (mu) {
-        Ysoc = diag(ybar)
-        Xsoc = cbind(kronecker(t(rep(1, p)), Ysoc), matrix(0, N, d + 1))
-        self$Ysoc = t(Ysoc)
-        self$Xsoc = t(Xsoc)
-      } else {
-        self$Ysoc = matrix(NA, N, 0)
-        self$Xsoc = matrix(NA, K, 0)
-      }
-      
-      if (delta) {
-        Ysur = t(ybar)
-        Xsur = cbind(kronecker(t(rep(1, p)), Ysur), 1, matrix(0, 1, d))
-        self$Ysur = t(Ysur)
-        self$Xsur = t(Xsur)
-      } else {
-        self$Ysur = matrix(NA, N, 0)
-        self$Xsur = matrix(NA, K, 0)
-      }
       
       prior  = self$get_prior()
       
