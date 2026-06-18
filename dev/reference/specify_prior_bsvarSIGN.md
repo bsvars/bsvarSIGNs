@@ -189,7 +189,8 @@ zero (removes the dummy observation prior).
 #### Examples
 
     # a prior for 5-variable example with four lags
-    prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+    data(optimism)
+    prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
     prior$no_dummy() # remove dummy observations
 
 ------------------------------------------------------------------------
@@ -410,10 +411,9 @@ prior$get_prior() # show the prior as list
 ## ------------------------------------------------
 
 # a prior for 5-variable example with four lags
-prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
-#> Error in initialize(...): unused argument (N = 5)
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 prior$no_dummy() # remove dummy observations
-#> Error: attempt to apply non-function
 
 
 ## ------------------------------------------------
