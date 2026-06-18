@@ -433,7 +433,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     estimate_hyper = function(
       S = 10000, burn_in = S / 2,
-      mu = FALSE, delta = FALSE, lambda = TRUE, psi = FALSE, covid = NULL
+      mu = TRUE, delta = TRUE, lambda = TRUE, psi = TRUE, covid = NULL
       ) {
       
       model = c(mu, delta, lambda, psi, !is.null(covid))

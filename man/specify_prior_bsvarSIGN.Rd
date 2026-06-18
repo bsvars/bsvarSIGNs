@@ -33,6 +33,15 @@ prior$get_prior() # show the prior as list
 
 
 ## ------------------------------------------------
+## Method `specify_prior_bsvarSIGN$no_dummy`
+## ------------------------------------------------
+
+# a prior for 5-variable example with four lags
+prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+prior$no_dummy() # remove dummy observations
+
+
+## ------------------------------------------------
 ## Method `specify_prior_bsvarSIGN$estimate_hyper`
 ## ------------------------------------------------
 
@@ -108,6 +117,7 @@ inverted-Wishart prior for error terms covariance matrix.}
 \itemize{
 \item \href{#method-PriorBSVARSIGN-new}{\code{specify_prior_bsvarSIGN$new()}}
 \item \href{#method-PriorBSVARSIGN-get_prior}{\code{specify_prior_bsvarSIGN$get_prior()}}
+\item \href{#method-PriorBSVARSIGN-no_dummy}{\code{specify_prior_bsvarSIGN$no_dummy()}}
 \item \href{#method-PriorBSVARSIGN-estimate_hyper}{\code{specify_prior_bsvarSIGN$estimate_hyper()}}
 \item \href{#method-PriorBSVARSIGN-clone}{\code{specify_prior_bsvarSIGN$clone()}}
 }
@@ -179,6 +189,28 @@ prior$get_prior() # show the prior as list
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PriorBSVARSIGN-no_dummy"></a>}}
+\if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-no_dummy}{}}}
+\subsection{Method \code{no_dummy()}}{
+Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
+(removes the dummy observation prior).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$no_dummy()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# a prior for 5-variable example with four lags
+prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+prior$no_dummy() # remove dummy observations
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PriorBSVARSIGN-estimate_hyper"></a>}}
 \if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-estimate_hyper}{}}}
 \subsection{Method \code{estimate_hyper()}}{
@@ -187,10 +219,10 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 \if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$estimate_hyper(
   S = 10000,
   burn_in = S/2,
-  mu = FALSE,
-  delta = FALSE,
+  mu = TRUE,
+  delta = TRUE,
   lambda = TRUE,
-  psi = FALSE,
+  psi = TRUE,
   covid = NULL
 )}\if{html}{\out{</div>}}
 }
