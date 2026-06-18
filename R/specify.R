@@ -285,7 +285,6 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' prior$B # show autoregressive prior mean
     #' 
     initialize = function(data, p, exogenous = NULL, stationary = rep(FALSE,  ncol(data))) {
-      
       stopifnot("Argument p must be a positive integer number." = p > 0 & p %% 1 == 0)
       
       data_m  = bsvars::specify_data_matrices$new(data, p, exogenous)
@@ -383,129 +382,7 @@ specify_prior_bsvarSIGN = R6::R6Class(
         psi.shape    = self$psi.shape,
         covid        = ifelse(is.null(self$covid), -1, self$covid)
       )
-    }, # END get_prior
-    
-    #' @description
-    #' Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
-    #' (removes the dummy observation prior).
-    #' 
-    #' @examples
-    #' # a prior for 5-variable example with four lags
-    #' data(optimism)
-    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-    #' prior$no_dummy() # remove dummy observations
-    #' 
-    no_dummy = function() {
-      self$Ysoc = matrix(NA, ncol(self$Y), 0)
-      self$Xsoc = matrix(NA, nrow(self$X), 0)
-      self$Ysur = matrix(NA, ncol(self$Y), 0)
-      self$Xsur = matrix(NA, nrow(self$X), 0)
-    }, # END no_dummy
-    
-    #' @description
-    #' Estimates hyper-parameters with adaptive Metropolis algorithm.
-    #' 
-    #' @param mu whether to estimate the hyper-parameter in the 
-    #' sum-of-coefficients dummy prior.
-    #' @param delta whether to estimate the hyper-parameter in the 
-    #' single-unit-root dummy prior.
-    #' @param lambda whether to estimate the hyper-parameter of the 
-    #' shrinkage in the Minnesota prior.
-    #' @param psi whether to estimate the hyper-parameter of the 
-    #' variances in the Minnesota prior.
-    #' @param covid NULL or positive integer indicating the start of
-    #' the COVID-19 pandemic
-    #' @param S number of MCMC draws.
-    #' @param burn_in number of burn-in draws.
-    #' 
-    #' @examples 
-    #' # specify the model and set seed
-    #' set.seed(123)
-    #' data(optimism)
-    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
-    #' 
-    #' # estimate hyper parameters with adaptive Metropolis algorithm
-    #' prior$estimate_hyper(S = 10, psi = TRUE)
-    #'
-    #' # trace plot
-    #' hyper = t(prior$hyper)[, 4:8]
-    #' colnames(hyper) = paste("psi", 1:5, sep = "")
-    #' plot.ts(hyper)
-    #' 
-    estimate_hyper = function(
-      S = 10000, burn_in = S / 2,
-      mu = TRUE, delta = TRUE, lambda = TRUE, psi = TRUE, covid = NULL
-      ) {
-      
-      model = c(mu, delta, lambda, psi, !is.null(covid))
-      
-      if (all(!model)) {
-        stop("At least one of the hyper-parameters must be estimated.")
-      }
-      
-      if (!is.null(covid)) {
-        if (covid %% 1 != 0 || covid <= 0) {
-          stop("covid must be a positive integer or NULL")
-        }
-        if (covid > ncol(self$Y)) {
-          stop(paste0("covid must be less than or equal to the number of observations used for estimation (T = ", ncol(self$Y), "). Please remember that the first p observations are used as lags."))
-        }
-      }
-      
-      hyper  = matrix(self$hyper[, ncol(self$hyper)])
-      init   = .Call(`_bsvarSIGNs_narrow_hyper`, model, hyper)
-      
-      Y_temp = t(self$Y)
-      N      = ncol(Y_temp)
-      p      = self$p
-      K      = nrow(self$X)
-      d      = K - 1 - N * p
-      
-      prior  = self$get_prior()
-      
-      self$covid = covid
-      
-      prior$B    = t(prior$A)
-      prior$Ysoc = t(prior$Ysoc)
-      prior$Xsoc = t(prior$Xsoc)
-      prior$Ysur = t(prior$Ysur)
-      prior$Xsur = t(prior$Xsur)
-      
-      lb = rep(0, length(init))
-      ub = init * 100
-      
-      if (!is.null(covid)) {
-        idx = (length(init) - 3):length(init)
-        lb[idx] = c(1, 1, 1, 0)
-        ub[idx] = c(Inf, Inf, Inf, 1)
-      }
-      
-      result = stats::optim(
-        init,
-        \(x) -.Call(`_bsvarSIGNs_log_posterior_hyper`,
-              .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(x)),
-              model, t(self$Y), t(self$X), prior),
-        method  = 'L-BFGS-B',
-        lower   = lb,
-        upper   = ub,
-        hessian = TRUE
-        )
-
-      mode       = .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(result$par))
-      variance   = result$hessian
-
-      if (length(init) == 1){
-        variance = 1 / variance
-      } else {
-        e        = eigen(variance)
-        variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
-      }
-      
-      self$hyper = .Call(`_bsvarSIGNs_sample_hyper`, S, burn_in, mode, model,
-             t(self$Y), t(self$X), variance, prior)
-      self$hyper = self$hyper[, -(1:burn_in)]
-    } # END estimate_hyper
-    
+    } # END get_prior    
   ) # END public
 ) # END specify_prior_bsvarSIGN
 
@@ -684,6 +561,13 @@ specify_identification_bsvarSIGN = R6::R6Class(
 #' @export
 specify_bsvarSIGN = R6::R6Class(
   "BSVARSIGN",
+  private = list(
+    hyper_mu = TRUE,
+    hyper_delta = TRUE,
+    hyper_lambda = TRUE,
+    hyper_psi = TRUE,
+    hyper_covid = NULL
+  ),
   
   public = list(
     
@@ -721,6 +605,11 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
     #' otherwise to random walk.
+    #' @param hyper_mu whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.
+    #' @param hyper_delta whether to estimate the hyper-parameter in the single-unit-root dummy prior.
+    #' @param hyper_lambda whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.
+    #' @param hyper_psi whether to estimate the hyper-parameter of the variances in the Minnesota prior.
+    #' @param hyper_covid NULL or positive integer indicating the start of the COVID-19 pandemic.
     #' @return A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
     initialize = function(
     data,
@@ -730,7 +619,12 @@ specify_bsvarSIGN = R6::R6Class(
     sign_structural,
     max_tries = Inf,
     exogenous = NULL,
-    stationary = rep(FALSE, ncol(data))
+    stationary = rep(FALSE, ncol(data)),
+    hyper_mu = TRUE,
+    hyper_delta = TRUE,
+    hyper_lambda = TRUE,
+    hyper_psi = TRUE,
+    hyper_covid = NULL
     ) {
       stopifnot("Argument p has to be a positive integer." = ((p %% 1) == 0 & p > 0))
       self$p        = p
@@ -795,9 +689,120 @@ specify_bsvarSIGN = R6::R6Class(
     #' # get the data matrices
     #' spec$get_data_matrices()
     #'
-    get_data_matrices = function() {
+    get_data_matrices    = function() {
       self$data_matrices$clone()
     }, # END get_data_matrices
+    
+    #' @description
+    #' Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
+    #' (removes the dummy observation prior).
+    #' 
+    #' @examples
+    #' # specify the model
+    #' data(optimism)
+    #' spec = specify_bsvarSIGN$new(optimism, p = 4)
+    #' spec$no_dummy_observations() # remove dummy observations
+    #' 
+    no_dummy_observations = function() {
+      self$prior$Ysoc = matrix(NA, nrow(self$prior$Ysoc), 0)
+      self$prior$Xsoc = matrix(NA, nrow(self$prior$Xsoc), 0)
+      self$prior$Ysur = matrix(NA, nrow(self$prior$Ysur), 0)
+      self$prior$Xsur = matrix(NA, nrow(self$prior$Xsur), 0)
+    }, # END no_dummy_observations
+    
+    #' @description
+    #' Estimates hyper-parameters with adaptive Metropolis algorithm.
+    #' 
+    #' @param S number of MCMC draws.
+    #' @param burn_in number of burn-in draws.
+    #' 
+    #' @examples 
+    #' # specify the model and set seed
+    #' set.seed(123)
+    #' data(optimism)
+    #' spec = specify_bsvarSIGN$new(optimism, p = 4)
+    #' 
+    #' # estimate hyper parameters with adaptive Metropolis algorithm
+    #' spec$estimate_hyper(S = 10)
+    #'
+    #' # trace plot
+    #' hyper = t(spec$prior$hyper)[, 4:8]
+    #' colnames(hyper) = paste("psi", 1:5, sep = "")
+    #' plot.ts(hyper)
+    #' 
+    estimate_hyper = function(
+      S = 10000, burn_in = S / 2
+      ) {
+      
+      model = c(private$hyper_mu, private$hyper_delta, private$hyper_lambda, private$hyper_psi, !is.null(private$hyper_covid))
+      covid = private$hyper_covid
+      
+      if (all(!model)) {
+        stop("At least one of the hyper-parameters must be estimated.")
+      }
+      
+      if (!is.null(covid)) {
+        if (covid %% 1 != 0 || covid <= 0) {
+          stop("covid must be a positive integer or NULL")
+        }
+        if (covid > ncol(self$prior$Y)) {
+          stop(paste0("covid must be less than or equal to the number of observations used for estimation (T = ", ncol(self$prior$Y), "). Please remember that the first p observations are used as lags."))
+        }
+      }
+      
+      hyper  = matrix(self$prior$hyper[, ncol(self$prior$hyper)])
+      init   = .Call(`_bsvarSIGNs_narrow_hyper`, model, hyper)
+      
+      Y_temp = t(self$prior$Y)
+      N      = ncol(Y_temp)
+      p      = self$p
+      K      = nrow(self$prior$X)
+      d      = K - 1 - N * p
+      
+      prior  = self$prior$get_prior()
+      
+      self$prior$covid = covid
+      
+      prior$B    = t(prior$A)
+      prior$Ysoc = t(prior$Ysoc)
+      prior$Xsoc = t(prior$Xsoc)
+      prior$Ysur = t(prior$Ysur)
+      prior$Xsur = t(prior$Xsur)
+      
+      lb = rep(0, length(init))
+      ub = init * 100
+      
+      if (!is.null(covid)) {
+        idx = (length(init) - 3):length(init)
+        lb[idx] = c(1, 1, 1, 0)
+        ub[idx] = c(Inf, Inf, Inf, 1)
+      }
+      
+      result = stats::optim(
+        init,
+        \(x) -.Call(`_bsvarSIGNs_log_posterior_hyper`,
+              .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(x)),
+              model, t(self$prior$Y), t(self$prior$X), prior),
+        method  = 'L-BFGS-B',
+        lower   = lb,
+        upper   = ub,
+        hessian = TRUE
+        )
+
+      mode       = .Call(`_bsvarSIGNs_extend_hyper`, hyper, model, matrix(result$par))
+      variance   = result$hessian
+
+      if (length(init) == 1){
+        variance = 1 / variance
+      } else {
+        e        = eigen(variance)
+        variance = e$vectors %*% diag(as.vector(1 / abs(e$values))) %*% t(e$vectors)
+      }
+      
+      self$prior$hyper = .Call(`_bsvarSIGNs_sample_hyper`, S, burn_in, mode, model,
+             t(self$prior$Y), t(self$prior$X), variance, prior)
+      self$prior$hyper = self$prior$hyper[, -(1:burn_in)]
+    }, # END estimate_hyper
     
     #' @description
     #' Returns the identifying restrictions as the IdentificationBSVARSIGN object.

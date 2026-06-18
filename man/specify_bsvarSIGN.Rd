@@ -33,6 +33,34 @@ spec$get_data_matrices()
 
 
 ## ------------------------------------------------
+## Method `specify_bsvarSIGN$no_dummy_observations`
+## ------------------------------------------------
+
+# specify the model
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+spec$no_dummy_observations() # remove dummy observations
+
+
+## ------------------------------------------------
+## Method `specify_bsvarSIGN$estimate_hyper`
+## ------------------------------------------------
+
+# specify the model and set seed
+set.seed(123)
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+
+# estimate hyper parameters with adaptive Metropolis algorithm
+spec$estimate_hyper(S = 10)
+
+# trace plot
+hyper = t(spec$prior$hyper)[, 4:8]
+colnames(hyper) = paste("psi", 1:5, sep = "")
+plot.ts(hyper)
+
+
+## ------------------------------------------------
 ## Method `specify_bsvarSIGN$get_identification`
 ## ------------------------------------------------
 
@@ -102,6 +130,8 @@ spec$get_starting_values()
 \itemize{
 \item \href{#method-BSVARSIGN-new}{\code{specify_bsvarSIGN$new()}}
 \item \href{#method-BSVARSIGN-get_data_matrices}{\code{specify_bsvarSIGN$get_data_matrices()}}
+\item \href{#method-BSVARSIGN-no_dummy_observations}{\code{specify_bsvarSIGN$no_dummy_observations()}}
+\item \href{#method-BSVARSIGN-estimate_hyper}{\code{specify_bsvarSIGN$estimate_hyper()}}
 \item \href{#method-BSVARSIGN-get_identification}{\code{specify_bsvarSIGN$get_identification()}}
 \item \href{#method-BSVARSIGN-get_prior}{\code{specify_bsvarSIGN$get_prior()}}
 \item \href{#method-BSVARSIGN-get_starting_values}{\code{specify_bsvarSIGN$get_starting_values()}}
@@ -122,7 +152,12 @@ Create a new specification of the Bayesian Structural VAR model with sign and na
   sign_structural,
   max_tries = Inf,
   exogenous = NULL,
-  stationary = rep(FALSE, ncol(data))
+  stationary = rep(FALSE, ncol(data)),
+  hyper_mu = TRUE,
+  hyper_delta = TRUE,
+  hyper_lambda = TRUE,
+  hyper_psi = TRUE,
+  hyper_covid = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -153,6 +188,16 @@ for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
 \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
 otherwise to random walk.}
+
+\item{\code{hyper_mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
+
+\item{\code{hyper_delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
+
+\item{\code{hyper_lambda}}{whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.}
+
+\item{\code{hyper_psi}}{whether to estimate the hyper-parameter of the variances in the Minnesota prior.}
+
+\item{\code{hyper_covid}}{NULL or positive integer indicating the start of the COVID-19 pandemic.}
 }
 \if{html}{\out{</div>}}
 }
@@ -181,6 +226,68 @@ spec = specify_bsvarSIGN$new(
 
 # get the data matrices
 spec$get_data_matrices()
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-BSVARSIGN-no_dummy_observations"></a>}}
+\if{latex}{\out{\hypertarget{method-BSVARSIGN-no_dummy_observations}{}}}
+\subsection{Method \code{no_dummy_observations()}}{
+Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
+(removes the dummy observation prior).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$no_dummy_observations()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify the model
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+spec$no_dummy_observations() # remove dummy observations
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-BSVARSIGN-estimate_hyper"></a>}}
+\if{latex}{\out{\hypertarget{method-BSVARSIGN-estimate_hyper}{}}}
+\subsection{Method \code{estimate_hyper()}}{
+Estimates hyper-parameters with adaptive Metropolis algorithm.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$estimate_hyper(S = 10000, burn_in = S/2)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{S}}{number of MCMC draws.}
+
+\item{\code{burn_in}}{number of burn-in draws.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify the model and set seed
+set.seed(123)
+data(optimism)
+spec = specify_bsvarSIGN$new(optimism, p = 4)
+
+# estimate hyper parameters with adaptive Metropolis algorithm
+spec$estimate_hyper(S = 10)
+
+# trace plot
+hyper = t(spec$prior$hyper)[, 4:8]
+colnames(hyper) = paste("psi", 1:5, sep = "")
+plot.ts(hyper)
 
 }
 \if{html}{\out{</div>}}
