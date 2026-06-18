@@ -313,7 +313,7 @@ spec$get_prior()
 #>     data: NA
 #>     delta.scale: 0.618033988749895
 #>     delta.shape: 2.61803398874989
-#>     estimate_hyper: function (S = 10000, burn_in = S/2, mu = FALSE, delta = FALSE, 
+#>     estimate_hyper: function (S = 10000, burn_in = S/2, mu = TRUE, delta = TRUE, 
 #>     get_prior: function () 
 #>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...
 #>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, 

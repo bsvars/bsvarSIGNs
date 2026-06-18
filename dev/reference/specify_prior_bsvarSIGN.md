@@ -107,6 +107,8 @@ homoskedastic bsvar model.
 
 - [`specify_prior_bsvarSIGN$get_prior()`](#method-PriorBSVARSIGN-get_prior)
 
+- [`specify_prior_bsvarSIGN$no_dummy()`](#method-PriorBSVARSIGN-no_dummy)
+
 - [`specify_prior_bsvarSIGN$estimate_hyper()`](#method-PriorBSVARSIGN-estimate_hyper)
 
 - [`specify_prior_bsvarSIGN$clone()`](#method-PriorBSVARSIGN-clone)
@@ -175,6 +177,23 @@ Returns the elements of the prior specification PriorBSVAR as a `list`.
 
 ------------------------------------------------------------------------
 
+### Method `no_dummy()`
+
+Sets the sum-of-coefficients and single-unit-root dummy observations to
+zero (removes the dummy observation prior).
+
+#### Usage
+
+    specify_prior_bsvarSIGN$no_dummy()
+
+#### Examples
+
+    # a prior for 5-variable example with four lags
+    prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+    prior$no_dummy() # remove dummy observations
+
+------------------------------------------------------------------------
+
 ### Method `estimate_hyper()`
 
 Estimates hyper-parameters with adaptive Metropolis algorithm.
@@ -184,10 +203,10 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
     specify_prior_bsvarSIGN$estimate_hyper(
       S = 10000,
       burn_in = S/2,
-      mu = FALSE,
-      delta = FALSE,
+      mu = TRUE,
+      delta = TRUE,
       lambda = TRUE,
-      psi = FALSE,
+      psi = TRUE,
       covid = NULL
     )
 
@@ -384,6 +403,17 @@ prior$get_prior() # show the prior as list
 #> $hyper_nu_AA
 #> [1] 10
 #> 
+
+
+## ------------------------------------------------
+## Method `specify_prior_bsvarSIGN$no_dummy`
+## ------------------------------------------------
+
+# a prior for 5-variable example with four lags
+prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+#> Error in initialize(...): unused argument (N = 5)
+prior$no_dummy() # remove dummy observations
+#> Error: attempt to apply non-function
 
 
 ## ------------------------------------------------

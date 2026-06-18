@@ -180,6 +180,7 @@ specification  = specify_bsvarSIGN$new(optimism * 100,
                                        sign_irf = sign_irf)
 
 # estimate the model
+specification$prior$no_dummy()
 posterior      = estimate(specification, S = 100)
 
 # compute and plot impulse responses
@@ -214,6 +215,7 @@ specification  = specify_bsvarSIGN$new(monetary       * 100,
                                        sign_narrative = sign_narrative)
 
 # estimate the model
+specification$prior$no_dummy()
 posterior      = estimate(specification, S = 100)
 
 # compute and plot impulse responses
