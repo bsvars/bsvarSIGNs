@@ -37,7 +37,8 @@ prior$get_prior() # show the prior as list
 ## ------------------------------------------------
 
 # a prior for 5-variable example with four lags
-prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 prior$no_dummy() # remove dummy observations
 
 
@@ -201,7 +202,8 @@ Sets the sum-of-coefficients and single-unit-root dummy observations to zero
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{# a prior for 5-variable example with four lags
-prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+data(optimism)
+prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
 prior$no_dummy() # remove dummy observations
 
 }

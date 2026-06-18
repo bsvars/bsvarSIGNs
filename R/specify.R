@@ -391,7 +391,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' 
     #' @examples
     #' # a prior for 5-variable example with four lags
-    #' prior = specify_prior_bsvarSIGN$new(N = 5, p = 4)
+    #' data(optimism)
+    #' prior = specify_prior_bsvarSIGN$new(optimism, p = 4)
     #' prior$no_dummy() # remove dummy observations
     #' 
     no_dummy = function() {
