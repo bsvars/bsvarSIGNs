@@ -586,6 +586,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' @field starting_values an object StartingValuesBSVARSIGN with the starting values.
     starting_values        = list(),
     
+    #' @field num_foreign_vars a non-negative integer specifying the number of foreign variables.
+    num_foreign_vars       = numeric(),
+    
     #' @description
     #' Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
     #' @param data a \code{(T+p)xN} matrix with time series data.
@@ -610,6 +613,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param hyper_lambda whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.
     #' @param hyper_psi whether to estimate the hyper-parameter of the variances in the Minnesota prior.
     #' @param hyper_covid NULL or positive integer indicating the start of the COVID-19 pandemic.
+    #' @param num_foreign_vars a non-negative integer specifying the number of foreign variables for a Small Open Economy (SOE) model. Defaults to 0. Note that foreign variables should be ordered first to make the block lower diagonal structure work. Zero restrictions are not supported when \code{num_foreign_vars > 0}.
     #' @return A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
     initialize = function(
     data,
@@ -624,7 +628,8 @@ specify_bsvarSIGN = R6::R6Class(
     hyper_delta = TRUE,
     hyper_lambda = TRUE,
     hyper_psi = TRUE,
-    hyper_covid = NULL
+    hyper_covid = NULL,
+    num_foreign_vars = 0
     ) {
       stopifnot("Argument p has to be a positive integer." = ((p %% 1) == 0 & p > 0))
       self$p        = p
@@ -659,6 +664,16 @@ specify_bsvarSIGN = R6::R6Class(
         sign_irf = array(sign_irf, dim = c(dim(sign_irf), 1))
       }
       verify_all(N, sign_irf, sign_narrative, sign_structural)
+      
+      if (num_foreign_vars > 0) {
+        zero_irf = sign_irf[, , 1] == 0
+        zero_irf[is.na(zero_irf)] = 0
+        if (sum(zero_irf) > 0) {
+          stop("Zero restrictions are not supported for Small Open Economy (SOE) models (num_foreign_vars > 0).")
+        }
+      }
+      
+      self$num_foreign_vars        = num_foreign_vars
       
       B                            = matrix(FALSE, N, N)
       B[lower.tri(B, diag = TRUE)] = TRUE

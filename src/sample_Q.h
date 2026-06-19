@@ -15,6 +15,7 @@ arma::field<arma::mat> sample_Q(
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const arma::field<arma::mat>& Z,
+    const int&                    Nf,
     const int&                    max_tries
 );
 

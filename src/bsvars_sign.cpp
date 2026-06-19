@@ -24,6 +24,7 @@ Rcpp::List bsvar_sign_cpp(
     const arma::mat&  sign_narrative,     // ANYx6 matrix of signs for historical decomposition
     const arma::mat&  sign_B,             // NxN matrix of signs for B
     const arma::field<arma::mat>& Z,      // a list of zero restrictions
+    const int&        Nf,                 // number of foreign variables for SOE
     const Rcpp::List& prior,              // a list of priors
     const bool        show_progress = true,
     const int         thin = 100,         // introduce thinning
@@ -159,7 +160,7 @@ Rcpp::List bsvar_sign_cpp(
       h_invp     = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
       
       result     = sample_Q(p, Y_scaled, X_scaled, B, h_invp, chol_Sigma, prior, 
-                            sign_irf, sign_narrative, sign_B, Z, 1);
+                            sign_irf, sign_narrative, sign_B, Z, Nf, 1);
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));

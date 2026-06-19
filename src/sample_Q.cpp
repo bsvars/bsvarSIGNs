@@ -44,6 +44,7 @@ arma::field<arma::mat> sample_Q(
     const arma::mat&              sign_narrative,
     const arma::mat&              sign_B,
     const arma::field<arma::mat>& Z,
+    const int&                    Nf,
     const int&                    max_tries
 ) {
   
@@ -68,7 +69,16 @@ arma::field<arma::mat> sample_Q(
     if (has_zero) {
       Q = rzeroQ(Z, irf.slice(0));
     } else {
-      Q = rortho_cpp(N);
+      if (Nf == 0) {
+        Q = rortho_cpp(N);
+      } else {
+        int Nd = N - Nf;
+        mat Qf = rortho_cpp(Nf);
+        mat Qd = rortho_cpp(Nd);
+        Q = arma::zeros(N, N);
+        Q.submat(0, 0, Nf - 1, Nf - 1) = Qf;
+        Q.submat(Nf, Nf, N - 1, N - 1) = Qd;
+      }
     }
     
     shocks = Q.t() * lt_shocks;

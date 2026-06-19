@@ -131,10 +131,11 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) 
   }
   struc               = identification$sign_structural
   struc[is.na(struc)] = 0
+  Nf                  = specification$num_foreign_vars
 
   # estimation
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
-                              sign, narrative, struc, Z, prior, 
+                              sign, narrative, struc, Z, Nf, prior, 
                               show_progress, thin, max_tries)
   
   # specification$starting_values$set_starting_values(qqq$last_draw)
