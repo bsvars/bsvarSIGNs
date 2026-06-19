@@ -177,14 +177,15 @@ sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 # specify the model
 spec     = specify_bsvarSIGN$new(optimism * 100,
                                  p        = 4,
-                                 sign_irf = sign_irf)
+                                 sign_irf = sign_irf,
+                                 mc.cores = parallel::detectCores() - 1)
 spec$no_dummy_observations()
 
 # estimate the model
-post     = estimate(specification, S = 100)
+post     = estimate(spec, S = 100)
 
 # compute and plot impulse responses
-irf      = compute_impulse_responses(posterior, horizon = 40)
+irf      = compute_impulse_responses(post, horizon = 40)
 plot(irf, probability = 0.68)
 ```
 
@@ -212,14 +213,15 @@ sign_narrative = list(
 spec           = specify_bsvarSIGN$new(monetary       * 100,
                                        p              = 12,
                                        sign_irf       = sign_irf,
-                                       sign_narrative = sign_narrative)
+                                       sign_narrative = sign_narrative,
+                                       mc.cores = parallel::detectCores() - 1)
 spec$no_dummy_observations()
 
 # estimate the model
-post           = estimate(specification, S = 100)
+post           = estimate(spec, S = 100)
 
 # compute and plot impulse responses
-irf            = compute_impulse_responses(posterior, horizon = 60)
+irf            = compute_impulse_responses(post, horizon = 60)
 plot(irf, probability = 0.68)
 ```
 
