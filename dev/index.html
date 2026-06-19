@@ -207,8 +207,8 @@
 <span></span>
 <span><span class="co"># + narrative sign restriction: the shock is positive in October 1979</span></span>
 <span><span class="va">sign_narrative</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="reference/specify_narrative.html">specify_narrative</a></span><span class="op">(</span>start <span class="op">=</span> <span class="fl">166</span>, periods <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"S"</span>, sign <span class="op">=</span> <span class="fl">1</span>, shock <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="reference/specify_narrative.html">specify_narrative</a></span><span class="op">(</span>start <span class="op">=</span> <span class="fl">166</span>, periods <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"B"</span>, sign <span class="op">=</span> <span class="fl">1</span>, shock <span class="op">=</span> <span class="fl">1</span>, var <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/specify_narrative.html">specify_narrative</a></span><span class="op">(</span>start <span class="op">=</span> <span class="fl">166</span>, periods <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"S"</span>, sign <span class="op">=</span> <span class="fl">1</span>, shock <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="co"># specify_narrative(start = 166, periods = 1, type = "B", sign = 1, shock = 1, var = 6)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># specify the model</span></span>
@@ -216,7 +216,7 @@
 <span>                                       p              <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>                                       sign_irf       <span class="op">=</span> <span class="va">sign_irf</span>,</span>
 <span>                                       sign_narrative <span class="op">=</span> <span class="va">sign_narrative</span>,</span>
-<span>                                       mc.cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>                                       mc.cores       <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">spec</span><span class="op">$</span><span class="fu">no_dummy_observations</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># estimate the model</span></span>
