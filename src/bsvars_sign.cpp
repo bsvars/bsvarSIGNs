@@ -163,6 +163,7 @@ Rcpp::List bsvar_sign_cpp(
       Q          = result(0);
       shocks     = result(1);
       w          = as_scalar(result(2));
+      n_tries++;
     }
     
     posterior_w(s)            = w;
