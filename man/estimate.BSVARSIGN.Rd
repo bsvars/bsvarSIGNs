@@ -5,7 +5,7 @@
 \title{Bayesian estimation of a Structural Vector Autoregression
 with traditional and narrative sign restrictions via Gibbs sampler}
 \usage{
-\method{estimate}{BSVARSIGN}(specification, S, thin = 1, show_progress = TRUE, mc.cores = 1, ...)
+\method{estimate}{BSVARSIGN}(specification, S, thin = 1, show_progress = TRUE, mc.cores = 1)
 }
 \arguments{
 \item{specification}{an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.}
@@ -17,8 +17,6 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
 
 \item{mc.cores}{number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.}
-
-\item{...}{additional arguments to be passed to or from other methods.}
 }
 \value{
 An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:

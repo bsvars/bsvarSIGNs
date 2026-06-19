@@ -40,7 +40,6 @@
 #' @param thin a positive integer, specifying the frequency of MCMC output thinning
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
 #' @param mc.cores number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.
-#' @param ... additional arguments to be passed to or from other methods.
 #' 
 #' @return An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:
 #' 
@@ -92,7 +91,7 @@
 #' posterior      = estimate(specification, S = 10)
 #' 
 #' @export
-estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE, mc.cores = 1, ...) {
+estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE, mc.cores = 1) {
   
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
@@ -138,7 +137,7 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE, 
   # estimation
   mc.cores = max(1, mc.cores)
   if (mc.cores > 1) {
-    return(estimate_par(specification, S, thin, show_progress, mc.cores, ...))
+    return(estimate_par(specification, S, thin, show_progress, mc.cores))
   }
 
   qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
@@ -153,7 +152,7 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE, 
 }
 
 # Internal function for parallel estimation
-estimate_par = function(specification, S, thin = 1, show_progress = TRUE, mc.cores, ...) {
+estimate_par = function(specification, S, thin = 1, show_progress = TRUE, mc.cores) {
   
   # get the inputs to estimation
   prior               = specification$prior$get_prior()

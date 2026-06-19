@@ -9,7 +9,7 @@
 #' trajcetories of (some of the) variables.
 #' 
 #' @method forecast PosteriorBSVARSIGN
-#' @param object posterior estimation outcome - an object of class 
+#' @param posterior posterior estimation outcome - an object of class 
 #' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
 #' @param horizon a positive integer, specifying the forecasting horizon.
 #' @param exogenous_forecast a matrix of dimension \code{horizon x d} containing 
@@ -18,7 +18,6 @@
 #' for selected variables. It should only contain \code{numeric} or \code{NA} 
 #' values. The entries with \code{NA} values correspond to the values that are 
 #' forecasted conditionally on the realisations provided as \code{numeric} values.
-#' @param ... additional arguments to be passed to or from other methods.
 #' 
 #' @return A list of class \code{Forecasts} containing the
 #' draws from the predictive density and data. The output list includes element:
@@ -76,13 +75,11 @@
 #' 
 #' @export
 forecast.PosteriorBSVARSIGN = function(
-    object, 
+    posterior, 
     horizon = 1, 
     exogenous_forecast = NULL,
-    conditional_forecast = NULL,
-    ...
+    conditional_forecast = NULL
 ) {
-  posterior = object
   stopifnot("forecast: specify horizon as integer." = horizon %% 1 == 0)
   
   posterior_Sigma = posterior$posterior$Sigma
