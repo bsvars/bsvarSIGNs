@@ -121,15 +121,13 @@ double log_ml(
 ) {
   
   int T = Y.n_rows;
-  int N = Y.n_cols;
-  
-  double tol       = 1e-10;
+  int    N         = Y.n_cols;
   double log_ml    = 0;
   
   mat    inv_Omega = diagmat(1 / Omega.diag());
   mat    XX        = X.t() * X + inv_Omega;
   
-  if (!Omega.is_sympd(tol) or !Psi.is_sympd(tol) or !XX.is_sympd(tol)) {
+  if (!Omega.is_sympd() or !Psi.is_sympd() or !XX.is_sympd()) {
     return -1e10;
   }
   
