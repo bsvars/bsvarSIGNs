@@ -61,6 +61,10 @@
 <dd><p>an object StartingValuesBSVARSIGN with the starting values.</p></dd>
 
 
+<dt><code>num_foreign_vars</code></dt>
+<dd><p>a non-negative integer specifying the number of foreign variables.</p></dd>
+
+
 </dl><p></p></div>
     </div>
     <div class="section level2">
@@ -94,7 +98,8 @@
 <span>  hyper_delta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_lambda <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_psi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  hyper_covid <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  hyper_covid <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  num_foreign_vars <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -159,6 +164,10 @@ otherwise to random walk.</p></dd>
 
 <dt><code>hyper_covid</code></dt>
 <dd><p>NULL or positive integer indicating the start of the COVID-19 pandemic.</p></dd>
+
+
+<dt><code>num_foreign_vars</code></dt>
+<dd><p>a non-negative integer specifying the number of foreign variables for a Small Open Economy (SOE) model. Defaults to 0. Note that foreign variables should be ordered first to make the block lower diagonal structure work. Zero restrictions are not supported when <code>num_foreign_vars &gt; 0</code>.</p></dd>
 
 
 </dl><p></p></div>

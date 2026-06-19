@@ -31,6 +31,10 @@ Structural VAR model with sign and narrative restrictions.
 
   an object StartingValuesBSVARSIGN with the starting values.
 
+- `num_foreign_vars`:
+
+  a non-negative integer specifying the number of foreign variables.
+
 ## Methods
 
 ### Public methods
@@ -73,7 +77,8 @@ sign and narrative restrictions BSVARSIGN.
       hyper_delta = TRUE,
       hyper_lambda = TRUE,
       hyper_psi = TRUE,
-      hyper_covid = NULL
+      hyper_covid = NULL,
+      num_foreign_vars = 0
     )
 
 #### Arguments
@@ -142,6 +147,14 @@ sign and narrative restrictions BSVARSIGN.
 
   NULL or positive integer indicating the start of the COVID-19
   pandemic.
+
+- `num_foreign_vars`:
+
+  a non-negative integer specifying the number of foreign variables for
+  a Small Open Economy (SOE) model. Defaults to 0. Note that foreign
+  variables should be ordered first to make the block lower diagonal
+  structure work. Zero restrictions are not supported when
+  `num_foreign_vars > 0`.
 
 #### Returns
 
