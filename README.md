@@ -220,8 +220,8 @@ sign_irf       = array(sign_irf, dim = c(6, 6, 6))
 
 # + narrative sign restriction: the shock is positive in October 1979
 sign_narrative = list(
-  specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1),
-  specify_narrative(start = 166, periods = 1, type = "B", sign = 1, shock = 1, var = 6)
+  specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1)
+  # specify_narrative(start = 166, periods = 1, type = "B", sign = 1, shock = 1, var = 6)
 )
 
 # specify the model
@@ -229,7 +229,7 @@ spec           = specify_bsvarSIGN$new(monetary       * 100,
                                        p              = 12,
                                        sign_irf       = sign_irf,
                                        sign_narrative = sign_narrative,
-                                       mc.cores = parallel::detectCores() - 1)
+                                       mc.cores       = parallel::detectCores() - 1)
 spec$no_dummy_observations()
 
 # estimate the model
