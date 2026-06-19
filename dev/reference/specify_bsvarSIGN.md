@@ -35,6 +35,10 @@ Structural VAR model with sign and narrative restrictions.
 
   a non-negative integer specifying the number of foreign variables.
 
+- `mc.cores`:
+
+  number of cores to use for parallel computing.
+
 ## Methods
 
 ### Public methods
@@ -78,7 +82,8 @@ sign and narrative restrictions BSVARSIGN.
       hyper_lambda = TRUE,
       hyper_psi = TRUE,
       hyper_covid = NULL,
-      num_foreign_vars = 0
+      num_foreign_vars = 0,
+      mc.cores = 1
     )
 
 #### Arguments
@@ -155,6 +160,11 @@ sign and narrative restrictions BSVARSIGN.
   variables should be ordered first to make the block lower diagonal
   structure work. Zero restrictions are not supported when
   `num_foreign_vars > 0`.
+
+- `mc.cores`:
+
+  number of cores to use for parallel computing. Default is 1. We
+  recommend setting it to `parallel::detectCores() - 1`.
 
 #### Returns
 
