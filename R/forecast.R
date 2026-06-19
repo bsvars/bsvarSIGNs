@@ -80,6 +80,7 @@ forecast.PosteriorBSVARSIGN = function(
     exogenous_forecast = NULL,
     conditional_forecast = NULL
 ) {
+  stopifnot("forecast: specify horizon as integer." = horizon %% 1 == 0)
   
   posterior_Sigma = posterior$posterior$Sigma
   posterior_A     = posterior$posterior$A

@@ -46,6 +46,27 @@ namespace bsvarSIGNs {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
+    inline Rcpp::List bsvar_sign_par_cpp(const int& p, const arma::mat& Y, const arma::mat& X, const arma::cube& sign_irf, const arma::mat& sign_narrative, const arma::mat& sign_B, const arma::field<arma::mat>& Z, const int& Nf, const Rcpp::List& prior, const int& max_tries = 10000) {
+        typedef SEXP(*Ptr_bsvar_sign_par_cpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_bsvar_sign_par_cpp p_bsvar_sign_par_cpp = NULL;
+        if (p_bsvar_sign_par_cpp == NULL) {
+            validateSignature("Rcpp::List(*bsvar_sign_par_cpp)(const int&,const arma::mat&,const arma::mat&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&,const Rcpp::List&,const int&)");
+            p_bsvar_sign_par_cpp = (Ptr_bsvar_sign_par_cpp)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_bsvar_sign_par_cpp");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_bsvar_sign_par_cpp(Shield<SEXP>(Rcpp::wrap(p)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(sign_irf)), Shield<SEXP>(Rcpp::wrap(sign_narrative)), Shield<SEXP>(Rcpp::wrap(sign_B)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(Nf)), Shield<SEXP>(Rcpp::wrap(prior)), Shield<SEXP>(Rcpp::wrap(max_tries)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
+    }
+
     inline arma::cube bsvarSIGNs_structural_shocks(arma::cube& posterior_B, arma::cube& posterior_A, arma::mat& Y, arma::mat& X) {
         typedef SEXP(*Ptr_bsvarSIGNs_structural_shocks)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_bsvarSIGNs_structural_shocks p_bsvarSIGNs_structural_shocks = NULL;

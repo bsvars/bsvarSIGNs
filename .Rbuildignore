@@ -14,3 +14,5 @@
 ^Meta$
 ^vignettes/paper/bsvars\.Rmd$
 ^vignettes/paper/bsvars\.knit\.md$
+
+^\.vscode$
