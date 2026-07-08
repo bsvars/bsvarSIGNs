@@ -121,16 +121,16 @@ Rcpp::List bsvar_sign_cpp(
       double s2 = hyper(N + 5);
       double rho = hyper(N + 6);
       
-      vec s = ones<vec>(T);
-      if (c_idx < T) s(c_idx) = s0;
-      if (c_idx + 1 < T) s(c_idx + 1) = s1;
-      if (c_idx + 2 < T) s(c_idx + 2) = s2;
+      vec scale = ones<vec>(T);
+      if (c_idx < T) scale(c_idx) = s0;
+      if (c_idx + 1 < T) scale(c_idx + 1) = s1;
+      if (c_idx + 2 < T) scale(c_idx + 2) = s2;
       for (int t = c_idx + 3; t < T; t++) {
-        s(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
+        scale(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
       }
       
-      Y_scaled.each_col() /= s;
-      X_scaled.each_col() /= s;
+      Y_scaled.each_col() /= scale;
+      X_scaled.each_col() /= scale;
     }
     
     Yplus        = join_vert(Ystar, Y_scaled);

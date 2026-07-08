@@ -361,25 +361,28 @@ RcppExport SEXP _bsvarSIGNs_bsvarSIGNs_fevd(SEXP posterior_irfSEXP) {
     return rcpp_result_gen;
 }
 // forecast_bsvarSIGNs
-arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon);
-static SEXP _bsvarSIGNs_forecast_bsvarSIGNs_try(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP horizonSEXP) {
+Rcpp::List forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::mat& posterior_hyper, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& covid, const int& T, const int& horizon);
+static SEXP _bsvarSIGNs_forecast_bsvarSIGNs_try(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP posterior_hyperSEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP covidSEXP, SEXP TSEXP, SEXP horizonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< arma::cube& >::type posterior_Sigma(posterior_SigmaSEXP);
     Rcpp::traits::input_parameter< arma::cube& >::type posterior_A(posterior_ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type posterior_hyper(posterior_hyperSEXP);
     Rcpp::traits::input_parameter< arma::vec& >::type X_T(X_TSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type exogenous_forecast(exogenous_forecastSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type cond_forecast(cond_forecastSEXP);
+    Rcpp::traits::input_parameter< const int& >::type covid(covidSEXP);
+    Rcpp::traits::input_parameter< const int& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const int& >::type horizon(horizonSEXP);
-    rcpp_result_gen = Rcpp::wrap(forecast_bsvarSIGNs(posterior_Sigma, posterior_A, X_T, exogenous_forecast, cond_forecast, horizon));
+    rcpp_result_gen = Rcpp::wrap(forecast_bsvarSIGNs(posterior_Sigma, posterior_A, posterior_hyper, X_T, exogenous_forecast, cond_forecast, covid, T, horizon));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_forecast_bsvarSIGNs(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP horizonSEXP) {
+RcppExport SEXP _bsvarSIGNs_forecast_bsvarSIGNs(SEXP posterior_SigmaSEXP, SEXP posterior_ASEXP, SEXP posterior_hyperSEXP, SEXP X_TSEXP, SEXP exogenous_forecastSEXP, SEXP cond_forecastSEXP, SEXP covidSEXP, SEXP TSEXP, SEXP horizonSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_forecast_bsvarSIGNs_try(posterior_SigmaSEXP, posterior_ASEXP, X_TSEXP, exogenous_forecastSEXP, cond_forecastSEXP, horizonSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_forecast_bsvarSIGNs_try(posterior_SigmaSEXP, posterior_ASEXP, posterior_hyperSEXP, X_TSEXP, exogenous_forecastSEXP, cond_forecastSEXP, covidSEXP, TSEXP, horizonSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1437,7 +1440,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_hd)(arma::field<arma::cube>&,arma::cube&,const bool)");
         signatures.insert("arma::mat(*hd1_cpp)(const int&,const int&,const int&,const arma::mat&,const arma::cube&)");
         signatures.insert("arma::field<arma::cube>(*bsvarSIGNs_fevd)(arma::field<arma::cube>&)");
-        signatures.insert("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
+        signatures.insert("Rcpp::List(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::mat&,arma::vec&,arma::mat&,arma::mat&,const int&,const int&,const int&)");
         signatures.insert("arma::mat(*metropolis)(const int,const int,arma::vec,arma::mat,Rcpp::Function)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
         signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
@@ -1524,7 +1527,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_bsvarSIGNs_hd", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_hd, 3},
     {"_bsvarSIGNs_hd1_cpp", (DL_FUNC) &_bsvarSIGNs_hd1_cpp, 5},
     {"_bsvarSIGNs_bsvarSIGNs_fevd", (DL_FUNC) &_bsvarSIGNs_bsvarSIGNs_fevd, 1},
-    {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 6},
+    {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 9},
     {"_bsvarSIGNs_metropolis_R", (DL_FUNC) &_bsvarSIGNs_metropolis_R, 5},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
     {"_bsvarSIGNs_weight_narrative", (DL_FUNC) &_bsvarSIGNs_weight_narrative, 3},

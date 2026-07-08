@@ -214,17 +214,17 @@ namespace bsvarSIGNs {
         return Rcpp::as<arma::field<arma::cube> >(rcpp_result_gen);
     }
 
-    inline arma::cube forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& horizon) {
-        typedef SEXP(*Ptr_forecast_bsvarSIGNs)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::List forecast_bsvarSIGNs(arma::cube& posterior_Sigma, arma::cube& posterior_A, arma::mat& posterior_hyper, arma::vec& X_T, arma::mat& exogenous_forecast, arma::mat& cond_forecast, const int& covid, const int& T, const int& horizon) {
+        typedef SEXP(*Ptr_forecast_bsvarSIGNs)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_forecast_bsvarSIGNs p_forecast_bsvarSIGNs = NULL;
         if (p_forecast_bsvarSIGNs == NULL) {
-            validateSignature("arma::cube(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::vec&,arma::mat&,arma::mat&,const int&)");
+            validateSignature("Rcpp::List(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::mat&,arma::vec&,arma::mat&,arma::mat&,const int&,const int&,const int&)");
             p_forecast_bsvarSIGNs = (Ptr_forecast_bsvarSIGNs)R_GetCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_forecast_bsvarSIGNs(Shield<SEXP>(Rcpp::wrap(posterior_Sigma)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(X_T)), Shield<SEXP>(Rcpp::wrap(exogenous_forecast)), Shield<SEXP>(Rcpp::wrap(cond_forecast)), Shield<SEXP>(Rcpp::wrap(horizon)));
+            rcpp_result_gen = p_forecast_bsvarSIGNs(Shield<SEXP>(Rcpp::wrap(posterior_Sigma)), Shield<SEXP>(Rcpp::wrap(posterior_A)), Shield<SEXP>(Rcpp::wrap(posterior_hyper)), Shield<SEXP>(Rcpp::wrap(X_T)), Shield<SEXP>(Rcpp::wrap(exogenous_forecast)), Shield<SEXP>(Rcpp::wrap(cond_forecast)), Shield<SEXP>(Rcpp::wrap(covid)), Shield<SEXP>(Rcpp::wrap(T)), Shield<SEXP>(Rcpp::wrap(horizon)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -232,7 +232,7 @@ namespace bsvarSIGNs {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::cube >(rcpp_result_gen);
+        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
     inline arma::mat metropolis(const int T, const int t0, arma::vec x, arma::mat Sigma, Rcpp::Function log_target) {

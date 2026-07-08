@@ -87,6 +87,9 @@ forecast.PosteriorBSVARSIGN = function(
   T               = ncol(posterior$last_draw$data_matrices$X)
   X_T             = posterior$last_draw$data_matrices$X[,T]
   Y               = posterior$last_draw$data_matrices$Y
+  posterior_hyper = posterior$posterior$hyper
+  covid           = posterior$last_draw$prior$covid
+  covid           = ifelse(is.null(covid), -1, covid)
   
   N               = nrow(posterior_Sigma)
   K               = length(X_T)
@@ -123,19 +126,23 @@ forecast.PosteriorBSVARSIGN = function(
   }
   
   # perform forecasting
-  for_y       = .Call(`_bsvarSIGNs_forecast_bsvarSIGNs`, 
+  fore        = .Call(`_bsvarSIGNs_forecast_bsvarSIGNs`, 
                       posterior_Sigma,
                       posterior_A,
+                      posterior_hyper,
                       X_T,
                       exogenous_forecast,
                       conditional_forecast,
+                      covid,
+                      T,
                       horizon
   ) # END .Call
   
-  fore            = list()
-  fore$forecasts  = for_y
-  fore$Y          = Y
-  class(fore)     = "Forecasts"
+  forecast_covariance                         = array(NA, c(N, N, horizon, S))
+  for (s in 1:S) forecast_covariance[, , , s] = fore$forecast_cov[s, ][[1]]
+  fore$forecast_covariance                    = forecast_covariance
+  fore$Y                                      = Y
+  class(fore)                                 = "Forecasts"
   
   return(fore)
 } # END forecast.PosteriorBSVARSIGN
