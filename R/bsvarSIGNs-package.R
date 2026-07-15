@@ -106,7 +106,8 @@
 #' @useDynLib bsvarSIGNs, .registration = TRUE
 #' @importFrom R6 R6Class
 #' @importFrom Rcpp sourceCpp
-#' @importFrom bsvars estimate forecast compute_impulse_responses compute_fitted_values compute_historical_decompositions compute_structural_shocks compute_variance_decompositions
+#' @importFrom bsvars estimate compute_impulse_responses compute_fitted_values compute_historical_decompositions compute_structural_shocks compute_variance_decompositions
+#' @importFrom generics forecast
 #' @import bsvars
 #' @import RcppArmadillo
 #' @import RcppProgress
@@ -124,6 +125,8 @@
 #'  Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 <doi:10.1162/REST_a_00483>.
 #'  
 #'  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
+#'  
+#'  Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, <doi:10.48550/arXiv.2501.16711>.
 #'  
 #'  Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.1, <doi:10.32614/CRAN.package.bsvars>.
 #'  
