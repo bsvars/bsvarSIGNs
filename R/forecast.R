@@ -1,4 +1,7 @@
 
+#' @export
+generics::forecast
+
 #' @title Forecasting using Structural Vector Autoregression
 #'
 #' @description Samples from the joint predictive density of all of the dependent 
@@ -9,7 +12,7 @@
 #' trajcetories of (some of the) variables.
 #' 
 #' @method forecast PosteriorBSVARSIGN
-#' @param posterior posterior estimation outcome - an object of class 
+#' @param object posterior estimation outcome - an object of class 
 #' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
 #' @param horizon a positive integer, specifying the forecasting horizon.
 #' @param exogenous_forecast a matrix of dimension \code{horizon x d} containing 
@@ -18,6 +21,7 @@
 #' for selected variables. It should only contain \code{numeric} or \code{NA} 
 #' values. The entries with \code{NA} values correspond to the values that are 
 #' forecasted conditionally on the realisations provided as \code{numeric} values.
+#' @param ... Not used here.
 #' 
 #' @return A list of class \code{Forecasts} containing the
 #' draws from the predictive density and data. The output list includes element:
@@ -32,12 +36,6 @@
 #' @author Tomasz Woźniak \email{wozniak.tom@pm.me} and Xiaolei Wang \email{adamwang15@gmail.com}
 #' 
 #' @examples
-#' # upload data
-#' data(optimism)
-#' 
-#' # specify the model and set seed
-#' set.seed(123)
-#' 
 #' # + no effect on productivity (zero restriction)
 #' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
@@ -51,7 +49,6 @@
 #' 
 #' # workflow with the pipe |>
 #' ############################################################
-#' set.seed(123)
 #' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
 #'   estimate(S = 20) |> 
@@ -67,7 +64,6 @@
 #' 
 #' # workflow with the pipe |>
 #' ############################################################
-#' set.seed(123)
 #' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
 #'   estimate(S = 10) |> 
@@ -75,25 +71,26 @@
 #' 
 #' @export
 forecast.PosteriorBSVARSIGN = function(
-    posterior, 
+    object, 
     horizon = 1, 
     exogenous_forecast = NULL,
-    conditional_forecast = NULL
+    conditional_forecast = NULL,
+    ...
 ) {
   stopifnot("forecast: specify horizon as integer." = horizon %% 1 == 0)
   
-  posterior_Sigma = posterior$posterior$Sigma
-  posterior_A     = posterior$posterior$A
-  T               = ncol(posterior$last_draw$data_matrices$X)
-  X_T             = posterior$last_draw$data_matrices$X[,T]
-  Y               = posterior$last_draw$data_matrices$Y
-  posterior_hyper = posterior$posterior$hyper
-  covid           = posterior$last_draw$prior$covid
+  posterior_Sigma = object$posterior$Sigma
+  posterior_A     = object$posterior$A
+  T               = ncol(object$last_draw$data_matrices$X)
+  X_T             = object$last_draw$data_matrices$X[,T]
+  Y               = object$last_draw$data_matrices$Y
+  posterior_hyper = object$posterior$hyper
+  covid           = object$last_draw$prior$covid
   covid           = ifelse(is.null(covid), -1, covid)
   
   N               = nrow(posterior_Sigma)
   K               = length(X_T)
-  d               = K - N * posterior$last_draw$p - 1
+  d               = K - N * object$last_draw$p - 1
   S               = dim(posterior_Sigma)[3]
   
   # prepare forecasting with exogenous variables
