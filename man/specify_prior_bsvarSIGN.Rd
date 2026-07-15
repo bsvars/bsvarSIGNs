@@ -14,7 +14,7 @@ prior$A  # show autoregressive prior mean
 
 
 ## ------------------------------------------------
-## Method `specify_prior_bsvarSIGN$new`
+## Method `PriorBSVARSIGN$new()`
 ## ------------------------------------------------
 
 # a prior for 5-variable example with one lag and stationary data
@@ -24,7 +24,7 @@ prior$B # show autoregressive prior mean
 
 
 ## ------------------------------------------------
-## Method `specify_prior_bsvarSIGN$get_prior`
+## Method `PriorBSVARSIGN$get_prior()`
 ## ------------------------------------------------
 
 # a prior for 5-variable example with four lags
@@ -33,147 +33,144 @@ prior$get_prior() # show the prior as list
 
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{p}}{a positive integer - the number of lags.}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{p}}{a positive integer - the number of lags.}
 
-\item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.}
+    \item{\code{hyper}}{a \code{(N+3)xS} matrix of hyper-parameters \eqn{\mu, \delta, \lambda, \psi}.}
 
-\item{\code{A}}{a \code{NxK} normal prior mean matrix for the autoregressive 
+    \item{\code{A}}{a \code{NxK} normal prior mean matrix for the autoregressive 
 parameters.}
 
-\item{\code{V}}{a \code{KxK} matrix determining  the normal prior column-specific 
+    \item{\code{V}}{a \code{KxK} matrix determining  the normal prior column-specific 
 covariance for the autoregressive parameters.}
 
-\item{\code{S}}{an \code{NxN} matrix determining the inverted-Wishart prior scale 
+    \item{\code{S}}{an \code{NxN} matrix determining the inverted-Wishart prior scale 
 of error terms covariance matrix.}
 
-\item{\code{nu}}{a positive scalar greater than \code{N+1} - the shape of the 
+    \item{\code{nu}}{a positive scalar greater than \code{N+1} - the shape of the 
 inverted-Wishart prior for error terms covariance matrix.}
 
-\item{\code{data}}{an \code{TxN} matrix of observations.}
+    \item{\code{data}}{an \code{TxN} matrix of observations.}
 
-\item{\code{Y}}{an \code{NxT} matrix of dependent variables.}
+    \item{\code{Y}}{an \code{NxT} matrix of dependent variables.}
 
-\item{\code{X}}{an \code{KxT} matrix of independent variables.}
+    \item{\code{X}}{an \code{KxT} matrix of independent variables.}
 
-\item{\code{Ysoc}}{an \code{NxN} matrix with the sum-of-coefficients dummy observations.}
+    \item{\code{Ysoc}}{an \code{NxN} matrix with the sum-of-coefficients dummy observations.}
 
-\item{\code{Xsoc}}{an \code{KxN} matrix with the sum-of-coefficients dummy observations.}
+    \item{\code{Xsoc}}{an \code{KxN} matrix with the sum-of-coefficients dummy observations.}
 
-\item{\code{Ysur}}{an \code{NxN} matrix with the single-unit-root dummy observations.}
+    \item{\code{Ysur}}{an \code{NxN} matrix with the single-unit-root dummy observations.}
 
-\item{\code{Xsur}}{an \code{KxN} matrix with the single-unit-root dummy observations.}
+    \item{\code{Xsur}}{an \code{KxN} matrix with the single-unit-root dummy observations.}
 
-\item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
+    \item{\code{mu.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
-\item{\code{mu.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
+    \item{\code{mu.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\mu}.}
 
-\item{\code{delta.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
+    \item{\code{delta.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
 
-\item{\code{delta.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
+    \item{\code{delta.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\delta}.}
 
-\item{\code{lambda.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
+    \item{\code{lambda.scale}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
 
-\item{\code{lambda.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
+    \item{\code{lambda.shape}}{a positive scalar - the shape of the gamma prior for \eqn{\lambda}.}
 
-\item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
+    \item{\code{psi.scale}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
 
-\item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
+    \item{\code{psi.shape}}{a positive scalar - the shape of the inverted gamma prior for \eqn{\psi}.}
 
-\item{\code{covid}}{NULL or a positive integer indicating the start of the COVID-19 pandemic.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{covid}}{NULL or a positive integer indicating the start of the COVID-19 pandemic.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-PriorBSVARSIGN-new}{\code{specify_prior_bsvarSIGN$new()}}
-\item \href{#method-PriorBSVARSIGN-get_prior}{\code{specify_prior_bsvarSIGN$get_prior()}}
-\item \href{#method-PriorBSVARSIGN-clone}{\code{specify_prior_bsvarSIGN$clone()}}
-}
+  \itemize{
+    \item \href{#method-PriorBSVARSIGN-initialize}{\code{PriorBSVARSIGN$new()}}
+    \item \href{#method-PriorBSVARSIGN-get_prior}{\code{PriorBSVARSIGN$get_prior()}}
+    \item \href{#method-PriorBSVARSIGN-clone}{\code{PriorBSVARSIGN$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PriorBSVARSIGN-new"></a>}}
-\if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-new}{}}}
-\subsection{Method \code{new()}}{
-Create a new prior specification PriorBSVAR.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$new(
+\if{html}{\out{<a id="method-PriorBSVARSIGN-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-initialize}{}}}
+\subsection{\code{PriorBSVARSIGN$new()}}{
+  Create a new prior specification PriorBSVAR.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PriorBSVARSIGN$new(
   data,
   p,
   exogenous = NULL,
   stationary = rep(FALSE, ncol(data))
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{the \code{TxN} data matrix of observations.}
-
-\item{\code{p}}{a positive integer - the autoregressive lag order of the SVAR model.}
-
-\item{\code{exogenous}}{a \code{Txd} matrix of exogenous variables.}
-
-\item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets 
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{data}}{the \code{TxN} data matrix of observations.}
+      \item{\code{p}}{a positive integer - the autoregressive lag order of the SVAR model.}
+      \item{\code{exogenous}}{a \code{Txd} matrix of exogenous variables.}
+      \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets 
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
 otherwise to random walk.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new prior specification PriorBSVARSIGN.
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 5-variable example with one lag and stationary data
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new prior specification PriorBSVARSIGN.
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{# a prior for 5-variable example with one lag and stationary data
 data(optimism)
 prior = specify_prior_bsvarSIGN$new(optimism, p = 1)
 prior$B # show autoregressive prior mean
-
 }
-\if{html}{\out{</div>}}
-
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PriorBSVARSIGN-get_prior"></a>}}
 \if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-get_prior}{}}}
-\subsection{Method \code{get_prior()}}{
-Returns the elements of the prior specification PriorBSVAR as a \code{list}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$get_prior()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{# a prior for 5-variable example with four lags
+\subsection{\code{PriorBSVARSIGN$get_prior()}}{
+  Returns the elements of the prior specification PriorBSVAR as a \code{list}.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PriorBSVARSIGN$get_prior()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{# a prior for 5-variable example with four lags
 prior = specify_prior_bsvar$new(N = 5, p = 4)
 prior$get_prior() # show the prior as list
-
 }
-\if{html}{\out{</div>}}
-
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PriorBSVARSIGN-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-PriorBSVARSIGN-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_prior_bsvarSIGN$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{PriorBSVARSIGN$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PriorBSVARSIGN$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

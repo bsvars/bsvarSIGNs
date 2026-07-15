@@ -18,133 +18,133 @@ specify_identification_bsvarSIGN$new(N = 5, sign_irf = sign_irf)
 
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{VB}}{a list of \code{N} matrices determining the unrestricted elements of matrix \eqn{B}.}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{VB}}{a list of \code{N} matrices determining the unrestricted elements of matrix \eqn{B}.}
 
-\item{\code{sign_irf}}{a \code{NxNxH} array of sign restrictions on the impulse response functions.}
+    \item{\code{sign_irf}}{a \code{NxNxH} array of sign restrictions on the impulse response functions.}
 
-\item{\code{sign_narrative}}{a \code{ANYx6} matrix of narrative sign restrictions.}
+    \item{\code{sign_narrative}}{a \code{ANYx6} matrix of narrative sign restrictions.}
 
-\item{\code{sign_structural}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
+    \item{\code{sign_structural}}{a \code{NxN} matrix of sign restrictions on contemporaneous relations.}
 
-\item{\code{max_tries}}{a positive integer with the maximum number of iterations 
+    \item{\code{max_tries}}{a positive integer with the maximum number of iterations 
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
-}
-\if{html}{\out{</div>}}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-IdentificationBSVARSIGN-new}{\code{specify_identification_bsvarSIGN$new()}}
-\item \href{#method-IdentificationBSVARSIGN-get_identification}{\code{specify_identification_bsvarSIGN$get_identification()}}
-\item \href{#method-IdentificationBSVARSIGN-set_identification}{\code{specify_identification_bsvarSIGN$set_identification()}}
-\item \href{#method-IdentificationBSVARSIGN-clone}{\code{specify_identification_bsvarSIGN$clone()}}
-}
+  \itemize{
+    \item \href{#method-IdentificationBSVARSIGN-initialize}{\code{IdentificationBSVARSIGN$new()}}
+    \item \href{#method-IdentificationBSVARSIGN-get_identification}{\code{IdentificationBSVARSIGN$get_identification()}}
+    \item \href{#method-IdentificationBSVARSIGN-set_identification}{\code{IdentificationBSVARSIGN$set_identification()}}
+    \item \href{#method-IdentificationBSVARSIGN-clone}{\code{IdentificationBSVARSIGN$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IdentificationBSVARSIGN-new"></a>}}
-\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-new}{}}}
-\subsection{Method \code{new()}}{
-Create new identifying restrictions IdentificationBSVARSIGN.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$new(
+\if{html}{\out{<a id="method-IdentificationBSVARSIGN-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-initialize}{}}}
+\subsection{\code{IdentificationBSVARSIGN$new()}}{
+  Create new identifying restrictions IdentificationBSVARSIGN.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{IdentificationBSVARSIGN$new(
   N,
   sign_irf,
   sign_narrative,
   sign_structural,
   max_tries = Inf
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{N}}{a positive integer - the number of dependent variables in the model.}
-
-\item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
+      \item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
 on the impulse response functions, ±1 for positive/negative sign restriction
 0 for zero restrictions and NA for no restrictions,
 the \code{h}-th slice \code{NxN} matrix contains the
 restrictions on the \code{h-1} horizon.}
-
-\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
-
-\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+      \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
+      \item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
-
-\item{\code{max_tries}}{a positive integer with the maximum number of iterations
+      \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Identifying restrictions IdentificationBSVARSIGN.
+  }
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Identifying restrictions IdentificationBSVARSIGN.
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IdentificationBSVARSIGN-get_identification"></a>}}
 \if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-get_identification}{}}}
-\subsection{Method \code{get_identification()}}{
-Returns the elements of the identification pattern IdentificationBSVARSIGN as a \code{list}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$get_identification()}\if{html}{\out{</div>}}
+\subsection{\code{IdentificationBSVARSIGN$get_identification()}}{
+  Returns the elements of the identification pattern IdentificationBSVARSIGN as a \code{list}.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{IdentificationBSVARSIGN$get_identification()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IdentificationBSVARSIGN-set_identification"></a>}}
 \if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-set_identification}{}}}
-\subsection{Method \code{set_identification()}}{
-Set new starting values StartingValuesBSVARSIGN.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$set_identification(
+\subsection{\code{IdentificationBSVARSIGN$set_identification()}}{
+  Set new starting values StartingValuesBSVARSIGN.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{IdentificationBSVARSIGN$set_identification(
   N,
   sign_irf,
   sign_narrative,
   sign_structural
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{N}}{a positive integer - the number of dependent variables in the model.}
-
-\item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{N}}{a positive integer - the number of dependent variables in the model.}
+      \item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
 on the impulse response functions, ±1 for positive/negative sign restriction
 0 for zero restrictions and NA for no restrictions,
 the \code{h}-th slice \code{NxN} matrix contains the
 restrictions on the \code{h-1} horizon.}
-
-\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
-
-\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+      \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
+      \item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
-
-\item{\code{max_tries}}{a positive integer with the maximum number of iterations
+      \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IdentificationBSVARSIGN-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-IdentificationBSVARSIGN-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_identification_bsvarSIGN$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{IdentificationBSVARSIGN$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{IdentificationBSVARSIGN$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

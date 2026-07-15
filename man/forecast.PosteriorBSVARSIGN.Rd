@@ -5,14 +5,15 @@
 \title{Forecasting using Structural Vector Autoregression}
 \usage{
 \method{forecast}{PosteriorBSVARSIGN}(
-  posterior,
+  object,
   horizon = 1,
   exogenous_forecast = NULL,
-  conditional_forecast = NULL
+  conditional_forecast = NULL,
+  ...
 )
 }
 \arguments{
-\item{posterior}{posterior estimation outcome - an object of class 
+\item{object}{posterior estimation outcome - an object of class 
 \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.}
 
 \item{horizon}{a positive integer, specifying the forecasting horizon.}
@@ -24,6 +25,8 @@ forecasted values of the exogenous variables.}
 for selected variables. It should only contain \code{numeric} or \code{NA} 
 values. The entries with \code{NA} values correspond to the values that are 
 forecasted conditionally on the realisations provided as \code{numeric} values.}
+
+\item{...}{Not used here.}
 }
 \value{
 A list of class \code{Forecasts} containing the
@@ -43,12 +46,6 @@ exogenous variables and conditional forecasting given projected future
 trajcetories of (some of the) variables.
 }
 \examples{
-# upload data
-data(optimism)
-
-# specify the model and set seed
-set.seed(123)
-
 # + no effect on productivity (zero restriction)
 # + positive effect on stock prices (positive sign restriction) 
 sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
@@ -62,7 +59,6 @@ predictive     = forecast(posterior, 4)
 
 # workflow with the pipe |>
 ############################################################
-set.seed(123)
 optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 20) |> 
@@ -78,7 +74,6 @@ predictive = forecast(posterior, 2, conditional_forecast = cf)
 
 # workflow with the pipe |>
 ############################################################
-set.seed(123)
 optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 10) |> 

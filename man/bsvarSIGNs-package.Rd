@@ -119,6 +119,8 @@ Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, Am
  
  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
  
+ Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, <doi:10.48550/arXiv.2501.16711>.
+ 
  Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.1, <doi:10.32614/CRAN.package.bsvars>.
 }
 \author{
