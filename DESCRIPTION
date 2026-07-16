@@ -10,7 +10,8 @@ License: GPL (>= 3)
 Imports: 
     Rcpp (>= 1.0.12),
     RcppProgress,
-    R6
+    R6,
+    parallel
 LinkingTo: 
     Rcpp, 
     RcppArmadillo,
