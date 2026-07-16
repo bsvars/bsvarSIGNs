@@ -21,7 +21,8 @@ Rcpp::List bsvar_sign_par_cpp(
     const arma::field<arma::mat> &Z, // a list of zero restrictions
     const int &Nf,                   // number of foreign variables for SOE
     const Rcpp::List &prior,         // a list of priors
-    const int &max_tries = 10000     // maximum tries for Q draw
+    const int &max_tries = 10000,    // maximum tries for Q draw
+    const int idx = 0                // specific hyperparameter column index
 )
 {
 
@@ -51,7 +52,7 @@ Rcpp::List bsvar_sign_par_cpp(
 
   field<mat> result;
 
-  hyper = hypers.col(randi(distr_param(0, S_hyper)));
+  hyper = hypers.col(hypers.n_cols > 1 ? idx : 0);
   mu = hyper(0);
   delta = hyper(1);
   lambda = hyper(2);

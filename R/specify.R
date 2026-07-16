@@ -761,7 +761,6 @@ specify_bsvarSIGN = R6::R6Class(
       S = 10000, burn_in = S / 2
       ) {
       
-      print(private$hyper_mu)
       model = c(private$hyper_mu, private$hyper_delta, private$hyper_lambda, private$hyper_psi, !is.null(private$hyper_covid))
       covid = private$hyper_covid
       

@@ -96,7 +96,7 @@ Rcpp::List bsvar_sign_cpp(
   // #pragma omp parallel for private(hyper, mu, delta, lambda, psi, prior_V, prior_S, Ystar, Xstar, Yplus, Xplus, result, post_B, post_V, post_S, Sigma, chol_Sigma, B, h_invp, Q, shocks, w)
   for (int s = 0; s < S; s++) {
     
-    hyper        = hypers.col(randi(distr_param(0, S_hyper)));
+    hyper        = hypers.col(hypers.n_cols > 1 ? hypers.n_cols - S + s : 0);
     mu           = hyper(0);
     delta        = hyper(1);
     lambda       = hyper(2);

@@ -92,6 +92,10 @@
 #' @export
 estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) {
   
+  if (ncol(specification$prior$hyper) > 1 && S > ncol(specification$prior$hyper)) {
+    stop("The number of requested draws S cannot be greater than the number of sampled hyperparameters.")
+  }
+  
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
   prior               = specification$prior$get_prior()
@@ -230,7 +234,8 @@ estimate_par = function(specification, S, thin = 1, show_progress = TRUE, mc.cor
       }
       
       set.seed(seeds[chunk[i]])
-      .Call(`_bsvarSIGNs_bsvar_sign_par_cpp`, p, Y, X, sign, narrative, struc, Z, Nf, prior, max_tries)
+      idx_cpp = ncol(prior$hyper) - S + chunk[i] - 1
+      .Call(`_bsvarSIGNs_bsvar_sign_par_cpp`, p, Y, X, sign, narrative, struc, Z, Nf, prior, max_tries, idx_cpp)
     })
     
     if (show_progress && is_worker_1) {
