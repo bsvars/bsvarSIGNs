@@ -678,6 +678,12 @@ specify_bsvarSIGN = R6::R6Class(
         }
       }
       
+      private$hyper_mu             = hyper_mu
+      private$hyper_delta          = hyper_delta
+      private$hyper_lambda         = hyper_lambda
+      private$hyper_psi            = hyper_psi
+      private$hyper_covid          = hyper_covid
+      
       self$num_foreign_vars        = num_foreign_vars
       self$mc.cores                = mc.cores
       
@@ -755,6 +761,7 @@ specify_bsvarSIGN = R6::R6Class(
       S = 10000, burn_in = S / 2
       ) {
       
+      print(private$hyper_mu)
       model = c(private$hyper_mu, private$hyper_delta, private$hyper_lambda, private$hyper_psi, !is.null(private$hyper_covid))
       covid = private$hyper_covid
       
@@ -780,10 +787,9 @@ specify_bsvarSIGN = R6::R6Class(
       K      = nrow(self$prior$X)
       d      = K - 1 - N * p
       
-      prior  = self$prior$get_prior()
-      
       self$prior$covid = covid
-      
+
+      prior      = self$prior$get_prior()
       prior$B    = t(prior$A)
       prior$Ysoc = t(prior$Ysoc)
       prior$Xsoc = t(prior$Xsoc)
