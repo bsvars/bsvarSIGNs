@@ -94,22 +94,24 @@ arma::field<arma::mat> sample_Q(
     n_tries++;
   }
   
-  double w = 1;
+  double log_w_out = 0;
   if (!success) {
-    w = 0;
+    log_w_out = -arma::datum::inf;
   } else {
+    double log_w = 0;
     if (has_narrative) {
-      w *= weight_narrative(T, sign_narrative, irf);  
+      log_w += log_weight_narrative(T, sign_narrative, irf);  
     }
     if (has_zero) {
-      w *= weight_zero(Z, B, h_invp, Q);
+      log_w += log_weight_zero(Z, B, h_invp, Q);
     }
+    log_w_out = log_w;
   }
   
   field<mat> result(3);
   result(0) = Q;
   result(1) = shocks;
-  result(2) = w;
+  result(2) = log_w_out;
   
   return result;
 }

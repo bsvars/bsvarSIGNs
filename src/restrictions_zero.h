@@ -7,7 +7,7 @@ using namespace Rcpp;
 using namespace arma;
 
 
-double weight_zero(
+double log_weight_zero(
     const arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,
