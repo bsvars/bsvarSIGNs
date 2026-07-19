@@ -954,6 +954,46 @@ RcppExport SEXP _bsvarSIGNs_sample_Q(SEXP pSEXP, SEXP YSEXP, SEXP XSEXP, SEXP BS
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// sample_restricted_B_cpp
+arma::field<arma::mat> sample_restricted_B_cpp(const arma::mat& post_B, const arma::mat& post_V, const arma::mat& Sigma, const int& p, const int& N, const int& Nf, const int& K);
+static SEXP _bsvarSIGNs_sample_restricted_B_cpp_try(SEXP post_BSEXP, SEXP post_VSEXP, SEXP SigmaSEXP, SEXP pSEXP, SEXP NSEXP, SEXP NfSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type post_B(post_BSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type post_V(post_VSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const int& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const int& >::type N(NSEXP);
+    Rcpp::traits::input_parameter< const int& >::type Nf(NfSEXP);
+    Rcpp::traits::input_parameter< const int& >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_restricted_B_cpp(post_B, post_V, Sigma, p, N, Nf, K));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _bsvarSIGNs_sample_restricted_B_cpp(SEXP post_BSEXP, SEXP post_VSEXP, SEXP SigmaSEXP, SEXP pSEXP, SEXP NSEXP, SEXP NfSEXP, SEXP KSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_sample_restricted_B_cpp_try(post_BSEXP, post_VSEXP, SigmaSEXP, pSEXP, NSEXP, NfSEXP, KSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // log_dgamma
 double log_dgamma(const double& x, const double& k, const double& theta);
 static SEXP _bsvarSIGNs_log_dgamma_try(SEXP xSEXP, SEXP kSEXP, SEXP thetaSEXP) {
@@ -1457,6 +1497,7 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("arma::field<arma::mat>(*niw_cpp)(const arma::mat&,const arma::mat&,const arma::mat&,const arma::mat&,const arma::mat&,const int&)");
         signatures.insert("bool(*match_sign_irf)(const arma::mat&,const arma::cube&,const arma::cube&)");
         signatures.insert("arma::field<arma::mat>(*sample_Q)(const int&,const arma::mat&,const arma::mat&,arma::mat&,arma::mat&,arma::mat&,const Rcpp::List&,const arma::cube&,const arma::mat&,const arma::mat&,const arma::field<arma::mat>&,const int&,const int&)");
+        signatures.insert("arma::field<arma::mat>(*sample_restricted_B_cpp)(const arma::mat&,const arma::mat&,const arma::mat&,const int&,const int&,const int&,const int&)");
         signatures.insert("double(*log_dgamma)(const double&,const double&,const double&)");
         signatures.insert("double(*log_dinvgamma)(const double&,const double&,const double&)");
         signatures.insert("double(*log_prior_hyper)(const arma::vec&,const arma::vec&,const Rcpp::List&)");
@@ -1501,6 +1542,7 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_niw_cpp", (DL_FUNC)_bsvarSIGNs_niw_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_irf", (DL_FUNC)_bsvarSIGNs_match_sign_irf_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_sample_Q", (DL_FUNC)_bsvarSIGNs_sample_Q_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_sample_restricted_B_cpp", (DL_FUNC)_bsvarSIGNs_sample_restricted_B_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_dgamma", (DL_FUNC)_bsvarSIGNs_log_dgamma_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_dinvgamma", (DL_FUNC)_bsvarSIGNs_log_dinvgamma_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_prior_hyper", (DL_FUNC)_bsvarSIGNs_log_prior_hyper_try);
@@ -1544,6 +1586,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_niw_cpp", (DL_FUNC) &_bsvarSIGNs_niw_cpp, 6},
     {"_bsvarSIGNs_match_sign_irf", (DL_FUNC) &_bsvarSIGNs_match_sign_irf, 3},
     {"_bsvarSIGNs_sample_Q", (DL_FUNC) &_bsvarSIGNs_sample_Q, 13},
+    {"_bsvarSIGNs_sample_restricted_B_cpp", (DL_FUNC) &_bsvarSIGNs_sample_restricted_B_cpp, 7},
     {"_bsvarSIGNs_log_dgamma", (DL_FUNC) &_bsvarSIGNs_log_dgamma, 3},
     {"_bsvarSIGNs_log_dinvgamma", (DL_FUNC) &_bsvarSIGNs_log_dinvgamma, 3},
     {"_bsvarSIGNs_log_prior_hyper", (DL_FUNC) &_bsvarSIGNs_log_prior_hyper, 3},

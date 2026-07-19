@@ -5,6 +5,7 @@
 #include "sample_hyper.h"
 #include "sample_Q.h"
 #include "sample_NIW.h"
+#include "sample_SOE.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -104,10 +105,10 @@ Rcpp::List bsvar_sign_par_cpp(
   post_S = result(2);
   post_nu = as_scalar(result(3));
 
-  w = 0;
+  double log_w = -arma::datum::inf;
   n_tries = 0;
 
-  while (w == 0 and (n_tries < max_tries or max_tries == 0))
+  while (std::isinf(log_w) and (n_tries < max_tries or max_tries == 0))
   {
 
     checkUserInterrupt();
@@ -115,16 +116,35 @@ Rcpp::List bsvar_sign_par_cpp(
     // sample reduced-form parameters
     Sigma = iwishrnd(post_S, post_nu);
     chol_Sigma = chol(Sigma, "lower");
-    B = rmatnorm_cpp(post_B, post_V, Sigma);
+
+    double log_w_B = 0;
+    if (Nf > 0)
+    {
+      arma::field<arma::mat> res_B = sample_restricted_B_cpp(post_B, post_V, Sigma, p, N, Nf, K);
+      B = res_B(0);
+      log_w_B = as_scalar(res_B(1));
+    }
+    else
+    {
+      B = rmatnorm_cpp(post_B, post_V, Sigma);
+    }
+
     h_invp = inv(trimatl(chol_Sigma)); // lower tri, h(Sigma) is upper tri
 
     result = sample_Q(p, Y_scaled, X_scaled, B, h_invp, chol_Sigma, prior,
                       sign_irf, sign_narrative, sign_B, Z, Nf, 1);
     Q = result(0);
     shocks = result(1);
-    w = as_scalar(result(2));
+    double log_w_Q = as_scalar(result(2));
+
+    if (!std::isinf(log_w_Q))
+    {
+      log_w = log_w_B + log_w_Q;
+    }
     n_tries++;
   }
+
+  w = std::exp(log_w);
 
   return List::create(
       _["w"] = w,
