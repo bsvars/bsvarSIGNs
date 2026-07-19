@@ -59,7 +59,6 @@ posterior      = estimate(specification, 10)
 
 # compute structural shocks' conditional standard deviations
 sigma          = compute_conditional_sd(posterior)
-#> The model is homoskedastic. Returning an NxTxS matrix of conditional sd all equal to 1.
 
 # workflow with the pipe |>
 ############################################################
@@ -75,5 +74,4 @@ optimism |>
 #>  Progress of simulation for 10 independent draws
 #>  Press Esc to interrupt the computations
 #> **************************************************|
-#> The model is homoskedastic. Returning an NxTxS matrix of conditional sd all equal to 1.
 ```
