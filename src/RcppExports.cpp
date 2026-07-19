@@ -477,23 +477,23 @@ RcppExport SEXP _bsvarSIGNs_match_sign_narrative(SEXP EpsilonSEXP, SEXP sign_nar
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// weight_narrative
-double weight_narrative(const int& T, arma::mat sign_narrative, const arma::cube& irf);
-static SEXP _bsvarSIGNs_weight_narrative_try(SEXP TSEXP, SEXP sign_narrativeSEXP, SEXP irfSEXP) {
+// log_weight_narrative
+double log_weight_narrative(const int& T, arma::mat sign_narrative, const arma::cube& irf);
+static SEXP _bsvarSIGNs_log_weight_narrative_try(SEXP TSEXP, SEXP sign_narrativeSEXP, SEXP irfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const int& >::type T(TSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type sign_narrative(sign_narrativeSEXP);
     Rcpp::traits::input_parameter< const arma::cube& >::type irf(irfSEXP);
-    rcpp_result_gen = Rcpp::wrap(weight_narrative(T, sign_narrative, irf));
+    rcpp_result_gen = Rcpp::wrap(log_weight_narrative(T, sign_narrative, irf));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_weight_narrative(SEXP TSEXP, SEXP sign_narrativeSEXP, SEXP irfSEXP) {
+RcppExport SEXP _bsvarSIGNs_log_weight_narrative(SEXP TSEXP, SEXP sign_narrativeSEXP, SEXP irfSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_weight_narrative_try(TSEXP, sign_narrativeSEXP, irfSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_log_weight_narrative_try(TSEXP, sign_narrativeSEXP, irfSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -690,24 +690,24 @@ RcppExport SEXP _bsvarSIGNs_log_volume_element(SEXP ZSEXP, SEXP A0SEXP, SEXP Apl
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// weight_zero
-double weight_zero(const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q);
-static SEXP _bsvarSIGNs_weight_zero_try(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, SEXP QSEXP) {
+// log_weight_zero
+double log_weight_zero(const arma::field<arma::mat>& Z, const arma::mat& B, const arma::mat& h_inv, const arma::mat& Q);
+static SEXP _bsvarSIGNs_log_weight_zero_try(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const arma::field<arma::mat>& >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type h_inv(h_invSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(weight_zero(Z, B, h_inv, Q));
+    rcpp_result_gen = Rcpp::wrap(log_weight_zero(Z, B, h_inv, Q));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _bsvarSIGNs_weight_zero(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, SEXP QSEXP) {
+RcppExport SEXP _bsvarSIGNs_log_weight_zero(SEXP ZSEXP, SEXP BSEXP, SEXP h_invSEXP, SEXP QSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_bsvarSIGNs_weight_zero_try(ZSEXP, BSEXP, h_invSEXP, QSEXP));
+        rcpp_result_gen = PROTECT(_bsvarSIGNs_log_weight_zero_try(ZSEXP, BSEXP, h_invSEXP, QSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1444,13 +1444,13 @@ static int _bsvarSIGNs_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::List(*forecast_bsvarSIGNs)(arma::cube&,arma::cube&,arma::mat&,arma::vec&,arma::mat&,arma::mat&,const int&,const int&,const int&)");
         signatures.insert("arma::mat(*metropolis)(const int,const int,arma::vec,arma::mat,Rcpp::Function)");
         signatures.insert("bool(*match_sign_narrative)(const arma::mat&,const arma::mat&,const arma::cube&)");
-        signatures.insert("double(*weight_narrative)(const int&,arma::mat,const arma::cube&)");
+        signatures.insert("double(*log_weight_narrative)(const int&,arma::mat,const arma::cube&)");
         signatures.insert("arma::field<arma::mat>(*ZIRF)(const arma::field<arma::mat>&,const arma::mat&)");
         signatures.insert("arma::colvec(*zero_restrictions)(const arma::field<arma::mat>&,const arma::colvec)");
         signatures.insert("arma::colvec(*g_fh)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::colvec(*g_fh_vec)(const arma::field<arma::mat>&,const arma::colvec)");
         signatures.insert("double(*log_volume_element)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&)");
-        signatures.insert("double(*weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
+        signatures.insert("double(*log_weight_zero)(const arma::field<arma::mat>&,const arma::mat&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::mat(*rzeroQ)(const arma::field<arma::mat>&,const arma::mat&)");
         signatures.insert("arma::mat(*rmatnorm_cpp)(const arma::mat&,const arma::mat&,const arma::mat&)");
         signatures.insert("arma::mat(*riwish_cpp)(const arma::mat&,const double&)");
@@ -1488,13 +1488,13 @@ RcppExport SEXP _bsvarSIGNs_RcppExport_registerCCallable() {
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC)_bsvarSIGNs_forecast_bsvarSIGNs_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_metropolis", (DL_FUNC)_bsvarSIGNs_metropolis_R_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_match_sign_narrative", (DL_FUNC)_bsvarSIGNs_match_sign_narrative_try);
-    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_narrative", (DL_FUNC)_bsvarSIGNs_weight_narrative_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_weight_narrative", (DL_FUNC)_bsvarSIGNs_log_weight_narrative_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_ZIRF", (DL_FUNC)_bsvarSIGNs_ZIRF_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_zero_restrictions", (DL_FUNC)_bsvarSIGNs_zero_restrictions_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh", (DL_FUNC)_bsvarSIGNs_g_fh_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_g_fh_vec", (DL_FUNC)_bsvarSIGNs_g_fh_vec_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_volume_element", (DL_FUNC)_bsvarSIGNs_log_volume_element_try);
-    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_weight_zero", (DL_FUNC)_bsvarSIGNs_weight_zero_try);
+    R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_log_weight_zero", (DL_FUNC)_bsvarSIGNs_log_weight_zero_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_rzeroQ", (DL_FUNC)_bsvarSIGNs_rzeroQ_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_rmatnorm_cpp", (DL_FUNC)_bsvarSIGNs_rmatnorm_cpp_try);
     R_RegisterCCallable("bsvarSIGNs", "_bsvarSIGNs_riwish_cpp", (DL_FUNC)_bsvarSIGNs_riwish_cpp_try);
@@ -1531,13 +1531,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bsvarSIGNs_forecast_bsvarSIGNs", (DL_FUNC) &_bsvarSIGNs_forecast_bsvarSIGNs, 9},
     {"_bsvarSIGNs_metropolis_R", (DL_FUNC) &_bsvarSIGNs_metropolis_R, 5},
     {"_bsvarSIGNs_match_sign_narrative", (DL_FUNC) &_bsvarSIGNs_match_sign_narrative, 3},
-    {"_bsvarSIGNs_weight_narrative", (DL_FUNC) &_bsvarSIGNs_weight_narrative, 3},
+    {"_bsvarSIGNs_log_weight_narrative", (DL_FUNC) &_bsvarSIGNs_log_weight_narrative, 3},
     {"_bsvarSIGNs_ZIRF", (DL_FUNC) &_bsvarSIGNs_ZIRF, 2},
     {"_bsvarSIGNs_zero_restrictions", (DL_FUNC) &_bsvarSIGNs_zero_restrictions, 2},
     {"_bsvarSIGNs_g_fh", (DL_FUNC) &_bsvarSIGNs_g_fh, 3},
     {"_bsvarSIGNs_g_fh_vec", (DL_FUNC) &_bsvarSIGNs_g_fh_vec, 2},
     {"_bsvarSIGNs_log_volume_element", (DL_FUNC) &_bsvarSIGNs_log_volume_element, 3},
-    {"_bsvarSIGNs_weight_zero", (DL_FUNC) &_bsvarSIGNs_weight_zero, 4},
+    {"_bsvarSIGNs_log_weight_zero", (DL_FUNC) &_bsvarSIGNs_log_weight_zero, 4},
     {"_bsvarSIGNs_rzeroQ", (DL_FUNC) &_bsvarSIGNs_rzeroQ, 2},
     {"_bsvarSIGNs_rmatnorm_cpp", (DL_FUNC) &_bsvarSIGNs_rmatnorm_cpp, 3},
     {"_bsvarSIGNs_riwish_cpp", (DL_FUNC) &_bsvarSIGNs_riwish_cpp, 2},

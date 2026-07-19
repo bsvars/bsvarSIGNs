@@ -98,12 +98,14 @@ arma::field<arma::mat> sample_Q(
   if (!success) {
     w = 0;
   } else {
+    double log_w = 0;
     if (has_narrative) {
-      w *= weight_narrative(T, sign_narrative, irf);  
+      log_w += log_weight_narrative(T, sign_narrative, irf);  
     }
     if (has_zero) {
-      w *= weight_zero(Z, B, h_invp, Q);
+      log_w += log_weight_zero(Z, B, h_invp, Q);
     }
+    w = std::exp(log_w);
   }
   
   field<mat> result(3);

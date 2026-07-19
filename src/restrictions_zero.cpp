@@ -124,7 +124,7 @@ double log_volume_element(
 // importance weight for zero restrictions
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
-double weight_zero(
+double log_weight_zero(
     const arma::field<arma::mat>& Z,
     const arma::mat&              B,
     const arma::mat&              h_inv,
@@ -139,7 +139,7 @@ double weight_zero(
   double log_ve_f   = -(2*N+K+1) * log_det(A0).real();
   double log_ve_gfz = log_volume_element(Z, A0, Aplus);
   
-  return exp(log_ve_f - log_ve_gfz);
+  return log_ve_f - log_ve_gfz;
 }
 
 

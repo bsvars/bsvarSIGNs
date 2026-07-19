@@ -73,7 +73,7 @@ bool match_sign_narrative(
 // approximate importance weight for narrative restrictions
 // [[Rcpp::interfaces(cpp)]]
 // [[Rcpp::export]]
-double weight_narrative(
+double log_weight_narrative(
     const int&                    T,
     arma::mat                     sign_narrative,
     const arma::cube&             irf
@@ -95,5 +95,5 @@ double weight_narrative(
       n_success++;
     }
   }
-  return M / n_success;
+  return std::log(M / n_success);
 }
