@@ -70,6 +70,7 @@ arma::field<arma::mat> bsvar_sign_single_draw_cpp(
   mat Y_scaled = Y;
   mat X_scaled = X;
   int covid = as<int>(prior["covid"]);
+  vec sigma = ones<vec>(T);
   if (covid > 0 && covid <= T) {
     int c_idx = covid - 1;
     double s0 = hyper(N + 3);
@@ -77,16 +78,15 @@ arma::field<arma::mat> bsvar_sign_single_draw_cpp(
     double s2 = hyper(N + 5);
     double rho = hyper(N + 6);
 
-    vec scale = ones<vec>(T);
-    if (c_idx < T) scale(c_idx) = s0;
-    if (c_idx + 1 < T) scale(c_idx + 1) = s1;
-    if (c_idx + 2 < T) scale(c_idx + 2) = s2;
+    if (c_idx < T) sigma(c_idx) = s0;
+    if (c_idx + 1 < T) sigma(c_idx + 1) = s1;
+    if (c_idx + 2 < T) sigma(c_idx + 2) = s2;
     for (int t = c_idx + 3; t < T; t++) {
-      scale(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
+      sigma(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
     }
 
-    Y_scaled.each_col() /= scale;
-    X_scaled.each_col() /= scale;
+    Y_scaled.each_col() /= sigma;
+    X_scaled.each_col() /= sigma;
   }
 
   Yplus = join_vert(Ystar, Y_scaled);
@@ -135,7 +135,7 @@ arma::field<arma::mat> bsvar_sign_single_draw_cpp(
 
   w = std::exp(log_w);
 
-  arma::field<arma::mat> out(8);
+  arma::field<arma::mat> out(9);
   out(0) = arma::mat(1, 1, arma::fill::zeros); out(0)(0, 0) = w;
   out(1) = hyper;
   out(2) = B.t();
@@ -144,6 +144,7 @@ arma::field<arma::mat> bsvar_sign_single_draw_cpp(
   out(5) = Sigma;
   out(6) = chol_Sigma * Q;
   out(7) = shocks;
+  out(8) = repmat(sigma.t(), N, 1);
 
   return out;
 }
@@ -175,7 +176,8 @@ Rcpp::List bsvar_sign_par_cpp(
       _["Q"]      = draw(4),
       _["Sigma"]  = draw(5),
       _["Theta0"] = draw(6),
-      _["shocks"] = draw(7)
+      _["shocks"] = draw(7),
+      _["sigma"]  = draw(8)
   );
 }
 
@@ -230,6 +232,7 @@ Rcpp::List bsvar_sign_cpp(
   cube       posterior_Sigma(N, N, S);
   cube       posterior_Theta0(N, N, S);
   cube       posterior_shocks(N, T, S);
+  cube       posterior_sigma(N, T, S);
   
   for (int s = 0; s < S; s++) {
     
@@ -247,6 +250,7 @@ Rcpp::List bsvar_sign_cpp(
     posterior_Sigma.slice(s)  = draw(5);
     posterior_Theta0.slice(s) = draw(6);
     posterior_shocks.slice(s) = draw(7);
+    posterior_sigma.slice(s)  = draw(8);
     
     // Increment progress bar
     if (any(prog_rep_points == s)) bar.increment();
@@ -262,7 +266,8 @@ Rcpp::List bsvar_sign_cpp(
       _["Q"]        = posterior_Q,
       _["Sigma"]    = posterior_Sigma,
       _["Theta0"]   = posterior_Theta0,
-      _["shocks"]   = posterior_shocks
+      _["shocks"]   = posterior_shocks,
+      _["sigma"]    = posterior_sigma
     )
   );
 } // END bsvar_sign_cpp
