@@ -608,6 +608,7 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param max_tries a positive integer with the maximum number of iterations
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
+    #' @param foreign a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
     #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
     #' otherwise to random walk.
@@ -616,7 +617,6 @@ specify_bsvarSIGN = R6::R6Class(
     #' @param hyper_lambda whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.
     #' @param hyper_psi whether to estimate the hyper-parameter of the variances in the Minnesota prior.
     #' @param hyper_covid NULL or positive integer indicating the start of the COVID-19 pandemic.
-    #' @param num_foreign_vars a non-negative integer specifying the number of foreign variables for a Small Open Economy (SOE) model. Defaults to 0. Note that foreign variables should be ordered first to make the block lower diagonal structure work. Zero restrictions are not supported when \code{num_foreign_vars > 0}.
     #' @param mc.cores number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.
     #' @return A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
     initialize = function(
@@ -627,17 +627,28 @@ specify_bsvarSIGN = R6::R6Class(
     sign_structural,
     max_tries = Inf,
     exogenous = NULL,
-    stationary = rep(FALSE, ncol(data)),
+    foreign = NULL,
+    stationary = NULL,
     hyper_mu = TRUE,
     hyper_delta = TRUE,
     hyper_lambda = TRUE,
     hyper_psi = TRUE,
     hyper_covid = NULL,
-    num_foreign_vars = 0,
     mc.cores = 1
     ) {
       stopifnot("Argument p has to be a positive integer." = ((p %% 1) == 0 & p > 0))
       self$p        = p
+      
+      if (!is.null(foreign)) {
+        if (!is.matrix(foreign)) foreign = as.matrix(foreign)
+        if (nrow(foreign) != nrow(data)) stop("foreign must have the same number of rows as data.")
+        data = cbind(foreign, data)
+        num_foreign_vars = ncol(foreign)
+      } else {
+        num_foreign_vars = 0
+      }
+      
+      if (is.null(stationary)) stationary = rep(FALSE, ncol(data))
       
       TT            = nrow(data)
       T             = TT - self$p
@@ -674,7 +685,7 @@ specify_bsvarSIGN = R6::R6Class(
         zero_irf = sign_irf[, , 1] == 0
         zero_irf[is.na(zero_irf)] = 0
         if (sum(zero_irf) > 0) {
-          stop("Zero restrictions are not supported for Small Open Economy (SOE) models (num_foreign_vars > 0).")
+          stop("Zero restrictions are not supported for Small Open Economy (SOE) models.")
         }
       }
       
