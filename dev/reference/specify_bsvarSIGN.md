@@ -76,13 +76,13 @@ sign and narrative restrictions BSVARSIGN.
       sign_structural,
       max_tries = Inf,
       exogenous = NULL,
-      stationary = rep(FALSE, ncol(data)),
+      foreign = NULL,
+      stationary = NULL,
       hyper_mu = TRUE,
       hyper_delta = TRUE,
       hyper_lambda = TRUE,
       hyper_psi = TRUE,
       hyper_covid = NULL,
-      num_foreign_vars = 0,
       mc.cores = 1
     )
 
@@ -122,6 +122,11 @@ sign and narrative restrictions BSVARSIGN.
 
   a `(T+p)xd` matrix of exogenous variables.
 
+- `foreign`:
+
+  a matrix of foreign variables for a Small Open Economy (SOE) model.
+  Defaults to NULL.
+
 - `stationary`:
 
   an `N` logical vector - its element set to `FALSE` sets the prior mean
@@ -152,14 +157,6 @@ sign and narrative restrictions BSVARSIGN.
 
   NULL or positive integer indicating the start of the COVID-19
   pandemic.
-
-- `num_foreign_vars`:
-
-  a non-negative integer specifying the number of foreign variables for
-  a Small Open Economy (SOE) model. Defaults to 0. Note that foreign
-  variables should be ordered first to make the block lower diagonal
-  structure work. Zero restrictions are not supported when
-  `num_foreign_vars > 0`.
 
 - `mc.cores`:
 
@@ -456,7 +453,7 @@ spec$get_prior()
 #>     delta.scale: 0.618033988749895
 #>     delta.shape: 2.61803398874989
 #>     get_prior: function () 
-#>     hyper: 1 1 0.2 6.63317874236153e-05 0.00655120654449836 1.68010 ...
+#>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...
 #>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, 
 #>     lambda.scale: 0.540312423743285
 #>     lambda.shape: 1.37015621187164

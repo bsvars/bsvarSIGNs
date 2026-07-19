@@ -97,13 +97,13 @@
 <span>  <span class="va">sign_structural</span>,</span>
 <span>  max_tries <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  exogenous <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  stationary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  foreign <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stationary <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hyper_mu <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_delta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_lambda <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_psi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hyper_covid <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  num_foreign_vars <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  mc.cores <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -145,6 +145,10 @@ for finding a rotation matrix \(Q\) that would satisfy sign restrictions</p></dd
 <dd><p>a <code>(T+p)xd</code> matrix of exogenous variables.</p></dd>
 
 
+<dt><code>foreign</code></dt>
+<dd><p>a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.</p></dd>
+
+
 <dt><code>stationary</code></dt>
 <dd><p>an <code>N</code> logical vector - its element set to <code>FALSE</code> sets
 the prior mean for the autoregressive parameters of the <code>N</code>th equation to the white noise process,
@@ -169,10 +173,6 @@ otherwise to random walk.</p></dd>
 
 <dt><code>hyper_covid</code></dt>
 <dd><p>NULL or positive integer indicating the start of the COVID-19 pandemic.</p></dd>
-
-
-<dt><code>num_foreign_vars</code></dt>
-<dd><p>a non-negative integer specifying the number of foreign variables for a Small Open Economy (SOE) model. Defaults to 0. Note that foreign variables should be ordered first to make the block lower diagonal structure work. Zero restrictions are not supported when <code>num_foreign_vars &gt; 0</code>.</p></dd>
 
 
 <dt><code>mc.cores</code></dt>
@@ -475,7 +475,7 @@ otherwise to random walk.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     delta.scale: 0.618033988749895</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     delta.shape: 2.61803398874989</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     get_prior: function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     hyper: 1 1 0.2 6.63317874236153e-05 0.00655120654449836 1.68010 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     hyper: 1 1 0.2 6.63317874235789e-05 0.00655120654453227 1.68010 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function (data, p, exogenous = NULL, stationary = rep(FALSE, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lambda.scale: 0.540312423743285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lambda.shape: 1.37015621187164</span>
