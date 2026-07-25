@@ -73,7 +73,7 @@ Rcpp::List forecast_bsvarSIGNs (
       
       mat   Sigma             = posterior_Sigma.slice(s);
       mat   mean              = posterior_A.slice(s) * Xt;
-      mat   cov               = scale(T + h) * Sigma;
+      mat   cov               = std::pow(scale(T + h), 2.0) * Sigma;
       vec   cond_forecast_h   = trans(cond_forecast.row(h));
       uvec  nonf_el           = find_nonfinite( cond_forecast_h );
       int   nonf_no           = nonf_el.n_elem;
