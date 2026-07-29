@@ -7,6 +7,10 @@
 
 - **Tomasz Woźniak**. Author. [](https://orcid.org/0000-0003-2212-2378)
 
+- **Fei Shang**. Contributor.
+  [](https://orcid.org/0000-0003-1908-3275)  
+  Corrected code for forecasting
+
 ## Citation
 
 Source:
