@@ -126,30 +126,21 @@ The objects of this class are cloneable with this method.
 ## Examples
 
 ``` r
-spec = specify_bsvar$new(us_fiscal_lsuw)
-#> The identification is set to the default option of lower-triangular structural matrix.
-burn = estimate(spec, 5)
+spec = specify_bsvarSIGN$new(optimism * 100)
+post = estimate(spec, 5)
 #> **************************************************|
-#> bsvars: Bayesian Structural Vector Autoregressions|
+#>  bsvarSIGNs: Bayesian Structural VAR with sign,   |
+#>              zero and narrative restrictions      |
 #> **************************************************|
-#>  Gibbs sampler for the SVAR model                 |
-#> **************************************************|
-#>  Progress of the MCMC simulation for 5 draws
-#>     Every draw is saved via MCMC thinning
-#>  Press Esc to interrupt the computations
-#> **************************************************|
-post = estimate(burn, 5)
-#> **************************************************|
-#> bsvars: Bayesian Structural Vector Autoregressions|
-#> **************************************************|
-#>  Gibbs sampler for the SVAR model                 |
-#> **************************************************|
-#>  Progress of the MCMC simulation for 5 draws
-#>     Every draw is saved via MCMC thinning
+#>  Progress of simulation for 5 independent draws
 #>  Press Esc to interrupt the computations
 #> **************************************************|
 fore = forecast(post, 4)
-#> Error in UseMethod("forecast"): no applicable method for 'forecast' applied to an object of class "c('PosteriorBSVAR', 'R6')"
 apply(fore$forecasts, 1:2, mean) # compute mean forecasts 
-#> Error: object 'fore' not found
+#>              [,1]          [,2]         [,3]         [,4]
+#> [1,]    84.482668  8.462837e+01    84.725136    84.313684
+#> [2,] -1068.752173 -1.074758e+03 -1074.418499 -1079.844384
+#> [3,]  -338.421656 -3.386165e+02  -338.746547  -338.466008
+#> [4,]    -1.057242  3.738026e-02     1.401288     1.249104
+#> [5,]  -784.616510 -7.848578e+02  -786.006054  -786.205879
 ```
