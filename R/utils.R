@@ -1,15 +1,17 @@
 
-# Given posterior draws with importance weights, sample with replacement
+# Resample posterior draws with unequal importance weights
 importance_sampling <- function(posterior) {
   
   w <- posterior$posterior$w
-  posterior$posterior <- posterior$posterior[-1] # remove weights
+  posterior$posterior$w <- NULL
+  posterior$posterior$ess <- sum(w)^2/sum(w^2)
   
-  # if (posterior$last_draw$identification$sign_narrative[1, 1] == 0) {
-  #   return(posterior)
-  # }
+  if (all(w == 1)) {
+    return(posterior)
+  }
   
-  indices <- sample(1:nrow(w), nrow(w), replace = TRUE, prob = w)
+  S <- length(w)
+  indices <- sample(seq_len(S), S, replace = TRUE, prob = w)
   
   posterior$posterior$A      = posterior$posterior$A[, , indices]
   posterior$posterior$B      = posterior$posterior$B[, , indices]
@@ -17,7 +19,5 @@ importance_sampling <- function(posterior) {
   posterior$posterior$Q      = posterior$posterior$Q[, , indices]
   posterior$posterior$Sigma  = posterior$posterior$Sigma[, , indices]
   posterior$posterior$Theta0 = posterior$posterior$Theta0[, , indices]
-  posterior$posterior$ess    = sum(w)^2/sum(w^2)
-  
   return(posterior)
 }
