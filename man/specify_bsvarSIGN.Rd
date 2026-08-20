@@ -184,32 +184,23 @@ contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
       \item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
-
-\item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
-
-\item{\code{foreign}}{a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.}
-
-\item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
+      \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
+      \item{\code{foreign}}{a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.}
+      \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
 otherwise to random walk.}
-
-\item{\code{hyper_mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
-
-\item{\code{hyper_delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
-
-\item{\code{hyper_lambda}}{whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.}
-
-\item{\code{hyper_psi}}{whether to estimate the hyper-parameter of the variances in the Minnesota prior.}
-
-\item{\code{hyper_covid}}{NULL or positive integer indicating the start of the COVID-19 pandemic.}
-
-\item{\code{mc.cores}}{number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
-}
+      \item{\code{hyper_mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
+      \item{\code{hyper_delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
+      \item{\code{hyper_lambda}}{whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.}
+      \item{\code{hyper_psi}}{whether to estimate the hyper-parameter of the variances in the Minnesota prior.}
+      \item{\code{hyper_covid}}{NULL or positive integer indicating the start of the COVID-19 pandemic.}
+      \item{\code{mc.cores}}{number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
+  }
 }
 
 \if{html}{\out{<hr>}}
