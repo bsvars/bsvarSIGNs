@@ -1,4 +1,121 @@
 
+#' @export
+generics::forecast
+
+
+
+#' @title R6 Class Representing Forecasts
+#'
+#' @description
+#' R6 class representing draws from the predictive density of a Bayesian
+#' Structural Vector Autoregression model.
+#'
+#' @details
+#' The class contains the following objects:
+#'
+#' \describe{
+#'   \item{\code{forecasts}}{An \code{N x horizon x S} array containing draws 
+#'   from the predictive density.}
+#'   \item{\code{forecast_mean}}{An \code{N x horizon x S} array containing the 
+#'   conditional means of the predictive density.}
+#'   \item{\code{forecast_covariance}}{An \code{N x N x horizon x S} array 
+#'   containing the conditional covariance matrices of the predictive density.}
+#'   \item{\code{Y}}{An \code{N x T} matrix containing the data on the dependent 
+#'   variables used for estimation.}
+#' }
+#'
+#' The method \code{as_list()} returns the contents of the \code{Forecasts}
+#' object as a list.
+#'
+#' @param output A list containing the forecasting output, including
+#' \code{forecasts}, \code{forecast_mean}, and \code{forecast_cov}.
+#' @param Y An \code{N x T} matrix containing the data on the dependent variables.
+#'
+#' @return An object of class \code{Forecasts}.
+#'
+#' @examples
+#' spec = specify_bsvar$new(us_fiscal_lsuw)
+#' burn = estimate(spec, 5)
+#' post = estimate(burn, 5)
+#' fore = forecast(post, 4)
+#' apply(fore$forecasts, 1:2, mean) # compute mean forecasts 
+#'
+#' @export
+specify_forecasts = R6::R6Class(
+  classname = "Forecasts",
+  
+  public = list(
+    
+    #' @field forecasts
+    #' An \code{N x horizon x S} numeric array containing draws from the
+    #' predictive density.
+    forecasts = array(),
+    
+    #' @field forecast_mean
+    #' An \code{N x horizon x S} numeric array containing the conditional
+    #' means of the predictive density.
+    forecast_mean = array(),
+    
+    #' @field forecast_covariance
+    #' An \code{N x N x horizon x S} numeric array containing the conditional
+    #' covariance matrices of the predictive density.
+    forecast_covariance = array(),
+    
+    #' @field Y
+    #' An \code{N x T} numeric matrix containing the data on the dependent
+    #' variables used for estimation.
+    Y = matrix(),
+    
+    #' @description
+    #' Creates a new \code{Forecasts} object from the output of the forecasting
+    #' procedure.
+    #'
+    #' @param output A list containing the forecasting output, including
+    #' \code{forecasts}, \code{forecast_mean}, and \code{forecast_cov}.
+    #' @param Y An \code{N x T} matrix containing the data on the dependent variables.
+    #'
+    #' @return An object of class \code{Forecasts}.
+    initialize = function(output, Y) {
+      
+      N       = dim(output$forecasts)[1]
+      horizon = dim(output$forecasts)[2]
+      S       = dim(output$forecasts)[3]
+      
+      forecast_covariance = array(
+        NA,
+        c(N, N, horizon, S)
+      )
+      
+      for (s in seq_len(S)) {
+        forecast_covariance[, , , s] = output$forecast_cov[s, ][[1]]
+      }
+      
+      self$forecasts           = output$forecasts
+      self$forecast_mean       = output$forecast_mean
+      self$forecast_covariance = forecast_covariance
+      self$Y                   = Y
+      
+      invisible(self)
+    },
+    
+    #' @description
+    #' Converts the \code{Forecasts} object to a list.
+    #'
+    #' @return A list containing \code{forecasts}, \code{forecast_mean},
+    #' \code{forecast_covariance}, and \code{Y}.
+    get_forecasts = function() {
+      
+      list(
+        forecasts           = self$forecasts,
+        forecast_mean       = self$forecast_mean,
+        forecast_covariance = self$forecast_covariance,
+        Y                   = self$Y
+      )
+    }
+  )
+)
+
+
 #' @title Forecasting using Structural Vector Autoregression
 #'
 #' @description Samples from the joint predictive density of all of the dependent 
@@ -9,7 +126,7 @@
 #' trajcetories of (some of the) variables.
 #' 
 #' @method forecast PosteriorBSVARSIGN
-#' @param posterior posterior estimation outcome - an object of class 
+#' @param object posterior estimation outcome - an object of class 
 #' \code{PosteriorBSVARSIGN} obtained by running the \code{estimate} function.
 #' @param horizon a positive integer, specifying the forecasting horizon.
 #' @param exogenous_forecast a matrix of dimension \code{horizon x d} containing 
@@ -18,6 +135,7 @@
 #' for selected variables. It should only contain \code{numeric} or \code{NA} 
 #' values. The entries with \code{NA} values correspond to the values that are 
 #' forecasted conditionally on the realisations provided as \code{numeric} values.
+#' @param ... Not used here.
 #' 
 #' @return A list of class \code{Forecasts} containing the
 #' draws from the predictive density and data. The output list includes element:
@@ -32,12 +150,6 @@
 #' @author Tomasz Woźniak \email{wozniak.tom@pm.me} and Xiaolei Wang \email{adamwang15@gmail.com}
 #' 
 #' @examples
-#' # upload data
-#' data(optimism)
-#' 
-#' # specify the model and set seed
-#' set.seed(123)
-#' 
 #' # + no effect on productivity (zero restriction)
 #' # + positive effect on stock prices (positive sign restriction) 
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
@@ -51,7 +163,6 @@
 #' 
 #' # workflow with the pipe |>
 #' ############################################################
-#' set.seed(123)
 #' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
 #'   estimate(S = 20) |> 
@@ -67,7 +178,6 @@
 #' 
 #' # workflow with the pipe |>
 #' ############################################################
-#' set.seed(123)
 #' optimism |>
 #'   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
 #'   estimate(S = 10) |> 
@@ -75,25 +185,26 @@
 #' 
 #' @export
 forecast.PosteriorBSVARSIGN = function(
-    posterior, 
+    object, 
     horizon = 1, 
     exogenous_forecast = NULL,
-    conditional_forecast = NULL
+    conditional_forecast = NULL,
+    ...
 ) {
   stopifnot("forecast: specify horizon as integer." = horizon %% 1 == 0)
   
-  posterior_Sigma = posterior$posterior$Sigma
-  posterior_A     = posterior$posterior$A
-  T               = ncol(posterior$last_draw$data_matrices$X)
-  X_T             = posterior$last_draw$data_matrices$X[,T]
-  Y               = posterior$last_draw$data_matrices$Y
-  posterior_hyper = posterior$posterior$hyper
-  covid           = posterior$last_draw$prior$covid
+  posterior_Sigma = object$posterior$Sigma
+  posterior_A     = object$posterior$A
+  T               = ncol(object$last_draw$data_matrices$X)
+  X_T             = object$last_draw$data_matrices$X[,T]
+  Y               = object$last_draw$data_matrices$Y
+  posterior_hyper = object$posterior$hyper
+  covid           = object$last_draw$prior$covid
   covid           = ifelse(is.null(covid), -1, covid)
   
   N               = nrow(posterior_Sigma)
   K               = length(X_T)
-  d               = K - N * posterior$last_draw$p - 1
+  d               = K - N * object$last_draw$p - 1
   S               = dim(posterior_Sigma)[3]
   
   # prepare forecasting with exogenous variables
@@ -138,11 +249,6 @@ forecast.PosteriorBSVARSIGN = function(
                       horizon
   ) # END .Call
   
-  forecast_covariance                         = array(NA, c(N, N, horizon, S))
-  for (s in 1:S) forecast_covariance[, , , s] = fore$forecast_cov[s, ][[1]]
-  fore$forecast_covariance                    = forecast_covariance
-  fore$Y                                      = Y
-  class(fore)                                 = "Forecasts"
-  
-  return(fore)
+  output = specify_forecasts$new(fore, Y)
+  return(output)
 } # END forecast.PosteriorBSVARSIGN

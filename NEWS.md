@@ -3,6 +3,8 @@
 2. Small open economy with fast zero restrictions [#82](https://github.com/bsvars/bsvarSIGNs/issues/82)
 3. Fix forecasting code with Covid hyperparameters [#85](https://github.com/bsvars/bsvarSIGNs/pull/85) [by Fei Shang](https://github.com/lcq110)
 
+1. Updated forecasting formatting [#80](https://github.com/bsvars/bsvarSIGNs/issues/80)
+
 # bsvarSIGNs 2.0
 
 1. The package has a [vignette](https://doi.org/10.48550/arXiv.2501.16711) now! ...and better citation information [#53](https://github.com/bsvars/bsvarSIGNs/issues/53)
