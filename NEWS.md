@@ -1,3 +1,5 @@
+# bsvarSIGNs 3.0.0
+
 # bsvarSIGNs 3.0
 
 1. Parallelized code for posterior sampling [#77](https://github.com/bsvars/bsvarSIGNs/issues/77)

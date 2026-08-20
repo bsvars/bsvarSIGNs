@@ -1,7 +1,7 @@
 Package: bsvarSIGNs
 Type: Package
 Title: Bayesian SVARs with Sign, Zero, and Narrative Restrictions
-Version: 2.0.0.9000
+Version: 3.0.0
 Date: 2025-01-28
 Authors@R: c(
     person(given = "Xiaolei", family = "Wang", email = "adamwang15@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0005-6192-9061")),
@@ -35,3 +35,4 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.2
