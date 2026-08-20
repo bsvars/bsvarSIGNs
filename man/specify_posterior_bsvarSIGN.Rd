@@ -19,7 +19,7 @@ class(posterior)
 
 
 ## ------------------------------------------------
-## Method `PosteriorBSVARSIGN$get_posterior()`
+## Method `specify_posterior_bsvarSIGN$get_posterior`
 ## ------------------------------------------------
 
 data(optimism)
@@ -30,7 +30,7 @@ estimate$get_posterior()
 
 
 ## ------------------------------------------------
-## Method `PosteriorBSVARSIGN$is_normalised()`
+## Method `specify_posterior_bsvarSIGN$is_normalised`
 ## ------------------------------------------------
 
 data(optimism)
@@ -46,115 +46,114 @@ posterior$is_normalised()
 \code{\link{estimate.BSVARSIGN}}, \code{\link{specify_bsvarSIGN}}
 }
 \section{Public fields}{
-  \if{html}{\out{<div class="r6-fields">}}
-  \describe{
-    \item{\code{last_draw}}{an object of class BSVARSIGN with the last draw of the current MCMC run as
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{last_draw}}{an object of class BSVARSIGN with the last draw of the current MCMC run as
 the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.}
 
-    \item{\code{posterior}}{a list containing Bayesian estimation output including:
+\item{\code{posterior}}{a list containing Bayesian estimation output including:
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
-  }
-  \if{html}{\out{</div>}}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-  \itemize{
-    \item \href{#method-PosteriorBSVARSIGN-initialize}{\code{PosteriorBSVARSIGN$new()}}
-    \item \href{#method-PosteriorBSVARSIGN-get_posterior}{\code{PosteriorBSVARSIGN$get_posterior()}}
-    \item \href{#method-PosteriorBSVARSIGN-is_normalised}{\code{PosteriorBSVARSIGN$is_normalised()}}
-    \item \href{#method-PosteriorBSVARSIGN-clone}{\code{PosteriorBSVARSIGN$clone()}}
-  }
+\itemize{
+\item \href{#method-PosteriorBSVARSIGN-new}{\code{specify_posterior_bsvarSIGN$new()}}
+\item \href{#method-PosteriorBSVARSIGN-get_posterior}{\code{specify_posterior_bsvarSIGN$get_posterior()}}
+\item \href{#method-PosteriorBSVARSIGN-is_normalised}{\code{specify_posterior_bsvarSIGN$is_normalised()}}
+\item \href{#method-PosteriorBSVARSIGN-clone}{\code{specify_posterior_bsvarSIGN$clone()}}
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PosteriorBSVARSIGN-initialize"></a>}}
-\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-initialize}{}}}
-\subsection{\code{PosteriorBSVARSIGN$new()}}{
-  Create a new posterior output PosteriorBSVARSIGN.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{PosteriorBSVARSIGN$new(specification_bsvarSIGN, posterior_bsvarSIGN)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{specification_bsvarSIGN}}{an object of class BSVARSIGN with the last draw of the current
-MCMC run as the starting value.}
-      \item{\code{posterior_bsvarSIGN}}{a list containing Bayesian estimation output collected in elements
-an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    A posterior output PosteriorBSVARSIGN.
-  }
+\if{html}{\out{<a id="method-PosteriorBSVARSIGN-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new posterior output PosteriorBSVARSIGN.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$new(specification_bsvarSIGN, posterior_bsvarSIGN)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{specification_bsvarSIGN}}{an object of class BSVARSIGN with the last draw of the current
+MCMC run as the starting value.}
+
+\item{\code{posterior_bsvarSIGN}}{a list containing Bayesian estimation output collected in elements
+an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A posterior output PosteriorBSVARSIGN.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-get_posterior"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-get_posterior}{}}}
-\subsection{\code{PosteriorBSVARSIGN$get_posterior()}}{
-  Returns a list containing Bayesian estimation output collected in elements
+\subsection{Method \code{get_posterior()}}{
+Returns a list containing Bayesian estimation output collected in elements
 an \code{NxNxS} array \code{B}, an \code{NxKxS} array \code{A}, and a \code{5xS} matrix \code{hyper}.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{PosteriorBSVARSIGN$get_posterior()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{data(optimism)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$get_posterior()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(optimism)
 specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 50)
 estimate$get_posterior()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-is_normalised"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-is_normalised}{}}}
-\subsection{\code{PosteriorBSVARSIGN$is_normalised()}}{
-  Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
+\subsection{Method \code{is_normalised()}}{
+Returns \code{TRUE} if the posterior has been normalised using \code{normalise_posterior()}
 and \code{FALSE} otherwise.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{PosteriorBSVARSIGN$is_normalised()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{data(optimism)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$is_normalised()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{data(optimism)
 specification  = specify_bsvarSIGN$new(optimism)
 set.seed(123)
 estimate       = estimate(specification, 20)
 
 # check normalisation status afterwards
 posterior$is_normalised()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PosteriorBSVARSIGN-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-PosteriorBSVARSIGN-clone}{}}}
-\subsection{\code{PosteriorBSVARSIGN$clone()}}{
-  The objects of this class are cloneable with this method.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{PosteriorBSVARSIGN$clone(deep = FALSE)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_posterior_bsvarSIGN$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }
