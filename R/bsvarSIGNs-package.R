@@ -125,13 +125,19 @@
 #'  
 #'  Arias, Rubio-Ramírez, & Waggoner (2018), Inference Based on Structural Vector Autoregressions Identified With Sign and Zero Restrictions: Theory and Applications, Econometrica, 86(2), 685-720, <doi:10.3982/ECTA14468>.
 #'  
-#'  Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 <doi:10.1162/REST_a_00483>.
+#'  Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451, <doi:10.1162/REST_a_00483>.
+#'  
+#'  Lenza, Primiceri (2022) How to estimate a vector autoregression after march 2020. Journal of Applied Econometrics 37 (4), 688–699, <doi:10.1002/jae.2895>.
+#'  
+#'  Liu, Ramirez Hassan, Woźniak (2026) bvars: Bayesian Forecasting with Large Vector Autoregressions. R package version 1.0, <doi:10.32614/CRAN.package.bvars>.
 #'  
 #'  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
 #'  
 #'  Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, <doi:10.48550/arXiv.2501.16711>.
 #'  
-#'  Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.1, <doi:10.32614/CRAN.package.bsvars>.
+#'  Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.2, <doi:10.32614/CRAN.package.bsvars>.
+#'  
+#'  Woźniak T (2026) bpvars: Forecasting with Bayesian Panel Vector Autoregressions. R package version 2.0, <doi:10.32614/CRAN.package.bpvars>.
 #'  
 #' @examples
 #' # investigate the effects of the optimism shock

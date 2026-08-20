@@ -7,28 +7,32 @@
 by Sign, Zero, and Narrative Restrictions}
 \description{
 Implements state-of-the-art algorithms for the Bayesian analysis 
-of Structural Vector Autoregressions identified by sign, zero, and narrative 
-restrictions. The core model is based on a flexible Vector Autoregression with 
-estimated hyper-parameters of the Minnesota prior and the dummy observation priors
-as in Giannone, Lenza, Primiceri (2015) <doi:10.1162/REST_a_00483>. The sign 
+of Structural Vector Autoregressions (SVARs) identified by sign, zero, and 
+narrative restrictions. The core model is based on a flexible Vector 
+Autoregression with estimated hyper-parameters of the Minnesota prior and the 
+dummy observation priors as in Giannone, Lenza, Primiceri (2015) 
+<doi:10.1162/REST_a_00483> extended by the COVID-specific heteroskedasticity 
+proposed by Lenza, Primiceri (2022) <doi:10.1002/jae.2895>. The sign 
 restrictions are implemented employing the methods proposed by 
 Rubio-Ramírez, Waggoner & Zha (2010) <doi:10.1111/j.1467-937X.2009.00578.x>, 
 while identification through sign and zero restrictions follows the approach 
 developed by Arias, Rubio-Ramírez, & Waggoner (2018) <doi:10.3982/ECTA14468>. 
-Furthermore, our tool provides algorithms for identification via sign and 
+Furthermore, our toolset provides algorithms for identification via sign and 
 narrative restrictions, in line with the methods introduced by 
 Antolín-Díaz and Rubio-Ramírez (2018) <doi:10.1257/aer.20161852>. Users can 
 also estimate a model with sign, zero, and narrative restrictions imposed at 
-once. The package facilitates predictive and structural analyses using 
-impulse responses, forecast error variance and historical decompositions, 
-forecasting and conditional forecasting, as well as analyses of structural 
-shocks and fitted values. All this is complemented by colourful plots, 
-user-friendly summary functions, and comprehensive documentation. The 
-'bsvarSIGNs' package is aligned regarding objects, workflows, and code 
-structure with the R package 'bsvars' by 
-Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, and they constitute an 
-integrated toolset. It was granted the Di Cook Open-Source Statistical 
-Software Award by the Statistical Society of Australia in 2024.
+once. The package facilitates predictive and structural analyses using impulse 
+responses, forecast error variance and historical decompositions, forecasting 
+and conditional forecasting, as well as analyses of structural shocks and 
+fitted values. All this is complemented by colourful plots, user-friendly 
+summary functions, and comprehensive documentation including the vignette by 
+Wang & Woźniak (2024) <doi:10.48550/arXiv.2501.16711>. The 'bsvarSIGNs' package 
+is aligned regarding objects, workflows, and code structure with the R packages 
+'bsvars' by Woźniak (2024) <doi:10.32614/CRAN.package.bsvars>, 'bvars' by 
+Liu, Ramirez Hassan, Woźniak (2026) <doi:10.32614/CRAN.package.bvars>, and 
+'bpvars' by Woźniak (2026) <doi:10.32614/CRAN.package.bpvars>, and they 
+constitute an integrated toolset. It was granted the Di Cook Open-Source 
+Statistical Software Award by the Statistical Society of Australia in 2024.
 }
 \details{
 \strong{Models.} All the SVAR models in this package are specified by two 
@@ -115,13 +119,19 @@ Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, Am
  
  Arias, Rubio-Ramírez, & Waggoner (2018), Inference Based on Structural Vector Autoregressions Identified With Sign and Zero Restrictions: Theory and Applications, Econometrica, 86(2), 685-720, <doi:10.3982/ECTA14468>.
  
- Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 <doi:10.1162/REST_a_00483>.
+ Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451, <doi:10.1162/REST_a_00483>.
+ 
+ Lenza, Primiceri (2022) How to estimate a vector autoregression after march 2020. Journal of Applied Econometrics 37 (4), 688–699, <doi:10.1002/jae.2895>.
+ 
+ Liu, Ramirez Hassan, Woźniak (2026) bvars: Bayesian Forecasting with Large Vector Autoregressions. R package version 1.0, <doi:10.32614/CRAN.package.bvars>.
  
  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
  
  Wang, Xiaolei and Woźniak, Tomasz (2025). Bayesian Analyses of Structural Vector Autoregressions with Sign, Zero, and Narrative Restrictions Using the R Package bsvarSIGNs, <doi:10.48550/arXiv.2501.16711>.
  
- Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.1, <doi:10.32614/CRAN.package.bsvars>.
+ Woźniak (2024) bsvars: Bayesian Estimation of Structural Vector Autoregressive Models. R package version 3.2, <doi:10.32614/CRAN.package.bsvars>.
+ 
+ Woźniak T (2026) bpvars: Forecasting with Bayesian Panel Vector Autoregressions. R package version 2.0, <doi:10.32614/CRAN.package.bpvars>.
 }
 \author{
 Xiaolei Wang \email{adamwang15@gmail.com} & Tomasz Woźniak \email{wozniak.tom@pm.me}
