@@ -192,17 +192,17 @@ double log_ml_dummy(
     double s2 = hyper(N + 5);
     double rho = hyper(N + 6);
     
-    vec s = ones<vec>(T);
-    if (c_idx < T) s(c_idx) = s0;
-    if (c_idx + 1 < T) s(c_idx + 1) = s1;
-    if (c_idx + 2 < T) s(c_idx + 2) = s2;
+    vec scale = ones<vec>(T);
+    if (c_idx < T) scale(c_idx) = s0;
+    if (c_idx + 1 < T) scale(c_idx + 1) = s1;
+    if (c_idx + 2 < T) scale(c_idx + 2) = s2;
     for (int t = c_idx + 3; t < T; t++) {
-      s(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
+      scale(t) = 1.0 + (s2 - 1.0) * std::pow(rho, t - c_idx - 2);
     }
     
-    Y_scaled.each_col() /= s;
-    X_scaled.each_col() /= s;
-    jacobian -= N * arma::accu(arma::log(s));
+    Y_scaled.each_col() /= scale;
+    X_scaled.each_col() /= scale;
+    jacobian -= N * arma::accu(arma::log(scale));
   }
 
   mat    Yplus       = join_vert(Ystar, Y_scaled);

@@ -117,7 +117,7 @@ compute_fitted_values.PosteriorBSVARSIGN <- function(posterior) {
   N               = dim(posterior_A)[1]
   T               = dim(posterior$last_draw$data_matrices$X)[2]
   S               = dim(posterior_A)[3]
-  posterior_sigma = array(1, c(N, T, S))
+  posterior_sigma = posterior$posterior$sigma
   X               = posterior$last_draw$data_matrices$X
   
   fv              = .Call(`_bsvarSIGNs_bsvarSIGNs_fitted_values`, posterior_A, posterior_B, posterior_sigma, X)
@@ -436,8 +436,7 @@ compute_conditional_sd.PosteriorBSVARSIGN <- function(posterior) {
   T     = ncol(Y)
   S     = dim(posterior$posterior$A)[3]
   
-  posterior_sigma       = array(1, c(N, T, S))
-  message("The model is homoskedastic. Returning an NxTxS matrix of conditional sd all equal to 1.")
+  posterior_sigma = posterior$posterior$sigma
   class(posterior_sigma)  = "PosteriorSigma"
   
   return(posterior_sigma)

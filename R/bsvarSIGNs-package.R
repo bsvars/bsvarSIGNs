@@ -114,6 +114,7 @@
 #' @import bsvars
 #' @import RcppArmadillo
 #' @import RcppProgress
+#' @importFrom parallel mclapply parLapply
 #' 
 #' @note This package is currently in active development. Your comments,
 #' suggestions and requests are warmly welcome!

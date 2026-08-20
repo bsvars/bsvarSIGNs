@@ -10,7 +10,7 @@ bool match_sign_narrative(
 );
 
 
-double weight_narrative(
+double log_weight_narrative(
     const int&                    T,
     arma::mat                     sign_narrative,
     const arma::cube&             irf

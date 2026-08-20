@@ -92,6 +92,10 @@
 #' @export
 estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE) {
   
+  if (ncol(specification$prior$hyper) > 1 && S > ncol(specification$prior$hyper)) {
+    stop("The number of requested draws S cannot be greater than the number of sampled hyperparameters.")
+  }
+  
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
   prior               = specification$prior$get_prior()
@@ -216,46 +220,60 @@ estimate_par = function(specification, S, thin = 1, show_progress = TRUE, mc.cor
   chunks = split(1:S, sort(rep_len(1:mc.cores, S)))
   seeds = sample.int(.Machine$integer.max, S, replace = TRUE)
   
-  worker_func = function(chunk) {
-    chunk_size = length(chunk)
-    is_worker_1 = (chunk[1] == 1)
-    
-    res_list = lapply(seq_along(chunk), function(i) {
-      if (show_progress && is_worker_1) {
-        num_stars = floor(i * 50 / chunk_size) - floor((i - 1) * 50 / chunk_size)
-        if (num_stars > 0) {
-          cat(rep("*", num_stars), sep = "")
-          utils::flush.console()
-        }
-      }
-      
-      set.seed(seeds[chunk[i]])
-      .Call(`_bsvarSIGNs_bsvar_sign_par_cpp`, p, Y, X, sign, narrative, struc, Z, Nf, prior, max_tries)
-    })
-    
-    if (show_progress && is_worker_1) {
-      cat("|\n")
-      utils::flush.console()
-    }
-    
-    return(res_list)
-  }
-  
   is_windows = .Platform$OS.type == "windows"
   
   if (is_windows) {
     cl = parallel::makeCluster(mc.cores, outfile = "")
     on.exit(parallel::stopCluster(cl))
-    parallel::clusterExport(cl, varlist = c("p", "Y", "X", "sign", "narrative", "struc", "Z", "Nf", "prior", "max_tries", "show_progress", "seeds"), envir = environment())
-    results_chunks = parallel::parLapply(cl, chunks, worker_func)
-  } else {
-    results_chunks = parallel::mclapply(chunks, worker_func, mc.cores = mc.cores, mc.set.seed = FALSE)
+    parallel::clusterExport(cl, varlist = c("p", "Y", "X", "sign", "narrative", "struc", "Z", "Nf", "prior", "max_tries", "seeds", "S"), envir = environment())
   }
   
-  results = unlist(results_chunks, recursive = FALSE)
+  results = vector("list", S)
+  stars_printed = 0
   
-  if (inherits(results_chunks[[1]], "try-error")) {
-    stop("Error in parallel execution: ", results_chunks[[1]])
+  num_blocks = 50
+  if (S < 50) num_blocks = S
+  blocks = split(1:S, sort(rep_len(1:num_blocks, S)))
+  
+  for (b in 1:num_blocks) {
+    block = blocks[[b]]
+    chunks = split(block, sort(rep_len(1:mc.cores, length(block))))
+    
+    worker_func = function(chunk) {
+      res_list = lapply(seq_along(chunk), function(i) {
+        set.seed(seeds[chunk[i]])
+        idx_cpp = ncol(prior$hyper) - S + chunk[i] - 1
+        .Call(`_bsvarSIGNs_bsvar_sign_par_cpp`, p, Y, X, sign, narrative, struc, Z, Nf, prior, max_tries, idx_cpp)
+      })
+      return(res_list)
+    }
+    
+    if (is_windows) {
+      res_chunks = parallel::parLapply(cl, chunks, worker_func)
+    } else {
+      res_chunks = parallel::mclapply(chunks, worker_func, mc.cores = mc.cores, mc.set.seed = FALSE)
+    }
+    
+    if (inherits(res_chunks[[1]], "try-error")) {
+      stop("Error in parallel execution: ", res_chunks[[1]])
+    }
+    
+    res_flat = unlist(res_chunks, recursive = FALSE)
+    results[block] = res_flat
+    
+    if (show_progress) {
+      stars_to_print = floor(b * 50 / num_blocks) - stars_printed
+      if (stars_to_print > 0) {
+        cat(rep("*", stars_to_print), sep = "")
+        flush(stdout())
+        stars_printed = stars_printed + stars_to_print
+      }
+    }
+  }
+  
+  if (show_progress) {
+    cat("|\n")
+    flush(stdout())
   }
   
   posterior_w      = matrix(NA, nrow = S, ncol = 1)
