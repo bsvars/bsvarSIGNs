@@ -1,0 +1,326 @@
+# bsvarSIGNs
+
+An **R** package for Bayesian Estimation of Structural Vector
+Autoregressions Identified by Sign, Zero, and Narrative Restrictions
+
+*The First Prize laureate of the Di Cook Open-Source Statistical
+Software Award granted by the Statistical Society of Australia in 2024*
+
+Implements state-of-the-art algorithms for the Bayesian analysis of
+Structural Vector Autoregressions (SVARs) identified by sign, zero, and
+narrative restrictions. The core model is based on a flexible Vector
+Autoregression with estimated hyper-parameters of the Minnesota prior
+and the dummy observation priors as in [Giannone, Lenza, Primiceri
+(2015)](http://doi.org/10.1162/REST_a_00483) extended by the
+COVID-specific heteroskedasticity proposed by [Lenza, Primiceri
+(2022)](http://doi.org/10.1002/jae.2895). The sign restrictions are
+implemented employing the methods proposed by [Rubio-Ramírez, Waggoner &
+Zha (2010)](http://doi.org/10.1111/j.1467-937X.2009.00578.x), while
+identification through sign and zero restrictions follows the approach
+developed by [Arias, Rubio-Ramírez, & Waggoner
+(2018)](http://doi.org/10.3982/ECTA14468). Furthermore, our toolset
+provides algorithms for identification via sign and narrative
+restrictions, in line with the methods introduced by [Antolín-Díaz and
+Rubio-Ramírez (2018)](http://doi.org/10.1257/aer.20161852). Users can
+also estimate a model with sign, zero, and narrative restrictions
+imposed at once. The package facilitates predictive and structural
+analyses using impulse responses, forecast error variance and historical
+decompositions, forecasting and conditional forecasting, as well as
+analyses of structural shocks and fitted values. All this is
+complemented by colourful plots, user-friendly summary functions, and
+comprehensive documentation including the vignette by [Wang & Woźniak
+(2025)](http://doi.org/10.48550/arXiv.2501.16711). The ‘bsvarSIGNs’
+package is aligned regarding objects, workflows, and code structure with
+the R packages ‘bsvars’ by [Woźniak
+(2024)](http://doi.org/10.32614/CRAN.package.bsvars), ‘bvars’ by [Liu,
+Ramirez Hassan, Woźniak
+(2026)](http://doi.org/10.32614/CRAN.package.bvars), and ‘bpvars’ by
+[Woźniak (2026)](http://doi.org/10.32614/CRAN.package.bpvars), and they
+constitute an integrated toolset. It was granted the Di Cook Open-Source
+Statistical Software Award by the Statistical Society of Australia in
+2024.
+
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/house.svg)](https://bsvars.org)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg)](mailto:contact@bsvars.org)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg)](https://github.com/bsvars/bpvars)
+[![](https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg)](https://bsky.app/profile/bsvars.org)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg)](https://fosstodon.org/@bsvars)
+
+[![bsvars.org
+website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvars.org/bsvars.org.png)](https://bsvars.org/)
+[![bsvars
+website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvars/bsvars.png)](https://bsvars.org/bsvars/)
+[![bsvarSIGNs
+website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bsvarSIGNs/bsvarSIGNs.png)](https://bsvars.org/bsvarSIGNs/)
+[![bpvars
+website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/bpvars/bpvars.png)](https://bsvars.org/bpvars/)
+[![bvars
+website](reference/figures/logo.png)](https://bsvars.org/bvars/)
+[![StealLikeBayes
+website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/StealLikeBayes/StealLikeBayes.png)](https://bsvars.org/StealLikeBayes/)
+
+## Features
+
+#### Structural Vector Autoregressions
+
+- All the models in the **bsvarSIGNs** package consist of the Vector
+  Autoregressive equation, with autoregressive parameters `A` and error
+  terms `E`, and the structural equation with a structural matrix `B`
+  and shocks `U`
+
+``` R
+    Y = AX + E           (VAR equation)
+   BE = U                (structural equation)
+```
+
+- All the models feature a hierarchical Minnesota prior following the
+  specification proposed by Giannone, Lenza, Primiceri (2015)
+- The identification of the SVAR model is achieved by imposing:
+  - sign restrictions on the structural matrix $`\mathbf{B}`$,
+  - sign and zero restrictions on the zero-horizon impulse responses
+    $`\mathbf{\Theta}_0 = \mathbf{B}^{-1}`$,
+  - sign restrictions on the impulse responses at other horizons
+    $`\mathbf{\Theta}_i`$ for $`i = 1, 2, \ldots`$,
+  - sign restrictions on selected structural shocks $`\mathbf{u}_t`$,
+  - two types of sign restrictions on the historical decompositions.
+
+#### Simple workflows
+
+- Specify the models using `specify_bsvarSIGN$new()` function
+- Estimate the models using the `estimate()` method
+- Predict the future using the
+  [`forecast()`](https://generics.r-lib.org/reference/forecast.html)
+  method
+- Provide structural analyses using **impulse responses**, forecast
+  error variance decompositions, historical decompositions, and
+  structural shocks using functions `compute_impulse_responses()`,
+  `compute_variance_decompositions()`,
+  `compute_historical_decompositions()`, and
+  `compute_structural_shocks()` respectively
+- Analyse the fitted values, time-varying volatility using functions
+  `compute_fitted_values()` and `compute_conditional_sd()` respectively
+- Use [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) methods to gain the
+  insights into the core of the empirical problem.
+
+#### Fast and efficient computations
+
+- Blazingly fast computations are obtained by combining
+  - the application of frontier econometric and numerical techniques,
+    and
+  - the implementation using compiled code written in **cpp**
+- It combines the best of two worlds: the ease of data analysis with
+  **R** and fast **cpp** algorithms
+- The algorithms used here are very fast. But still, Bayesian estimation
+  might take a little time. Look at our beautiful **progress bar** in
+  the meantime:
+
+``` R
+**************************************************|
+ bsvarSIGNs: Bayesian Structural VAR with sign,   |
+             zero and narrative restrictions      |
+**************************************************|
+ Progress of simulation for 1000 independent draws
+ Press Esc to interrupt the computations
+**************************************************|
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+***********************************
+```
+
+#### The hexagonal logo
+
+This beautiful logo can be reproduced in R using [this
+file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
+
+[![bsvars
+website](reference/figures/logo.png)](https://bsvars.org/bsvarSIGNs/)
+
+## Resources
+
+- a vignette by [Wang & Woźniak
+  (2025)](https://doi.org/10.48550/arXiv.2501.16711)
+- a website of the family of packages [bsvars.org](https://bsvars.org/)
+- **bsvarSIGNs** on
+  [CRAN](https://cran.r-project.org/package=bsvarSIGNs)
+- youtube recordings:
+  - [Workshop on Open Source
+    Forecasting](https://event.nectric.com.au/iif-osf/) [youtube
+    recording](https://www.youtube.com/watch?v=Gmd7x0gwS7U)
+  - [Workshops for
+    Ukraine](https://sites.google.com/view/dariia-mykhailyshyna/main/r-workshops-for-ukraine)
+    [youtube recording](https://www.youtube.com/watch?v=zjjM0l2r6gM)
+  - [Di Cook Open-Source Statistical Software Award
+    Seminar](https://statsoc.org.au/Di-Cook-Award) [youtube
+    recording](https://www.youtube.com/watch?v=0UqwxWD0s_4)
+  - [Forecasting for Social Good](https://www.f4sg.org/) [youtube
+    recording](https://youtu.be/QT02OTZWW14)
+- presentations:
+  - [Quantlab](https://quantilab.github.io/) [2025-07 featuring
+    **bsvarSIGNs** 2.0](https://bsvars.org/2025-07-28-QuantLab/)
+  - [IIF Workshop on Open Source
+    Forecasting](https://event.nectric.com.au/iif-osf/) [2025-06
+    featuring **bsvarSIGNs** 2.0](https://bsvars.org/2025-06-iifosf/)
+  - [Workshops for
+    Ukraine](https://sites.google.com/view/dariia-mykhailyshyna/main/r-workshops-for-ukraine)
+    [2025-03 featuring **bsvarSIGNs**
+    2.0](https://bsvars.org/2025-03-bsvarSIGNs-w4UKR/)
+  - [Statistical Society of Australia](https://statsoc.org.au/) [2025-02
+    featuring **bsvarSIGNs** 2.0](https://bsvars.org/2025-02-DiCook/)
+  - for students at [Szkoła Główna Handlowa](https://www.sgh.waw.pl/)
+    given in Warsaw in December 2024 [featuring **bsvars** 3.2 and
+    **bsvarSIGNs** 1.0.1](https://bsvars.org/2024-12-sgh/)\]
+  - at [Uniwersytet Warszawski](https://www.wne.uw.edu.pl/) given in
+    Warsaw in December 2024 [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-uwwne/)
+  - for students and researchers at [Uniwersytet Ekonomiczny w
+    Krakowie](https://uek.krakow.pl/) given in Cracow in December 2024
+    [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-uek/)
+  - a [youtube recording](https://youtu.be/QT02OTZWW14)\] for
+    \[[Forecasting for Social Good](https://www.f4sg.org/)
+  - for [Forecasting for Social Good](https://www.f4sg.org/) given
+    online in December 2024 [featuring **bsvars** 3.2 and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-12-F4SG/)\]
+  - for Bayesian Econometrics students at the University of Melbourne
+    given in October 2024 [featuring **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-10-be24-bsvarSIGNs/)
+  - for the [QuantEcon](https://quantecon.org/) lab at the Australian
+    National University given in August 2024 [featuring **bsvars** 3.1
+    and **bsvarSIGNs**
+    1.0.1](https://bsvars.org/2024-08-bsvars-QuantEcon/)
+  - at Monash University given in August 2024 [featuring **bsvars** 3.1
+    and **bsvarSIGNs** 1.0](https://bsvars.org/2024-08-bsvars-monash/)
+  - a [youtube recording](https://www.youtube.com/watch?v=0UqwxWD0s_4)
+    for [Di Cook Open-Source Statistical Software
+    Award](https://statsoc.org.au/Di-Cook-Award) in February 2025
+
+## Examples
+
+Replication of the results by [Arias, Rubio-Ramírez, & Waggoner
+(2018)](http://doi.org/10.3982/ECTA14468).
+
+``` r
+
+# investigate the effects of the optimism shock
+data(optimism)
+
+# specify identifying restrictions:
+# + no effect on productivity (zero restriction)
+# + positive effect on stock prices (positive sign restriction)
+sign_irf = matrix(c(0, 1, rep(NA, 23)), 5, 5)
+
+# specify the model
+spec     = specify_bsvarSIGN$new(optimism * 100,
+                                 p        = 4,
+                                 sign_irf = sign_irf,
+                                 mc.cores = parallel::detectCores() - 1)
+spec$no_dummy_observations()
+
+# estimate the model
+post     = estimate(spec, S = 100)
+
+# compute and plot impulse responses
+irf      = compute_impulse_responses(post, horizon = 40)
+plot(irf, probability = 0.68)
+```
+
+Replication of the results by [Antolín-Díaz and Rubio-Ramírez
+(2018)](http://doi.org/10.1257/aer.20161852).
+
+``` r
+
+# investigate the effects of the contractionary monetary policy shock
+data(monetary)
+
+# specify identifying restrictions:
+# + sign restrictions on the impulse responses at horizons from 0 to 5
+sign_irf       = matrix(NA, 6, 6)
+sign_irf[, 1]  = c(NA, -1, -1, NA, -1, 1)
+sign_irf       = array(sign_irf, dim = c(6, 6, 6))
+
+# + narrative sign restriction: the shock is positive in October 1979
+sign_narrative = list(
+  specify_narrative(start = 166, periods = 1, type = "S", sign = 1, shock = 1)
+  # specify_narrative(start = 166, periods = 1, type = "B", sign = 1, shock = 1, var = 6)
+)
+
+# specify the model
+spec           = specify_bsvarSIGN$new(monetary       * 100,
+                                       p              = 12,
+                                       sign_irf       = sign_irf,
+                                       sign_narrative = sign_narrative,
+                                       mc.cores       = parallel::detectCores() - 1)
+spec$no_dummy_observations()
+
+# estimate the model
+post           = estimate(spec, S = 100)
+
+# compute and plot impulse responses
+irf            = compute_impulse_responses(post, horizon = 60)
+plot(irf, probability = 0.68)
+```
+
+## Installation
+
+#### The first time you install the package
+
+You must have a **cpp** compiler. Follow the instructions from [Section
+1.3. by Eddelbuettel & François
+(2023)](https://cran.r-project.org/package=Rcpp/vignettes/Rcpp-FAQ.pdf).
+In short, for **Windows:** install
+[RTools](https://CRAN.R-project.org/bin/windows/Rtools/), for **macOS:**
+install [Xcode Command Line
+Tools](https://www.freecodecamp.org/news/install-xcode-command-line-tools/),
+and for **Linux:** install the standard development packages.
+
+#### Once that’s done:
+
+Just open your **R** and type:
+
+``` R
+install.packages("bsvarSIGNs")
+```
+
+The developer’s version of the package with the newest features can be
+installed by typing:
+
+``` R
+devtools::install_github("bsvars/bsvarSIGNs")
+```
+
+## Development
+
+Your help is most welcome! Contribute by submitting a Pull Request with
+your code. Contributions that add new functionality require prior
+agreement with the package authors. We only accept submissions from
+humans, and AI agents cannot be listed as contributors. This means that
+the person providing the code takes full responsibility for the
+contribution. Please also have a look at the
+[roadmap](https://github.com/bsvars/bsvarSIGNs/milestones), or [report a
+bug](https://github.com/bsvars/bsvarSIGNs/issues). Thank you!
+
+## About the authors
+
+**Xiaolei** is a PhD candidate at the University of Melbourne. He is
+interested in Bayesian econometrics and time series analysis and is the
+author and maintainer of the **bsvarSIGNs** package.
+
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg)](mailto:adamwang15@gmail.com)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg)](https://github.com/adamwang15)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg)](https://orcid.org/0009-0005-6192-9061)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/xiaolei-adam-wang/)
+
+**Tomasz** is a Bayesian econometrician and a Senior Lecturer at the
+University of Melbourne. He develops methodology for empirical
+macroeconomic analyses and programs in **R** and **C++** using **Rcpp**.
+
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/envelope.svg)](mailto:twozniak@unimelb.edu.au)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/github.svg)](https://github.com/donotdespair)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/orcid.svg)](https://orcid.org/0000-0003-2212-2378)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/tomaszwwozniak)
+[![](https://raw.githubusercontent.com/jpswalsh/academicons/refs/heads/master/svg/google-scholar-square.svg)](https://scholar.google.com/citations?user=2uWpFrYAAAAJ&hl)
+[![](https://raw.githubusercontent.com/jpswalsh/academicons/refs/heads/master/svg/arxiv-square.svg)](https://arxiv.org/a/wozniak_t_1)
+[![](https://raw.githubusercontent.com/jpswalsh/academicons/refs/heads/master/svg/researchgate-square.svg)](https://www.researchgate.net/profile/Tomasz-Wozniak-2)
+[![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/mastodon.svg)](https://fosstodon.org/@tomaszwozniak)
+[![](https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg)](https://bsky.app/profile/tomaszwozniak.bsky.social)
