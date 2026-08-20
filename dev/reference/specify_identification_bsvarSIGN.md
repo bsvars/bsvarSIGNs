@@ -33,23 +33,23 @@ restrictions.
 
 ### Public methods
 
-- [`specify_identification_bsvarSIGN$new()`](#method-IdentificationBSVARSIGN-new)
+- [`IdentificationBSVARSIGN$new()`](#method-IdentificationBSVARSIGN-initialize)
 
-- [`specify_identification_bsvarSIGN$get_identification()`](#method-IdentificationBSVARSIGN-get_identification)
+- [`IdentificationBSVARSIGN$get_identification()`](#method-IdentificationBSVARSIGN-get_identification)
 
-- [`specify_identification_bsvarSIGN$set_identification()`](#method-IdentificationBSVARSIGN-set_identification)
+- [`IdentificationBSVARSIGN$set_identification()`](#method-IdentificationBSVARSIGN-set_identification)
 
-- [`specify_identification_bsvarSIGN$clone()`](#method-IdentificationBSVARSIGN-clone)
+- [`IdentificationBSVARSIGN$clone()`](#method-IdentificationBSVARSIGN-clone)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `IdentificationBSVARSIGN$new()`
 
 Create new identifying restrictions IdentificationBSVARSIGN.
 
 #### Usage
 
-    specify_identification_bsvarSIGN$new(
+    IdentificationBSVARSIGN$new(
       N,
       sign_irf,
       sign_narrative,
@@ -91,24 +91,24 @@ Identifying restrictions IdentificationBSVARSIGN.
 
 ------------------------------------------------------------------------
 
-### Method `get_identification()`
+### `IdentificationBSVARSIGN$get_identification()`
 
 Returns the elements of the identification pattern
 IdentificationBSVARSIGN as a `list`.
 
 #### Usage
 
-    specify_identification_bsvarSIGN$get_identification()
+    IdentificationBSVARSIGN$get_identification()
 
 ------------------------------------------------------------------------
 
-### Method `set_identification()`
+### `IdentificationBSVARSIGN$set_identification()`
 
 Set new starting values StartingValuesBSVARSIGN.
 
 #### Usage
 
-    specify_identification_bsvarSIGN$set_identification(
+    IdentificationBSVARSIGN$set_identification(
       N,
       sign_irf,
       sign_narrative,
@@ -145,13 +145,13 @@ Set new starting values StartingValuesBSVARSIGN.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `IdentificationBSVARSIGN$clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    specify_identification_bsvarSIGN$clone(deep = FALSE)
+    IdentificationBSVARSIGN$clone(deep = FALSE)
 
 #### Arguments
 

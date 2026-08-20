@@ -12,16 +12,17 @@ trajcetories of (some of the) variables.
 ``` r
 # S3 method for class 'PosteriorBSVARSIGN'
 forecast(
-  posterior,
+  object,
   horizon = 1,
   exogenous_forecast = NULL,
-  conditional_forecast = NULL
+  conditional_forecast = NULL,
+  ...
 )
 ```
 
 ## Arguments
 
-- posterior:
+- object:
 
   posterior estimation outcome - an object of class `PosteriorBSVARSIGN`
   obtained by running the `estimate` function.
@@ -41,6 +42,10 @@ forecast(
   It should only contain `numeric` or `NA` values. The entries with `NA`
   values correspond to the values that are forecasted conditionally on
   the realisations provided as `numeric` values.
+
+- ...:
+
+  Not used here.
 
 ## Value
 
@@ -69,12 +74,6 @@ Tomasz Woźniak <wozniak.tom@pm.me> and Xiaolei Wang
 ## Examples
 
 ``` r
-# upload data
-data(optimism)
-
-# specify the model and set seed
-set.seed(123)
-
 # + no effect on productivity (zero restriction)
 # + positive effect on stock prices (positive sign restriction) 
 sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
@@ -95,7 +94,6 @@ predictive     = forecast(posterior, 4)
 
 # workflow with the pipe |>
 ############################################################
-set.seed(123)
 optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 20) |> 
@@ -118,7 +116,6 @@ predictive = forecast(posterior, 2, conditional_forecast = cf)
 
 # workflow with the pipe |>
 ############################################################
-set.seed(123)
 optimism |>
   specify_bsvarSIGN$new(sign_irf = sign_irf) |>
   estimate(S = 10) |> 

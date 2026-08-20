@@ -24,6 +24,8 @@ Choose a model to work with
 
 - [`specify_bsvarSIGN`](https://bsvars.org/bsvarSIGNs/dev/reference/specify_bsvarSIGN.md)
   : R6 Class representing the specification of the BSVARSIGN model
+- [`specify_forecasts`](https://bsvars.org/bsvarSIGNs/dev/reference/specify_forecasts.md)
+  : R6 Class Representing Forecasts
 - [`specify_identification_bsvarSIGN`](https://bsvars.org/bsvarSIGNs/dev/reference/specify_identification_bsvarSIGN.md)
   : R6 Class Representing IdentificationBSVARSIGN
 - [`specify_narrative()`](https://bsvars.org/bsvarSIGNs/dev/reference/specify_narrative.md)
@@ -58,6 +60,8 @@ Predict future values of your variables
 
 - [`forecast(`*`<PosteriorBSVARSIGN>`*`)`](https://bsvars.org/bsvarSIGNs/dev/reference/forecast.PosteriorBSVARSIGN.md)
   : Forecasting using Structural Vector Autoregression
+- [`specify_forecasts`](https://bsvars.org/bsvarSIGNs/dev/reference/specify_forecasts.md)
+  : R6 Class Representing Forecasts
 
 ## Structural analyses
 

@@ -4,11 +4,16 @@
 
 1.  Parallelized code for posterior sampling
     [\#77](https://github.com/bsvars/bsvarSIGNs/issues/77)
+
 2.  Small open economy with fast zero restrictions
     [\#82](https://github.com/bsvars/bsvarSIGNs/issues/82)
+
 3.  Fix forecasting code with Covid hyperparameters
     [\#85](https://github.com/bsvars/bsvarSIGNs/pull/85) [by Fei
     Shang](https://github.com/lcq110)
+
+4.  Updated forecasting formatting
+    [\#80](https://github.com/bsvars/bsvarSIGNs/issues/80)
 
 ## bsvarSIGNs 2.0
 

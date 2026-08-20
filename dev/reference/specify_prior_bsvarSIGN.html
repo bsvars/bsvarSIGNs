@@ -41,91 +41,91 @@
 <dd><p>a positive integer - the number of lags.</p></dd>
 
 
-<dt><code>hyper</code></dt>
+    <dt><code>hyper</code></dt>
 <dd><p>a <code>(N+3)xS</code> matrix of hyper-parameters \(\mu, \delta, \lambda, \psi\).</p></dd>
 
 
-<dt><code>A</code></dt>
+    <dt><code>A</code></dt>
 <dd><p>a <code>NxK</code> normal prior mean matrix for the autoregressive
 parameters.</p></dd>
 
 
-<dt><code>V</code></dt>
+    <dt><code>V</code></dt>
 <dd><p>a <code>KxK</code> matrix determining  the normal prior column-specific
 covariance for the autoregressive parameters.</p></dd>
 
 
-<dt><code>S</code></dt>
+    <dt><code>S</code></dt>
 <dd><p>an <code>NxN</code> matrix determining the inverted-Wishart prior scale
 of error terms covariance matrix.</p></dd>
 
 
-<dt><code>nu</code></dt>
+    <dt><code>nu</code></dt>
 <dd><p>a positive scalar greater than <code>N+1</code> - the shape of the
 inverted-Wishart prior for error terms covariance matrix.</p></dd>
 
 
-<dt><code>data</code></dt>
+    <dt><code>data</code></dt>
 <dd><p>an <code>TxN</code> matrix of observations.</p></dd>
 
 
-<dt><code>Y</code></dt>
+    <dt><code>Y</code></dt>
 <dd><p>an <code>NxT</code> matrix of dependent variables.</p></dd>
 
 
-<dt><code>X</code></dt>
+    <dt><code>X</code></dt>
 <dd><p>an <code>KxT</code> matrix of independent variables.</p></dd>
 
 
-<dt><code>Ysoc</code></dt>
+    <dt><code>Ysoc</code></dt>
 <dd><p>an <code>NxN</code> matrix with the sum-of-coefficients dummy observations.</p></dd>
 
 
-<dt><code>Xsoc</code></dt>
+    <dt><code>Xsoc</code></dt>
 <dd><p>an <code>KxN</code> matrix with the sum-of-coefficients dummy observations.</p></dd>
 
 
-<dt><code>Ysur</code></dt>
+    <dt><code>Ysur</code></dt>
 <dd><p>an <code>NxN</code> matrix with the single-unit-root dummy observations.</p></dd>
 
 
-<dt><code>Xsur</code></dt>
+    <dt><code>Xsur</code></dt>
 <dd><p>an <code>KxN</code> matrix with the single-unit-root dummy observations.</p></dd>
 
 
-<dt><code>mu.scale</code></dt>
+    <dt><code>mu.scale</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\mu\).</p></dd>
 
 
-<dt><code>mu.shape</code></dt>
+    <dt><code>mu.shape</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\mu\).</p></dd>
 
 
-<dt><code>delta.scale</code></dt>
+    <dt><code>delta.scale</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\delta\).</p></dd>
 
 
-<dt><code>delta.shape</code></dt>
+    <dt><code>delta.shape</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\delta\).</p></dd>
 
 
-<dt><code>lambda.scale</code></dt>
+    <dt><code>lambda.scale</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\lambda\).</p></dd>
 
 
-<dt><code>lambda.shape</code></dt>
+    <dt><code>lambda.shape</code></dt>
 <dd><p>a positive scalar - the shape of the gamma prior for \(\lambda\).</p></dd>
 
 
-<dt><code>psi.scale</code></dt>
+    <dt><code>psi.scale</code></dt>
 <dd><p>a positive scalar - the shape of the inverted gamma prior for \(\psi\).</p></dd>
 
 
-<dt><code>psi.shape</code></dt>
+    <dt><code>psi.shape</code></dt>
 <dd><p>a positive scalar - the shape of the inverted gamma prior for \(\psi\).</p></dd>
 
 
-<dt><code>covid</code></dt>
+    <dt><code>covid</code></dt>
 <dd><p>NULL or a positive integer indicating the start of the COVID-19 pandemic.</p></dd>
 
 
@@ -136,82 +136,70 @@ inverted-Wishart prior for error terms covariance matrix.</p></dd>
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-PriorBSVARSIGN-new"><code>specify_prior_bsvarSIGN$new()</code></a></p></li>
-<li><p><a href="#method-PriorBSVARSIGN-get_prior"><code>specify_prior_bsvarSIGN$get_prior()</code></a></p></li>
-<li><p><a href="#method-PriorBSVARSIGN-clone"><code>specify_prior_bsvarSIGN$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-PriorBSVARSIGN-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+<p></p><ul><li><p><a href="#method-PriorBSVARSIGN-initialize"><code>PriorBSVARSIGN$new()</code></a></p></li>
+<li><p><a href="#method-PriorBSVARSIGN-get_prior"><code>PriorBSVARSIGN$get_prior()</code></a></p></li>
+<li><p><a href="#method-PriorBSVARSIGN-clone"><code>PriorBSVARSIGN$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-PriorBSVARSIGN-initialize"></a><div class="section">
+<h3 id="priorbsvarsign-new-"><code>PriorBSVARSIGN$new()</code><a class="anchor" aria-label="anchor" href="#priorbsvarsign-new-"></a></h3>
 <p>Create a new prior specification PriorBSVAR.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/specify_prior_bsvarSIGN.html">specify_prior_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PriorBSVARSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">p</span>,</span>
 <span>  exogenous <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stationary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>data</code></dt>
 <dd><p>the <code>TxN</code> data matrix of observations.</p></dd>
 
-
-<dt><code>p</code></dt>
+      <dt><code>p</code></dt>
 <dd><p>a positive integer - the autoregressive lag order of the SVAR model.</p></dd>
 
-
-<dt><code>exogenous</code></dt>
+      <dt><code>exogenous</code></dt>
 <dd><p>a <code>Txd</code> matrix of exogenous variables.</p></dd>
 
-
-<dt><code>stationary</code></dt>
+      <dt><code>stationary</code></dt>
 <dd><p>an <code>N</code> logical vector - its element set to <code>FALSE</code> sets
 the prior mean for the autoregressive parameters of the <code>N</code>th equation to the white noise process,
 otherwise to random walk.</p></dd>
 
 
 </dl><p></p></div>
-</div>
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
 <p>A new prior specification PriorBSVARSIGN.</p>
-</div>
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># a prior for 5-variable example with one lag and stationary data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
 <span><span class="va">prior</span> <span class="op">=</span> <span class="va"><a href="../reference/specify_prior_bsvarSIGN.html">specify_prior_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">prior</span><span class="op">$</span><span class="va">B</span> <span class="co"># show autoregressive prior mean</span></span>
-<span></span></code></pre></div><p></p></div>
+<span><span class="va">prior</span><span class="op">$</span><span class="va">B</span> <span class="co"># show autoregressive prior mean</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-PriorBSVARSIGN-get_prior"></a><div class="section">
-<h3 id="method-get-prior-">Method <code>get_prior()</code><a class="anchor" aria-label="anchor" href="#method-get-prior-"></a></h3>
+<p></p><hr><a id="method-PriorBSVARSIGN-get_prior"></a><div class="section">
+<h3 id="priorbsvarsign-get-prior-"><code>PriorBSVARSIGN$get_prior()</code><a class="anchor" aria-label="anchor" href="#priorbsvarsign-get-prior-"></a></h3>
 <p>Returns the elements of the prior specification PriorBSVAR as a <code>list</code>.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_prior_bsvarSIGN</span><span class="op">$</span><span class="fu">get_prior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PriorBSVARSIGN</span><span class="op">$</span><span class="fu">get_prior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="examples-1">Examples<a class="anchor" aria-label="anchor" href="#examples-1"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="co"># a prior for 5-variable example with four lags</span></span>
 <span><span class="va">prior</span> <span class="op">=</span> <span class="va">specify_prior_bsvar</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">5</span>, p <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">prior</span><span class="op">$</span><span class="fu">get_prior</span><span class="op">(</span><span class="op">)</span> <span class="co"># show the prior as list</span></span>
-<span></span></code></pre></div><p></p></div>
+<span><span class="va">prior</span><span class="op">$</span><span class="fu">get_prior</span><span class="op">(</span><span class="op">)</span> <span class="co"># show the prior as list</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-PriorBSVARSIGN-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p></p><hr><a id="method-PriorBSVARSIGN-clone"></a><div class="section">
+<h3 id="priorbsvarsign-clone-"><code>PriorBSVARSIGN$clone()</code><a class="anchor" aria-label="anchor" href="#priorbsvarsign-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_prior_bsvarSIGN</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PriorBSVARSIGN</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -221,6 +209,7 @@ otherwise to random walk.</p></dd>
 </div>
 
 </div>
+
 
     </div>
 
@@ -239,7 +228,7 @@ otherwise to random walk.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="co">## Method `specify_prior_bsvarSIGN$new`</span></span></span>
+<span class="r-in"><span><span class="co">## Method `PriorBSVARSIGN$new()`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a prior for 5-variable example with one lag and stationary data</span></span></span>
@@ -250,7 +239,7 @@ otherwise to random walk.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="co">## Method `specify_prior_bsvarSIGN$get_prior`</span></span></span>
+<span class="r-in"><span><span class="co">## Method `PriorBSVARSIGN$get_prior()`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a prior for 5-variable example with four lags</span></span></span>
