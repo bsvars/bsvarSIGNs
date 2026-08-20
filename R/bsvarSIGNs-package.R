@@ -109,9 +109,8 @@
 #' @useDynLib bsvarSIGNs, .registration = TRUE
 #' @importFrom R6 R6Class
 #' @importFrom Rcpp sourceCpp
-#' @importFrom bsvars estimate compute_impulse_responses compute_fitted_values compute_historical_decompositions compute_structural_shocks compute_variance_decompositions
+#' @importFrom bsvars estimate compute_impulse_responses compute_fitted_values compute_historical_decompositions compute_structural_shocks compute_variance_decompositions compute_conditional_sd
 #' @importFrom generics forecast
-#' @import bsvars
 #' @import RcppArmadillo
 #' @import RcppProgress
 #' @importFrom parallel mclapply parLapply

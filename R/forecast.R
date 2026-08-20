@@ -34,9 +34,8 @@ generics::forecast
 #' @return An object of class \code{Forecasts}.
 #'
 #' @examples
-#' spec = specify_bsvar$new(us_fiscal_lsuw)
-#' burn = estimate(spec, 5)
-#' post = estimate(burn, 5)
+#' spec = specify_bsvarSIGN$new(optimism * 100)
+#' post = estimate(spec, 5)
 #' fore = forecast(post, 4)
 #' apply(fore$forecasts, 1:2, mean) # compute mean forecasts 
 #'
