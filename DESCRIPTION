@@ -29,7 +29,7 @@ Depends:
 Suggests: 
     knitr,
     tinytest
-URL: https://bsvars.org/bsvarSIGNs/
+URL: https://bsvars.org/bsvarSIGNs/, https://github.com/bsvars/bsvarSIGNs
 BugReports: https://github.com/bsvars/bsvarSIGNs/issues
 Encoding: UTF-8
 LazyData: true
