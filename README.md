@@ -139,7 +139,7 @@ src="man/figures/logo.png" width="120" alt="bvars website" /></a>
 #### The hexagonal logo
 
 This beautiful logo can be reproduced in R using [this
-file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
+file](https://github.com/bsvars/hex/blob/main/bsvarSIGNs/bsvarSIGNs.R).
 
 <p>
 
