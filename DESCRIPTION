@@ -1,7 +1,7 @@
 Package: bsvarSIGNs
 Type: Package
 Title: Bayesian SVARs with Sign, Zero, and Narrative Restrictions
-Version: 3.0.0
+Version: 3.0
 Date: 2026-08-21
 Authors@R: c(
     person(given = "Xiaolei", family = "Wang", email = "adamwang15@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0005-6192-9061")),
