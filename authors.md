@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/bsvars/bsvarSIGNs/blob/3.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/bsvars/bsvarSIGNs/blob/main/inst/CITATION)
 
 Wang, Xiaolei and Woźniak, Tomasz (2025). bsvarSIGNs: Bayesian SVARs
 with Sign, Zero, and Narrative Restrictions. R package version 2.0, URL:
