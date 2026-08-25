@@ -131,7 +131,7 @@ website](https://raw.githubusercontent.com/bsvars/hex/refs/heads/main/StealLikeB
 #### The hexagonal logo
 
 This beautiful logo can be reproduced in R using [this
-file](https://github.com/donotdespair/naklejki/blob/master/bsvarSIGNs/bsvarSIGNs.R).
+file](https://github.com/bsvars/hex/blob/main/bsvarSIGNs/bsvarSIGNs.R).
 
 [![bsvars
 website](reference/figures/logo.png)](https://bsvars.org/bsvarSIGNs/)

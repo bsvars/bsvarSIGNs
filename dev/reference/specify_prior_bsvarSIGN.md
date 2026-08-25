@@ -103,21 +103,21 @@ homoskedastic bsvar model.
 
 ### Public methods
 
-- [`PriorBSVARSIGN$new()`](#method-PriorBSVARSIGN-initialize)
+- [`specify_prior_bsvarSIGN$new()`](#method-PriorBSVARSIGN-new)
 
-- [`PriorBSVARSIGN$get_prior()`](#method-PriorBSVARSIGN-get_prior)
+- [`specify_prior_bsvarSIGN$get_prior()`](#method-PriorBSVARSIGN-get_prior)
 
-- [`PriorBSVARSIGN$clone()`](#method-PriorBSVARSIGN-clone)
+- [`specify_prior_bsvarSIGN$clone()`](#method-PriorBSVARSIGN-clone)
 
 ------------------------------------------------------------------------
 
-### `PriorBSVARSIGN$new()`
+### Method `new()`
 
 Create a new prior specification PriorBSVAR.
 
 #### Usage
 
-    PriorBSVARSIGN$new(
+    specify_prior_bsvarSIGN$new(
       data,
       p,
       exogenous = NULL,
@@ -157,13 +157,13 @@ A new prior specification PriorBSVARSIGN.
 
 ------------------------------------------------------------------------
 
-### `PriorBSVARSIGN$get_prior()`
+### Method `get_prior()`
 
 Returns the elements of the prior specification PriorBSVAR as a `list`.
 
 #### Usage
 
-    PriorBSVARSIGN$get_prior()
+    specify_prior_bsvarSIGN$get_prior()
 
 #### Examples
 
@@ -173,13 +173,13 @@ Returns the elements of the prior specification PriorBSVAR as a `list`.
 
 ------------------------------------------------------------------------
 
-### `PriorBSVARSIGN$clone()`
+### Method `clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    PriorBSVARSIGN$clone(deep = FALSE)
+    specify_prior_bsvarSIGN$clone(deep = FALSE)
 
 #### Arguments
 
@@ -203,7 +203,7 @@ prior$A  # show autoregressive prior mean
 
 
 ## ------------------------------------------------
-## Method `PriorBSVARSIGN$new()`
+## Method `specify_prior_bsvarSIGN$new`
 ## ------------------------------------------------
 
 # a prior for 5-variable example with one lag and stationary data
@@ -214,7 +214,7 @@ prior$B # show autoregressive prior mean
 
 
 ## ------------------------------------------------
-## Method `PriorBSVARSIGN$get_prior()`
+## Method `specify_prior_bsvarSIGN$get_prior`
 ## ------------------------------------------------
 
 # a prior for 5-variable example with four lags

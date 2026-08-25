@@ -9,7 +9,7 @@ Structural Vector Autoregression model."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">bsvarSIGNs</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">3.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,17 +72,17 @@ object as a list.</p>
 predictive density.</p></dd>
 
 
-    <dt><code>forecast_mean</code></dt>
+<dt><code>forecast_mean</code></dt>
 <dd><p>An <code>N x horizon x S</code> numeric array containing the conditional
 means of the predictive density.</p></dd>
 
 
-    <dt><code>forecast_covariance</code></dt>
+<dt><code>forecast_covariance</code></dt>
 <dd><p>An <code>N x N x horizon x S</code> numeric array containing the conditional
 covariance matrices of the predictive density.</p></dd>
 
 
-    <dt><code>Y</code></dt>
+<dt><code>Y</code></dt>
 <dd><p>An <code>N x T</code> numeric matrix containing the data on the dependent
 variables used for estimation.</p></dd>
 
@@ -94,52 +94,57 @@ variables used for estimation.</p></dd>
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-<p></p><ul><li><p><a href="#method-Forecasts-initialize"><code>Forecasts$new()</code></a></p></li>
-<li><p><a href="#method-Forecasts-get_forecasts"><code>Forecasts$get_forecasts()</code></a></p></li>
-<li><p><a href="#method-Forecasts-clone"><code>Forecasts$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-Forecasts-initialize"></a><div class="section">
-<h3 id="forecasts-new-"><code>Forecasts$new()</code><a class="anchor" aria-label="anchor" href="#forecasts-new-"></a></h3>
+
+<ul><li><p><a href="#method-Forecasts-new"><code>specify_forecasts$new()</code></a></p></li>
+<li><p><a href="#method-Forecasts-get_forecasts"><code>specify_forecasts$get_forecasts()</code></a></p></li>
+<li><p><a href="#method-Forecasts-clone"><code>specify_forecasts$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-Forecasts-new"></a><div class="section">
+<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Creates a new <code>Forecasts</code> object from the output of the forecasting
 procedure.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Forecasts</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">output</span>, <span class="va">Y</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div><p></p><div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/specify_forecasts.html">specify_forecasts</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">output</span>, <span class="va">Y</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>output</code></dt>
 <dd><p>A list containing the forecasting output, including
 <code>forecasts</code>, <code>forecast_mean</code>, and <code>forecast_cov</code>.</p></dd>
 
-      <dt><code>Y</code></dt>
+
+<dt><code>Y</code></dt>
 <dd><p>An <code>N x T</code> matrix containing the data on the dependent variables.</p></dd>
 
 
 </dl><p></p></div>
-</div><p></p><div class="section">
+</div>
+<div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
 <p>An object of class <code>Forecasts</code>.</p>
 </div>
 
-</div>
-
-<p></p><hr><a id="method-Forecasts-get_forecasts"></a><div class="section">
-<h3 id="forecasts-get-forecasts-"><code>Forecasts$get_forecasts()</code><a class="anchor" aria-label="anchor" href="#forecasts-get-forecasts-"></a></h3>
+</div><p></p><hr><a id="method-Forecasts-get_forecasts"></a><div class="section">
+<h3 id="method-get-forecasts-">Method <code>get_forecasts()</code><a class="anchor" aria-label="anchor" href="#method-get-forecasts-"></a></h3>
 <p>Converts the <code>Forecasts</code> object to a list.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Forecasts</span><span class="op">$</span><span class="fu">get_forecasts</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div><p></p><div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_forecasts</span><span class="op">$</span><span class="fu">get_forecasts</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
 <p>A list containing <code>forecasts</code>, <code>forecast_mean</code>,
 <code>forecast_covariance</code>, and <code>Y</code>.</p>
 </div>
 
-</div>
-
-<p></p><hr><a id="method-Forecasts-clone"></a><div class="section">
-<h3 id="forecasts-clone-"><code>Forecasts$clone()</code><a class="anchor" aria-label="anchor" href="#forecasts-clone-"></a></h3>
+</div><p></p><hr><a id="method-Forecasts-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Forecasts</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div><p></p><div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_forecasts</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -149,7 +154,6 @@ procedure.</p><div class="section">
 </div>
 
 </div>
-
 
     </div>
 
@@ -167,11 +171,11 @@ procedure.</p><div class="section">
 <span class="r-in"><span><span class="va">fore</span> <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/forecast.html" class="external-link">forecast</a></span><span class="op">(</span><span class="va">post</span>, <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">fore</span><span class="op">$</span><span class="va">forecasts</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span> <span class="co"># compute mean forecasts </span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               [,1]          [,2]          [,3]          [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    84.5451248    85.1549035    84.8759131  8.445742e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    84.5451248    85.1549035    84.8759130  8.445742e+01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -1070.4948614 -1069.6004138 -1070.8006405 -1.069942e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  -338.6833530  -338.5817412  -338.7693864 -3.387349e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0.5422752     0.5167357     0.1908743  1.367001e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  -784.2297911  -784.9333610  -785.2907366 -7.851993e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  -338.6833530  -338.5817413  -338.7693865 -3.387349e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0.5422753     0.5167357     0.1908743  1.367007e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  -784.2297912  -784.9333611  -785.2907367 -7.851993e+02</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

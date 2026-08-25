@@ -1,6 +1,12 @@
 # Changelog
 
+## bsvarSIGNs (development version)
+
+## bsvarSIGNs 3.0.0
+
 ## bsvarSIGNs 3.0
+
+CRAN release: 2026-08-21
 
 1.  Parallelized code for posterior sampling
     [\#77](https://github.com/bsvars/bsvarSIGNs/issues/77)

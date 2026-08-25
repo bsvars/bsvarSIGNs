@@ -60,22 +60,22 @@ a list.
 
 ### Public methods
 
-- [`Forecasts$new()`](#method-Forecasts-initialize)
+- [`specify_forecasts$new()`](#method-Forecasts-new)
 
-- [`Forecasts$get_forecasts()`](#method-Forecasts-get_forecasts)
+- [`specify_forecasts$get_forecasts()`](#method-Forecasts-get_forecasts)
 
-- [`Forecasts$clone()`](#method-Forecasts-clone)
+- [`specify_forecasts$clone()`](#method-Forecasts-clone)
 
 ------------------------------------------------------------------------
 
-### `Forecasts$new()`
+### Method `new()`
 
 Creates a new `Forecasts` object from the output of the forecasting
 procedure.
 
 #### Usage
 
-    Forecasts$new(output, Y)
+    specify_forecasts$new(output, Y)
 
 #### Arguments
 
@@ -94,13 +94,13 @@ An object of class `Forecasts`.
 
 ------------------------------------------------------------------------
 
-### `Forecasts$get_forecasts()`
+### Method `get_forecasts()`
 
 Converts the `Forecasts` object to a list.
 
 #### Usage
 
-    Forecasts$get_forecasts()
+    specify_forecasts$get_forecasts()
 
 #### Returns
 
@@ -109,13 +109,13 @@ and `Y`.
 
 ------------------------------------------------------------------------
 
-### `Forecasts$clone()`
+### Method `clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    Forecasts$clone(deep = FALSE)
+    specify_forecasts$clone(deep = FALSE)
 
 #### Arguments
 
@@ -138,9 +138,9 @@ post = estimate(spec, 5)
 fore = forecast(post, 4)
 apply(fore$forecasts, 1:2, mean) # compute mean forecasts 
 #>               [,1]          [,2]          [,3]          [,4]
-#> [1,]    84.5451248    85.1549035    84.8759131  8.445742e+01
+#> [1,]    84.5451248    85.1549035    84.8759130  8.445742e+01
 #> [2,] -1070.4948614 -1069.6004138 -1070.8006405 -1.069942e+03
-#> [3,]  -338.6833530  -338.5817412  -338.7693864 -3.387349e+02
-#> [4,]     0.5422752     0.5167357     0.1908743  1.367001e-02
-#> [5,]  -784.2297911  -784.9333610  -785.2907366 -7.851993e+02
+#> [3,]  -338.6833530  -338.5817413  -338.7693865 -3.387349e+02
+#> [4,]     0.5422753     0.5167357     0.1908743  1.367007e-02
+#> [5,]  -784.2297912  -784.9333611  -785.2907367 -7.851993e+02
 ```
