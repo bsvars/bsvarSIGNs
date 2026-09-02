@@ -1,7 +1,8 @@
-# Submission notes bsvarSIGNs v2.0
+# Submission notes bsvarSIGNs v3.0
 
-Removed `const` keyword in C++ code when calling dependent package, which resolves the issues highlighted in [link](https://www.stats.ox.ac.uk/pub/bdr/M1-SAN/bsvarSIGNs/).
+In DESCRIPTION, the date was updated to 2026-08-21, the following are author names of an academic paper that is cited in the package documentation,
+    Hassan (12:1736)
+    Liu (12:1723)
 
-Passed `rhub::rhub_check()` and `devtools::check()`.
-
-Updated R version dependency to 4.1.0 for pipe operator. Changed status 301 URL to the corresponding new URL. The other URL is not a link to CRAN package, removed the not canonical link to reference manual on CRAN.
+and the following is a common statistical term
+    heteroskedasticity (12:424)

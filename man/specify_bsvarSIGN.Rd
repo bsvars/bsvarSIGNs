@@ -17,7 +17,7 @@ specification = specify_bsvarSIGN$new(
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$get_data_matrices()`
+## Method `specify_bsvarSIGN$get_data_matrices`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -33,7 +33,7 @@ spec$get_data_matrices()
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$no_dummy_observations()`
+## Method `specify_bsvarSIGN$no_dummy_observations`
 ## ------------------------------------------------
 
 # specify the model
@@ -43,7 +43,7 @@ spec$no_dummy_observations() # remove dummy observations
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$estimate_hyper()`
+## Method `specify_bsvarSIGN$estimate_hyper`
 ## ------------------------------------------------
 
 # specify the model and set seed
@@ -61,7 +61,7 @@ plot.ts(hyper)
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$get_identification()`
+## Method `specify_bsvarSIGN$get_identification`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -76,7 +76,7 @@ spec$get_identification()
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$get_prior()`
+## Method `specify_bsvarSIGN$get_prior`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -92,7 +92,7 @@ spec$get_prior()
 
 
 ## ------------------------------------------------
-## Method `BSVARSIGN$get_starting_values()`
+## Method `specify_bsvarSIGN$get_starting_values`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -111,45 +111,44 @@ spec$get_starting_values()
 \code{\link{estimate.BSVARSIGN}}, \code{\link{specify_posterior_bsvarSIGN}}
 }
 \section{Public fields}{
-  \if{html}{\out{<div class="r6-fields">}}
-  \describe{
-    \item{\code{p}}{a non-negative integer specifying the autoregressive lag order of the model.}
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{p}}{a non-negative integer specifying the autoregressive lag order of the model.}
 
-    \item{\code{identification}}{an object IdentificationBSVARSIGN with the identifying restrictions.}
+\item{\code{identification}}{an object IdentificationBSVARSIGN with the identifying restrictions.}
 
-    \item{\code{prior}}{an object PriorBSVARSIGN with the prior specification.}
+\item{\code{prior}}{an object PriorBSVARSIGN with the prior specification.}
 
-    \item{\code{data_matrices}}{an object DataMatricesBSVARSIGN with the data matrices.}
+\item{\code{data_matrices}}{an object DataMatricesBSVARSIGN with the data matrices.}
 
-    \item{\code{starting_values}}{an object StartingValuesBSVARSIGN with the starting values.}
+\item{\code{starting_values}}{an object StartingValuesBSVARSIGN with the starting values.}
 
-    \item{\code{num_foreign_vars}}{a non-negative integer specifying the number of foreign variables.}
+\item{\code{num_foreign_vars}}{a non-negative integer specifying the number of foreign variables.}
 
-    \item{\code{mc.cores}}{number of cores to use for parallel computing.}
-  }
-  \if{html}{\out{</div>}}
+\item{\code{mc.cores}}{number of cores to use for parallel computing.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-  \itemize{
-    \item \href{#method-BSVARSIGN-initialize}{\code{BSVARSIGN$new()}}
-    \item \href{#method-BSVARSIGN-get_data_matrices}{\code{BSVARSIGN$get_data_matrices()}}
-    \item \href{#method-BSVARSIGN-no_dummy_observations}{\code{BSVARSIGN$no_dummy_observations()}}
-    \item \href{#method-BSVARSIGN-estimate_hyper}{\code{BSVARSIGN$estimate_hyper()}}
-    \item \href{#method-BSVARSIGN-get_identification}{\code{BSVARSIGN$get_identification()}}
-    \item \href{#method-BSVARSIGN-get_prior}{\code{BSVARSIGN$get_prior()}}
-    \item \href{#method-BSVARSIGN-get_starting_values}{\code{BSVARSIGN$get_starting_values()}}
-    \item \href{#method-BSVARSIGN-clone}{\code{BSVARSIGN$clone()}}
-  }
+\itemize{
+\item \href{#method-BSVARSIGN-new}{\code{specify_bsvarSIGN$new()}}
+\item \href{#method-BSVARSIGN-get_data_matrices}{\code{specify_bsvarSIGN$get_data_matrices()}}
+\item \href{#method-BSVARSIGN-no_dummy_observations}{\code{specify_bsvarSIGN$no_dummy_observations()}}
+\item \href{#method-BSVARSIGN-estimate_hyper}{\code{specify_bsvarSIGN$estimate_hyper()}}
+\item \href{#method-BSVARSIGN-get_identification}{\code{specify_bsvarSIGN$get_identification()}}
+\item \href{#method-BSVARSIGN-get_prior}{\code{specify_bsvarSIGN$get_prior()}}
+\item \href{#method-BSVARSIGN-get_starting_values}{\code{specify_bsvarSIGN$get_starting_values()}}
+\item \href{#method-BSVARSIGN-clone}{\code{specify_bsvarSIGN$clone()}}
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-BSVARSIGN-initialize"></a>}}
-\if{latex}{\out{\hypertarget{method-BSVARSIGN-initialize}{}}}
-\subsection{\code{BSVARSIGN$new()}}{
-  Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$new(
+\if{html}{\out{<a id="method-BSVARSIGN-new"></a>}}
+\if{latex}{\out{\hypertarget{method-BSVARSIGN-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new specification of the Bayesian Structural VAR model with sign and narrative restrictions BSVARSIGN.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$new(
   data,
   p = 1L,
   sign_irf,
@@ -165,57 +164,69 @@ spec$get_starting_values()
   hyper_psi = TRUE,
   hyper_covid = NULL,
   mc.cores = 1
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{data}}{a \code{(T+p)xN} matrix with time series data.}
-      \item{\code{p}}{a positive integer providing model's autoregressive lag order.}
-      \item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{a \code{(T+p)xN} matrix with time series data.}
+
+\item{\code{p}}{a positive integer providing model's autoregressive lag order.}
+
+\item{\code{sign_irf}}{a \code{NxNxH} array - sign and zero restrictions 
 on the impulse response functions, ±1 for positive/negative sign restriction
 0 for zero restrictions and NA for no restrictions,
 the \code{h}-th slice \code{NxN} matrix contains the
 restrictions on the \code{h-1} horizon.}
-      \item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
-      \item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
+
+\item{\code{sign_narrative}}{a list of objects of class "narrative" - narrative sign restrictions.}
+
+\item{\code{sign_structural}}{a \code{NxN} matrix with entries ±1 or NA - sign restrictions on the
 contemporaneous relations \code{B} between reduced-form errors \code{E} and
 structural shocks \code{U} where \code{BE=U}.}
-      \item{\code{max_tries}}{a positive integer with the maximum number of iterations
+
+\item{\code{max_tries}}{a positive integer with the maximum number of iterations
 for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions}
-      \item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
-      \item{\code{foreign}}{a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.}
-      \item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
+
+\item{\code{exogenous}}{a \code{(T+p)xd} matrix of exogenous variables.}
+
+\item{\code{foreign}}{a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.}
+
+\item{\code{stationary}}{an \code{N} logical vector - its element set to \code{FALSE} sets
 the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
 otherwise to random walk.}
-      \item{\code{hyper_mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
-      \item{\code{hyper_delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
-      \item{\code{hyper_lambda}}{whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.}
-      \item{\code{hyper_psi}}{whether to estimate the hyper-parameter of the variances in the Minnesota prior.}
-      \item{\code{hyper_covid}}{NULL or positive integer indicating the start of the COVID-19 pandemic.}
-      \item{\code{mc.cores}}{number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
-  }
-}
 
+\item{\code{hyper_mu}}{whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.}
+
+\item{\code{hyper_delta}}{whether to estimate the hyper-parameter in the single-unit-root dummy prior.}
+
+\item{\code{hyper_lambda}}{whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.}
+
+\item{\code{hyper_psi}}{whether to estimate the hyper-parameter of the variances in the Minnesota prior.}
+
+\item{\code{hyper_covid}}{NULL or positive integer indicating the start of the COVID-19 pandemic.}
+
+\item{\code{mc.cores}}{number of cores to use for parallel computing. Default is 1. We recommend setting it to \code{parallel::detectCores() - 1}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new complete specification for the Bayesian Structural VAR model BSVARSIGN.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-get_data_matrices"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_data_matrices}{}}}
-\subsection{\code{BSVARSIGN$get_data_matrices()}}{
-  Returns the data matrices as the DataMatricesBSVAR object.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$get_data_matrices()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify a model with the optimism data and 4 lags
+\subsection{Method \code{get_data_matrices()}}{
+Returns the data matrices as the DataMatricesBSVAR object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_data_matrices()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify a model with the optimism data and 4 lags
 
 data(optimism)
 spec = specify_bsvarSIGN$new(
@@ -225,54 +236,57 @@ spec = specify_bsvarSIGN$new(
 
 # get the data matrices
 spec$get_data_matrices()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-no_dummy_observations"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-no_dummy_observations}{}}}
-\subsection{\code{BSVARSIGN$no_dummy_observations()}}{
-  Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
+\subsection{Method \code{no_dummy_observations()}}{
+Sets the sum-of-coefficients and single-unit-root dummy observations to zero 
 (removes the dummy observation prior).
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$no_dummy_observations()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify the model
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$no_dummy_observations()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify the model
 data(optimism)
 spec = specify_bsvarSIGN$new(optimism, p = 4)
 spec$no_dummy_observations() # remove dummy observations
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-estimate_hyper"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-estimate_hyper}{}}}
-\subsection{\code{BSVARSIGN$estimate_hyper()}}{
-  Estimates hyper-parameters with adaptive Metropolis algorithm.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$estimate_hyper(S = 10000, burn_in = S/2)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{S}}{number of MCMC draws.}
-      \item{\code{burn_in}}{number of burn-in draws.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify the model and set seed
+\subsection{Method \code{estimate_hyper()}}{
+Estimates hyper-parameters with adaptive Metropolis algorithm.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$estimate_hyper(S = 10000, burn_in = S/2)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{S}}{number of MCMC draws.}
+
+\item{\code{burn_in}}{number of burn-in draws.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify the model and set seed
 set.seed(123)
 data(optimism)
 spec = specify_bsvarSIGN$new(optimism, p = 4)
@@ -284,24 +298,25 @@ spec$estimate_hyper(S = 10)
 hyper = t(spec$prior$hyper)[, 4:8]
 colnames(hyper) = paste("psi", 1:5, sep = "")
 plot.ts(hyper)
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-get_identification"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_identification}{}}}
-\subsection{\code{BSVARSIGN$get_identification()}}{
-  Returns the identifying restrictions as the IdentificationBSVARSIGN object.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$get_identification()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify a model with the optimism data and 4 lags
+\subsection{Method \code{get_identification()}}{
+Returns the identifying restrictions as the IdentificationBSVARSIGN object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_identification()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify a model with the optimism data and 4 lags
 data(optimism)
 spec = specify_bsvarSIGN$new(
    data = optimism,
@@ -310,24 +325,25 @@ spec = specify_bsvarSIGN$new(
 
 # get the identifying restrictions
 spec$get_identification()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-get_prior"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_prior}{}}}
-\subsection{\code{BSVARSIGN$get_prior()}}{
-  Returns the prior specification as the PriorBSVAR object.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$get_prior()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify a model with the optimism data and 4 lags
+\subsection{Method \code{get_prior()}}{
+Returns the prior specification as the PriorBSVAR object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_prior()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify a model with the optimism data and 4 lags
 
 data(optimism)
 spec = specify_bsvarSIGN$new(
@@ -337,24 +353,25 @@ spec = specify_bsvarSIGN$new(
 
 # get the prior specification
 spec$get_prior()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-get_starting_values"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-get_starting_values}{}}}
-\subsection{\code{BSVARSIGN$get_starting_values()}}{
-  Returns the starting values as the StartingValuesBSVAR object.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$get_starting_values()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{# specify a model with the optimism data and 4 lags
+\subsection{Method \code{get_starting_values()}}{
+Returns the starting values as the StartingValuesBSVAR object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$get_starting_values()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# specify a model with the optimism data and 4 lags
 
 data(optimism)
 spec = specify_bsvarSIGN$new(
@@ -364,28 +381,28 @@ spec = specify_bsvarSIGN$new(
 
 # get the starting values
 spec$get_starting_values()
+
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BSVARSIGN-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-BSVARSIGN-clone}{}}}
-\subsection{\code{BSVARSIGN$clone()}}{
-  The objects of this class are cloneable with this method.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{BSVARSIGN$clone(deep = FALSE)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{specify_bsvarSIGN$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }
