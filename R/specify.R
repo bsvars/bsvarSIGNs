@@ -275,8 +275,8 @@ specify_prior_bsvarSIGN = R6::R6Class(
     #' @param p a positive integer - the autoregressive lag order of the SVAR model.
     #' @param exogenous a \code{Txd} matrix of exogenous variables.
     #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets 
-    #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process, 
-    #' otherwise to random walk.
+    #' the prior mean for the autoregressive parameters of the \code{N}th equation to the random walk process, 
+    #' otherwise to white noise.
     #' @return A new prior specification PriorBSVARSIGN.
     #' @examples 
     #' # a prior for 5-variable example with one lag and stationary data
@@ -609,9 +609,9 @@ specify_bsvarSIGN = R6::R6Class(
     #' for finding a rotation matrix \eqn{Q} that would satisfy sign restrictions
     #' @param exogenous a \code{(T+p)xd} matrix of exogenous variables.
     #' @param foreign a matrix of foreign variables for a Small Open Economy (SOE) model. Defaults to NULL.
-    #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets
-    #' the prior mean for the autoregressive parameters of the \code{N}th equation to the white noise process,
-    #' otherwise to random walk.
+    #' @param stationary an \code{N} logical vector - its element set to \code{FALSE} sets 
+    #' the prior mean for the autoregressive parameters of the \code{N}th equation to the random walk process, 
+    #' otherwise to white noise.
     #' @param hyper_mu whether to estimate the hyper-parameter in the sum-of-coefficients dummy prior.
     #' @param hyper_delta whether to estimate the hyper-parameter in the single-unit-root dummy prior.
     #' @param hyper_lambda whether to estimate the hyper-parameter of the shrinkage in the Minnesota prior.
