@@ -35,83 +35,88 @@ apply(fore$forecasts, 1:2, mean) # compute mean forecasts
 
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{forecasts}}{An \code{N x horizon x S} numeric array containing draws from the
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{forecasts}}{An \code{N x horizon x S} numeric array containing draws from the
 predictive density.}
 
-\item{\code{forecast_mean}}{An \code{N x horizon x S} numeric array containing the conditional
+    \item{\code{forecast_mean}}{An \code{N x horizon x S} numeric array containing the conditional
 means of the predictive density.}
 
-\item{\code{forecast_covariance}}{An \code{N x N x horizon x S} numeric array containing the conditional
+    \item{\code{forecast_covariance}}{An \code{N x N x horizon x S} numeric array containing the conditional
 covariance matrices of the predictive density.}
 
-\item{\code{Y}}{An \code{N x T} numeric matrix containing the data on the dependent
+    \item{\code{Y}}{An \code{N x T} numeric matrix containing the data on the dependent
 variables used for estimation.}
-}
-\if{html}{\out{</div>}}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-Forecasts-new}{\code{specify_forecasts$new()}}
-\item \href{#method-Forecasts-get_forecasts}{\code{specify_forecasts$get_forecasts()}}
-\item \href{#method-Forecasts-clone}{\code{specify_forecasts$clone()}}
-}
+  \itemize{
+    \item \href{#method-Forecasts-initialize}{\code{Forecasts$new()}}
+    \item \href{#method-Forecasts-get_forecasts}{\code{Forecasts$get_forecasts()}}
+    \item \href{#method-Forecasts-clone}{\code{Forecasts$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Forecasts-new"></a>}}
-\if{latex}{\out{\hypertarget{method-Forecasts-new}{}}}
-\subsection{Method \code{new()}}{
-Creates a new \code{Forecasts} object from the output of the forecasting
+\if{html}{\out{<a id="method-Forecasts-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Forecasts-initialize}{}}}
+\subsection{\code{Forecasts$new()}}{
+  Creates a new \code{Forecasts} object from the output of the forecasting
 procedure.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_forecasts$new(output, Y)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{output}}{A list containing the forecasting output, including
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Forecasts$new(output, Y)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{output}}{A list containing the forecasting output, including
 \code{forecasts}, \code{forecast_mean}, and \code{forecast_cov}.}
+      \item{\code{Y}}{An \code{N x T} matrix containing the data on the dependent variables.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An object of class \code{Forecasts}.
+  }
+}
 
-\item{\code{Y}}{An \code{N x T} matrix containing the data on the dependent variables.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An object of class \code{Forecasts}.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Forecasts-get_forecasts"></a>}}
 \if{latex}{\out{\hypertarget{method-Forecasts-get_forecasts}{}}}
-\subsection{Method \code{get_forecasts()}}{
-Converts the \code{Forecasts} object to a list.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_forecasts$get_forecasts()}\if{html}{\out{</div>}}
+\subsection{\code{Forecasts$get_forecasts()}}{
+  Converts the \code{Forecasts} object to a list.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Forecasts$get_forecasts()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A list containing \code{forecasts}, \code{forecast_mean},
+\code{forecast_covariance}, and \code{Y}.
+  }
 }
 
-\subsection{Returns}{
-A list containing \code{forecasts}, \code{forecast_mean},
-\code{forecast_covariance}, and \code{Y}.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Forecasts-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Forecasts-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{specify_forecasts$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{Forecasts$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Forecasts$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }
