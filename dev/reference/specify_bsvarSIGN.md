@@ -43,32 +43,32 @@ Structural VAR model with sign and narrative restrictions.
 
 ### Public methods
 
-- [`specify_bsvarSIGN$new()`](#method-BSVARSIGN-new)
+- [`BSVARSIGN$new()`](#method-BSVARSIGN-initialize)
 
-- [`specify_bsvarSIGN$get_data_matrices()`](#method-BSVARSIGN-get_data_matrices)
+- [`BSVARSIGN$get_data_matrices()`](#method-BSVARSIGN-get_data_matrices)
 
-- [`specify_bsvarSIGN$no_dummy_observations()`](#method-BSVARSIGN-no_dummy_observations)
+- [`BSVARSIGN$no_dummy_observations()`](#method-BSVARSIGN-no_dummy_observations)
 
-- [`specify_bsvarSIGN$estimate_hyper()`](#method-BSVARSIGN-estimate_hyper)
+- [`BSVARSIGN$estimate_hyper()`](#method-BSVARSIGN-estimate_hyper)
 
-- [`specify_bsvarSIGN$get_identification()`](#method-BSVARSIGN-get_identification)
+- [`BSVARSIGN$get_identification()`](#method-BSVARSIGN-get_identification)
 
-- [`specify_bsvarSIGN$get_prior()`](#method-BSVARSIGN-get_prior)
+- [`BSVARSIGN$get_prior()`](#method-BSVARSIGN-get_prior)
 
-- [`specify_bsvarSIGN$get_starting_values()`](#method-BSVARSIGN-get_starting_values)
+- [`BSVARSIGN$get_starting_values()`](#method-BSVARSIGN-get_starting_values)
 
-- [`specify_bsvarSIGN$clone()`](#method-BSVARSIGN-clone)
+- [`BSVARSIGN$clone()`](#method-BSVARSIGN-clone)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `BSVARSIGN$new()`
 
 Create a new specification of the Bayesian Structural VAR model with
 sign and narrative restrictions BSVARSIGN.
 
 #### Usage
 
-    specify_bsvarSIGN$new(
+    BSVARSIGN$new(
       data,
       p = 1L,
       sign_irf,
@@ -130,8 +130,8 @@ sign and narrative restrictions BSVARSIGN.
 - `stationary`:
 
   an `N` logical vector - its element set to `FALSE` sets the prior mean
-  for the autoregressive parameters of the `N`th equation to the white
-  noise process, otherwise to random walk.
+  for the autoregressive parameters of the `N`th equation to the random
+  walk process, otherwise to white noise.
 
 - `hyper_mu`:
 
@@ -170,13 +170,13 @@ BSVARSIGN.
 
 ------------------------------------------------------------------------
 
-### Method `get_data_matrices()`
+### `BSVARSIGN$get_data_matrices()`
 
 Returns the data matrices as the DataMatricesBSVAR object.
 
 #### Usage
 
-    specify_bsvarSIGN$get_data_matrices()
+    BSVARSIGN$get_data_matrices()
 
 #### Examples
 
@@ -193,14 +193,14 @@ Returns the data matrices as the DataMatricesBSVAR object.
 
 ------------------------------------------------------------------------
 
-### Method `no_dummy_observations()`
+### `BSVARSIGN$no_dummy_observations()`
 
 Sets the sum-of-coefficients and single-unit-root dummy observations to
 zero (removes the dummy observation prior).
 
 #### Usage
 
-    specify_bsvarSIGN$no_dummy_observations()
+    BSVARSIGN$no_dummy_observations()
 
 #### Examples
 
@@ -211,13 +211,13 @@ zero (removes the dummy observation prior).
 
 ------------------------------------------------------------------------
 
-### Method `estimate_hyper()`
+### `BSVARSIGN$estimate_hyper()`
 
 Estimates hyper-parameters with adaptive Metropolis algorithm.
 
 #### Usage
 
-    specify_bsvarSIGN$estimate_hyper(S = 10000, burn_in = S/2)
+    BSVARSIGN$estimate_hyper(S = 10000, burn_in = S/2)
 
 #### Arguments
 
@@ -246,14 +246,14 @@ Estimates hyper-parameters with adaptive Metropolis algorithm.
 
 ------------------------------------------------------------------------
 
-### Method `get_identification()`
+### `BSVARSIGN$get_identification()`
 
 Returns the identifying restrictions as the IdentificationBSVARSIGN
 object.
 
 #### Usage
 
-    specify_bsvarSIGN$get_identification()
+    BSVARSIGN$get_identification()
 
 #### Examples
 
@@ -269,13 +269,13 @@ object.
 
 ------------------------------------------------------------------------
 
-### Method `get_prior()`
+### `BSVARSIGN$get_prior()`
 
 Returns the prior specification as the PriorBSVAR object.
 
 #### Usage
 
-    specify_bsvarSIGN$get_prior()
+    BSVARSIGN$get_prior()
 
 #### Examples
 
@@ -292,13 +292,13 @@ Returns the prior specification as the PriorBSVAR object.
 
 ------------------------------------------------------------------------
 
-### Method `get_starting_values()`
+### `BSVARSIGN$get_starting_values()`
 
 Returns the starting values as the StartingValuesBSVAR object.
 
 #### Usage
 
-    specify_bsvarSIGN$get_starting_values()
+    BSVARSIGN$get_starting_values()
 
 #### Examples
 
@@ -315,13 +315,13 @@ Returns the starting values as the StartingValuesBSVAR object.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `BSVARSIGN$clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    specify_bsvarSIGN$clone(deep = FALSE)
+    BSVARSIGN$clone(deep = FALSE)
 
 #### Arguments
 
@@ -342,7 +342,7 @@ specification = specify_bsvarSIGN$new(
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$get_data_matrices`
+## Method `BSVARSIGN$get_data_matrices()`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -365,7 +365,7 @@ spec$get_data_matrices()
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$no_dummy_observations`
+## Method `BSVARSIGN$no_dummy_observations()`
 ## ------------------------------------------------
 
 # specify the model
@@ -375,7 +375,7 @@ spec$no_dummy_observations() # remove dummy observations
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$estimate_hyper`
+## Method `BSVARSIGN$estimate_hyper()`
 ## ------------------------------------------------
 
 # specify the model and set seed
@@ -397,7 +397,7 @@ plot.ts(hyper)
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$get_identification`
+## Method `BSVARSIGN$get_identification()`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -423,7 +423,7 @@ spec$get_identification()
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$get_prior`
+## Method `BSVARSIGN$get_prior()`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags
@@ -466,7 +466,7 @@ spec$get_prior()
 
 
 ## ------------------------------------------------
-## Method `specify_bsvarSIGN$get_starting_values`
+## Method `BSVARSIGN$get_starting_values()`
 ## ------------------------------------------------
 
 # specify a model with the optimism data and 4 lags

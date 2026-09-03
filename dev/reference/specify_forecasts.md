@@ -60,22 +60,22 @@ a list.
 
 ### Public methods
 
-- [`specify_forecasts$new()`](#method-Forecasts-new)
+- [`Forecasts$new()`](#method-Forecasts-initialize)
 
-- [`specify_forecasts$get_forecasts()`](#method-Forecasts-get_forecasts)
+- [`Forecasts$get_forecasts()`](#method-Forecasts-get_forecasts)
 
-- [`specify_forecasts$clone()`](#method-Forecasts-clone)
+- [`Forecasts$clone()`](#method-Forecasts-clone)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `Forecasts$new()`
 
 Creates a new `Forecasts` object from the output of the forecasting
 procedure.
 
 #### Usage
 
-    specify_forecasts$new(output, Y)
+    Forecasts$new(output, Y)
 
 #### Arguments
 
@@ -94,13 +94,13 @@ An object of class `Forecasts`.
 
 ------------------------------------------------------------------------
 
-### Method `get_forecasts()`
+### `Forecasts$get_forecasts()`
 
 Converts the `Forecasts` object to a list.
 
 #### Usage
 
-    specify_forecasts$get_forecasts()
+    Forecasts$get_forecasts()
 
 #### Returns
 
@@ -109,13 +109,13 @@ and `Y`.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `Forecasts$clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    specify_forecasts$clone(deep = FALSE)
+    Forecasts$clone(deep = FALSE)
 
 #### Arguments
 

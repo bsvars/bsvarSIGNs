@@ -55,7 +55,7 @@ might not be equal to the last draw provided in element <code>posterior</code>.<
 the starting value to be passed to the continuation of the MCMC estimation using <code>estimate()</code>.</p></dd>
 
 
-<dt><code>posterior</code></dt>
+    <dt><code>posterior</code></dt>
 <dd><p>a list containing Bayesian estimation output including:
 an <code>NxNxS</code> array <code>B</code>, an <code>NxKxS</code> array <code>A</code>, and a <code>5xS</code> matrix <code>hyper</code>.</p></dd>
 
@@ -67,65 +67,58 @@ an <code>NxNxS</code> array <code>B</code>, an <code>NxKxS</code> array <code>A<
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-PosteriorBSVARSIGN-new"><code>specify_posterior_bsvarSIGN$new()</code></a></p></li>
-<li><p><a href="#method-PosteriorBSVARSIGN-get_posterior"><code>specify_posterior_bsvarSIGN$get_posterior()</code></a></p></li>
-<li><p><a href="#method-PosteriorBSVARSIGN-is_normalised"><code>specify_posterior_bsvarSIGN$is_normalised()</code></a></p></li>
-<li><p><a href="#method-PosteriorBSVARSIGN-clone"><code>specify_posterior_bsvarSIGN$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-PosteriorBSVARSIGN-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+<p></p><ul><li><p><a href="#method-PosteriorBSVARSIGN-initialize"><code>PosteriorBSVARSIGN$new()</code></a></p></li>
+<li><p><a href="#method-PosteriorBSVARSIGN-get_posterior"><code>PosteriorBSVARSIGN$get_posterior()</code></a></p></li>
+<li><p><a href="#method-PosteriorBSVARSIGN-is_normalised"><code>PosteriorBSVARSIGN$is_normalised()</code></a></p></li>
+<li><p><a href="#method-PosteriorBSVARSIGN-clone"><code>PosteriorBSVARSIGN$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-PosteriorBSVARSIGN-initialize"></a><div class="section">
+<h3 id="posteriorbsvarsign-new-"><code>PosteriorBSVARSIGN$new()</code><a class="anchor" aria-label="anchor" href="#posteriorbsvarsign-new-"></a></h3>
 <p>Create a new posterior output PosteriorBSVARSIGN.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/specify_posterior_bsvarSIGN.html">specify_posterior_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">specification_bsvarSIGN</span>, <span class="va">posterior_bsvarSIGN</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PosteriorBSVARSIGN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">specification_bsvarSIGN</span>, <span class="va">posterior_bsvarSIGN</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>specification_bsvarSIGN</code></dt>
 <dd><p>an object of class BSVARSIGN with the last draw of the current
 MCMC run as the starting value.</p></dd>
 
-
-<dt><code>posterior_bsvarSIGN</code></dt>
+      <dt><code>posterior_bsvarSIGN</code></dt>
 <dd><p>a list containing Bayesian estimation output collected in elements
 an <code>NxNxS</code> array <code>B</code>, an <code>NxKxS</code> array <code>A</code>, and a <code>5xS</code> matrix <code>hyper</code>.</p></dd>
 
 
 </dl><p></p></div>
-</div>
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
 <p>A posterior output PosteriorBSVARSIGN.</p>
 </div>
 
-</div><p></p><hr><a id="method-PosteriorBSVARSIGN-get_posterior"></a><div class="section">
-<h3 id="method-get-posterior-">Method <code>get_posterior()</code><a class="anchor" aria-label="anchor" href="#method-get-posterior-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-PosteriorBSVARSIGN-get_posterior"></a><div class="section">
+<h3 id="posteriorbsvarsign-get-posterior-"><code>PosteriorBSVARSIGN$get_posterior()</code><a class="anchor" aria-label="anchor" href="#posteriorbsvarsign-get-posterior-"></a></h3>
 <p>Returns a list containing Bayesian estimation output collected in elements
 an <code>NxNxS</code> array <code>B</code>, an <code>NxKxS</code> array <code>A</code>, and a <code>5xS</code> matrix <code>hyper</code>.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_posterior_bsvarSIGN</span><span class="op">$</span><span class="fu">get_posterior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PosteriorBSVARSIGN</span><span class="op">$</span><span class="fu">get_posterior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
 <span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="../reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">estimate</span>       <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, <span class="fl">50</span><span class="op">)</span></span>
-<span><span class="va">estimate</span><span class="op">$</span><span class="fu">get_posterior</span><span class="op">(</span><span class="op">)</span></span>
-<span></span></code></pre></div><p></p></div>
+<span><span class="va">estimate</span><span class="op">$</span><span class="fu">get_posterior</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-PosteriorBSVARSIGN-is_normalised"></a><div class="section">
-<h3 id="method-is-normalised-">Method <code>is_normalised()</code><a class="anchor" aria-label="anchor" href="#method-is-normalised-"></a></h3>
+<p></p><hr><a id="method-PosteriorBSVARSIGN-is_normalised"></a><div class="section">
+<h3 id="posteriorbsvarsign-is-normalised-"><code>PosteriorBSVARSIGN$is_normalised()</code><a class="anchor" aria-label="anchor" href="#posteriorbsvarsign-is-normalised-"></a></h3>
 <p>Returns <code>TRUE</code> if the posterior has been normalised using <code>normalise_posterior()</code>
 and <code>FALSE</code> otherwise.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_posterior_bsvarSIGN</span><span class="op">$</span><span class="fu">is_normalised</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PosteriorBSVARSIGN</span><span class="op">$</span><span class="fu">is_normalised</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="examples-1">Examples<a class="anchor" aria-label="anchor" href="#examples-1"></a></h4>
 <p></p><div class="r example copy"><div class="sourceCode"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
 <span><span class="va">specification</span>  <span class="op">=</span> <span class="va"><a href="../reference/specify_bsvarSIGN.html">specify_bsvarSIGN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span>
@@ -133,19 +126,17 @@ and <code>FALSE</code> otherwise.</p><div class="section">
 <span><span class="va">estimate</span>       <span class="op">=</span> <span class="fu">estimate</span><span class="op">(</span><span class="va">specification</span>, <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># check normalisation status afterwards</span></span>
-<span><span class="va">posterior</span><span class="op">$</span><span class="fu">is_normalised</span><span class="op">(</span><span class="op">)</span></span>
-<span></span></code></pre></div><p></p></div>
+<span><span class="va">posterior</span><span class="op">$</span><span class="fu">is_normalised</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-PosteriorBSVARSIGN-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p></p><hr><a id="method-PosteriorBSVARSIGN-clone"></a><div class="section">
+<h3 id="posteriorbsvarsign-clone-"><code>PosteriorBSVARSIGN$clone()</code><a class="anchor" aria-label="anchor" href="#posteriorbsvarsign-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">specify_posterior_bsvarSIGN</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PosteriorBSVARSIGN</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -155,6 +146,7 @@ and <code>FALSE</code> otherwise.</p><div class="section">
 </div>
 
 </div>
+
 
     </div>
 
@@ -177,7 +169,7 @@ and <code>FALSE</code> otherwise.</p><div class="section">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="co">## Method `specify_posterior_bsvarSIGN$get_posterior`</span></span></span>
+<span class="r-in"><span><span class="co">## Method `PosteriorBSVARSIGN$get_posterior()`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>
@@ -20870,7 +20862,7 @@ and <code>FALSE</code> otherwise.</p><div class="section">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="co">## Method `specify_posterior_bsvarSIGN$is_normalised`</span></span></span>
+<span class="r-in"><span><span class="co">## Method `PosteriorBSVARSIGN$is_normalised()`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">optimism</span><span class="op">)</span></span></span>

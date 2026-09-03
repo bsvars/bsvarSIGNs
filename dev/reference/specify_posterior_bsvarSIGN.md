@@ -28,23 +28,23 @@ might not be equal to the last draw provided in element `posterior`.
 
 ### Public methods
 
-- [`specify_posterior_bsvarSIGN$new()`](#method-PosteriorBSVARSIGN-new)
+- [`PosteriorBSVARSIGN$new()`](#method-PosteriorBSVARSIGN-initialize)
 
-- [`specify_posterior_bsvarSIGN$get_posterior()`](#method-PosteriorBSVARSIGN-get_posterior)
+- [`PosteriorBSVARSIGN$get_posterior()`](#method-PosteriorBSVARSIGN-get_posterior)
 
-- [`specify_posterior_bsvarSIGN$is_normalised()`](#method-PosteriorBSVARSIGN-is_normalised)
+- [`PosteriorBSVARSIGN$is_normalised()`](#method-PosteriorBSVARSIGN-is_normalised)
 
-- [`specify_posterior_bsvarSIGN$clone()`](#method-PosteriorBSVARSIGN-clone)
+- [`PosteriorBSVARSIGN$clone()`](#method-PosteriorBSVARSIGN-clone)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `PosteriorBSVARSIGN$new()`
 
 Create a new posterior output PosteriorBSVARSIGN.
 
 #### Usage
 
-    specify_posterior_bsvarSIGN$new(specification_bsvarSIGN, posterior_bsvarSIGN)
+    PosteriorBSVARSIGN$new(specification_bsvarSIGN, posterior_bsvarSIGN)
 
 #### Arguments
 
@@ -64,7 +64,7 @@ A posterior output PosteriorBSVARSIGN.
 
 ------------------------------------------------------------------------
 
-### Method `get_posterior()`
+### `PosteriorBSVARSIGN$get_posterior()`
 
 Returns a list containing Bayesian estimation output collected in
 elements an `NxNxS` array `B`, an `NxKxS` array `A`, and a `5xS` matrix
@@ -72,7 +72,7 @@ elements an `NxNxS` array `B`, an `NxKxS` array `A`, and a `5xS` matrix
 
 #### Usage
 
-    specify_posterior_bsvarSIGN$get_posterior()
+    PosteriorBSVARSIGN$get_posterior()
 
 #### Examples
 
@@ -84,14 +84,14 @@ elements an `NxNxS` array `B`, an `NxKxS` array `A`, and a `5xS` matrix
 
 ------------------------------------------------------------------------
 
-### Method `is_normalised()`
+### `PosteriorBSVARSIGN$is_normalised()`
 
 Returns `TRUE` if the posterior has been normalised using
 `normalise_posterior()` and `FALSE` otherwise.
 
 #### Usage
 
-    specify_posterior_bsvarSIGN$is_normalised()
+    PosteriorBSVARSIGN$is_normalised()
 
 #### Examples
 
@@ -105,13 +105,13 @@ Returns `TRUE` if the posterior has been normalised using
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `PosteriorBSVARSIGN$clone()`
 
 The objects of this class are cloneable with this method.
 
 #### Usage
 
-    specify_posterior_bsvarSIGN$clone(deep = FALSE)
+    PosteriorBSVARSIGN$clone(deep = FALSE)
 
 #### Arguments
 
@@ -139,7 +139,7 @@ class(posterior)
 
 
 ## ------------------------------------------------
-## Method `specify_posterior_bsvarSIGN$get_posterior`
+## Method `PosteriorBSVARSIGN$get_posterior()`
 ## ------------------------------------------------
 
 data(optimism)
@@ -20832,7 +20832,7 @@ estimate$get_posterior()
 
 
 ## ------------------------------------------------
-## Method `specify_posterior_bsvarSIGN$is_normalised`
+## Method `PosteriorBSVARSIGN$is_normalised()`
 ## ------------------------------------------------
 
 data(optimism)
